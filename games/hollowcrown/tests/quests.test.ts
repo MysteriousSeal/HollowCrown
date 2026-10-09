@@ -6,6 +6,7 @@ import { loadWorldMap } from '@voxel/engine/world';
 import { PEOPLE_DATA } from '../src/data/people';
 import { QUESTS } from '../src/data/quests';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
+import { DRESSING } from '../src/data/world/dressing';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
 const known = new Set([...WORLD_MAP.places.map((p) => p.id), ...WORLD_MAP.areas.map((a) => a.id)]);
@@ -34,9 +35,14 @@ describe('the quests', () => {
           if (o.kind === 'choose') expect((o.options ?? []).length, `${s.id}/${o.id}`).toBeGreaterThan(1);
         }
       }
-      for (const next of q.next) expect(next).toMatch(/^(MQ|SQ-)/);
+      for (const next of q.next) expect(next).toMatch(/^(MQ|SQ-|WQ-)/);
       for (const before of q.start.after) expect(QUESTS[before], `${q.id} after ${before}`).toBeDefined();
       if (q.start.giver) expect(PEOPLE_DATA[q.start.giver], `${q.id}'s giver`).toBeDefined();
+      const found = q.start.found;
+      if (found && 'examine' in found) {
+        const { at, prop } = found.examine;
+        expect(DRESSING.some((d) => d.kind === prop && d.at?.[0] === at[0] && d.at?.[1] === at[1]), `${q.id}: no ${prop} at (${at})`).toBe(true);
+      } else if (found) expect(map.walkable(...found.at), `${q.id} found at (${found.at})`).toBe(true);
     });
   }
 });
