@@ -47,15 +47,16 @@ describe('quest play', () => {
     expect(book.quests[0].stage).toBe('the-inn');
   });
 
-  it("asks Garrick's choice at the inn, its reply setting the flag, and on to midnight", () => {
+  it("asks Garrick's choice at the inn, its reply setting the flag, and on through midnight to dawn", () => {
     const { world, book } = atStage('the-inn');
     const talk = talkWith(world, 'Garrick Fenn');
     expect(talk.lines[1].choices).toHaveLength(4);
     talk.onChoice(1, 1);
     talk.onClose();
     expect(book.flags.hero_reason).toBe('work');
-    expect(book.quests[0].stage).toBe('midnight'); // (the wait for midnight isn't played yet)
-    expect(world.resource(TimeOfDay).hours).toBe(0);
+    expect(book.quests[0].stage).toBe('dawn'); // (midnight's fight isn't played yet: passed through)
+    expect(book.flags.mq01_dead_walked).toBe(true);
+    expect(world.resource(TimeOfDay).hours).toBe(6);
   });
 
   it('has only first words for someone the quests ask nothing of', () => {
