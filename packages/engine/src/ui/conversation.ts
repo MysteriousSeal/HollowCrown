@@ -46,6 +46,34 @@ export class Script {
   }
 }
 
+export const TYPE_SPEED = 45; // letters a second
+
+// A line written out a letter at a time (`speed`: letters a second); finished at once on asking.
+export class Typewriter {
+  private shown = 0;
+
+  constructor(readonly text: string, readonly speed = TYPE_SPEED) {}
+
+  get done(): boolean {
+    return this.shown >= this.text.length;
+  }
+
+  // The text shown so far, `dt` seconds on.
+  tick(dt: number): string {
+    this.shown = Math.min(this.text.length, this.shown + dt * this.speed);
+    return this.visible;
+  }
+
+  get visible(): string {
+    return this.text.slice(0, Math.floor(this.shown));
+  }
+
+  finish(): string {
+    this.shown = this.text.length;
+    return this.text;
+  }
+}
+
 export const TALK_KEYS = ['KeyE', 'Space', 'Enter'];
 
 // One side's portrait and name plate.
@@ -75,6 +103,8 @@ export class Conversation {
   private script: Script | null = null;
   private onClose: (() => void) | undefined;
   private openedAt = 0;
+  private typing: Typewriter | null = null;
+  private frame = 0;
 
   constructor(root: HTMLElement, private readonly keys = TALK_KEYS) {
     const panel = element('div', 'ui-talk-panel');
@@ -108,8 +138,13 @@ export class Conversation {
     this.draw();
   }
 
+  // The line written out at once if it's still being written; else on to the next (past the last: closed).
   advance(): void {
     if (!this.script) return;
+    if (this.typing && !this.typing.done) {
+      this.text.textContent = this.typing.finish();
+      return;
+    }
     if (this.script.advance()) this.draw();
     else this.close();
   }
@@ -117,6 +152,8 @@ export class Conversation {
   close(): void {
     if (!this.script) return;
     this.script = null;
+    this.typing = null;
+    cancelAnimationFrame(this.frame);
     this.el.hidden = true;
     const onClose = this.onClose;
     this.onClose = undefined;
@@ -133,8 +170,23 @@ export class Conversation {
     }
     this.el.dataset.speaker = side;
     this.speaker.textContent = this.names[side];
-    this.text.textContent = text;
+    this.type(text);
     this.hint.textContent = script.last ? 'E · close' : 'E · next';
+  }
+
+  // Writes `text` out a frame at a time.
+  private type(text: string): void {
+    cancelAnimationFrame(this.frame);
+    const typing = (this.typing = new Typewriter(text));
+    this.text.textContent = '';
+    let last = performance.now();
+    const step = (now: number): void => {
+      if (this.typing !== typing) return;
+      this.text.textContent = typing.tick(Math.max(0, now - last) / 1000);
+      last = now;
+      if (!typing.done) this.frame = requestAnimationFrame(step);
+    };
+    this.frame = requestAnimationFrame(step);
   }
 }
 
