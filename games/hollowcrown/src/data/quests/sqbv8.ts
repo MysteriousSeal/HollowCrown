@@ -14,6 +14,7 @@ export const SQ_BV8: Quest = {
   level: 4,
   minutes: 30,
   starts: 'after MQ03: Elsa, crying in the yard, or Hal Wicke',
+  start: { after: ['MQ03'], giver: 'Elsa Fenn' },
   places: ['ferrymans-rest', 'tallow-green', 'chandlery', 'brindleford-well'],
   stages: [
     {

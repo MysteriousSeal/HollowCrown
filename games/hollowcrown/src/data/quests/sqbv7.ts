@@ -11,6 +11,7 @@ export const SQ_BV7: Quest = {
   level: 3,
   minutes: 20,
   starts: 'Tobin Harrow (done at once if Wat was freed in MQ03)',
+  start: { after: [], giver: 'Tobin Harrow' },
   places: ['smithy', 'red-hen-camp'],
   stages: [
     {

@@ -12,6 +12,7 @@ export const MQ02: Quest = {
   level: 2,
   minutes: 50,
   starts: 'the end of MQ01: Father Cuthwin and Odo Pell, at the well',
+  start: { after: ['MQ01'] },
   places: ['brindleford-well', 'shrine-house', 'famine-pit', 'quiet-bell-chapel', 'bellwardens-tomb'],
   stages: [
     {

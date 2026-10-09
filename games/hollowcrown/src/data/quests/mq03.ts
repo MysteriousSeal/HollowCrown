@@ -12,6 +12,7 @@ export const MQ03: Quest = {
   level: 3,
   minutes: 45,
   starts: 'MQ02 done, or asking Pell about the robbery',
+  start: { after: ['MQ02'] },
   places: ['reeves-house', 'ferrymans-rest', 'hanging-oak', 'red-hen-camp', 'brindleford-well', 'herbalists-cottage', 'cobbe-farmhouse'],
   stages: [
     {

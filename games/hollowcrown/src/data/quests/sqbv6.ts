@@ -11,6 +11,7 @@ export const SQ_BV6: Quest = {
   level: 4,
   minutes: 40,
   starts: 'after MQ01: Ada Cobbe, frantic, or Scrap the dog, barking',
+  start: { after: ['MQ01'], giver: 'Ada Cobbe' },
   places: ['cobbe-farmhouse', 'mossjaw-cave', 'herbalists-cottage', 'ferrymans-rest'],
   stages: [
     {
