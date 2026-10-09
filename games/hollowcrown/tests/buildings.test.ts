@@ -4,7 +4,8 @@
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
 import { TILE_HEIGHT, loadWorldMap, type PlaceData } from '@voxel/engine/world';
-import { buildingModel, doorOf, levelGround, placeModel, placesOf } from '../src/buildings';
+import { buildingModel, doorOf, levelGround, obstaclesOf, placeModel, placesOf } from '../src/buildings';
+import { landmarkAt } from '../src/buildings/landmarks';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
 import { BRINDLEFORD } from '../src/data/world/brindleford';
 import { footprint } from '../src/data/world/kinds';
@@ -106,6 +107,16 @@ describe('Brindleford\'s buildings', () => {
     const props = (use: string) => buildingModel(at(use)).root.children[0].children.length;
     expect(props('chandler')).toBe(props('farmhouse') + 3);
     expect(() => buildingModel(at('not-yet'))).not.toThrow();
+  });
+
+  it('draw the Pilgrim\'s Shrine behind where the game starts, in the way', () => {
+    const shrine = map.place('pilgrims-shrine')!;
+    expect(placeModel(shrine)).not.toBeNull();
+    const key = `${Math.floor(shrine.at[0] / 16)},${Math.floor(shrine.at[1] / 16)}`;
+    const [x, z] = landmarkAt(shrine);
+    expect(placesOf(map).build(key).some((o) => o.position.x === x && o.position.z === z)).toBe(true);
+    expect(obstaclesOf(map).blocks(x, z, 0.1)).toBe(true);
+    expect(obstaclesOf(map).blocks(shrine.at[0], shrine.at[1], 0.4)).toBe(false); // (the hero wakes on its tile, in front of it)
   });
 
   it('stand on level ground, a tile round them too (levelGround)', () => {

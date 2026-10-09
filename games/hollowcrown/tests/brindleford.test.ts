@@ -9,6 +9,7 @@ import { World } from '@voxel/engine/ecs';
 import { BODY_RADIUS, MoveIntent, MoveSpeed, Transform, movementSystem } from '@voxel/engine/gameplay';
 import { ObstaclesResource, TerrainResource, loadWorldMap, type PlaceData } from '@voxel/engine/world';
 import { obstaclesOf } from '../src/buildings';
+import { LANDMARKS } from '../src/buildings/landmarks';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
 import { BRINDLEFORD } from '../src/data/world/brindleford';
 import { footprint, type BuildingProps } from '../src/data/world/kinds';
@@ -81,7 +82,7 @@ describe('Brindleford\'s walls', () => {
   const obstacles = obstaclesOf(map);
 
   it('stand in the way of every building and fixture, and leave every door clear', () => {
-    expect(obstacles.size).toBe(WORLD_MAP.places.filter((p) => p.kind === 'building' || p.kind === 'fixture').length); // (the whole map's)
+    expect(obstacles.size).toBe(WORLD_MAP.places.filter((p) => p.kind === 'building' || p.kind === 'fixture' || (p.kind === 'landmark' && LANDMARKS[p.id])).length); // (the whole map's)
     for (const b of buildings) {
       expect(obstacles.blocks(...centre(b), BODY_RADIUS), `${b.id}'s middle`).toBe(true);
       expect(obstacles.blocks(...footprint(b).door, BODY_RADIUS), `${b.id}'s door`).toBe(false);

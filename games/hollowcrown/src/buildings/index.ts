@@ -10,6 +10,7 @@ import { STRUCTURE_VOXEL, StructureModel, type StructureSpec } from '@voxel/engi
 import { Obstacles, placesLayer, type ChunkLayer, type PlaceData, type Point, type WorldMap } from '@voxel/engine/world';
 import type { VoxelGrid } from '@voxel/engine/voxel';
 import { cardinal, footprint, type BuildingProps } from '../data/world/kinds';
+import { LANDMARKS, landmarkAt } from './landmarks';
 import { LOOK, structureColors, type Shutter } from './palette';
 import {
   anvil, bellCote, chandlerSign, mossy, doorstepStool, dryingCandles, dryingHerbs, forgeHearth, heronPlaque, holedRoof, innSign,
@@ -23,7 +24,7 @@ const TILE = 16; // voxels a tile
 const hashOf = (id: string) => [...id].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7) % 10007;
 const LOOKS = 4;
 const UNIQUE = new Set(['holt-house', 'megs-house']); // (houses with something of their own)
-const shared = (place: PlaceData) => (place.props as BuildingProps).use === 'house' && !UNIQUE.has(place.id);
+const shared = (place: PlaceData) => place.kind === 'building' && (place.props as BuildingProps).use === 'house' && !UNIQUE.has(place.id);
 const seedOf = (place: PlaceData) => (shared(place) ? 101 + (hashOf(place.id) % LOOKS) * 1013 : hashOf(place.id));
 
 // What a place looks like, as a key: places with the same one are built once (placesOf), sharing their meshes.
@@ -147,10 +148,20 @@ export function fixtureModel(place: PlaceData): Model | null {
   return fixture ? new VoxelModel(fixture.grid(), LOOK, { voxel: STRUCTURE_VOXEL }) : null;
 }
 
+// A landmark's model (the Pilgrim's Shrine), or null if it has none.
+export function landmarkModel(place: PlaceData): Model | null {
+  const landmark = LANDMARKS[place.id];
+  return landmark ? new VoxelModel(landmark.grid(), LOOK, { voxel: STRUCTURE_VOXEL }) : null;
+}
+
 // A place's model, if it's drawn as one.
 export function placeModel(place: PlaceData): Model | null {
-  return place.kind === 'building' ? buildingModel(place) : place.kind === 'fixture' ? fixtureModel(place) : null;
+  if (place.kind === 'building') return buildingModel(place);
+  return place.kind === 'fixture' ? fixtureModel(place) : place.kind === 'landmark' ? landmarkModel(place) : null;
 }
+
+// Whether a place is drawn here (a building, a fixture, a landmark with a model).
+const drawn = (p: PlaceData) => p.kind === 'building' || p.kind === 'fixture' || (p.kind === 'landmark' && !!LANDMARKS[p.id]);
 
 // The layer of every drawn place on `map`: each built once (kept for when its chunk comes back; places that look
 // alike share one build's meshes), stood on the ground in the middle of its footprint, turned the way it faces.
@@ -167,7 +178,7 @@ export function placesOf(map: WorldMap): ChunkLayer {
       }
       const root = looks.get(look)?.clone() ?? null; // (a clone shares its meshes' geometry)
       if (root) {
-        const [cx, cz] = place.kind === 'building' ? centreOf(place) : place.at;
+        const [cx, cz] = place.kind === 'building' ? centreOf(place) : place.kind === 'landmark' ? landmarkAt(place) : place.at;
         root.position.set(cx, map.groundY(...place.at), cz);
         root.rotation.y = place.facing ?? 0;
       }
@@ -175,7 +186,7 @@ export function placesOf(map: WorldMap): ChunkLayer {
     }
     return built.get(place.id)!;
   };
-  return placesLayer(map.places().filter((p) => p.kind === 'building' || p.kind === 'fixture'), make, [litMaterial(), glowMaterial()]);
+  return placesLayer(map.places().filter(drawn), make, [litMaterial(), glowMaterial()]);
 }
 
 // The ground under every building and fixture on `map` made level, a tile round it too (no wall over a dip, no grass
@@ -185,7 +196,7 @@ export function levelGround(map: WorldMap): void {
     if (place.kind === 'building') {
       const f = footprint(place);
       map.flatten({ rect: [f.x0 - 1, f.z0 - 1, f.x1 + 1, f.z1 + 1] });
-    } else if (place.kind === 'fixture' && fixtureOf(place)) {
+    } else if ((place.kind === 'fixture' && fixtureOf(place)) || (place.kind === 'landmark' && LANDMARKS[place.id])) {
       const [x, z] = place.at;
       map.flatten({ rect: [x - 1, z - 1, x + 1, z + 1] });
     }
@@ -193,7 +204,7 @@ export function levelGround(map: WorldMap): void {
 }
 
 // What stands in the way on `map`: every building's walls (inset from its footprint as they're built: the eaves can
-// be walked under), every fixture; added to `obstacles` (a new set, none given).
+// be walked under), every fixture, every landmark drawn here; added to `obstacles` (a new set, none given).
 export function obstaclesOf(map: WorldMap, obstacles = new Obstacles()): Obstacles {
   for (const place of map.places()) {
     let half: [number, number] | undefined;
@@ -204,6 +215,7 @@ export function obstaclesOf(map: WorldMap, obstacles = new Obstacles()): Obstacl
       half = cardinal(place.facing)! % 2 === 0 ? [w, d] : [d, w];
       [cx, cz] = centreOf(place);
     } else if (place.kind === 'fixture') half = fixtureOf(place)?.half;
+    else if (place.kind === 'landmark') [half, [cx, cz]] = [LANDMARKS[place.id]?.half, landmarkAt(place)];
     if (half) obstacles.add({ x0: cx - half[0], z0: cz - half[1], x1: cx + half[0], z1: cz + half[1] });
   }
   return obstacles;
