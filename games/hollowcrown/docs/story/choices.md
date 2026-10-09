@@ -11,6 +11,8 @@ noted. The first value listed is the default if the quest is never done.
 | Flag | Values | Set in | Changes |
 |---|---|---|---|
 | `hero_reason` | `road` / `work` / `forget` | MQ01 | Quoted back by NPCs and Hrathgar |
+| `pilgrim_jerkin` | `taken` / `covered` | MQ01 | Hesper knows her mother's jerkin on sight (MQ03) |
+| `mq01_dead_walked` | true | MQ01 | The Vale's barks about the night the dead came home |
 | `hero_unsworn_seen` | true | MQ02 | Cuthwin's letter (MQ04) |
 | `famine_pit` | `untouched` / `blessed` | MQ02 | Famine ghosts stop returning |
 | `hamund` | `rested` / `destroyed` | MQ02 | Crypt quiet or not; Lantern +5 |
@@ -25,7 +27,9 @@ noted. The first value listed is the default if the quest is never done.
 | `pell_ledger` | `none` / `hidden` / `reported` / `written_off` / `pell_confessed` | SQ-BV5 | Pell lives or hangs; Grimwald |
 | `wenna` | `none` / `home` / `ada_told` / `hob_beaten` / `wenna_nan` | SQ-BV6 | Wenna's slide |
 | `tobin_at_forge` | | SQ-BV7 | MQ23 guide |
+| `harrow_steel` | `kept` / `returned` | SQ-BV7 | The Harrow steel blade now, or a free upgrade from Tobin later |
 | `bv_elsa_wed` / `bv_elsa_eloped`, `garrick_trusts` | | SQ-BV8, SQ-HM6 | Garrick's testimony |
+| `sqbv8_push` | `bell` / `rhosyn` / `plain` | SQ-BV8 | How Garrick was pushed: `bell` (needs `bv_bell_rung`) and `rhosyn` (needs MQ11 or MQ12) succeed; `plain` fails unless `hal_secret` is `kept` |
 | `hob_watch` | `none` / `stood_down` / `destroyed` | CT-BV1 | |
 
 ### Act I

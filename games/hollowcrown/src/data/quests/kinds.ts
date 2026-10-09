@@ -16,6 +16,12 @@ export interface ChoiceOption {
   sets?: Record<string, string | boolean>;
 }
 
+// A line of a conversation: who says it (a villager by name, 'hero', or anyone else by name) and what they say.
+export interface Line {
+  who: string;
+  text: string;
+}
+
 export interface Objective {
   id: string;
   kind: ObjectiveKind;
@@ -25,7 +31,8 @@ export interface Objective {
   what?: string; // an item or a foe kind
   count?: number;
   optional?: boolean;
-  options?: ChoiceOption[]; // (a choice's)
+  options?: ChoiceOption[]; // (a choice's: the hero's replies, after its lines)
+  lines?: Line[]; // what's said, in order, when a talk or a choice is played (instead of the speaker's first words)
 }
 
 // A stage: its objectives, all done (but the optional ones) before the next stage starts.

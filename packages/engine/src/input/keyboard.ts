@@ -1,9 +1,9 @@
 // The keyboard, as a resource: which actions are held, and which were pressed since a system last took the press. A
-// game binds keys to actions (WASD and the arrows to the four directions, E to interact, Shift to sprint, by default).
+// game binds keys to actions (WASD and the arrows to the four directions, E to interact, Shift to sprint, Space to attack, by default).
 
 import { defineResource } from '../ecs';
 
-export type Action = 'up' | 'down' | 'left' | 'right' | 'interact' | 'sprint';
+export type Action = 'up' | 'down' | 'left' | 'right' | 'interact' | 'sprint' | 'attack';
 
 export const DEFAULT_BINDINGS: Readonly<Record<string, Action>> = {
   KeyW: 'up',
@@ -17,6 +17,7 @@ export const DEFAULT_BINDINGS: Readonly<Record<string, Action>> = {
   KeyE: 'interact',
   ShiftLeft: 'sprint',
   ShiftRight: 'sprint',
+  Space: 'attack',
 };
 
 export class Keyboard {

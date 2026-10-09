@@ -6,6 +6,7 @@ import type { System } from '../ecs';
 import { ObstaclesResource, type Obstacles } from '../world/obstacles';
 import { TerrainResource, type Terrain } from '../world/terrain';
 import { BODY_RADIUS, BodyRadius, MoveIntent, MoveSpeed, Transform } from './components';
+import { Dead } from './health';
 
 const EDGE_MARGIN = 0.4; // how close to the map's edge anyone may go
 
@@ -24,7 +25,7 @@ export const movementSystem: System = {
     for (const entity of world.query(Transform, MoveIntent, MoveSpeed)) {
       const at = world.read(entity, Transform);
       const { x: dx, z: dz } = world.read(entity, MoveIntent);
-      const length = Math.hypot(dx, dz);
+      const length = world.has(entity, Dead) ? 0 : Math.hypot(dx, dz); // (the dead lie still)
       if (length > 1e-6) {
         const step = (world.read(entity, MoveSpeed) * dt) / length;
         const x = Math.min(width - 1 - EDGE_MARGIN, Math.max(EDGE_MARGIN, at.x + dx * step));

@@ -2,9 +2,10 @@
 // Kept in step with the engine's key bindings and the HUD's own keys.
 
 export const CONTROLS: Array<[string, string]> = [
-  ['WASD', 'Walk'],
+  ['WASD', 'Walk (or the arrows)'],
   ['Shift', 'Sprint (held)'],
   ['E', 'Talk, use'],
-  ['M', 'Map'],
+  ['M', 'Map (+ and − to zoom)'],
+  ['J', 'Journal (W and S to pick a quest)'],
   ['Esc', 'Pause, close'],
 ];

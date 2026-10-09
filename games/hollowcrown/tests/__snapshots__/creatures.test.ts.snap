@@ -170,6 +170,23 @@ exports[`creatures > bogDraugr: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > brannoc: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.142,
+    0.518,
+    0.178,
+  ],
+  "min": [
+    -0.142,
+    -0,
+    -0.119,
+  ],
+  "triangles": 2052,
+}
+`;
+
 exports[`creatures > broodMother: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.665,
@@ -408,6 +425,91 @@ exports[`creatures > pitEater: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > redHenBrute: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.486,
+  "max": [
+    0.153,
+    0.487,
+    0.209,
+  ],
+  "min": [
+    -0.153,
+    -0.058,
+    -0.101,
+  ],
+  "triangles": 1508,
+}
+`;
+
+exports[`creatures > redHenKnifeThrower: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.108,
+    0.501,
+    0.25,
+  ],
+  "min": [
+    -0.108,
+    -0,
+    -0.113,
+  ],
+  "triangles": 1438,
+}
+`;
+
+exports[`creatures > redHenLookout: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.428,
+  "max": [
+    0.135,
+    0.475,
+    0.103,
+  ],
+  "min": [
+    -0.119,
+    -0,
+    -0.103,
+  ],
+  "triangles": 1150,
+}
+`;
+
+exports[`creatures > redHenPoppyEater: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.451,
+    0.16,
+  ],
+  "min": [
+    -0.125,
+    -0.016,
+    -0.074,
+  ],
+  "triangles": 1384,
+}
+`;
+
+exports[`creatures > redHenSpearman: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.74,
+    0.137,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.125,
+  ],
+  "triangles": 1696,
+}
+`;
+
 exports[`creatures > rook: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.313,
@@ -541,6 +643,57 @@ exports[`creatures > spiderling: builds, poses and keeps its shape 1`] = `
     -0.187,
   ],
   "triangles": 1990,
+}
+`;
+
+exports[`creatures > towerRecruit: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.419,
+  "max": [
+    0.116,
+    0.734,
+    0.137,
+  ],
+  "min": [
+    -0.116,
+    -0,
+    -0.116,
+  ],
+  "triangles": 1280,
+}
+`;
+
+exports[`creatures > towerShieldman: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.258,
+    0.789,
+    0.148,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.125,
+  ],
+  "triangles": 2030,
+}
+`;
+
+exports[`creatures > towerVeteran: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.483,
+    0.23,
+  ],
+  "min": [
+    -0.225,
+    -0,
+    -0.125,
+  ],
+  "triangles": 2062,
 }
 `;
 

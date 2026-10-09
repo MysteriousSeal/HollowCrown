@@ -17,6 +17,23 @@ exports[`people > Ada Cobbe: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Agna Bee: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.154,
+    0.483,
+    0.133,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.125,
+  ],
+  "triangles": 2156,
+}
+`;
+
 exports[`people > Alys Fletcher: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -48,6 +65,23 @@ exports[`people > Bran Hollin: builds, poses and keeps their shape 1`] = `
     -0.1,
   ],
   "triangles": 1624,
+}
+`;
+
+exports[`people > Brannoc Mabb: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.142,
+    0.518,
+    0.178,
+  ],
+  "min": [
+    -0.142,
+    -0,
+    -0.119,
+  ],
+  "triangles": 2052,
 }
 `;
 
@@ -187,6 +221,74 @@ exports[`people > Gert Hollin: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Goody Thatch: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.108,
+    0.467,
+    0.108,
+  ],
+  "min": [
+    -0.108,
+    -0,
+    -0.108,
+  ],
+  "triangles": 1154,
+}
+`;
+
+exports[`people > Hal Wicke: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.45,
+    0.092,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1062,
+}
+`;
+
+exports[`people > Hesper Rowe (chained): builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.113,
+    0.476,
+    0.163,
+  ],
+  "min": [
+    -0.113,
+    -0.051,
+    -0.089,
+  ],
+  "triangles": 1944,
+}
+`;
+
+exports[`people > Hesper Rowe: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.113,
+    0.46,
+    0.11,
+  ],
+  "min": [
+    -0.113,
+    -0,
+    -0.108,
+  ],
+  "triangles": 2034,
+}
+`;
+
 exports[`people > Hob Cobbe: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -255,6 +357,40 @@ exports[`people > Kit: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Little Brede: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.279,
+  "max": [
+    0.067,
+    0.31,
+    0.057,
+  ],
+  "min": [
+    -0.067,
+    -0,
+    -0.057,
+  ],
+  "triangles": 1348,
+}
+`;
+
+exports[`people > Matthias Crow: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.789,
+    0.148,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.125,
+  ],
+  "triangles": 2016,
+}
+`;
+
 exports[`people > Nan Wicket: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -320,6 +456,23 @@ exports[`people > Old Meg: builds, poses and keeps their shape 1`] = `
     -0.086,
   ],
   "triangles": 1552,
+}
+`;
+
+exports[`people > Osmund Wicke: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.45,
+    0.092,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1122,
 }
 `;
 
