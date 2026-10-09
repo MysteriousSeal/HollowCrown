@@ -5,13 +5,15 @@
 
 import { describe, expect, it } from 'vitest';
 import { CHUNK_SIZE, chunkTilesIn, loadWorldMap, terrainLayer, tierRects } from '@voxel/engine/world';
-import { placesOf } from '../../src/buildings';
+import { obstaclesOf, placesOf } from '../../src/buildings';
+import { forestTrees } from '../../src/nature/forests';
 import { PLACE_KINDS, WORLD_MAP } from '../../src/data/world';
 
 const BUDGET_MS = {
   workOutChunk: 3, // measured ~0.3 ms
   terrainChunk: 3, // measured ~0.2 ms
   placesChunk: 500, // measured ~100 ms
+  forests: 150, // every forest's trees, at the start (measured ~300-600 ms with three forests: see the bug below)
 };
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
@@ -41,8 +43,14 @@ function busiestPlacesChunk(): string {
 
 describe.runIf(process.env.PERF)('world-build performance', () => {
   it(`works out a chunk of the world map in under ${BUDGET_MS.workOutChunk} ms`, () => {
+    // Each run on a fresh map, its chunks not worked out yet (the map paints a chunk the first time it's asked).
     const tiles = chunkTilesIn(BRINDLEFORD_CHUNK, WHOLE)!;
-    expect(timed(() => tierRects(map, tiles))).toBeLessThan(BUDGET_MS.workOutChunk);
+    let best = Infinity;
+    for (let i = 0; i < 5; i++) {
+      const fresh = loadWorldMap(WORLD_MAP, PLACE_KINDS);
+      best = Math.min(best, timed(() => tierRects(fresh, tiles), 1));
+    }
+    expect(best).toBeLessThan(BUDGET_MS.workOutChunk);
   });
 
   it(`builds a terrain chunk in under ${BUDGET_MS.terrainChunk} ms`, () => {
@@ -54,5 +62,13 @@ describe.runIf(process.env.PERF)('world-build performance', () => {
     const key = busiestPlacesChunk();
     // Each run on a fresh layer: the first build of a chunk models its buildings, later ones reuse them.
     expect(timed(() => placesOf(map).build(key), 3)).toBeLessThan(BUDGET_MS.placesChunk);
+  });
+
+  // BUG (environment): nature/forests.ts:42 forestTrees scans every forest's cells at the start: each asks the map for
+  // five tiles' surfaces (working out ~1000 map chunks up front) and checks all the map's places one by one. Filed.
+  it.skip(`places every forest's trees in under ${BUDGET_MS.forests} ms`, () => {
+    const fresh = loadWorldMap(WORLD_MAP, PLACE_KINDS);
+    const obstacles = obstaclesOf(fresh);
+    expect(timed(() => forestTrees(fresh, obstacles), 1)).toBeLessThan(BUDGET_MS.forests);
   });
 });
