@@ -1,0 +1,19 @@
+// Every person of the Vale with a name, by that name exactly as the bible writes it (docs/story/regions/
+// brindle-vale.md): how each is made. The game places them (gameplay), the model viewer (models.html) shows them all.
+
+import type { Model } from '@voxel/engine/models';
+import { FrameModel, type FrameSpec } from '@voxel/engine/characters';
+import { FOLK } from './brindleford';
+
+export interface Person {
+  name: string;
+  make(): Model;
+}
+
+const people = (specs: Record<string, FrameSpec>): Array<[string, Person]> =>
+  Object.entries(specs).map(([name, spec]) => [name, { name, make: () => new FrameModel(spec) }]);
+
+export const PEOPLE: Record<string, Person> = Object.fromEntries([...people(FOLK)]);
+
+// A person's id for a URL or a save: their name in lower case, hyphened ('Garrick Fenn' is garrick-fenn).
+export const personId = (name: string): string => name.toLowerCase().replace(/[^a-z]+/g, '-');

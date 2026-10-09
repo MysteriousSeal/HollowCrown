@@ -1,43 +1,46 @@
-// Brindleford's people are the ones its buildings house: each lives where the map says, spends every hour somewhere
-// the map has (and can be walked to), and has something to say.
+// Every named person of the Vale builds, poses, stands on the ground, and keeps their shape: height, triangles and
+// bounds snapshotted (a change to a model shows up here, to be accepted on purpose), drawn in about what the
+// fighting people are (creatures/peopleVoxels.ts).
 
+import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
-import { loadWorldMap } from '@voxel/engine/world';
-import { PEOPLE, PEOPLE_DATA, barkLine } from '../src/data/people';
-import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
-import { BRINDLEFORD } from '../src/data/world/brindleford';
-import type { BuildingProps } from '../src/data/world/kinds';
+import { PEOPLE, personId } from '../src/people';
 
-const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
-const buildings = (BRINDLEFORD.places ?? []).filter((p) => p.kind === 'building');
-const known = new Set([...WORLD_MAP.places.map((p) => p.id), ...WORLD_MAP.areas.map((a) => a.id)]);
+const round = (n: number) => Math.round(n * 1000) / 1000;
 
-describe("Brindleford's people", () => {
-  it('names everyone its buildings house, once, each at home where the map has them', () => {
-    const residents = buildings.flatMap((b) => (b.props as BuildingProps).residents.map((who) => [who, b.id]));
-    expect(PEOPLE.map((p) => p.name).sort()).toEqual(residents.map(([who]) => who).sort());
-    for (const [who, home] of residents) expect(PEOPLE_DATA[who]?.home, who).toBe(home);
-    expect(new Set(PEOPLE.map((p) => p.id)).size).toBe(PEOPLE.length);
+function measure(root: THREE.Object3D): { triangles: number; min: number[]; max: number[] } {
+  root.updateMatrixWorld(true);
+  let triangles = 0;
+  const box = new THREE.Box3();
+  root.traverse((o) => {
+    const mesh = o as THREE.Mesh;
+    if (!mesh.isMesh || mesh.geometry.type === 'PlaneGeometry') return; // (the shade square under the feet)
+    triangles += (mesh.geometry.index?.count ?? mesh.geometry.getAttribute('position').count) / 3;
+    box.expandByObject(mesh);
+  });
+  return { triangles, min: box.min.toArray().map(round), max: box.max.toArray().map(round) };
+}
+
+describe('people', () => {
+  it('keys each person by their own name, every id unique', () => {
+    for (const [key, person] of Object.entries(PEOPLE)) expect(person.name).toBe(key);
+    const ids = Object.keys(PEOPLE).map(personId);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('spends every hour somewhere the map has, in order from midnight', () => {
-    for (const p of PEOPLE) {
-      expect(p.routine[0].from, p.id).toBe(0);
-      for (let i = 1; i < p.routine.length; i++) expect(p.routine[i].from, p.id).toBeGreaterThanOrEqual(p.routine[i - 1].from);
-      for (const s of [p.work, p.away?.at, ...p.routine.map((r) => r.at)]) {
-        if (s === undefined) continue;
-        if (typeof s === 'string') expect(known.has(s), `${p.id}: ${s}`).toBe(true);
-        else expect(map.walkable(...s), `${p.id}: (${s})`).toBe(true);
-      }
-      for (const r of p.routine) expect(r.from >= 0 && r.from <= 23, p.id).toBe(true);
-    }
-  });
-
-  it('gives everyone first words and two or three barks, short ones', () => {
-    for (const p of PEOPLE) {
-      expect(p.firstWords.length, p.id).toBeGreaterThan(1);
-      expect(p.barks.length >= 2 && p.barks.length <= 3, p.id).toBe(true);
-      for (const b of p.barks) expect(barkLine(b).length, `${p.id}: ${barkLine(b)}`).toBeLessThanOrEqual(80);
-    }
-  });
+  for (const person of Object.values(PEOPLE)) {
+    it(`${person.name}: builds, poses and keeps their shape`, () => {
+      const model = person.make();
+      expect(model.height).toBeGreaterThan(0.25);
+      model.animate(0, 0);
+      const standing = measure(model.root);
+      expect(standing.triangles).toBeGreaterThan(600);
+      expect(standing.triangles).toBeLessThan(2600); // (about the fighting people's)
+      expect(standing.min[1]).toBeGreaterThan(-0.06); // (on the ground, not in it)
+      expect({ height: round(model.height), ...standing }).toMatchSnapshot();
+      for (const t of [0.4, 1.3, 2.9]) model.animate(t, 1); // (walking: no throw, no NaN)
+      model.root.updateMatrixWorld(true);
+      model.root.traverse((o) => expect(Number.isFinite(o.matrixWorld.elements[13])).toBe(true));
+    });
+  }
 });

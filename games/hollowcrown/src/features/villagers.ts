@@ -1,12 +1,16 @@
 // Brindleford's villagers: everyone living in a building of the map, stood just outside its door (a household side by
-// side along its front), facing out. Until each has a model of their own (src/people/), a person is the human body
-// of a look drawn from their name: the same name, the same face, every time.
+// side along its front), facing out; by day they stroll round it (systems/villagerDay.ts). Each is their own model
+// (src/people/ PEOPLE); anyone not modelled yet is the human body of a look drawn from their name: the same name, the
+// same face, every time.
 
 import { FrameModel, MARCH, bodyPalette, type BodyLook, type Build } from '@voxel/engine/characters';
 import { MoveSpeed, Transform } from '@voxel/engine/gameplay';
 import { hashUnit, oneOf } from '@voxel/engine/math';
+import type { Model } from '@voxel/engine/models';
 import type { PlaceData, WorldMap } from '@voxel/engine/world';
 import { footprint, type BuildingProps } from '../data/world/kinds';
+import { Resident, villagerDaySystem } from '../systems/villagerDay';
+import { PEOPLE } from '../people';
 import type { Feature } from './context';
 
 // What a name can't tell (the region's bible, "Brindleford"): who's a woman, who's old, who's a child (their size).
@@ -93,10 +97,11 @@ function atDoor(place: PlaceData, name: string, along: number): Villager {
   };
 }
 
-// A villager's figure: their body at their size, sat down if they sit (legs forward, hips on the stool).
-function figureOf(v: Villager): FrameModel {
-  const model = new FrameModel({ palette: bodyPalette(v.look), base: v.look, gait: { ...MARCH, speed: 1.6 }, scale: v.scale });
-  if (v.seated) {
+// A villager's figure: their own model (made at their size), else their look's body at their size; sat down if
+// they sit (legs forward, hips on the stool).
+export function figureOf(v: Villager): Model {
+  const model = PEOPLE[v.name]?.make() ?? new FrameModel({ palette: bodyPalette(v.look), base: v.look, gait: { ...MARCH, speed: 1.6 }, scale: v.scale });
+  if (v.seated && model instanceof FrameModel) {
     model.ticks.push(() => {
       model.joints.leftLeg.rotation.x = -1.45;
       model.joints.rightLeg.rotation.x = -1.45;
@@ -113,8 +118,10 @@ export const villagers: Feature = {
       const person = app.world.spawn(
         [Transform, { x: v.x, y: map.groundY(v.x, v.z), z: v.z, facing: v.facing }],
         [MoveSpeed, 1.2],
+        [Resident, { home: { x: v.x, z: v.z }, facing: v.facing, seated: v.seated }],
       );
       app.show(person, figureOf(v));
     }
+    app.addSystems(villagerDaySystem);
   },
 };

@@ -1,40 +1,43 @@
-// Brindleford's villagers: everyone living in a building stands outside its door on open ground, each looking the
-// same every time, Kit child-sized, Old Meg sat by her door.
+// Brindleford's people are the ones its buildings house: each lives where the map says, spends every hour somewhere
+// the map has (and can be walked to), and has something to say.
 
 import { describe, expect, it } from 'vitest';
 import { loadWorldMap } from '@voxel/engine/world';
-import { obstaclesOf } from '../src/buildings';
+import { PEOPLE, PEOPLE_DATA, barkLine } from '../src/data/people';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
+import { BRINDLEFORD } from '../src/data/world/brindleford';
 import type { BuildingProps } from '../src/data/world/kinds';
-import { lookOf, villagersOf } from '../src/features/villagers';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
-const obstacles = obstaclesOf(map);
-const people = villagersOf(map);
-const who = (name: string) => people.find((v) => v.name === name)!;
+const buildings = (BRINDLEFORD.places ?? []).filter((p) => p.kind === 'building');
+const known = new Set([...WORLD_MAP.places.map((p) => p.id), ...WORLD_MAP.areas.map((a) => a.id)]);
 
-describe('villagers', () => {
-  it('stands every resident of every building', () => {
-    const residents = map.places('building').flatMap((p) => (p.props as BuildingProps).residents);
-    expect(people.map((v) => v.name).sort()).toEqual([...residents].sort());
+describe("Brindleford's people", () => {
+  it('names everyone its buildings house, once, each at home where the map has them', () => {
+    const residents = buildings.flatMap((b) => (b.props as BuildingProps).residents.map((who) => [who, b.id]));
+    expect(PEOPLE.map((p) => p.name).sort()).toEqual(residents.map(([who]) => who).sort());
+    for (const [who, home] of residents) expect(PEOPLE_DATA[who]?.home, who).toBe(home);
+    expect(new Set(PEOPLE.map((p) => p.id)).size).toBe(PEOPLE.length);
   });
 
-  it('puts each one outside, on walkable ground clear of the walls', () => {
-    for (const v of people) {
-      expect(map.walkable(v.x, v.z), v.name).toBe(true);
-      expect(obstacles.blocks(v.x, v.z, 0.1), v.name).toBe(false);
+  it('spends every hour somewhere the map has, in order from midnight', () => {
+    for (const p of PEOPLE) {
+      expect(p.routine[0].from, p.id).toBe(0);
+      for (let i = 1; i < p.routine.length; i++) expect(p.routine[i].from, p.id).toBeGreaterThanOrEqual(p.routine[i - 1].from);
+      for (const s of [p.work, p.away?.at, ...p.routine.map((r) => r.at)]) {
+        if (s === undefined) continue;
+        if (typeof s === 'string') expect(known.has(s), `${p.id}: ${s}`).toBe(true);
+        else expect(map.walkable(...s), `${p.id}: (${s})`).toBe(true);
+      }
+      for (const r of p.routine) expect(r.from >= 0 && r.from <= 23, p.id).toBe(true);
     }
   });
 
-  it('gives a name the same look each time, and different names different looks', () => {
-    expect(lookOf('Odo Pell')).toEqual(lookOf('Odo Pell'));
-    const looks = new Set(people.map((v) => JSON.stringify(v.look)));
-    expect(looks.size).toBeGreaterThan(people.length * 0.8);
-  });
-
-  it('makes Kit child-sized and sits Old Meg by her door', () => {
-    expect(who('Kit').scale).toBeLessThan(1);
-    expect(who('Old Meg').seated).toBe(true);
-    expect(who('Old Meg').look.build).toBe('female');
+  it('gives everyone first words and two or three barks, short ones', () => {
+    for (const p of PEOPLE) {
+      expect(p.firstWords.length, p.id).toBeGreaterThan(1);
+      expect(p.barks.length >= 2 && p.barks.length <= 3, p.id).toBe(true);
+      for (const b of p.barks) expect(barkLine(b).length, `${p.id}: ${barkLine(b)}`).toBeLessThanOrEqual(80);
+    }
   });
 });

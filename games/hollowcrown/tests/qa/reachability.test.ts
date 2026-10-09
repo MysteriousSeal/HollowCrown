@@ -9,6 +9,8 @@ import { covers, loadWorldMap, type PlaceData } from '@voxel/engine/world';
 import { obstaclesOf } from '../../src/buildings';
 import { PLACE_KINDS, START_PLACE, WORLD_MAP } from '../../src/data/world';
 import { footprint } from '../../src/data/world/kinds';
+import { villagersOf } from '../../src/features/villagers';
+import { WILDLIFE } from '../../src/features/wildlife';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
 const obstacles = obstaclesOf(map);
@@ -56,5 +58,12 @@ describe('Brindle Vale reachability', () => {
       return p.kind === 'building' ? !reached(x, z) : !near(x, z);
     });
     expect(unreached.map((p) => `${p.id} at (${target(p).join(', ')})`)).toEqual([]);
+  });
+
+  it("reaches every villager and every animal from the Pilgrim's Shrine", () => {
+    const seen = flood(...target(map.place(START_PLACE)!));
+    const standing = [...villagersOf(map).map((v) => ({ who: v.name, x: v.x, z: v.z })), ...WILDLIFE.map((a) => ({ who: `${a.creature} (${a.note})`, x: a.at[0], z: a.at[1] }))];
+    const unreached = standing.filter(({ x, z }) => !seen[(Math.round(z) - z0) * W + (Math.round(x) - x0)]).map((s) => s.who);
+    expect(unreached).toEqual([]);
   });
 });

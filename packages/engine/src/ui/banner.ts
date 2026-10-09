@@ -10,6 +10,7 @@ export class Banner {
   private readonly title = element('b', 'ui-banner-title');
   private readonly sub = element('span', 'ui-banner-sub');
   private timer: ReturnType<typeof setTimeout> | undefined;
+  private frame = 0;
 
   constructor(root: HTMLElement) {
     this.el.append(this.title, this.sub);
@@ -20,14 +21,20 @@ export class Banner {
     this.title.textContent = title;
     this.sub.textContent = sub;
     this.sub.hidden = !sub;
+    this.cancel();
     // Shown on the next frame, so a banner just made still fades in.
-    requestAnimationFrame(() => this.el.classList.add('shown'));
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => this.el.classList.remove('shown'), seconds * 1000);
+    this.frame = requestAnimationFrame(() => this.el.classList.add('shown'));
+    this.timer = setTimeout(() => this.hide(), seconds * 1000);
   }
 
+  // Fades out now (and won't show on a frame still to come).
   hide(): void {
-    clearTimeout(this.timer);
+    this.cancel();
     this.el.classList.remove('shown');
+  }
+
+  private cancel(): void {
+    cancelAnimationFrame(this.frame);
+    clearTimeout(this.timer);
   }
 }
