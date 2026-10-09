@@ -21,7 +21,7 @@ import { Walker } from './walker';
 const CLEARANCE = 0.4; // tiles the bot keeps from what's in the way (the hero's body and a little more)
 const SPRINT_FROM = 14; // tiles: further than this, it runs
 const PRESS_EVERY = 0.6; // seconds between presses of E (or Space), so each one counts
-const RISE_EVERY = 1500; // milliseconds (real ones: the game's paused) between presses of Enter on the death screen
+const RISE_EVERY = 45; // frames between presses of Enter on the death screen (no game time passes under it: it's paused)
 
 // Whether a walker of the bot's clearance can stand at (x, z).
 export const freeOn = (map: WorldMap, obstacles: Obstacles) => (x: number, z: number) =>
@@ -186,16 +186,17 @@ export function autopilotSystem(map: WorldMap, obstacles: Obstacles, hero: Entit
   };
 }
 
-// Fallen: once the death screen is up (the game paused under it), Enter on its first choice, to rise and go on.
+// Fallen: once the death screen is up, Enter on its first choice, to rise and go on. The game's paused under it (no
+// game time passes), so it counts frames: the present stage runs once a frame, paused or not.
 export function riseSystem(hero: Entity): System {
   const keys = new BotKeys();
-  let last = 0;
+  let frames = 0;
   return {
     name: 'bot rise',
     stage: 'present',
     update(world) {
-      if (!world.has(hero, Dead) || performance.now() - last < RISE_EVERY) return;
-      last = performance.now();
+      if (!world.has(hero, Dead)) return void (frames = 0);
+      if (++frames % RISE_EVERY !== 0) return;
       if (document.querySelector('.ui-end:not([hidden]) button, .ui-menu:not([hidden]) button')) keys.tap('Enter');
     },
   };
