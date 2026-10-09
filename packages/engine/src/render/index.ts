@@ -1,6 +1,6 @@
 // Rendering: the fixed isometric camera, the lights, the stylized look (cel bands, haze, valley mist), the sky through
 // a day, portraits (a model alone on its own canvas), and the post-processing (light shafts, bloom), with their tunings.
-export { computeMovementAxes, createCamera, resizeCamera, type MovementAxes } from './camera';
+export { DEFAULT_ZOOM_LEVEL, ZOOM_LEVELS, computeMovementAxes, createCamera, resizeCamera, stepZoom, type MovementAxes } from './camera';
 export { addLights, placeSun, type Lights } from './lighting';
 export { PostProcessing } from './postprocessing';
 export { portraitFraming, releasePortrait, renderPortrait, type Framing, type PortraitFraming, type PortraitOptions } from './portrait';
