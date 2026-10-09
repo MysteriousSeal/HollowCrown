@@ -1,10 +1,19 @@
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
-import { CHUNK_SIZE, ChunkStreamer, chunkKeysIn, chunkTilesIn, flatTerrain, terrainLayer, tierRects, type ChunkLayer, type Terrain } from '../src/world';
+import { CHUNK_SIZE, ChunkStreamer, chunkKeysIn, chunkTilesIn, flatTerrain, seamsOf, terrainLayer, tierRects, type ChunkLayer, type Terrain } from '../src/world';
+import { EDGE_BITS } from '../src/world/voxelGround';
 
 const size = { width: 64, depth: 64 };
 
 describe('terrain', () => {
+  it('marks the sides of a rectangle that meet other ground, for its seams', () => {
+    const road: Terrain = { ...flatTerrain(size, 1), surfaceAt: (x) => (x >= 10 && x < 14 ? 1 : 0) };
+    const [rect] = tierRects(road, { x0: 10, z0: 0, x1: 14, z1: 16 });
+    expect(rect.surface).toBe(1);
+    expect(seamsOf(road, rect)).toBe(EDGE_BITS.west | EDGE_BITS.east); // (north: the map's edge; south: more road)
+    expect(seamsOf(flatTerrain(size, 1), tierRects(flatTerrain(size, 1), { x0: 0, z0: 0, x1: 16, z1: 16 })[0])).toBe(0);
+  });
+
   it('draws a flat chunk as one rectangle', () => {
     const rects = tierRects(flatTerrain(size, 1), { x0: 0, z0: 0, x1: 16, z1: 16 });
     expect(rects).toEqual([{ tier: 1, relief: 0, surface: 0, x: 0, z: 0, width: 16, depth: 16 }]);

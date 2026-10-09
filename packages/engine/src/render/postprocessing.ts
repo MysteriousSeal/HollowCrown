@@ -97,7 +97,7 @@ export class PostProcessing {
   setSize(width: number, height: number, pixelRatio: number): void {
     this.composer.setPixelRatio(pixelRatio);
     this.composer.setSize(width, height);
-    this.shafts.uniforms.uViewSize.value.set(this.camera.right - this.camera.left, this.camera.top - this.camera.bottom);
+    this.shafts.uniforms.uViewSize.value.set((this.camera.right - this.camera.left) / this.camera.zoom, (this.camera.top - this.camera.bottom) / this.camera.zoom);
   }
 
   // How strong the light shafts are, 0..1 of their full strength (the day and night fade them out after dusk).

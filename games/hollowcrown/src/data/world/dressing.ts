@@ -4,15 +4,19 @@
 // Used by the props' placing (environment) and their obstacles.
 
 import type { Point } from '@voxel/engine/world';
+import { FIRST_WALK_DRESSING, SHRINE_PASTURE } from './firstWalk';
 import { EAST, NORTH, SOUTH } from './kinds';
 
-export type DressingKind = 'fence' | 'hay-rick' | 'gibbet' | 'standing-stone' | 'hanging-oak' | 'garden-bed' | 'barrow' | 'old-oak' | 'hive' | 'hedge';
+export type DressingKind = 'fence' | 'hay-rick' | 'gibbet' | 'standing-stone' | 'hanging-oak' | 'garden-bed' | 'barrow' | 'old-oak' | 'hive' | 'hedge'
+  | 'flagstones' | 'rockslide' | 'milestone' | 'handcart' | 'belongings' | 'thicket' | 'lone-tree' | 'footbridge';
 
 export interface Dressing {
   kind: DressingKind;
   note: string;
   at?: Point; // a thing's tile (a garden bed's middle, which can fall between tiles)
-  radius?: number; // a barrow's, in tiles
+  radius?: number; // a barrow's, a thicket's, a scatter's, in tiles
+  rect?: [number, number, number, number]; // flagstones' extent, tiles [x0, z0, x1, z1]
+  species?: 'oak' | 'birch' | 'pine'; // a lone tree's
   facing?: number; // radians, 0 toward +z
   line?: Point[]; // a fence's run, corner to corner, on tile edges (half tiles); a hedge's, point to point
 }
@@ -74,9 +78,9 @@ function hedge(note: string, a: Point, b: Point, off: number): Dressing {
 
 const HEDGES: Dressing[] = [
   // The Pilgrim Road, the shrine to the ford: hawthorn both sides, broken at the gibbet and the hay meadows' gate.
-  hedge('the Pilgrim Road, north side, past the shrine', [500, 3379], [632, 3368], 4),
+  hedge('the Pilgrim Road, north side, past the shrine', [505, 3379], [548, 3375], 4),
   hedge("the Pilgrim Road, north side, past the Wyke farm's gate", [650, 3366], [680, 3364], 4),
-  hedge('the Pilgrim Road, south side, past the shrine', [500, 3379], [680, 3364], -4),
+  hedge('the Pilgrim Road, south side, past the shrine', [505, 3379], [550, 3375], -4), // (then the Birchwood's edge)
   hedge('the Pilgrim Road, north side, to the ford', [720, 3361], [840, 3352], 4),
   hedge('the Pilgrim Road, south side, to the ford', [720, 3361], [850, 3351], -4),
   // The Pilgrim Road, up past Chapel Hill to Tallow Green: one side only.
@@ -106,4 +110,7 @@ export const DRESSING: Dressing[] = [
   // The Hanging Oak, where the South Road bends: its hollow (MQ03's note), Jory's Wednesdays. A step off the road.
   { kind: 'hanging-oak', note: 'the Hanging Oak', at: [997, 3485], facing: EAST },
   ...HEDGES,
+  // The first walk's own (firstWalk.ts), and the Shrine Rise pasture's fence, its gate on the hut's path.
+  ...FIRST_WALK_DRESSING,
+  ...fenceRound('Shrine Rise pasture', SHRINE_PASTURE, 'south', 3),
 ];

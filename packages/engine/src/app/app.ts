@@ -3,7 +3,7 @@
 
 import * as THREE from 'three';
 import { Schedule, World, type Entity, type System } from '../ecs';
-import { CAMERA_OFFSET, PostProcessing, type Lights, addLights, computeMovementAxes, createCamera, resizeCamera, stylize, type Stylizer } from '../render';
+import { CAMERA_OFFSET, DEFAULT_ZOOM_LEVEL, PostProcessing, ZOOM_LEVELS, stepZoom, type Lights, addLights, computeMovementAxes, createCamera, resizeCamera, stylize, type Stylizer } from '../render';
 import { ChunkStreamer, TerrainResource, tileOf, type ChunkLayer } from '../world';
 import { TimeOfDay, Transform, actingSystem, attackSystem, facingSystem, healthSystems, hostileSystem, hoursPerSecond, interactionSystem, movementSystem, timeOfDaySystem, wanderSystem } from '../gameplay';
 import { Keyboard, KeyboardResource, ScreenAxes, playerInputSystem } from '../input';
@@ -34,6 +34,7 @@ export class App {
   private scale = 1;
   private pausedNow = false;
   private debug: DebugOverlay | null = null;
+  private zoomAt = DEFAULT_ZOOM_LEVEL;
   private last = 0;
 
   constructor(canvas: HTMLCanvasElement, { pixelRatio = 1 }: AppOptions = {}) {
@@ -117,6 +118,23 @@ export class App {
     this.scale = scale;
   }
 
+  // How close the camera sits: a level of ZOOM_LEVELS (the mouse wheel steps through them), remembered in the browser.
+  get zoomLevel(): number {
+    return this.zoomAt;
+  }
+
+  setZoomLevel(level: number): void {
+    this.zoomAt = stepZoom(Math.round(level), 0);
+    this.camera.zoom = ZOOM_LEVELS[this.zoomAt];
+    this.camera.updateProjectionMatrix();
+    this.resize();
+    try {
+      localStorage.setItem(ZOOM_KEY, String(this.zoomAt));
+    } catch {
+      // (not remembered, then)
+    }
+  }
+
   // Paused (a menu open): the input and simulation stop, the time of day with them, while the world stays drawn.
   get paused(): boolean {
     return this.pausedNow;
@@ -148,6 +166,11 @@ export class App {
     this.post = new PostProcessing(this.renderer, this.scene, this.camera);
     this.resize();
     window.addEventListener('resize', () => this.resize());
+    this.setZoomLevel(remembered(ZOOM_KEY) ?? this.zoomAt);
+    this.renderer.domElement.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (Math.abs(e.deltaY) > 2) this.setZoomLevel(stepZoom(this.zoomAt, e.deltaY < 0 ? 1 : -1));
+    }, { passive: false });
     const target = this.targetTransform();
     if (target) this.streamer.loadAround(target.x, target.z);
     this.last = performance.now();
@@ -189,6 +212,18 @@ export class App {
     this.renderer.setSize(width, height);
     resizeCamera(this.camera, width, height);
     this.post?.setSize(width, height, this.pixelRatio);
+  }
+}
+
+const ZOOM_KEY = 'voxel-engine.zoom';
+
+// A whole number kept in the browser, or undefined (none, or storage blocked).
+function remembered(key: string): number | undefined {
+  try {
+    const n = Number(localStorage.getItem(key) ?? NaN);
+    return Number.isInteger(n) ? n : undefined;
+  } catch {
+    return undefined;
   }
 }
 

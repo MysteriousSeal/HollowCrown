@@ -51,7 +51,6 @@ export const hud: Feature = {
     const conversation = world.setResource(ConversationScreen, new Conversation(root));
     const placeholderLog = startLog();
     const logOf = () => (world.hasResource(QuestLog) ? world.resource(QuestLog) : placeholderLog);
-    const theMap = pausingScreens(app, root, map, () => conversation.isOpen || world.has(hero, Dead), logOf);
     // A key a conversation took (to go on, to close it) isn't the hero's too: no swing, no talk again.
     let talking = false;
     window.addEventListener('keydown', () => (talking = conversation.isOpen), { capture: true });
@@ -64,6 +63,11 @@ export const hud: Feature = {
     let questsWere: ReturnType<typeof snapshot> = [];
     const placesSeen = new Set<string>();
     let region: string | undefined;
+    let placeName: string | null = null;
+    // A save's label: where the hero is, and the hour.
+    const saveLabel = () => [placeName ?? regionName, world.hasResource(TimeOfDay) ? clockText(world.resource(TimeOfDay).hours) : ''].filter(Boolean).join(' · ');
+    let regionName = '';
+    const theMap = pausingScreens(app, root, map, () => conversation.isOpen || world.has(hero, Dead), logOf, saveLabel);
 
     // The names of the villagers near the hero, over their heads, fading out farther off.
     const nameTags = (hx: number, hz: number): WorldLabel[] => {
@@ -130,8 +134,10 @@ export const hud: Feature = {
           banner.show(title, sub);
         }
         region = here?.id;
+        regionName = here?.name ?? '';
         const near = nearPlaceName(map.places(), at.x, at.z);
         place.set(near);
+        placeName = near;
         if (near && !placesSeen.has(near)) {
           placesSeen.add(near);
           toasts.push('New place', near);

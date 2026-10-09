@@ -6,7 +6,7 @@ export { CornerLabel, type Corner } from './label';
 export { END_CHOICES_AFTER, EndScreen } from './endScreen';
 export { FLOAT_SECONDS, FloatingText, floatAt } from './floatingText';
 export { JournalScreen, type JournalEntry, type JournalItem } from './journal';
-export { Menu, type MenuItem } from './menu';
+export { Menu, slider, type MenuItem } from './menu';
 export { Meter, meterShare } from './meter';
 export { Prompt } from './prompt';
 export { TOASTS_AT_ONCE, TOAST_SECONDS, ToastQueue, Toasts, type Toast } from './toasts';

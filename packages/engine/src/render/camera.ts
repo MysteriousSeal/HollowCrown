@@ -1,6 +1,14 @@
 import * as THREE from 'three';
 import { CAMERA_OFFSET, FRUSTUM_SIZE } from './constants';
 
+// How close the camera can sit: zoom levels (the camera's zoom: 1 shows FRUSTUM_SIZE world units up the screen),
+// stepped through with the mouse wheel. The farthest never shows the streamed world's edge.
+export const ZOOM_LEVELS = [0.8, 1, 1.25, 1.6, 2] as const;
+export const DEFAULT_ZOOM_LEVEL = 2; // (1.25: a figure reads clearly, with the land round it)
+
+// The level `step` levels on from `level`, stopping at the ends.
+export const stepZoom = (level: number, step: number): number => Math.max(0, Math.min(ZOOM_LEVELS.length - 1, level + step));
+
 export interface MovementAxes {
   forward: { x: number; z: number };
   right: { x: number; z: number };
