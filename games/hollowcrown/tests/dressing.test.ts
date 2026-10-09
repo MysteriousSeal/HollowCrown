@@ -30,7 +30,17 @@ function trouble(x: number, z: number): string | undefined {
 
 describe("the Vale's dressing", () => {
   it('stands every prop on open ground', () => {
-    for (const d of DRESSING.filter((d) => d.at)) expect(trouble(...d.at!), `${d.note} at (${d.at})`).toBeUndefined();
+    for (const d of DRESSING.filter((d) => d.at && d.kind !== 'garden-bed')) expect(trouble(...d.at!), `${d.note} at (${d.at})`).toBeUndefined();
+  });
+
+  it('lays every garden bed (3 tiles by 2) wholly on its garden, a few in each', () => {
+    const beds = DRESSING.filter((d) => d.kind === 'garden-bed');
+    expect(beds.length).toBeGreaterThanOrEqual(11);
+    for (const { at: [x, z] = [0, 0], note } of beds) {
+      for (const dx of [-1, 0, 1]) for (const dz of [-0.5, 0.5]) {
+        expect(map.surfaceNames[map.surfaceAt(x + dx, z + dz) - 1], `${note} at (${x + dx}, ${z + dz})`).toBe('garden');
+      }
+    }
   });
 
   it('runs every fence on tile edges, never across a road or path, by water or in a doorway', () => {
