@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { Schedule, World, type Entity, type System } from '../ecs';
 import { CAMERA_OFFSET, PostProcessing, type Lights, addLights, computeMovementAxes, createCamera, resizeCamera, stylize, type Stylizer } from '../render';
 import { ChunkStreamer, type ChunkLayer } from '../world';
-import { TimeOfDay, Transform, hoursPerSecond, movementSystem, timeOfDaySystem } from '../gameplay';
+import { TimeOfDay, Transform, hoursPerSecond, movementSystem, timeOfDaySystem, wanderSystem } from '../gameplay';
 import { Keyboard, KeyboardResource, ScreenAxes, playerInputSystem } from '../input';
 import type { Model } from '../models';
 import { dayNightSystem, type DayNightOptions } from './dayNight';
@@ -42,7 +42,7 @@ export class App {
     this.streamer = new ChunkStreamer(this.scene);
     this.world.setResource(KeyboardResource, new Keyboard());
     this.world.setResource(ScreenAxes, computeMovementAxes());
-    this.schedule.add(playerInputSystem, movementSystem, visualSystem(() => this.elapsed), this.cameraSystem);
+    this.schedule.add(playerInputSystem, wanderSystem, movementSystem, visualSystem(() => this.elapsed), this.cameraSystem);
   }
 
   // A layer of the world drawn chunk by chunk round the camera (terrain, trees...).

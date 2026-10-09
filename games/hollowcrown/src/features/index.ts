@@ -6,12 +6,14 @@ import { daylight } from './daylight';
 import { hud } from './hud';
 import { land } from './land';
 import { villagers } from './villagers';
+import { wildlife } from './wildlife';
 
 export const FEATURES: Feature[] = [
   daylight,
   land,
   buildings,
   villagers,
+  wildlife,
   hud,
 ];
 
