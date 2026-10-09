@@ -34,6 +34,9 @@ export interface WindowSpec {
   every: number; // voxels between windows along a wall
 }
 
+// Palette entries a detailed building uses if the game gives them (else the nearest of its own).
+export type StructureDetailColor = 'iron';
+
 export interface StructureSpec {
   width: number; // the walls, voxels across the front (x)
   depth: number; // and deep (z)
@@ -41,7 +44,7 @@ export interface StructureSpec {
   storeyHeight: number; // voxels
   walls: WallStyle;
   roof: RoofStyle;
-  colors: Record<StructureColor, number>;
+  colors: Record<StructureColor, number> & Partial<Record<StructureDetailColor, number>>;
   pitch?: number; // the roof's rise per voxel across (1: 45 degrees)
   overhang?: number; // the eaves beyond the walls, voxels
   plinth?: number; // the stone footing's height, voxels
@@ -51,6 +54,10 @@ export interface StructureSpec {
   chimney?: -1 | 1; // a stack at the left (-x) or right (+x) gable end
   shut?: boolean; // nobody lives there: windows shuttered, the door boarded
   seed?: number; // varies its stones, thatch and plaster
+  // Built in depth (more voxels, more triangles): plaster set a voxel back behind a frame standing proud, windows of
+  // four panes recessed in a frame, doors of alternating planks strapped with iron, shingles cut and staggered under a
+  // light ridge cap, a king post and raking struts in the gables.
+  detail?: boolean;
   paint?: (grid: VoxelGrid, layout: StructureLayout) => void; // anything more, painted over it
 }
 
@@ -105,7 +112,18 @@ export function structureGrid(spec: StructureSpec): { grid: VoxelGrid; layout: S
       if (corner || y === eaves - 1) return C.timber;
       return y < plinth + 2 ? C.plasterShade : plaster(u, y, face, 0.3);
     }
-    if (gable) return Math.abs(u - (length - 1) / 2) < 1 || y === eaves ? C.timber : plaster(u, y, face, 0.12);
+    if (gable) {
+      const mid = (length - 1) / 2;
+      if (Math.abs(u - mid) < 1 || y === eaves) return C.timber; // (the king post, on the tie beam)
+      if (spec.detail && mid > 4) {
+        // Raking struts from near the gable's feet up to the king post's middle.
+        const along = Math.abs(u - mid);
+        const up = y - eaves;
+        const strut = ((mid - 2 - along) * (rise / 2)) / (mid - 2);
+        if (along <= mid - 2 && Math.abs(up - strut) < 0.6) return C.timber;
+      }
+      return plaster(u, y, face, 0.12);
+    }
     const yIn = y % storeyHeight;
     if (corner || u % 8 === 0 || yIn === storeyHeight - 1 || y === plinth || (yIn === 0 && y > 0)) return C.timber;
     const panel = Math.floor(u / 8);
@@ -137,6 +155,28 @@ export function structureGrid(spec: StructureSpec): { grid: VoxelGrid; layout: S
     if (out && y === storeyHeight) for (let x = x0; x <= x1; x++) [z0 - 1, z1 + 1].forEach((z) => setColor(grid, x, y, z, C.timberDark)); // (the jetty's beam)
   }
 
+  // In depth: the plaster of every face set a voxel back, the frame left standing proud of it.
+  if (spec.detail && spec.walls !== 'stone') {
+    const recess = (x: number, y: number, z: number, inX: number, inZ: number) => {
+      const c = grid.cells[x + size[0] * (y + size[1] * z)];
+      if (c !== C.plaster && c !== C.plasterShade) return;
+      setColor(grid, x, y, z, 0);
+      setColor(grid, x + inX, y, z + inZ, c);
+    };
+    for (let y = plinth; y < eaves + rise; y++) {
+      const out = y >= eaves ? jut : y >= storeyHeight ? jut : 0;
+      const [za, zb] = [z0 - out, z1 + out];
+      for (let x = x0 + 1; x < x1; x++) {
+        recess(x, y, zb, 0, -1);
+        recess(x, y, za, 0, 1);
+      }
+      for (let z = za + 1; z < zb; z++) {
+        recess(x0, y, z, 1, 0);
+        recess(x1, y, z, -1, 0);
+      }
+    }
+  }
+
   // ---- the roof: two slopes from the eaves to the ridge, running across the front ----
   for (let x = x0 - 1; x <= x1 + 1; x++) {
     for (let z = Math.ceil(zc - halfSpan); z <= Math.floor(zc + halfSpan); z++) {
@@ -144,7 +184,7 @@ export function structureGrid(spec: StructureSpec): { grid: VoxelGrid; layout: S
       const fromRidge = Math.abs(z - zc);
       for (let y = top - thick + 1; y <= top; y++) {
         let c: number;
-        if (fromRidge < 1.5) c = spec.roof === 'thatch' && x % 4 === 0 ? C.roofLight : C.roofDark; // (the ridge: a capping, pegged)
+        if (fromRidge < 1.5) c = spec.detail ? C.roofLight : spec.roof === 'thatch' && x % 4 === 0 ? C.roofLight : C.roofDark; // (the ridge: a capping, pegged)
         else if (halfSpan - fromRidge < 1.5 || x === x0 - 1 || x === x1 + 1) c = C.roofDark; // (the eaves' and verges' edge)
         else if (spec.roof === 'thatch') {
           const h = hashUnit(Math.floor(x / 3), Math.floor(top / 4), seed + 3); // (laid in bundles: strands 3 wide)
@@ -152,8 +192,14 @@ export function structureGrid(spec: StructureSpec): { grid: VoxelGrid; layout: S
         } else {
           const course = Math.floor(fromRidge / 2);
           const size = spec.roof === 'slate' ? 4 : 3;
-          const h = hashUnit(Math.floor((x + (course % 2) * 2) / size), course, seed + 4);
+          const along = x + (course % 2) * Math.ceil(size / 2);
+          const h = hashUnit(Math.floor(along / size), course, seed + 4);
           c = h < 0.5 ? C.roof : h < 0.8 ? C.roofLight : C.roofDark;
+          if (spec.detail) {
+            // Each shingle cut from the next, courses staggered, and every other pair of courses a shade apart.
+            if (along % size === 0 && y === top) c = C.roofDark;
+            else if (Math.floor(course / 2) % 2 === 1 && c === C.roof) c = C.roofLight;
+          }
         }
         setColor(grid, x, y, z, c);
       }
@@ -171,11 +217,17 @@ export function structureGrid(spec: StructureSpec): { grid: VoxelGrid; layout: S
     for (let x = dx0; x <= dx1; x++) {
       for (let y = 0; y < h; y++) {
         for (let r = 0; r < recess; r++) setColor(grid, x, y, z1 - r, 0);
-        const planks = spec.shut ? (y % 3 === 1 ? C.timberDark : C.door) : (x - dx0) % 3 === 0 ? C.doorDark : C.door;
+        const strap = spec.detail && !spec.shut && (y === 2 || y === h - 3);
+        const plank = spec.detail ? ((x - dx0) % 2 === 0 ? C.door : C.doorDark) : (x - dx0) % 3 === 0 ? C.doorDark : C.door;
+        const planks = spec.shut ? (y % 3 === 1 ? C.timberDark : C.door) : strap ? (C.iron ?? C.timberDark) : plank;
         setColor(grid, x, y, z1 - recess, open ? C.inside : planks);
       }
       setColor(grid, x, h, z1, C.timber); // (the lintel)
       setColor(grid, x, 0, z1 + 1, C.stoneLight); // (the step)
+    }
+    if (spec.detail) {
+      for (const x of [dx0 - 2, dx1 + 2]) setColor(grid, x, h, z1, C.timber); // (the lintel running past the jambs)
+      for (let x = dx0 - 1; x <= dx1 + 1; x++) setColor(grid, x, 0, z1 + 2, C.stone); // (a second, lower step)
     }
     for (let y = 0; y <= h; y++) [dx0 - 1, dx1 + 1].forEach((x) => setColor(grid, x, y, z1, C.timber));
   }
@@ -212,11 +264,13 @@ export function structureGrid(spec: StructureSpec): { grid: VoxelGrid; layout: S
                 setColor(grid, x, y, z, C.timber);
               } else if (edge) {
                 setColor(grid, x + wall.out[0], y, z + wall.out[1], C.shutter); // (the shutters, folded back)
+                if (spec.detail) setColor(grid, x, y, z, C.timber); // (the frame round the glass)
               } else if (spec.shut) {
                 setColor(grid, x, y, z, y % 2 ? C.shutter : C.timberDark);
               } else {
                 setColor(grid, x, y, z, 0);
-                setColor(grid, x - wall.out[0], y, z - wall.out[1], du === Math.floor(w / 2) ? C.timberDark : C.window);
+                const cross = du === Math.floor(w / 2) || (spec.detail && y === base + Math.floor(h / 2));
+                setColor(grid, x - wall.out[0], y, z - wall.out[1], cross ? C.timberDark : C.window);
               }
             }
           }
