@@ -17,6 +17,9 @@ export const PROPS = namedPalette({
   soil: 0x6b4a2e, furrow: 0x523822, cabbage: 0x7da05a, cabbageDark: 0x557a3e, leek: 0x9cbf74, bean: 0x4f7f34,
   // the barrow
   turf: 0x5f9a46, turfLight: 0x7cb256, turfDark: 0x467a37, earth: 0x5e4630, earthDark: 0x3e2e20,
+  // by the roads (roadside.ts): a pilgrim's things, hedges
+  cloth: 0xb9a888, clothDark: 0x8a7a60, clay: 0xa0603a, leather: 0x5a3c26,
+  hedge: 0x3f6b30, hedgeDark: 0x2c4f24, hedgeLight: 0x5f8f3e, blossom: 0xe8e2d0,
 });
 
 export const P = PROPS.C;

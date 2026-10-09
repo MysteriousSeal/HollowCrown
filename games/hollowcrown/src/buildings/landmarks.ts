@@ -53,7 +53,16 @@ export function pilgrimShrine(): VoxelGrid {
   return g;
 }
 
-// Each landmark drawn here, by its place's id: its grid, and the room it takes (half its size, tiles, x and z).
-export const LANDMARKS: Record<string, { grid: () => VoxelGrid; half: [number, number] }> = {
-  'pilgrims-shrine': { grid: pilgrimShrine, half: [0.3, 0.3] },
+// Each landmark drawn here, by its place's id: its grid, the room it takes (half its size, tiles, x and z), and how far
+// it stands back from its place's tile (tiles, behind its front: the shrine's tile is where the game starts, so the
+// hero wakes in front of it, not inside it).
+export const LANDMARKS: Record<string, { grid: () => VoxelGrid; half: [number, number]; back?: number }> = {
+  'pilgrims-shrine': { grid: pilgrimShrine, half: [0.3, 0.3], back: 2 },
 };
+
+// Where a landmark stands (world units): its place's tile, moved back behind its front as far as it says.
+export function landmarkAt(place: { at: [number, number]; facing?: number; id: string }): [number, number] {
+  const back = LANDMARKS[place.id]?.back ?? 0;
+  const f = place.facing ?? 0;
+  return [place.at[0] - Math.sin(f) * back, place.at[1] - Math.cos(f) * back];
+}

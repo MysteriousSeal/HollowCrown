@@ -10,7 +10,7 @@ import { STRUCTURE_VOXEL, StructureModel, type StructureSpec } from '@voxel/engi
 import { Obstacles, placesLayer, type ChunkLayer, type PlaceData, type Point, type WorldMap } from '@voxel/engine/world';
 import type { VoxelGrid } from '@voxel/engine/voxel';
 import { cardinal, footprint, type BuildingProps } from '../data/world/kinds';
-import { LANDMARKS } from './landmarks';
+import { LANDMARKS, landmarkAt } from './landmarks';
 import { LOOK, structureColors, type Shutter } from './palette';
 import {
   anvil, bellCote, chandlerSign, mossy, doorstepStool, dryingCandles, dryingHerbs, forgeHearth, heronPlaque, holedRoof, innSign,
@@ -178,7 +178,7 @@ export function placesOf(map: WorldMap): ChunkLayer {
       }
       const root = looks.get(look)?.clone() ?? null; // (a clone shares its meshes' geometry)
       if (root) {
-        const [cx, cz] = place.kind === 'building' ? centreOf(place) : place.at;
+        const [cx, cz] = place.kind === 'building' ? centreOf(place) : place.kind === 'landmark' ? landmarkAt(place) : place.at;
         root.position.set(cx, map.groundY(...place.at), cz);
         root.rotation.y = place.facing ?? 0;
       }
@@ -204,7 +204,7 @@ export function levelGround(map: WorldMap): void {
 }
 
 // What stands in the way on `map`: every building's walls (inset from its footprint as they're built: the eaves can
-// be walked under), every fixture; added to `obstacles` (a new set, none given).
+// be walked under), every fixture, every landmark drawn here; added to `obstacles` (a new set, none given).
 export function obstaclesOf(map: WorldMap, obstacles = new Obstacles()): Obstacles {
   for (const place of map.places()) {
     let half: [number, number] | undefined;
@@ -215,7 +215,7 @@ export function obstaclesOf(map: WorldMap, obstacles = new Obstacles()): Obstacl
       half = cardinal(place.facing)! % 2 === 0 ? [w, d] : [d, w];
       [cx, cz] = centreOf(place);
     } else if (place.kind === 'fixture') half = fixtureOf(place)?.half;
-    else if (place.kind === 'landmark') half = LANDMARKS[place.id]?.half;
+    else if (place.kind === 'landmark') [half, [cx, cz]] = [LANDMARKS[place.id]?.half, landmarkAt(place)];
     if (half) obstacles.add({ x0: cx - half[0], z0: cz - half[1], x1: cx + half[0], z1: cz + half[1] });
   }
   return obstacles;
