@@ -17,6 +17,57 @@ exports[`people > Ada Cobbe: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Alys Fletcher: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.113,
+    0.45,
+    0.092,
+  ],
+  "min": [
+    -0.096,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1408,
+}
+`;
+
+exports[`people > Bran Hollin: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.175,
+    0.45,
+    0.15,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.1,
+  ],
+  "triangles": 1624,
+}
+`;
+
+exports[`people > Cob Fletcher: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.45,
+    0.092,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1260,
+}
+`;
+
 exports[`people > Dunstan: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -85,6 +136,23 @@ exports[`people > Father Cuthwin: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Gammer Orr: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.108,
+    0.466,
+    0.164,
+  ],
+  "min": [
+    -0.108,
+    -0,
+    -0.072,
+  ],
+  "triangles": 1658,
+}
+`;
+
 exports[`people > Garrick Fenn: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -99,6 +167,23 @@ exports[`people > Garrick Fenn: builds, poses and keeps their shape 1`] = `
     -0.092,
   ],
   "triangles": 1336,
+}
+`;
+
+exports[`people > Gert Hollin: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.108,
+    0.467,
+    0.108,
+  ],
+  "min": [
+    -0.108,
+    -0,
+    -0.108,
+  ],
+  "triangles": 1150,
 }
 `;
 
@@ -187,6 +272,23 @@ exports[`people > Nan Wicket: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Ned Tolley: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.45,
+    0.092,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1664,
+}
+`;
+
 exports[`people > Odo Pell: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -238,7 +340,41 @@ exports[`people > Rolf Reede: builds, poses and keeps their shape 1`] = `
 }
 `;
 
-exports[`people > Tamsin: builds, poses and keeps their shape 1`] = `
+exports[`people > Sibyl Hask: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.108,
+    0.467,
+    0.108,
+  ],
+  "min": [
+    -0.108,
+    -0,
+    -0.108,
+  ],
+  "triangles": 1256,
+}
+`;
+
+exports[`people > Simkin Orr: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.447,
+    0.157,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.078,
+  ],
+  "triangles": 984,
+}
+`;
+
+exports[`people > Tamsin Reede: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
   "max": [
@@ -306,7 +442,7 @@ exports[`people > Wenna: builds, poses and keeps their shape 1`] = `
 }
 `;
 
-exports[`people > Wynn: builds, poses and keeps their shape 1`] = `
+exports[`people > Wynn Tidy: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
   "max": [
