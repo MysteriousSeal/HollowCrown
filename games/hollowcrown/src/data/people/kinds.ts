@@ -34,6 +34,7 @@ export interface Villager {
   barks: Bark[];
   quests: string[];
   away?: { until: string; at: Spot }; // gone from their routine until a quest ends (Wat, held at the Red Hen camp)
+  bed?: { line: string; yes: string; no: string }; // an innkeeper's offer of a bed, and the hero's two answers
 }
 
 // The line of a bark, whatever its kind.

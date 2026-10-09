@@ -21,6 +21,7 @@ export const BRINDLEFORD_PEOPLE: Villager[] = [
     firstWords: "Wipe your feet. The floor's the only thing in here I've paid for.",
     barks: ["Ferry's sunk. So's the ferryman, near enough.", "Pay first. The dead don't, and I've had my fill of them.", "River's quiet. I don't like it quiet."],
     quests: ['MQ01', 'MQ04', 'MQ11', 'SQ-BV8'],
+    bed: { line: "Bed's aired. Sheets are mostly clean. Up the stair, second door, don't mind the noises.", yes: '[Sleep till morning]', no: 'Not yet.' },
   },
   {
     id: 'elsa-fenn', name: 'Elsa Fenn', who: 'cook, 24, Garrick\'s daughter', home: 'ferrymans-rest', work: 'ferrymans-rest',
