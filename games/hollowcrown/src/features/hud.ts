@@ -1,16 +1,18 @@
 // The HUD over the scene (styled in index.html): the region's name fading in large as the hero comes into it (and
-// at the start), the named place the hero is near, small in the top-left corner, and the time of day in the top-right, the quest followed under it;
+// at the start), the named place the hero is near, small in the top-left corner, and the time of day in the top-right, the quest followed under it; notices sliding in on the
+// left (a quest started, an objective done, a new place);
 // what E would do, low in the middle; the conversation screen (ConversationScreen, for gameplay to open); the map
 // (M), drawn the first time it's opened; and the pause menu (Esc). The game pauses behind the map and the menu.
 
 import type { System } from '@voxel/engine/ecs';
 import { InReach, TimeOfDay, Transform } from '@voxel/engine/gameplay';
-import { Banner, Conversation, CornerLabel, MAP_TILES_PER_PIXEL, MapScreen, Menu, Prompt, TrackerPanel, createOverlay, drawMapImage } from '@voxel/engine/ui';
+import { Banner, Conversation, CornerLabel, MAP_TILES_PER_PIXEL, MapScreen, Menu, Prompt, Toasts, TrackerPanel, createOverlay, drawMapImage } from '@voxel/engine/ui';
 import { CONTROLS } from '../ui/controls';
 import { clockText, nearPlaceName, regionBanner, regionOf } from '../ui/hudText';
 import { MAP_GROUND, mapLabels, mapMarks } from '../ui/mapContent';
-import { START_PROGRESS, trackerText } from '../ui/questText';
-import { ConversationScreen, TrackedQuest } from '../ui/screens';
+import { questNews, snapshot, startLog, trackedOf } from '../ui/questLog';
+import { trackerText } from '../ui/questText';
+import { ConversationScreen, QuestLog } from '../ui/screens';
 import type { Feature } from './context';
 
 export const hud: Feature = {
@@ -21,7 +23,11 @@ export const hud: Feature = {
     const place = new CornerLabel(root, 'top-left', 'ui-place');
     const clock = new CornerLabel(root, 'top-right', 'ui-clock');
     const tracker = new TrackerPanel(root);
+    const toasts = new Toasts(root);
     const prompt = new Prompt(root);
+    const placeholderLog = startLog();
+    let questsWere: ReturnType<typeof snapshot> = [];
+    const placesSeen = new Set<string>();
     const conversation = app.world.setResource(ConversationScreen, new Conversation(root));
     let region: string | undefined;
 
@@ -69,7 +75,11 @@ export const hud: Feature = {
       stage: 'present',
       update(world) {
         if (world.hasResource(TimeOfDay)) clock.set(clockText(world.resource(TimeOfDay).hours));
-        tracker.set(trackerText(world.hasResource(TrackedQuest) ? world.resource(TrackedQuest) : START_PROGRESS));
+        const log = world.hasResource(QuestLog) ? world.resource(QuestLog) : placeholderLog;
+        const tracked = trackedOf(log);
+        tracker.set(tracked && trackerText(tracked));
+        for (const { title, text } of questNews(questsWere, log.quests)) toasts.push(title, text);
+        questsWere = snapshot(log);
         const reach = world.hasResource(InReach) ? world.resource(InReach) : null;
         prompt.set(reach?.entity != null && !conversation.isOpen ? 'E' : null, reach?.label);
         const at = world.get(hero, Transform);
@@ -80,7 +90,12 @@ export const hud: Feature = {
           banner.show(title, sub);
         }
         region = here?.id;
-        place.set(nearPlaceName(map.places(), at.x, at.z));
+        const near = nearPlaceName(map.places(), at.x, at.z);
+        place.set(near);
+        if (near && !placesSeen.has(near)) {
+          placesSeen.add(near);
+          toasts.push('New place', near);
+        }
         if (mapScreen?.isOpen) {
           mapScreen.setTitle(here ? regionBanner(here).title : '');
           mapScreen.setHero(at.x, at.z, at.facing);
