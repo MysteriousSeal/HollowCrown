@@ -7,6 +7,7 @@ import type { Entity, System } from '../ecs';
 import { defineComponent } from '../ecs';
 import { hashUnit } from '../math';
 import { MoveIntent, MoveSpeed, Transform } from './components';
+import { Dead } from './health';
 
 export const WANDER_SPEED = 1.2; // tiles a second: a stroll (the hero walks at about 4)
 const ARRIVED = 0.15; // world units: this close to its spot, it's there
@@ -68,6 +69,7 @@ export const wanderSystem: System = {
   stage: 'input',
   update(world, dt) {
     for (const entity of world.query(Wander, Transform)) {
+      if (world.has(entity, Dead)) continue;
       const w = world.read(entity, Wander);
       const at = world.read(entity, Transform);
       let intent = world.get(entity, MoveIntent);
