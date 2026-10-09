@@ -8,7 +8,7 @@ import type { Point } from '@voxel/engine/world';
 export type Spot = string | Point;
 
 // What they're doing there.
-export type Doing = 'sleep' | 'work' | 'eat' | 'drink' | 'pray' | 'sit' | 'stand' | 'wander' | 'gather' | 'herd' | 'travel';
+export type Doing = 'held' | 'sleep' | 'work' | 'eat' | 'drink' | 'pray' | 'sit' | 'stand' | 'wander' | 'gather' | 'herd' | 'travel';
 
 // One step of a day: from `from` (the hour, 0..23) until the next step's hour, they're at `at`, doing `doing`. A step
 // with `days` only happens on the days it names (the day count since the game began: day % every === on); on other
@@ -33,7 +33,9 @@ export interface Villager {
   firstWords: string; // the first time the hero speaks to them
   barks: Bark[];
   quests: string[];
-  away?: { until: string; at: Spot }; // gone from their routine until a quest ends (Wat, held at the Red Hen camp)
+  // Somewhere else instead of their routine until a quest is done (Wat, in the Red Hen's stock until SQ-BV7, which
+  // freeing him in MQ03 completes): spawned there, doing that, then home.
+  away?: { until: string; at: Spot; doing: Doing };
   bed?: { line: string; yes: string; no: string }; // an innkeeper's offer of a bed, and the hero's two answers
 }
 

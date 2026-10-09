@@ -11,6 +11,7 @@ const THE_RIVERBANK: Point = [862, 3346]; // the west bank, by the Fletchers'
 const MEGS_DOORSTEP: Point = [924, 3348];
 const ORRS_DOORSTEP: Point = [934, 3357];
 const HALFWAY_UP_THE_CHAPEL_PATH: Point = [1040, 3230]; // Cuthwin, at dusk, never further
+const THE_RED_HENS_STOCK: Point = [617, 3557]; // Wat's, by the camp's fire, until he's freed
 const THE_SOUTH_PASTURES: Point = [1030, 3500]; // Wenna's ewes, below the Hanging Oak
 
 export const BRINDLEFORD_PEOPLE: Villager[] = [
@@ -63,7 +64,7 @@ export const BRINDLEFORD_PEOPLE: Villager[] = [
     firstWords: "I'm not a coward. I just didn't want to hurt that old woman.",
     barks: ['Master Tobin says I swing like a drowning cat.', 'They tied her to a post. I just... ran.', "Don't tell him where you found me."],
     quests: ['SQ-BV7'],
-    away: { until: 'SQ-BV7', at: 'red-hen-camp' },
+    away: { until: 'SQ-BV7', at: THE_RED_HENS_STOCK, doing: 'held' },
   },
   {
     id: 'nan-wicket', name: 'Nan Wicket', who: 'herbalist, 70', home: 'herbalists-cottage', work: 'herbalists-cottage',
