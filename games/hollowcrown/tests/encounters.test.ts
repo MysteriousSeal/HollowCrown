@@ -9,7 +9,7 @@ import { obstaclesOf } from '../src/buildings';
 import { CREATURES } from '../src/creatures';
 import { QUESTS } from '../src/data/quests';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
-import { ENCOUNTERS, provokeSystem } from '../src/features/encounters';
+import { ENCOUNTERS, KEEPERS, provokeSystem } from '../src/features/encounters';
 import { Creature } from '../src/systems/kills';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
@@ -22,6 +22,15 @@ describe('encounters', () => {
       expect(QUESTS[quest]?.stages.some((s) => s.id === stage), key).toBe(true);
       expect(CREATURES.some((c) => c.id === creature), key).toBe(true);
       for (const [x, z] of at) expect(map.walkable(x, z) && !obstacles.blocks(x, z, 0.2), `${key} ${x},${z}`).toBe(true);
+    }
+  });
+
+  it('keeps the Red Hen camp with five of the band, on open ground', () => {
+    const camp = KEEPERS.find((k) => k.note === 'the Red Hen camp')!;
+    expect(camp.at).toHaveLength(5);
+    for (const [x, z] of camp.at) {
+      expect(map.walkable(x, z) && !obstacles.blocks(x, z, 0.2), `${x},${z}`).toBe(true);
+      expect(Math.hypot(x - 620, z - 3560)).toBeLessThan(8);
     }
   });
 
