@@ -14,8 +14,8 @@ import { NATURE } from './palette';
 const SINK = 0.02; // a little into the ground, no gap at the foot
 
 // One thing growing (or standing: a fence, a stone): where (world units), its shape (a key of the layer's shapes),
-// quarter turns, its tint (0..1: darker to lighter), and how far it's stretched along its own x (a fence's rails to
-// the length of their run; none: 1).
+// quarter turns, its tint (0..1: darker to lighter), how far it's stretched along its own x (a fence's rails to the
+// length of their run; none: 1), and the color its shape's multiplied by (grass, tinted where it grows; none: white).
 export interface Growth {
   x: number;
   z: number;
@@ -23,6 +23,7 @@ export interface Growth {
   turn: number;
   tint: number;
   stretch?: number;
+  color?: number;
 }
 
 // A shape's mesh from its grid (painted from `palette`), its foot centred under its origin; `voxel`: world units a
@@ -59,7 +60,7 @@ export function coarse(grid: VoxelGrid): VoxelGrid {
 
 // How far (tiles, from the hero to a chunk's middle) a chunk's things are drawn by their far stand-ins, as the camera
 // measures it: its own height and distance off the hero, and that far across the ground.
-export const FAR_TILES = 25;
+export const FAR_TILES = 14;
 const FAR = Math.hypot(CAMERA_OFFSET.length(), FAR_TILES);
 
 // The layer of what grows in chunks `keys`: `grow` works out a chunk's growth the first time it comes near (kept for
@@ -68,16 +69,16 @@ const FAR = Math.hypot(CAMERA_OFFSET.length(), FAR_TILES);
 // FAR_TILES off or more; `tint`: how far a tint reaches either side of the shape's own colors.
 export function instancedLayer(
   map: WorldMap, keys: Iterable<string>, grow: (key: string) => Growth[], meshOf: (shape: string) => THREE.BufferGeometry,
-  { tint = 0.08, farOf }: { tint?: number; farOf?: (shape: string) => THREE.BufferGeometry } = {},
+  { tint = 0.08, farOf }: { tint?: number; farOf?: (shape: string) => THREE.BufferGeometry | null } = {},
 ): ChunkLayer {
   const material = litMaterial();
   const matrix = new THREE.Matrix4();
   const stretch = new THREE.Matrix4();
   const color = new THREE.Color();
   const grown = new Map<string, Map<string, Growth[]>>(); // chunk -> shape -> its growth
-  const cache = (make: (shape: string) => THREE.BufferGeometry) => {
-    const made = new Map<string, THREE.BufferGeometry>();
-    return (shape: string) => made.get(shape) ?? made.set(shape, make(shape)).get(shape)!;
+  const cache = <T>(make: (shape: string) => T) => {
+    const made = new Map<string, T>();
+    return (shape: string): T => (made.has(shape) ? made.get(shape)! : made.set(shape, make(shape)).get(shape)!);
   };
   const [near, far] = [cache(meshOf), farOf && cache(farOf)];
   const byShape = (key: string) => {
@@ -93,13 +94,16 @@ export function instancedLayer(
     return grown.get(key)!;
   };
   // One instanced mesh a shape, from `meshes`, each thing placed less `origin` (where the meshes' parent stands).
-  const meshesOf = (key: string, meshes: (shape: string) => THREE.BufferGeometry, [ox, oz]: [number, number]) =>
-    [...byShape(key)].map(([shape, all]) => {
-      const mesh = new THREE.InstancedMesh(meshes(shape), material, all.length);
+  // (a shape with no mesh there is left out)
+  const meshesOf = (key: string, meshes: (shape: string) => THREE.BufferGeometry | null, [ox, oz]: [number, number]) =>
+    [...byShape(key)].flatMap(([shape, all]) => {
+      const geometry = meshes(shape);
+      if (!geometry) return [];
+      const mesh = new THREE.InstancedMesh(geometry, material, all.length);
       all.forEach((g, i) => {
         matrix.makeRotationY((g.turn * Math.PI) / 2).multiply(stretch.makeScale(g.stretch ?? 1, 1, 1)).setPosition(g.x - ox, map.groundY(g.x, g.z) - SINK, g.z - oz);
         mesh.setMatrixAt(i, matrix);
-        mesh.setColorAt(i, color.setScalar(1 + (g.tint * 2 - 1) * tint));
+        mesh.setColorAt(i, color.set(g.color ?? 0xffffff).multiplyScalar(1 + (g.tint * 2 - 1) * tint));
       });
       mesh.computeBoundingSphere();
       return mesh;
@@ -108,14 +112,15 @@ export function instancedLayer(
     materials: [material],
     chunkKeys: () => keys,
     build: (key) => {
-      if (!byShape(key).size) return []; // (nothing grows here; an empty Group.add() would complain)
       if (!far) return meshesOf(key, near, [0, 0]);
+      if (byShape(key).size === 0) return []; // (nothing grows there)
       // near and far, the chunk's middle their origin (the camera's distance to it picks which is drawn)
       const [cx, cz] = key.split(',').map((n) => (Number(n) + 0.5) * CHUNK_SIZE - 0.5);
       const lod = new THREE.LOD();
       lod.position.set(cx, 0, cz);
-      lod.addLevel(new THREE.Group().add(...meshesOf(key, near, [cx, cz])), 0);
-      lod.addLevel(new THREE.Group().add(...meshesOf(key, far, [cx, cz])), FAR);
+      const group = (meshes: THREE.Object3D[]) => (meshes.length ? new THREE.Group().add(...meshes) : new THREE.Group());
+      lod.addLevel(group(meshesOf(key, near, [cx, cz])), 0);
+      lod.addLevel(group(meshesOf(key, far, [cx, cz])), FAR);
       return [lod];
     },
   };

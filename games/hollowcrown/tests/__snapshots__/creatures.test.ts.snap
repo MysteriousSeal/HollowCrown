@@ -272,6 +272,40 @@ exports[`creatures > deadPilgrim: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > deerDoe: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.538,
+  "max": [
+    0.063,
+    0.625,
+    0.287,
+  ],
+  "min": [
+    -0.063,
+    0,
+    -0.193,
+  ],
+  "triangles": 432,
+}
+`;
+
+exports[`creatures > deerStag: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.672,
+  "max": [
+    0.112,
+    0.84,
+    0.322,
+  ],
+  "min": [
+    -0.112,
+    0,
+    -0.216,
+  ],
+  "triangles": 594,
+}
+`;
+
 exports[`creatures > draugr: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.72,
