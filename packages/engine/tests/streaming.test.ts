@@ -69,6 +69,24 @@ describe('chunk streaming', () => {
     for (const group of scene.children) for (const o of group.children) expect(o).toBeInstanceOf(THREE.Group);
   });
 
+  it('leaves out what a layer builds that isn\'t a 3D object, warning once with its name', () => {
+    const warned: string[] = [];
+    const warn = console.warn;
+    console.warn = (message: string) => warned.push(message);
+    try {
+      const layer: ChunkLayer = { name: 'meadows', materials: [], chunkKeys: () => [], build: () => [new THREE.Group(), undefined as unknown as THREE.Object3D] };
+      const scene = new THREE.Scene();
+      const streamer = new ChunkStreamer(scene, () => 0);
+      streamer.layer(layer);
+      streamer.loadAround(100, 100);
+      for (const chunk of scene.children) for (const o of chunk.children) expect(o).toBeInstanceOf(THREE.Group);
+      expect(warned).toHaveLength(1);
+      expect(warned[0]).toContain('"meadows"');
+    } finally {
+      console.warn = warn;
+    }
+  });
+
   it('splits a places chunk into a step per place', () => {
     const places = Array.from({ length: 3 }, (_, i) => ({ kind: 'prop', at: [2 + i, 2] }) as unknown as PlaceData);
     const layer = placesLayer(places, () => new THREE.Group(), []);

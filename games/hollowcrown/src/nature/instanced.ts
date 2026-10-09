@@ -108,6 +108,7 @@ export function instancedLayer(
     materials: [material],
     chunkKeys: () => keys,
     build: (key) => {
+      if (!byShape(key).size) return []; // (nothing grows here; an empty Group.add() would complain)
       if (!far) return meshesOf(key, near, [0, 0]);
       // near and far, the chunk's middle their origin (the camera's distance to it picks which is drawn)
       const [cx, cz] = key.split(',').map((n) => (Number(n) + 0.5) * CHUNK_SIZE - 0.5);
@@ -115,7 +116,7 @@ export function instancedLayer(
       lod.position.set(cx, 0, cz);
       lod.addLevel(new THREE.Group().add(...meshesOf(key, near, [cx, cz])), 0);
       lod.addLevel(new THREE.Group().add(...meshesOf(key, far, [cx, cz])), FAR);
-      return byShape(key).size ? [lod] : [];
+      return [lod];
     },
   };
 }

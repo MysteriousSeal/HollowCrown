@@ -37,6 +37,7 @@ describe('creatures', () => {
       if (entry.id !== 'rook' && entry.id !== 'rookLeader' && entry.id !== 'rookFlock') expect(standing.min[1]).toBeGreaterThan(-0.06); // (on the ground, not in it)
       expect({ height: round(model.height), ...standing }).toMatchSnapshot();
       for (const t of [0.4, 1.3, 2.9]) model.animate(t, 1); // (walking: no throw, no NaN)
+      for (const name of ['graze', 'alert', 'sitUp', 'bound', 'sniff', 'tailWag', 'peck', 'preen', 'flutter', 'lookRound']) for (const phase of [0.3, 0.7]) model.animate(1, 0, { name, phase }); // (its gestures, if it has them)
       model.root.updateMatrixWorld(true);
       model.root.traverse((o) => expect(Number.isFinite(o.matrixWorld.elements[13])).toBe(true));
     });

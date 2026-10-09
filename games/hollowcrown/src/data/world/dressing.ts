@@ -6,7 +6,7 @@
 import type { Point } from '@voxel/engine/world';
 import { EAST, NORTH, SOUTH } from './kinds';
 
-export type DressingKind = 'fence' | 'hay-rick' | 'gibbet' | 'standing-stone' | 'hanging-oak' | 'garden-bed' | 'barrow' | 'old-oak' | 'hive';
+export type DressingKind = 'fence' | 'hay-rick' | 'gibbet' | 'standing-stone' | 'hanging-oak' | 'garden-bed' | 'barrow' | 'old-oak' | 'hive' | 'hedge';
 
 export interface Dressing {
   kind: DressingKind;
@@ -14,7 +14,7 @@ export interface Dressing {
   at?: Point; // a thing's tile (a garden bed's middle, which can fall between tiles)
   radius?: number; // a barrow's, in tiles
   facing?: number; // radians, 0 toward +z
-  line?: Point[]; // a fence's run, corner to corner, on tile edges (half tiles)
+  line?: Point[]; // a fence's run, corner to corner, on tile edges (half tiles); a hedge's, point to point
 }
 
 // A fence round a rect of tiles [x0, z0, x1, z1], on its outer edges, its runs broken where `open` says: a side left
@@ -62,6 +62,33 @@ const SISTERS: Point[] = Array.from({ length: 9 }, (_, i) => {
   return [Math.round(750 + 7 * Math.cos(a)), Math.round(3050 + 7 * Math.sin(a))] as Point;
 });
 
+// Hedgerows along the roads, a few tiles off them, either side, broken where a track or a gate comes through: a run
+// from `a` to `b` along the road, `off` tiles to its left (+) or right (-) as you walk from a to b.
+function hedge(note: string, a: Point, b: Point, off: number): Dressing {
+  const [dx, dz] = [b[0] - a[0], b[1] - a[1]];
+  const length = Math.hypot(dx, dz);
+  const [nx, nz] = [dz / length, -dx / length]; // (to the left, walking a to b, x east and z south)
+  const shift = (p: Point): Point => [Math.round((p[0] + nx * off) * 2) / 2, Math.round((p[1] + nz * off) * 2) / 2];
+  return { kind: 'hedge', note, line: [shift(a), shift(b)] };
+}
+
+const HEDGES: Dressing[] = [
+  // The Pilgrim Road, the shrine to the ford: hawthorn both sides, broken at the gibbet and the hay meadows' gate.
+  hedge('the Pilgrim Road, north side, past the shrine', [500, 3379], [680, 3364], 4),
+  hedge('the Pilgrim Road, south side, past the shrine', [500, 3379], [680, 3364], -4),
+  hedge('the Pilgrim Road, north side, to the ford', [720, 3361], [840, 3352], 4),
+  hedge('the Pilgrim Road, south side, to the ford', [720, 3361], [850, 3351], -4),
+  // The Pilgrim Road, up past Chapel Hill to Tallow Green: one side only.
+  hedge('the Pilgrim Road, south-east side, below Chapel Hill (the Chapel Path runs the other)', [1010, 3268], [1060, 3214], -4),
+  hedge('the Pilgrim Road, west side, toward Tallow Green', [1120, 3150], [1185, 3082], 4),
+  // The Pilgrim Road, east of Tallow Green, toward Hob's Tower.
+  hedge('the Pilgrim Road, south side, past the clover meadow', [1230, 3035], [1310, 3013], -4),
+  // The South Road, the Hanging Oak to the Boundary Stone: both sides, broken where the shepherds' track crosses.
+  hedge('the South Road, north side, toward the Stone', [1050, 3475], [1190, 3461], 4),
+  hedge('the South Road, south side, toward the Stone', [1060, 3474], [1190, 3461], -4),
+  hedge('the South Road, north side, under Mosshill', [1210, 3460], [1430, 3451], 4),
+];
+
 export const DRESSING: Dressing[] = [
   // The Cobbes' strips (brindleford.ts), open on the east to the fallow end and the shepherds' track.
   ...fenceRound("the Cobbes' fields", [929, 3434, 977, 3471], 'east'),
@@ -77,4 +104,5 @@ export const DRESSING: Dressing[] = [
   ...[1176, 1178, 1180, 1182, 1184].map((x): Dressing => ({ kind: 'hive', note: "one of Agna Bee's skeps", at: [x, 2999], facing: SOUTH })),
   // The Hanging Oak, where the South Road bends: its hollow (MQ03's note), Jory's Wednesdays. A step off the road.
   { kind: 'hanging-oak', note: 'the Hanging Oak', at: [997, 3485], facing: EAST },
+  ...HEDGES,
 ];

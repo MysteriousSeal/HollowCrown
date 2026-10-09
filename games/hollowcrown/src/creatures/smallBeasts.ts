@@ -5,6 +5,7 @@
 
 import { beastPart, type BeastSpec } from '@voxel/engine/characters';
 import { createGrid, fillBox, namedPalette, setColor, type VoxelGrid } from '@voxel/engine/voxel';
+import { BEAST_GESTURES } from './wildGestures';
 
 // ---- the rabbit ----
 
@@ -47,6 +48,7 @@ export const RABBIT: BeastSpec = {
   tailDroop: -0.3, // (the scut cocked up)
   legsAt: [[-1, 1.5], [1, 1.5], [-1, -1.5], [1, -1.5]],
   stride: 3.2,
+  gestures: BEAST_GESTURES,
 };
 
 // ---- the fox ----
@@ -96,4 +98,5 @@ export const FOX: BeastSpec = {
   tailDroop: 0.2,
   legsAt: [[-1, 3], [1, 3], [-1, -3], [1, -3]],
   stride: 2.2,
+  gestures: BEAST_GESTURES,
 };
