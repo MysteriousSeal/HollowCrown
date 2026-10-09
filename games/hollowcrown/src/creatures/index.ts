@@ -15,6 +15,7 @@ import { ASHEN, ASHEN_SMALL, BLOOMER } from './bloomVoxels';
 import { ROOK, ROOK_LEADER } from './rookVoxels';
 import { BARROW_GIANT } from './giantVoxels';
 import { BANDIT, CARROW_ARBALESTER, CARROW_PIKEMAN, GREENHOOD, HERON_CROSSBOWMAN, HERON_SPEARMAN, LANTERN_KNIGHT } from './peopleVoxels';
+import { RED_HEN_BAND } from '../people/redHen';
 
 export interface CreatureEntry {
   id: string;
@@ -32,6 +33,7 @@ export const CREATURES: CreatureEntry[] = [
   { id: 'spiderling', name: 'Spiderling', family: 'beast', make: () => new SpiderModel(HATCHLING) },
   { id: 'broodMother', name: 'Brood mother', family: 'beast', make: () => new SpiderModel(BROOD_MOTHER) },
   { id: 'bandit', name: 'Bandit (Red Hen)', family: 'people', make: () => new FrameModel(BANDIT) },
+  ...RED_HEN_BAND.map(({ id, name, spec }) => ({ id, name, family: 'people' as const, make: () => new FrameModel(spec) })),
   { id: 'heronSpearman', name: 'Regency heron', family: 'people', make: () => new FrameModel(HERON_SPEARMAN) },
   { id: 'heronCrossbowman', name: 'Heron crossbowman', family: 'people', make: () => new FrameModel(HERON_CROSSBOWMAN) },
   { id: 'greenhood', name: 'Greenhood archer', family: 'people', make: () => new FrameModel(GREENHOOD) },

@@ -51,6 +51,23 @@ exports[`people > Bran Hollin: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Brannoc Mabb: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.142,
+    0.518,
+    0.178,
+  ],
+  "min": [
+    -0.142,
+    -0,
+    -0.119,
+  ],
+  "triangles": 2052,
+}
+`;
+
 exports[`people > Cob Fletcher: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -184,6 +201,40 @@ exports[`people > Gert Hollin: builds, poses and keeps their shape 1`] = `
     -0.108,
   ],
   "triangles": 1150,
+}
+`;
+
+exports[`people > Hesper Rowe (chained): builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.113,
+    0.476,
+    0.163,
+  ],
+  "min": [
+    -0.113,
+    -0.051,
+    -0.089,
+  ],
+  "triangles": 1944,
+}
+`;
+
+exports[`people > Hesper Rowe: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.113,
+    0.46,
+    0.11,
+  ],
+  "min": [
+    -0.113,
+    -0,
+    -0.108,
+  ],
+  "triangles": 2034,
 }
 `;
 
