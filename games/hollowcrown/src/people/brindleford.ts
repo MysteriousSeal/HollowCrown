@@ -5,7 +5,7 @@ import { cuff, gloves, type FrameSpec } from '@voxel/engine/characters';
 import { noise3 } from '@voxel/engine/math';
 import { wrap } from '@voxel/engine/voxel';
 import { tornHem } from '../creatures/kit';
-import { apron, body, cap, coif, dusted, folk, forearms, hammer, K, ladle, lantern, ledger, longSkirtLeg, OLD, right, shawl, shoes, skirt, sleeves, staff, W } from './kit';
+import { apron, body, braids, cap, coif, dusted, folk, forearms, hammer, K, ladle, lantern, ledger, longSkirtLeg, OLD, right, shawl, shoes, skirt, sleeves, staff, strawHat, W } from './kit';
 
 // Garrick Fenn, the innkeeper: an old ferryman gone to fat at the middle, his forearms still a ferryman's (the
 // sleeves rolled off them), a long white apron, a woad kerchief knotted at the throat from the river days.
@@ -166,6 +166,64 @@ const KIT = folk({ build: 'male', skin: 0, hair: 3, dye: 3, hairStyle: 'shaggy',
   arm: (g, o) => sleeves(g, o, 5, (_x, y) => (y === 5 ? K.ragDark : K.rag)),
 }, { scale: 0.7 });
 
+// Old Meg, the widow, 70: in faded mourning black to the ground, a linen coif, a dark shawl pinned close, a little
+// stooped from sitting every night on her doorstep.
+const OLD_MEG = folk({ build: 'female', skin: 0, hair: 7, dye: 4, hairStyle: 'bun', beard: false, expression: 'wistful' }, {
+  head: (g, o) => coif(g, o, (x, z) => ((x + z) % 4 ? W.linen : W.linenShade), W.linenShade),
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => ((x + y) % 5 ? W.widow : W.widowLight));
+    shawl(g, o, f, (x, y) => ((x + y) % 3 ? W.widowLight : W.widow), W.linenDark);
+    skirt(g, o, f, 5, (x, y) => ((x + y) % 5 ? W.widow : W.widowLight));
+  },
+  arm: (g, o) => sleeves(g, o, 2, () => W.widow),
+  leg: (g, o) => {
+    longSkirtLeg(g, o, (x, y) => ((x + y) % 5 ? W.widow : W.widowLight));
+    shoes(g, o, 0, () => K.leatherDark);
+  },
+}, { gait: { ...OLD, lean: 0.15 } });
+
+// Hob Cobbe, the farmer, 45: a straw hat, a russet smock roped at the waist, moss-green breeches, a hayfork; a sway
+// in his walk that isn't the ale.
+const HOB_COBBE = folk({ build: 'male', skin: 2, hair: 0, dye: 2, hairStyle: 'short', beard: true, expression: 'stern' }, {
+  head: strawHat,
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => (y === 3 ? W.string : (x + y) % 4 ? W.russet : W.russetDark));
+    skirt(g, o, f, 3, (x, y) => (y === -3 ? W.russetDark : (x + y) % 4 ? W.russet : W.russetDark));
+  },
+  arm: (g, o) => sleeves(g, o, 3, (_x, y) => (y === 3 ? W.russetDark : W.russet)),
+  leg: (g, o) => {
+    body(g, o, (_x, y) => (y >= 2 ? W.moss : 0));
+    shoes(g, o, 2, (_x, y) => (y === 2 ? K.leather : K.leatherDark));
+  },
+}, { held: { rightArm: staff(14, 'fork', 5) }, gait: { sway: 0.04 } });
+
+// Ada Cobbe, the farmer's wife, 40: a linen coif, a woad-blue dress to the ankle, her sleeves rolled, a work-stained
+// apron.
+const ADA_COBBE = folk({ build: 'female', skin: 2, hair: 0, dye: 1, hairStyle: 'bun', beard: false, expression: 'stern' }, {
+  head: (g, o) => coif(g, o, (x, z) => ((x + z) % 4 ? W.linen : W.linenShade), W.linenShade),
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => (y >= 7 ? W.linen : (x + y) % 4 ? W.woad : W.woadDark));
+    skirt(g, o, f, 5, (x, y) => ((x + y) % 4 ? W.woad : W.woadDark));
+    apron(g, o, f, 0, 4, (x, y) => ((x * 3 + y) % 5 ? W.apronHem : W.linenDark));
+  },
+  arm: (g, o) => sleeves(g, o, 5, (_x, y) => (y === 5 ? W.roll : W.linen)),
+  leg: (g, o) => {
+    longSkirtLeg(g, o, (x, y) => ((x + y) % 4 ? W.woad : W.woadDark));
+    shoes(g, o, 0, () => K.leatherDark);
+  },
+});
+
+// Wenna, Ada's niece, 13: fair braids tied with string, a moss-green dress to the knee, bare shins, scuffed shoes.
+const WENNA = folk({ build: 'female', skin: 0, hair: 2, dye: 2, hairStyle: 'twinBraids', beard: false, expression: 'cheerful' }, {
+  head: braids,
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => (y >= 8 ? W.linen : y === 3 ? K.leather : (x + y) % 4 ? W.moss : W.mossDark));
+    skirt(g, o, f, 4, (x, y) => (y === -4 ? W.mossDark : (x + y) % 4 ? W.moss : W.mossDark));
+  },
+  arm: (g, o) => sleeves(g, o, 4, () => W.linen),
+  leg: (g, o) => shoes(g, o, 1, (_x, y) => (y === 1 ? K.leatherLight : K.leather)),
+}, { scale: 0.82 });
+
 export const FOLK: Record<string, FrameSpec> = {
   'Garrick Fenn': GARRICK,
   'Elsa Fenn': ELSA,
@@ -177,4 +235,8 @@ export const FOLK: Record<string, FrameSpec> = {
   'Dunstan': DUNSTAN,
   'Jory': JORY,
   'Kit': KIT,
+  'Old Meg': OLD_MEG,
+  'Hob Cobbe': HOB_COBBE,
+  'Ada Cobbe': ADA_COBBE,
+  'Wenna': WENNA,
 };
