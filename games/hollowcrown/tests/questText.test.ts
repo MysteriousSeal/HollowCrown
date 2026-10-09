@@ -2,7 +2,10 @@
 
 import { describe, expect, it } from 'vitest';
 import { QUESTS } from '../src/data/quests';
-import { START_PROGRESS, trackerText } from '../src/ui/questText';
+import { trackedOf, startLog } from '../src/ui/questLog';
+import { trackerText } from '../src/ui/questText';
+
+const START_PROGRESS = trackedOf(startLog())!;
 
 const waking = QUESTS.MQ01.stages[0];
 

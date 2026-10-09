@@ -76,6 +76,23 @@
       .ui-tracker-line { margin: 5px 0 0; font-size: 15px; font-weight: 500; line-height: 1.3; }
       .ui-tracker-line::before { content: '◆'; margin-right: 6px; font-size: 10px; color: #e8903a; vertical-align: 2px; }
 
+      /* Notices, on the left under the place's name: each slides in from the edge, then out. */
+      .ui-toasts { position: absolute; top: 62px; left: 18px; width: 280px; display: flex; flex-direction: column; gap: 8px; }
+      .ui-toast {
+        padding: 6px 12px 7px;
+        background: var(--panel);
+        border: 2px solid var(--sand);
+        border-left: 4px solid #e8903a;
+        box-shadow: 3px 3px 0 rgba(46, 31, 20, 0.5);
+        opacity: 0;
+        transform: translateX(-24px);
+        transition: opacity 0.3s, transform 0.3s ease-out;
+      }
+      .ui-toast.shown { opacity: 1; transform: none; }
+      .ui-toast.leaving { opacity: 0; transform: translateX(-24px); }
+      .ui-toast-title { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #e8c27a; }
+      .ui-toast-text { display: block; margin-top: 2px; font-size: 15px; font-weight: 500; line-height: 1.3; }
+
       /* What E would do: a keycap, then the action, low in the middle. */
       .ui-prompt {
         position: absolute;
