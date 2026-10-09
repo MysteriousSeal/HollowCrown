@@ -3,6 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import { loadWorldMap } from '@voxel/engine/world';
 import { PLACE_KINDS, START_PLACE, WORLD_MAP } from '../src/data/world';
+import { CONTROLS } from '../src/ui/controls';
 import { clockText, nearPlaceName, regionBanner, regionOf } from '../src/ui/hudText';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
@@ -27,6 +28,12 @@ describe('the place label', () => {
 
   it('names nothing out in the open', () => {
     expect(nearPlaceName(map.places(), sx + 40, sz - 40)).toBeNull();
+  });
+});
+
+describe('the controls page', () => {
+  it('lists walking, sprint, talk, the map and pause', () => {
+    expect(CONTROLS.map(([key]) => key)).toEqual(['WASD', 'Shift', 'E', 'M', 'Esc']);
   });
 });
 
