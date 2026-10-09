@@ -1,238 +1,254 @@
 # Main Quest — Prologue and Act I
 
-Each quest: who starts it, where, the level it expects, how long it takes, then its steps, its choices (the flags
-they set and the reputation they move: [choices.md](choices.md)), its rewards and its journal entry. Places and
-people of Brindle Vale are detailed in [regions/brindle-vale.md](regions/brindle-vale.md).
+Each quest: who starts it, where, its level and time, then its scenes (with key lines), its choices (their arguments
+and costs; flags in [choices.md](choices.md)), rewards and journal. Brindle Vale's places and people:
+[regions/brindle-vale.md](regions/brindle-vale.md). Tone and voice: [writing-guide.md](writing-guide.md).
 
 ---
 
-# Prologue — *The Stranger at the Ford* (Brindle Vale, ~3 h)
+# Prologue — *The Stranger at the Ford* (Brindle Vale, ~2.5 h)
 
-The prologue teaches walking, fighting, looting, talking, the journal and the first choice. It ends when the hero
-leaves Brindle Vale.
+Teaches walking, fighting, looting, talking, the journal, tones, the first hard choice. Ends when the hero leaves the
+vale.
 
 ## MQ01 — The Stranger at the Ford
-- **Starts**: the game's start. **Where**: Pilgrim's Shrine (480, 3380) → Brindleford (900, 3350).
-- **Level** 1. **Time** 30 min.
-1. **Waking** at dusk on the pilgrim road by the Pilgrim's Shrine, in underclothes: the Red Hen's bandits took
-   everything. A hen feather, dyed red, lies in the mud (`item: red feather`). The shrine's offering bowl holds a
-   rusty **knife** and 3 copper (the first loot). Journal opens: *"Robbed on the road into the Vale. A red feather is
-   all they left. There's a village east: lights, smoke."*
-2. **The road east** (420 tiles): two wolves at the Birchwood's north edge (650, 3420) teach the fight (level 1). A
-   dead pilgrim by the road has a **padded jerkin** and a **walking staff**.
-3. **Brindleford**, night falling. The chapel bell rings on the hill, though the chapel has had no bell-tongue for
-   forty years. Villagers run inside; **Reeve Odo Pell** shouts at the stranger to get indoors.
-4. **The Ferryman's Rest**: **Garrick Fenn** lets the hero in, gives bread and a bed "on account". **Elsa** brings
-   soup. Talk: Garrick asks where the hero's from (the first dialogue choice the game remembers: `hero_reason` =
-   `work`/`forget`/`road`).
-5. **Midnight**: ghosts drift down from the chapel into the village (4 ghosts, level 1–2). Garrick takes up an oar
-   and goes out; the hero follows (or stays: Garrick is knocked down and Elsa begs for help: the quest goes on either
-   way). Defend the square: the ghosts fade at the well when struck down.
-6. Dawn. Pell, shaken, gathers the village at the well. Father **Cuthwin** says the dead came from the **Bellwarden's
-   Tomb** under the chapel. No one will go. Garrick: "The stranger fought them. The stranger owes us a bed."
-- **Rewards**: 40 xp; the bed at the inn (free while in Brindleford); Garrick's spare **boatman's coat**.
-- **Journal**: *"The dead walked into Brindleford tonight. The priest says they came from the tomb under the old
-  chapel. Everyone looks at me."*
+- **Starts**: the game's start. **Where**: Pilgrim's Shrine (480, 3380) → Brindleford (900, 3350). **Level** 1.
+  **Time** 30 min.
+1. **Waking** at dusk by the shrine in underclothes, a lump on the head. A red-dyed hen feather in the mud. In the
+   offering bowl, a rusty knife and 3 copper someone left for the dead. The hero's first line (the first tone choice,
+   alone): Kind *"Thank you, whoever you were."* / Hard *"Of course."* / Sly *"Well. Lighter for the walk."* / Blunt
+   *"Robbed. Wonderful."*
+2. **The road east**: an old pilgrim woman dead in the ditch, throat cut, her shawl and padded jerkin still on her.
+   The hero can take the jerkin (cold night; she doesn't need it) or cover her with it. Two wolves at the Birchwood's
+   edge (650, 3420) have already started on a dead mule: the first fight.
+3. **Brindleford** at nightfall: the chapel bell on the hill rings, slow, though it has had no tongue for forty years.
+   Shutters slam. **Reeve Odo Pell** in a nightcap with a sword: *"In the name of the Lord Regent — who are you, and why
+   are you in your smalls?"*
+4. **The Ferryman's Rest**: **Garrick** lets the hero in when Pell won't (*"Wipe your feet. The floor's the only thing in
+   here I've paid for."*); bread, a bed "on account"; **Elsa** brings soup and an old shirt. Garrick asks why they came
+   (`hero_reason`). The bell stops. The silence is worse.
+5. **Midnight**: the dead come down from Chapel Hill: not knights, not old bones: **villagers**. Ghosts in famine
+   rags, thin as sticks, a woman carrying a child. Old Meg screams a name at one of them: it's her sister. Garrick takes
+   an oar and goes out; Pell holds the well with his sword shaking. The hero fights (4 famine ghosts, level 1–2); they
+   don't attack people first: they go to the houses they lived in, and only fight when stopped. One whispers to the
+   hero: *"Hungry... so hungry... the reeve put us in the pit..."*
+6. **Dawn**: the village at the well. Old Meg won't stop crying. **Father Cuthwin**: the dead came from the
+   **Bellwarden's Tomb**, he says, and the **famine pit** beside the chapel. Pell goes grey at "pit". No one will go.
+   Garrick: *"The stranger fought them. The stranger owes us for a bed."*
+- **Rewards**: 40 xp; the inn's bed (free in Brindleford); Garrick's spare **boatman's coat**.
+- **Journal**: *"The dead walked into Brindleford tonight: starved villagers, not monsters. One said the reeve put them
+  in a pit. Everyone looks at me."*
 
 ## MQ02 — The Quiet Bell
-- **Starts**: end of MQ01. **Giver**: Father Cuthwin, Reeve Pell. **Where**: Chapel of the Quiet Bell (1080, 3180),
-  the Bellwarden's Tomb below.
-- **Level** 2. **Time** 50 min.
-1. Pell gives the **reeve's old sword** ("Regency property, mind"). Cuthwin gives a **lantern-oil flask** (heals) and
-   tells the legend: Sir **Hamund**, the Bellwarden, a knight of the Oath buried with the chapel bell's tongue, "to
-   ring if the dead ever rose, to wake the living".
-2. The chapel ruin: broken walls, a skeleton pair at the altar (level 2). The stairs down are sealed by an
-   **oath-iron grate**, frosted white. Cuthwin's hands blister with cold at the bars; the hero's don't. *"It's only
-   iron to you,"* Cuthwin says, very quietly. (`hero_unsworn_seen`)
-3. **The Bellwarden's Tomb** (crypt, 3 halls, level 2–3): skeletons, two ghosts, a pit trap, a side niche with
-   Hamund's journal page ("If the crown fails, the bell will ring by itself. Then someone must go to the Lantern.").
-4. **Sir Hamund**, crypt lord (level 3): his ghost rises with the bell-tongue in his hand. At half health he stops:
-   *"Unsworn. You're not of the Oath. Then you can carry what we can't. The crown is broken. The Oath is failing. Tell
-   the Lantern."* Choice:
-   - **Fight to the end**: he falls, drops the **Bell-Tongue** and **Hamund's sword** (`hamund: destroyed`).
-   - **Let him finish his watch** (talk): he lays the tongue down and fades in peace; no sword, but **Hamund's
-     blessing** (+5% max health, permanent) and Cuthwin's gratitude later (`hamund: rested`, Lantern +5).
-5. Back to Brindleford. If the hero gives Cuthwin the Bell-Tongue, SQ-BV4 starts.
-- **Rewards**: 120 xp, 20 copper from Pell, the Bell-Tongue.
-- **Journal**: *"Sir Hamund, the Bellwarden, called me Unsworn. The crown is broken and the Oath is failing, he said.
-  Oath-iron froze the priest's hands, and didn't touch mine."*
+- **Starts**: end of MQ01. **Givers**: Cuthwin, Pell. **Where**: the Chapel of the Quiet Bell (1080, 3180), the famine
+  pit (1090, 3200), the Bellwarden's Tomb. **Level** 2. **Time** 50 min.
+1. Pell gives the **reeve's old sword** (*"Regency property. Bring it back. Clean."*). Cuthwin gives a flask of lantern
+   oil (heals) and the legend of **Sir Hamund**, the Bellwarden, buried with the bell's tongue "to ring if the dead rose".
+2. **The famine pit**: a long low mound beside the chapel wall, the turf broken from inside. Grave-poppy grows thick
+   on it, white as frost; it's been harvested (stems cut clean, a dropped sickle with a mill's mark: Jory's: SQ-BV1).
+   Sixty dead of the Wet Years, buried without rites because the Lantern charged a silver a grave and Brindleford had
+   none. The hero can say the words Cuthwin knows over it (if they ask him first: a short rite: the famine ghosts don't
+   return: `famine_pit: blessed`) or leave it.
+3. **The chapel**: roofless, the bell hanging in the half-tower. Two skeletons at the altar. The stairs down are sealed
+   by an **oath-iron grate**, white with frost in summer. Cuthwin's palms blister at the bars. The hero's don't.
+   He goes very quiet: *"It's only iron to you."* (`hero_unsworn_seen`)
+4. **The Bellwarden's Tomb** (crypt, 3 halls, level 2–3): the Ossuary; the Bell Hall (ghosts of bell-ringers, a pit with
+   a rope bridge); the Warden's Rest. A journal page in a niche: *"If the crown fails, the bell will ring itself. Then
+   someone must go to the Lantern. God help them if the Lantern is what it was when I was young."*
+5. **Sir Hamund** (crypt lord, level 3), the bell-tongue in his fist. At half his life he stops and stares: *"Unsworn.
+   You're not of the Oath. You can carry what we can't. The crown is broken. Go to the Lantern... no. Don't trust the
+   Lantern. Trust what the Lantern fears."* Choice (`hamund`):
+   - **Fight to the end**: he falls; the **Bell-Tongue**, **Hamund's sword** (a good blade for now) (`destroyed`).
+   - **Let him finish his watch** (Kind or Blunt: *"Your watch is over."*): he lays down the tongue and fades;
+     **Hamund's blessing** (+5% max health) (`rested`).
+6. Back at the well: Pell, privately, if the hero mentions the pit: *"There was no money for graves. There was no money
+   for anything. I dug that pit myself, with Dunstan and the Cobbes. I said the words I knew. I didn't know the right
+   ones."* The hero's answer is remembered (Kind: Pell +; Hard: he'll fear the hero).
+- **Rewards**: 120 xp, 20 copper, the Bell-Tongue (gives SQ-BV4 to Cuthwin).
 
 ## MQ03 — The Red Hen
-- **Starts**: MQ02 done, or on talking to Pell about the robbery. **Giver**: Reeve Pell (the Regency's bounty), or
-  Garrick (who recognises the red feather). **Where**: Red Hen camp (620, 3560) in the Birchwood.
-- **Level** 3. **Time** 40 min.
-1. Pell: the Red Hen's band has robbed every pilgrim for a month. A bounty: 50 copper for **Brannoc Mabb**, "alive to
-   hang, dead to bury".
-2. Track them: the dyed feathers on the trail; the Hanging Oak (1000, 3480) where they left a note for a fence
-   ("Wednesday, the miller's sacks").
-3. **The camp**: palisade, 5 bandits (level 2–3) and Brannoc (bandit chief, level 4). The hero's stolen belongings
-   are in the camp chest (their coin, a **traveller's pack**: +4 bag slots).
-4. At low health Brannoc throws down his cleaver: *"I'm Greenhood, me. Wren's man. Hang me and the woods'll remember
-   it."* Choice (`bv_red_hen`):
-   - **Bring him to Pell to hang** (`hanged`): Regency +15, Greenhood -15, Brindleford +1. He's hanged at the well.
-     Wren knows of it in MQ09 (cold).
-   - **Kill him** (`killed`): Regency +5, Greenhood -5. Title *the Red Hen's Bane*.
-   - **Send him to Wren for judgment** (`to_wren`): Greenhood +15, Regency -10, Brindleford -1 (Pell is furious).
-     He carries a message; Wren knows the hero's name in MQ09.
-   - **Let him go** for his purse (`spared`, +30 copper): no reputation change; Brindleford -1. He reappears in SQ-GW7.
-- **Rewards**: 150 xp, the bounty (if hanged or killed), the hero's belongings.
-- **Journal** (by choice): *"The Red Hen has hanged at the well."* / *"Brannoc will face Wren Halloway's judgment, he
-  swears."* …
+- **Starts**: MQ02 done, or asking Pell about the robbery. **Where**: the Hanging Oak (1000, 3480), the Red Hen camp
+  (620, 3560). **Level** 3. **Time** 45 min.
+1. Pell's bounty: 50 copper for **Brannoc Mabb**, "alive to hang, dead to bury". Garrick, seeing the feather:
+   *"Brannoc. Says he's Greenhood. The Greenhood says he isn't. Both are lying a little."*
+2. **The trail**: red feathers; at the Hanging Oak's hollow, a note (*"Wednesday, the miller's sacks, and the white"*)
+   and a vial of grave-poppy milk.
+3. **The camp** (5 bandits level 2–3, Brannoc level 4). In the stock by the fire: **Wat**, Tobin's apprentice
+   (SQ-BV7). In the back tent, chained: **Hesper Rowe**, a pilgrim woman taken from the road a week ago, the old
+   dead woman's daughter. She doesn't speak of what was done to her; she asks for her mother. (Implied, never shown:
+   her bruises, her silence, the bandits' laughter as the hero comes in. The hero's choice of tone with her matters:
+   Kind lines let her speak; Hard lines make her go still.) The hero's belongings in the chest (12 copper, a
+   **traveller's pack**: +4 bag slots).
+4. Brannoc, beaten, drops his cleaver, grinning: *"I'm Greenhood, me. Wren's man. You hang me, the woods'll remember."*
+   Then the choice (`bv_red_hen`), with Hesper watching:
+   - **Bring him to Pell to hang** (`hanged`): Regency +15, Greenhood -15, Brindleford +1. The hanging at the well;
+     Hesper watches it and says nothing.
+   - **Kill him here** (`killed`): Regency +5, Greenhood -5. Title *the Red Hen's Bane*.
+   - **Let Hesper decide** (Kind or Blunt): she takes the cleaver; the screen goes to black over her face; Brannoc's
+     voice stops. (`hesper_judged`): Brindleford +1; Hesper leaves the vale at dawn without a word to anyone, except one
+     to the hero: *"Thank you for asking me."*
+   - **Send him to Wren** (`to_wren`): Greenhood +15, Regency -10, Brindleford -1. Hesper spits at the hero.
+   - **Let him go for his purse** (`spared`, +30 copper): Brindleford -2 (Hesper tells everyone). He comes back
+     (SQ-GW7).
+5. Hesper: she can be taken to Nan Wicket and the Cobbes (`hesper_safe`), or left at the inn. In Act II she's in
+   Gullhaven, working in the Milk House (`hesper_safe` false) or a fishwife (`hesper_safe` true): a short meeting.
+- **Rewards**: 150 xp; the bounty; the pack.
 
 ## MQ04 — Three Roads
-- **Starts**: MQ02 and MQ03 done. **Where**: Brindleford, then Hob's Tower checkpoint (1400, 3000).
-- **Level** 4. **Time** 30 min.
-1. Three messages reach the hero at the Ferryman's Rest, the same evening:
-   - **The Regency**: Pell's report went to Kingsmere; a sealed summons from the Lord Regent: *"The person who opened
-     the Bellwarden's grate is to present themselves at the Regent's Hall."* (always)
-   - **The Lantern**: Cuthwin wrote to Sister-Captain Odalys; her reply, carried by a novice: *"Send the unsworn one
-     to the Abbey."* (always)
-   - **The Greenhood**: a wren's feather and a scrap of birch bark pushed under the door: *"The Hollow Oak. Come
-     alone. — W."* (always; its tone depends on `bv_red_hen`: if hanged, *"You hanged one of mine. Come and explain
-     yourself."*)
-2. **Garrick**, late, by the fire (the first hint): *"Three roads, and every one of them wants the same thing. They
-   want the crown. Whatever they tell you."* He tells the public story of the Night of Still Water (the king drowned,
-   the princess lost, the crown found broken) and stops short. *"I rowed that boat for twenty years. Not that night.
-   That night I was ill."* (a lie; `garrick_lied_once`)
-3. **Hob's Tower checkpoint**: the Regency's sergeant **Matthias Crow** lets the hero through with the Regent's
-   summons. The Vale opens.
-- **Rewards**: 100 xp; Garrick's **ferry token** (free passage on Hollowmere's ferries: Reedby, Elderwick, the isle
-  once it's open).
-- **Journal**: *"The Regent, the Lantern and the Greenhood all want to see me. Garrick says they all want the crown.
-  I think Garrick knows more than he says about the night it broke."*
+- **Starts**: MQ02 and MQ03 done. **Where**: the inn, then Hob's Tower (1400, 3000). **Level** 4. **Time** 30 min.
+1. Three messages in one evening: the **Regent's summons** (sealed with the grey heron; Pell's report reached
+   Kingsmere); the **Lantern's** (Cuthwin wrote; Odalys answers: *"Send the unsworn one to the Abbey."*); the
+   **Greenhood's** (a wren feather and birch bark under the door: *"The Hollow Oak. Come alone. — W."*; if `hanged`:
+   *"You hanged one of mine. Come and explain it."*).
+2. **Garrick**, late, the fire low, the second bottle: *"Three roads, and all of them want the crown, whatever they say.
+   You know what a crown is, stranger? A ring of iron somebody else forged, that you can't take off."* He tells the
+   public story of the Still Water, and says he was ill that night (`garrick_lied_once`). Elsa, from the stair, watches
+   her father lie and knows it.
+3. **Hob's Tower checkpoint**: **Sergeant Matthias Crow** reads the summons, spits, raises the bar: *"Kingsmere. Mind
+   the Ditch when you get there: they'll sell you the white for a copper, and your boots for two."*
+- **Rewards**: 100 xp; Garrick's **ferry token** (Hollowmere's ferries).
 
 ---
 
-# Act I — *Three Claims* (~7 h)
+# Act I — *Three Claims* (~6.5 h)
 
-The three factions court the hero. The order is free: Kingsmere (MQ05–06), the Abbey (MQ07–08), the Greenwood
-(MQ09–10). When all three have been met, MQ11 starts. The act ends with MQ12.
+The factions court the hero, in any order: Kingsmere (MQ05–06), the Abbey (MQ07–08), the Greenwood (MQ09–10). Then
+MQ11 and MQ12. Each faction's first quest shows its best face; its second, its rot.
 
 ## MQ05 — The Regent's Court
-- **Where**: Kingsmere (2100, 2550), the Regent's Hall. **Level** 5. **Time** 40 min.
-1. Kingsmere: walls, a lake harbour, the market, the gallows square (SQ-HM4), the Regent's Hall with its grey heron
-   banners. The steward **Benedikt Orme** keeps the hero waiting (an hour of game time; the hero can explore).
-2. **Corvin**, in his study, gloved. He knows about the grate. He tests the hero with a small oath-iron key on the
-   desk: "Pick it up." The hero does; he flinches. *"So it's true."* He tells the "official" story of Still Water.
-   He wants the crown reforged and the Vale safe; he offers the hero a place: "the Regent's Hand", if they serve.
-3. **Aldous** interrupts, eager to meet "the one who went into the tomb". Corvin sends him out (seeds SQ-HM3).
-4. **Sabeline**, in the corridor, introduces herself: "If the Regent ever disappoints you, I'm two doors down. Carrow
-   pays in gold, not promises." (seeds MQ15)
-5. Corvin's first task: **MQ06**.
-- **Rewards**: 80 xp; the **Regency writ** (free passage at all checkpoints; Regency guards will answer the hero).
-- **Journal**: *"The Lord Regent wears gloves indoors. He watched my hand on the oath-iron like a man watching a coin
-  fall."*
+- **Where**: Kingsmere, the gallows square, the Regent's Hall. **Level** 5. **Time** 45 min.
+1. **Arrival**: a hanging in Gallows Square: three Barrowborn poppy-sellers, a boy among them, *"for trading in the
+   Lantern's mercy without licence"*. The crowd jeers the grey-eyes. **Old Grey Edda**, at the back, sings under her
+   breath. (Seeds SQ-HM10.)
+2. **The Hall**: the steward **Benedikt Orme** keeps the hero waiting an hour (explore).
+3. **Corvin** in his study, gloved; an oath-iron key on the desk: *"Pick it up."* The hero does. He flinches as if the
+   cold were in him. *"So it's true."* He offers the official Still Water story, and the Regent's Hand: *"I need someone
+   the iron doesn't hate. I'll pay what that's worth, which is a great deal."* If asked about the hanging: *"The trade
+   kills more than the dead do. I hang the sellers so I don't have to bury the buyers."* (He taxes it. The hero doesn't
+   know yet.)
+4. **Aldous** bursts in, eager (*"Is it true you — "*); Corvin sends him out. (SQ-HM3.)
+5. **Sabeline** in the corridor, fan half open: *"If the Regent disappoints you, I'm two doors down. Carrow pays in gold,
+   not in sums."* (Romance beat 1 for a Sly answer.)
+- **Rewards**: 80 xp; the **Regency writ**.
 
 ## MQ06 — The Tax Cart
-- **Giver**: Corvin. **Where**: Reedby (1550, 2050) → the Lake Road → Kingsmere. **Level** 6. **Time** 45 min.
-1. Escort the quarter's tax cart from Reedby to Kingsmere with two Regency guards and the tax clerk **Hiram Bose**.
-   Reedby's fishers watch it go in silence; a widow begs for her share of the grain back.
-2. At the Weeping Willows (1800, 2350) the **Greenhood** blocks the road: **Pip Tanner** and six archers. Pip,
-   politely: *"Grain's going back to the people it was taken from. Nobody needs to bleed."*
-3. Choice (`mq06_cart`):
-   - **Defend the cart** (`defended`): fight Pip's archers (they retreat at half losses; Pip escapes). Regency +15,
-     Greenhood -15, Reedby -1. Corvin: *"Good. You've a head for sums."*
-   - **Stand aside** (`given`): the Greenhood takes the cart; the guards curse the hero. Greenhood +15, Regency -15,
-     Reedby +1. Corvin is cold in the next meeting; the summons stays.
-   - **The middle way** (persuade, needs Brindleford ≥ +1 or Greenhood ≥ 20): half the grain goes back to Reedby,
-     half to Kingsmere; Hiram writes "lost to bandits" in the book (`split`): Regency -5, Greenhood +5, Reedby +2.
-     Hiram owes the hero (SQ-HM5).
-- **Rewards**: 160 xp; 60 copper from Corvin (defended) or a Greenhood **wren token** (given/split: lets the hero find
-  the Hollow Oak without tracking).
+- **Giver**: Corvin. **Where**: Reedby → the Lake Road → the Weeping Willows (1800, 2350). **Level** 6. **Time** 50 min.
+1. Escort Reedby's tax cart with two herons and the clerk **Hiram Bose**. The widow **Hester Cole** holds the cart's
+   wheel: her children's grain is on it. The guards drag her off; Hiram looks at his shoes.
+2. At the Weeping Willows, **Pip Tanner** and six Greenhood archers: *"The grain goes back where it came from. Nobody
+   needs to bleed for a reeve's arithmetic."*
+3. **The turn**: in the fight or the talk, a sack splits: under the top layer of grain, sealed crates of **grave-poppy
+   milk**, stamped with the Lantern's lantern and the Regency's heron. Hiram, white: *"I didn't load it. I just sign."*
+   Pip's eyes go to the crates, not the grain: the Greenhood came for the poppy, not the bread.
+4. Choice (`mq06_cart`; each with its argument):
+   - **Defend the cart** (`defended`): order is order; the poppy's "the Regent's business". Regency +15, Greenhood
+     -15, Reedby -1. Corvin, later, about the crates: *"Medicine, for Carrow's hospitals. The Vale's only export that
+     isn't sorrow."*
+   - **Give it to the Greenhood** (`given`): the grain to Reedby, the poppy to Wren's sellers. Greenhood +15, Regency
+     -15, Reedby +1. The poppy will be sold in the Ditch (SQ-HM10 later: a dead child in the Ditch had it from a hood).
+   - **The grain to Reedby, the poppy into the lake** (Hard or Blunt; `drowned_poppy`): nobody profits. Regency -10,
+     Greenhood -10, Reedby +2. Pip laughs despite himself: *"Wren's going to hate you. I don't."*
+   - **The middle way** (needs Brindleford ≥ +1 or Greenhood ≥ 20): half the grain back, the poppy to Kingsmere, Hiram
+     writes "lost" (`split`): Regency -5, Greenhood +5, Reedby +2; Hiram owes the hero (SQ-HM5).
+- **Rewards**: 160 xp; 60 silver (defended) or a **wren token** (given, split).
+- **Journal**: *"Under the Reedby grain: poppy-milk, with the Regent's heron on the seal. The Regent hangs the sellers."*
 
 ## MQ07 — The Abbey on the Moor
-- **Giver**: Odalys's letter. **Where**: the Moor Road → Gorse Hollow (1050, 1150) → the Abbey (850, 800).
-  **Level** 7. **Time** 40 min.
-1. The Moor Road climbs from Reedby into heather and mist; standing stones; a grey hound pack (level 6).
-2. **Gorse Hollow**: a peat village under the Abbey; the Order's tithe-wagon is loading their peat (seeds SQ-LM2).
-3. **The Abbey**: a walled keep of grey stone on a crag, the great lantern burning on its tower day and night.
-   **Odalys** receives the hero in the yard among drilling knights. She doesn't waste words: she holds out an
-   oath-iron reliquary; her gauntlet frosts. The hero takes it bare-handed. Knights murmur.
-4. **Lector Anselm** in the chapter house: gentle, curious, asks about the hero's homeland, blesses them. He explains
-   the Oath (the public version: the crown keeps the dead asleep; it must be reforged at the Oathforge and the rite
-   spoken). He doesn't mention who should wear it. *"The pieces will come to you, I think. Iron finds the hands that
-   can hold it."*
-5. Odalys's test: **MQ08**.
-- **Rewards**: 80 xp; Lantern +5; a **lantern charm** (ghosts' blows -10%).
+- **Giver**: Odalys's letter. **Where**: the Moor Road → Gorse Hollow (1050, 1150) → the Abbey (850, 800). **Level** 7.
+  **Time** 40 min.
+1. The Moor Road: heather, mist, standing stones, a grey hound pack. **Gorse Hollow**: the Barrowborn peat-cutters load
+   the Abbey's tithe; the children have grey eyes and no shoes.
+2. **The Abbey**: walls, the great lantern burning on its tower. Below the walls, the **poppy terraces**: the Order's own
+   cemetery, white with grave-poppy, novices in cloth masks bleeding the heads into cups. The knights drilling in the
+   yard; **Odalys** holds out an oath-iron reliquary; her gauntlet frosts; the hero takes it bare-handed.
+3. **Anselm** in the chapter house, kind, curious, a smell of cloves. He explains the Oath (the Vale's version) and the
+   terraces (*"The dead give us their last mercy. We give it to the dying."*). *"The pieces will come to you. Iron finds
+   the hands that can hold it."*
+4. Night in the guest cell: a novice, **Bryn**, at the door, whispering, then fleeing when a knight passes (SQ-LM1).
+   Somewhere under the floor, someone singing in a language no one speaks.
+- **Rewards**: 80 xp; Lantern +5; a **lantern charm**.
 
 ## MQ08 — Cairnfold
-- **Giver**: Odalys. **Where**: Cairnfold ruin and crypt (550, 1250). **Level** 8. **Time** 60 min.
-1. Cairnfold's crypt has broken open; three Lantern knights went in two days ago. Odalys goes with the hero (a
-   companion for this quest: she fights with a mace, heals once).
-2. The ruined keep above: skeleton archers on the walls (level 7).
-3. **The crypt**: an oath-iron reliquary chain seals each hall; only the hero can open them. Odalys's reactions show
-   her: she makes the hero go first, she guards their back, she prays for the dead she breaks.
-4. The three knights: two dead, one alive (**Brother Aedric**, the Abbey's forge-brother, trapped behind a fallen
-   ward). He thanks the hero; he'll matter at the Oathforge (MQ23: `aedric_alive`).
-5. **The crypt lord**: **Abbess Wynfrith**, a Lantern abbess of a hundred years ago, risen (level 9, calls skeletons).
-   Dying, she whispers: *"Anselm... practising the words... the dead don't sleep, they listen..."* Odalys hears
-   only "Anselm". She doesn't understand it. (`wynfrith_warning`; a seed for exposing Anselm.)
-- **Choice**: none here; whether the hero tells Odalys what Wynfrith said in full matters later (`told_odalys_wynfrith`).
-- **Rewards**: 220 xp; Lantern +15; Odalys's **knight's mace** or 80 silver; access to the Abbey's smith and stores.
+- **Giver**: Odalys. **Where**: Cairnfold ruin and crypt (550, 1250). **Level** 8. **Time** 65 min.
+1. Cairnfold's crypt has broken open; three knights went in. **Odalys** comes (companion: mace, a heal once).
+2. **The ruin**: Cairnfold's burned barrow-halls, black stone and fused bones in the walls, skeleton archers on the ring
+   wall. A Barrowborn carving under the soot (a woman with a lantern, and a man setting fire to a door): Odalys doesn't
+   see it, or doesn't look. The hero can (`cairnfold_carving`: lore).
+3. **The crypt**: oath-iron seals that only the hero can open; Odalys makes the hero go first and guards their back;
+   she prays over every dead she breaks.
+4. **The Listener**: in a side chamber, a dead novice, a girl, eyes sewn shut with black thread, a wax tablet in her lap
+   covered in barrow-tongue words scratched blind, poppy-cups round her, sent in alone *"to listen"* by the Lector's
+   order (a sealed note). Odalys has never seen this. She goes very still. *"There must be a reason."* (She'll keep
+   saying it, quieter each time, all game.)
+5. The three knights: two dead; **Brother Aedric** alive behind a fallen ward (`aedric_alive`).
+6. **Abbess Wynfrith** (crypt lord, level 9): dying, she whispers: *"Anselm... he makes them listen... the dead don't
+   sleep, child, they *listen*... he's teaching them a new prayer..."* Odalys hears only "Anselm". Telling her the whole
+   warning, now or later, is a choice (`told_odalys_wynfrith`; romance beat).
+- **Rewards**: 220 xp; Lantern +15; Odalys's **knight's mace** or 80 silver.
 
 ## MQ09 — The Hood in the Wood
-- **Giver**: the birch-bark note. **Where**: the Wood Road → Thornbeck (3000, 2300) → Oakhallow (3200, 1500) → the
-  Hollow Oak (3600, 1100). **Level** 7. **Time** 45 min.
-1. **Thornbeck**: a Regency garrison village; Captain **Ilse Varrow** warns the hero off the deep wood (seeds
-   SQ-GW2).
-2. **Oakhallow**: woodcutters, a village that loves the Greenhood; they won't say where the camp is unless the hero
-   has the wren token, Greenhood ≥ 20, or does a favour (SQ-GW3's first step).
-3. Finding the Hollow Oak: a trail of wren carvings on trees (tracking), past a lynx's den (level 8).
-4. **The Hollow Oak**: a camp round and inside a vast hollow oak; children, the wounded, smoke, a hanging larder.
-   **Wren** meets the hero with a bow half-drawn. Her greeting depends on `bv_red_hen` (to_wren: *"Brannoc told me.
-   You could've hanged him and you didn't. That's a start."*; hanged: *"Brannoc was a thief and a bully. He was also
-   mine to judge."*).
-5. Wren's view of the crown: *"Kings are bandits who got there first. If you find the pieces, throw them in the
-   sea."* She wants a test of the hero's side: **MQ10**.
-- **Rewards**: 80 xp; Greenhood +5.
+- **Giver**: the birch-bark note. **Where**: Thornbeck → Oakhallow → the Hollow Oak (3600, 1100). **Level** 7.
+  **Time** 45 min.
+1. **Thornbeck**: Captain Ilse Varrow warns the hero off the deep wood. A burned barn at the village's edge, black
+   beams, a child's shoe in the ash, still laced: *"The hoods did that,"* says a soldier. *"Burned the Fellowes alive for
+   talking to us."* (SQ-GW8.)
+2. **Oakhallow**: the villagers won't say where the camp is (unless wren token, Greenhood ≥ 20, or SQ-GW3's first
+   step).
+3. The trail of wren carvings; a lynx's den; **Kestrel** (12), Wren's scout, drops from a tree with a knife.
+4. **The Hollow Oak**: children, the wounded, a hanging larder, a crate of poppy-milk being cut into vials by two
+   hoods who stop when they see the hero. **Wren**, bow half drawn. Her greeting depends on `bv_red_hen`
+   (`hesper_judged`: *"I heard a woman took Brannoc's head off with his own cleaver. I'd like to buy her a drink."*).
+5. Wren on the crown: *"Kings are bandits who got there first. Find the pieces and throw them in the sea."* On the
+   poppy, if asked: *"Arrows cost money. Bread costs money. I sell the Lantern's poison back to the Regent's town and
+   buy both. Judge me when you've fed forty people through a winter."* Then the test: **MQ10**.
+- **Rewards**: 80 xp; Greenhood +5; romance beat 1.
 
 ## MQ10 — Bread and Arrows
-- **Giver**: Wren. **Where**: Thornbeck's tithe barn (3020, 2280). **Level** 8. **Time** 50 min.
-1. The Regency's grain for the winter garrison sits in Thornbeck's tithe barn; Oakhallow is starving. Wren plans a
-   night raid and wants the hero to open the barn's lock (an oath-iron lock: the Regency uses old Lantern locks for
-   its stores).
-2. Scout Thornbeck: the garrison's watch rota (Captain Varrow is decent; her men are tired, hungry too).
+- **Giver**: Wren. **Where**: Thornbeck's tithe barn (3020, 2280). **Level** 8. **Time** 55 min.
+1. Oakhallow starves; the garrison's winter grain sits in Thornbeck's barn behind an oath-iron lock. Wren wants the
+   hero to open it during a night raid.
+2. **Scouting Thornbeck**: Varrow's men are hungry too, three of them boys from Oakhallow pressed into the levy. One,
+   **Col Fell**, is headman Aldred's grandson.
 3. Choice (`mq10_raid`):
-   - **Open the barn for Wren** (`raided`): a night raid; the hero holds the gate against the watch (non-lethal by
-     choice, or not). Greenhood +20, Regency -20, Oakhallow +2, Thornbeck -2. If guards were killed (`raid_blood`),
-     Captain Varrow hates the hero (SQ-GW2 closed).
-   - **Warn Captain Varrow** (`warned`): the raid walks into an ambush; Pip is captured (Wren must be talked out of
-     killing the hero; hero escapes the camp). Regency +20, Greenhood -30, Thornbeck +2, Oakhallow -2. Pip is to hang
-     in Kingsmere (SQ-HM4 can save him).
-   - **Talk Varrow into sharing the grain** (needs SQ-GW2 done, or Regency ≥ 20 and Greenhood ≥ 20): Varrow opens the
-     barn to Oakhallow "for the winter's peace" (`shared`): Regency -5, Greenhood +10, Thornbeck +1, Oakhallow +2.
-     Varrow is reprimanded by Kingsmere; Wren respects the hero more than any outcome.
-- **Rewards**: 220 xp; a Greenhood **longbow** (raided/shared) or 80 silver from Varrow (warned).
+   - **Open the barn for Wren** (`raided`): the hero holds the gate; the choice to fight to kill or to stun is the
+     hero's (`raid_blood` if any soldier dies; if Col Fell dies, Oakhallow learns its grain was bought with its own
+     boy). Greenhood +20, Regency -20, Oakhallow +2 (or -1 with Col dead), Thornbeck -2.
+   - **Warn Varrow** (`warned`): the raid walks into an ambush. Pip is taken; two hoods die; Wren, at the camp later,
+     puts an arrow through the hero's shoulder (a scripted wound) and lets them go: *"Because Kit's father would be dead
+     already if I didn't need you. Get out of my wood."* Regency +20, Greenhood -30.
+   - **Make Varrow share** (needs SQ-GW2 done, or SQ-GW1 `both`, or Regency ≥ 20 and Greenhood ≥ 20) (`shared`): Varrow
+     opens the barn to Oakhallow "for the winter's peace" and is reprimanded by Kingsmere. Regency -5, Greenhood +10,
+     Thornbeck +1, Oakhallow +2.
+- **Rewards**: 220 xp; a Greenhood **longbow** or 80 silver.
 
 ## MQ11 — What the Ferryman Saw
-- **Starts**: MQ05, MQ07 and MQ09 done. **Where**: Brindleford, the Ferryman's Rest (Garrick sends for the hero), or
-  Kingsmere if Garrick has come to market. **Level** 9. **Time** 30 min.
-1. Elsa sends word: her father's drinking himself sick since the stranger left. Garrick, drunk at the fire, finally
-   talks: there were three on the boat that night besides himself. The king. The Lord Regent, then chancellor. The
-   princess. *"I said I was ill. I wasn't ill."* He won't say what happened, only: *"The king went in. The crown went
-   in, I heard it go. It broke on the gunwale, three ways, and I heard one piece hit the water. You want the crown?
-   Ask the lake."*
-2. The **ferry token** now opens the ferry to the **Drowned Chantry** isle: no one has gone there in seven years.
-- **Choice**: press Garrick for more (he breaks down; Brindleford -1, `garrick_pressed`) or let him sleep
-  (`garrick_spared`: he trusts the hero, needed for his full testimony later).
-- **Rewards**: 60 xp.
+- **Starts**: MQ05, MQ07 and MQ09 done. **Where**: Brindleford (Elsa sends word). **Level** 9. **Time** 35 min.
+1. Elsa: her father hasn't been sober in a week; he's been sleeping by the river; he called her Rhosyn.
+2. Garrick at the river bank at night, a bottle, his feet in the water. Half a confession: three on the boat besides
+   himself and two more: *"The king. The chancellor, now Regent. The little princess. The Chamberlain. Lady Rhosyn."*
+   He says Rhosyn's name and stops. *"The crown broke on my rowlock, three ways. I heard one piece hit the water. Ask the
+   lake. The lake knows everything I did."*
+3. Choice: **press him** (Hard; he breaks, weeping, says nothing more: `garrick_pressed`, Brindleford -1) or **sit with
+   him** till he sleeps, and take the bottle (`garrick_spared`).
+- **Rewards**: 60 xp; the ferry token opens the isle.
 
 ## MQ12 — Still Water
-- **Where**: the Reedby ferry → the Drowned Chantry isle (2050, 1950), crypt below. **Level** 10. **Time** 70 min.
-1. Reedby's ferrywoman **Agnes Lark** rows the hero out at dusk ("seven years, and I never once rowed this way").
-2. The isle: a sunken chapel half under water, the royal ferry's wreck beached in the reeds (it was dragged here by
-   the lake, against all sense). On the wreck: the oath-iron **rowlock**, scarred where the crown struck it.
-3. **The Drowned Chantry** (crypt, flooded halls, level 9–10): drowned courtiers (ghosts), skeletons rising from the
-   water, a flooded hall the hero crosses on the tops of tombs.
-4. **The vision**: in the chantry's heart, the ghosts re-enact the Night of Still Water in light on the water, but
-   only in pieces: the boat, the king standing, a raised voice, *two* figures struggling, one going over, an oar held
-   down by a gloved hand (the face never shown), a girl in the water. The ghosts whisper: *"What the lake takes, the
-   sea keeps."*
-5. **The crypt lord**: **the Drowned Chamberlain**, Lord Osbert Hale (level 11), who drowned trying to save the king
-   (he dove after him). Laid to rest, he tells the hero: Hollowmere drains under the hills to the sea, at **Gullmouth**
-   on the Saltreach Coast. *"The king went with the water. So did his iron."*
-- **Rewards**: 300 xp; Lantern +5 (the chantry's dead laid to rest); the **Chamberlain's signet** (opens Kingsmere's
-  old water-gate: the heist route in MQ20).
-- **Journal**: *"The lake showed me the night the king drowned: someone held the oar down while he drowned, someone in
-  gloves. And the iron went with the water, to the sea, to a place called Gullmouth."*
-- **Act I ends.** The Act I summary scroll shows the three factions' standing and what the hero did.
+- **Where**: Reedby's ferry → the Drowned Chantry isle (2050, 1950). **Level** 10. **Time** 75 min.
+1. **Agnes Lark** rows the hero out at dusk: *"Seven years, and I never once rowed this way. The water's wrong here.
+   Too still."*
+2. The isle: the drowned chapel; the royal ferry's wreck beached in the reeds where no current could carry it. Its
+   oath-iron rowlock, scarred.
+3. **The Drowned Chantry** (flooded halls, level 9–10): the drowned courtiers' ghosts, skeletons from the water, a hall
+   crossed on tomb-tops.
+4. **The vision**: the ghosts play the night in light on the black water, in pieces the hero must walk between (each
+   piece a lit tableau): the king drunk, striking; *two* men struggling; one going over; a gloved hand on the gunwale,
+   a boot on an oar; a girl in the water; a woman diving after her; a ferryman rowing **away** while two people call his
+   name; then, far off, the boat turning back for one.
+5. **Lord Osbert Hale**, the Drowned Chamberlain (crypt lord, level 11): he dove after the king. Laid to rest (Rite of
+   Rest) or beaten, he speaks: *"He rowed away from us. Garrick. He rowed away. I don't blame him. I would have. Tell
+   Rhosyn — no. She's here. She's always here."* And: *"The lake goes under the hills to the sea, at Gullmouth. The king
+   went with the water. His iron too."*
+- **Rewards**: 300 xp; the **Chamberlain's signet** (Kingsmere's old water-gate).
+- **Journal**: *"The lake showed me the Still Water: a gloved hand held the oar down while the king drowned, and Garrick
+  rowed away from two drowning people. Then turned back for one. The iron went to the sea, at Gullmouth."*
+- **Act I ends.** The Barrows' fringe opens: from Elderwick, the White Fields can be seen, white as snow in summer.

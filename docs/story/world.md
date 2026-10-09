@@ -7,219 +7,215 @@ north, the barrow hills where the old kings sleep. For three hundred years it ha
 **Hollow Crown**, and as long as a king wore it, the dead stayed in their graves.
 
 Seven years ago King Edric drowned on a calm night on Hollowmere. His daughter vanished the same night. The crown was
-found on the shore, broken in three, and the pieces have not been seen since. No one has been crowned. The Regent
-rules from Kingsmere, outlaws rule the woods, the Order of the Last Lantern guards the crypts, and every year the dead
-stir a little more.
+found broken in three. No one has been crowned since. The Regent rules from Kingsmere and taxes a drug he publicly
+hangs men for selling. Outlaws feed starving villages and burn informers in their barns. The Order of the Last Lantern
+guards the crypts and sews shut the eyes of its novices. And every year the dead stir a little more, because the
+living keep digging them up.
 
-The hero comes over the western mountains on the pilgrim road, a stranger, owing nothing to anyone. That is exactly
-what the Vale needs: the crown's iron burns anyone born under the Oath. A stranger can carry it.
+The hero comes over the western mountains on the pilgrim road, a stranger, owing nothing to anyone. The crown's iron
+burns anyone born under the Oath. A stranger can carry it. A stranger will have to decide what it's for.
+
+## The story the Vale tells itself
+Three hundred years ago, **Osric the Oathmaker** freed the lowland folk from the cruel **Barrow Kings** of the north.
+At the end of a long war, **Sigrun**, the last Barrow King's daughter, fell in love with Osric and made peace: her
+father **Hrathgar** and his dead would sleep forever, and the living would rule. Osric and Sigrun married. Hrathgar's
+iron crown was reforged as the **Hollow Crown**, and every ruler since has worn it and sworn to rule justly. The
+**Order of the Last Lantern** keeps the vigil over the sleeping dead, named for the lantern Sigrun carried through
+the lines to make peace.
+
+## What really happened (learned in pieces through the game)
+- **The war was a conquest.** Hrathgar's hill-folk were the Vale's first people; Osric's lowlanders came over the
+  southern hills three generations before and took the good land.
+- **The Night of Lanterns** (revealed: SQ-BR4, MQ22, Cairnfold's ruins). The war ended at **Cairnfold**, where
+  Hrathgar's women, children and old folk sheltered in the barrow-halls. Osric's men sealed the doors and fired the
+  halls by lantern-light. Four thousand burned. The Order's name, *the Last Lantern*, is the torch that lit it,
+  turned into a holy story by the Order's first Lector, who was there.
+- **Sigrun was taken, not won** (SQ-BR4). She was captured at Cairnfold; Osric made her his "bride" that night. The
+  Vale's songs call it love. Her ghost does not. (Implied, never shown.)
+- **The Oath was a surrender.** Hrathgar, his people burning, swore that he and his dead would lie down and sleep, and
+  that his living would bow, in exchange for his daughter's life and his people's lives. His iron crown was melted
+  and reforged as a crown that binds *him*: the Hollow Crown is, under its legend, a chain. The Oath's other half
+  (that the wearer rule *justly*, the living and the Barrowborn alike) was the price Osric swore to pay. Few kings
+  remembered it.
+- **The Barrowborn** are the descendants of Hrathgar's surviving hill-folk: grey-eyed, dark-haired, an underclass of
+  peat-cutters, grave-diggers and servants, kept out of guilds and land; there are Barrowborn quarters in Kingsmere
+  (**the Ditch**), Gorse Hollow and Elderwick. They're sworn like everyone else. They have their own songs, which tell
+  the true story, which no one listens to.
 
 ## History
-
 | When | What happened |
 |---|---|
-| ~1000 years ago | The **Barrow Kings** rule the Vale from the northern hills. They bury their dead with their iron and their oaths. The greatest and last is **Hrathgar**. |
-| 312 years ago | **Osric the Oathmaker** leads the lowland folk against Hrathgar. The war lasts nine years and ends at the **Speaking Stone**, inside Hrathgar's own barrow. |
-| 303 years ago | **The Oath.** Hrathgar's daughter **Sigrun** brokers peace: the barrow-dead will sleep, and the living will rule, as long as a ruler of the Vale wears a crown made of Hrathgar's iron and speaks the oath before the Stone. Osric marries Sigrun. Hrathgar's crown is melted and forged again, its jewels prised out: the **Hollow Crown**. Hrathgar lies down in his barrow to sleep. |
-| 300 years ago | The **Order of the Last Lantern** is founded to guard the barrows and keep the rite. Every coronation since, the new ruler goes down into the Great Barrow with the Lector and speaks the oath. Few outside the Order know. |
-| 300 to 40 years ago | Fifteen kings and queens. The Vale prospers; the barrows are a story to frighten children. |
-| 31 years ago | **King Edric** is crowned. |
-| 12 to 9 years ago | **The Wet Years**: three summers of rain, the harvests rot, famine. The treasury empties buying grain from Carrow. **Corvin Ashby**, the king's chancellor, raises taxes; his reeves take seed grain from starving villages. Corvin's own sister **Maud** dies of the famine in Oakhallow. Her daughter **Wren** never forgives him. |
-| 8 years ago | **Duke Ferrand of Carrow**, over the eastern mountains, offers to buy the barrow hills: there is silver and old iron under them. Edric, desperate, secretly agrees. The sale is to be signed at Kingsmere in the autumn. Corvin learns of it from the Lantern: opening the barrows breaks the Oath. |
-| 7 years ago, autumn | **The Night of Still Water.** Edric crosses Hollowmere by the royal ferry to Kingsmere, to sign. On board: the ferryman **Garrick Fenn**, Corvin, Princess **Maelis** (15), and the crown in its casket. Corvin begs the king not to sign. They struggle; the king goes over the side. Corvin holds Garrick's oar and lets him drown. The Oath curses betrayal: the moment the king dies by a sworn man's treachery, the crown breaks in three. One piece goes into the lake, Corvin snatches one, Maelis, thrown into the water, clutches the third. Garrick pulls her out and hides her. |
-| 7 years ago to now | Corvin becomes **Lord Regent** "until the princess is found or the crown made whole". He pays Garrick's silence with an inn far away, in Brindleford. Maelis grows up as **Isolde**, a herbalist's foundling in Millbrook. The **Greenhood** rises in the Greenwood under Wren. Carrow, refused, waits. The dead begin to stir: first in the north, then everywhere. |
-| Game start | The first dead come out of a crypt in the far south: under the Chapel of the Quiet Bell, by Brindleford, on the night the stranger arrives. |
+| ~1000 years ago | The Barrow Kings rule the Vale from the northern hills; they bury their dead with their iron and their oaths. The last is **Hrathgar**. |
+| ~330 years ago | Osric's grandfather's lowlanders cross the Sorrow Hills; generations of raids. |
+| 312–303 years ago | **The Barrow War**. Ends at Cairnfold: the **Night of Lanterns**. |
+| 303 years ago | **The Oath**, sworn at the **Speaking Stone** in Hrathgar's **Great Barrow**. Hrathgar lies down to sleep. Sigrun is wed to Osric. The **Hollow Crown** is forged at the **Oathforge**. |
+| 300 years ago | The Order of the Last Lantern is founded to keep the rite: each new ruler goes down to the Stone with the Lector and speaks the oath wearing the crown. |
+| 300 to 40 years ago | Fifteen rulers. The Barrowborn are bound to the land by law; three revolts, three massacres. |
+| 52 years ago | **The Border Burning**: Carrow raids over the eastern mountains and burns the Southfields; among the dead, the family of a young Lantern brother, **Anselm Crane**. |
+| 40 years ago | The Lantern begins farming **grave-poppy** on the barrows' fringe (the **White Fields**) to pay for its knights. |
+| 31 years ago | **King Edric** is crowned. Weak, kind, indecisive. His queen, **Annis**, dies in childbirth with Maelis; Edric never quite recovers. |
+| 12–9 years ago | **The Wet Years**: three summers of rain, famine. Chancellor **Corvin Ashby** secretly sells the Lantern's grave-poppy to Carrow, through Gullhaven, and buys Carrow grain with the money: for Kingsmere. The villages starve; reeves take their seed grain for the towns. Corvin's sister **Maud** dies in Oakhallow. The **poppy purse** never closes again. |
+| 8 years ago | **Duke Ferrand of Carrow** offers to buy the barrow hills (silver, old iron) and to marry his son **Lord Haakon** (40, twice widowed, the rumours worse) to the princess. Edric, broke and desperate, agrees. Corvin learns of it: the sale breaks the Oath, ends the poppy trade (the White Fields are on those hills), and gives Annis's daughter to Haakon. |
+| 7 years ago, autumn | **The Night of Still Water.** (Below.) |
+| 7 years ago to now | Corvin becomes **Lord Regent**. Maelis is raised as **Isolde** in Millbrook. **Wren** raises the Greenhood. **Anselm** becomes Lector and begins the Listeners. The dead stir; then the poppy-diggers wake more. |
+| Game start | The first dead come out of a crypt in the far south: Chapel Hill, by Brindleford, on the night the stranger arrives. |
+
+## The Night of Still Water
+Edric crosses Hollowmere by the royal ferry to sign the sale in Kingsmere. On board: the ferryman **Garrick Fenn**,
+Chancellor **Corvin**, Princess **Maelis** (15), her governess **Lady Rhosyn**, the Lord Chamberlain **Osbert Hale**,
+and the crown in its casket.
+
+Corvin begs the king not to sign. He tells him what the barrows are. He tells him what Haakon is. Edric, drunk, says
+he has no choice and strikes him. They struggle; the king goes over the side. The king can't swim. Corvin puts his
+foot on Garrick's oar and his hand on the gunwale and doesn't let go. Hale dives after the king. Rhosyn jumps after
+Maelis, who has gone in after her father. The crown's casket goes over and the crown, striking the oath-iron
+rowlock as the king dies by a sworn man's betrayal, breaks in three. Corvin snatches one piece from the boat floor
+(it freezes his hand black). Then he gives the order: *"Row."* Garrick rows away from Hale and Rhosyn, who are
+drowning, calling. He looks back. He sees the princess still afloat, clinging to a piece of iron, and in the dark,
+against orders, he turns back for her alone, and pulls her in, and lies to Corvin that she drowned. He hides her with
+the herbalist Mother Hesk in Millbrook. Corvin pays him with an inn far from the lake, and Garrick takes it.
 
 ## The Oath and the Hollow Crown
-
-- **The Oath** binds the barrow-dead to sleep and the living to rule them justly. It is renewed by every new ruler at
-  the **Speaking Stone** in Hrathgar's **Great Barrow**, wearing the crown.
-- **The Hollow Crown** is iron, plain, its four jewel sockets empty. Broken, it is three pieces:
-  - **the Brow** (the front, with the empty sockets): went into the lake; carried by Hollowmere's underground outflow
-    to the sea cave at Gullmouth, with the drowned king's body.
-  - **the Band** (the back): taken by Corvin; locked in the Regent's vault in Kingsmere.
-  - **the Heart** (the inner ring, the oath engraved on it in the old tongue): clutched by Maelis; buried under her
-    foster mother's beehives in Millbrook.
-- **Oath-iron**: the crown, the pieces and every lock, reliquary and grave-ward the Lantern ever forged from barrow
-  iron. It burns with a deep cold anyone **sworn**, anyone born in the Vale under the Oath. Held for long, it frosts
-  the hand black. The hero, born beyond the mountains, is **unsworn**: oath-iron is only iron to them. In game: only
-  the hero can open oath-iron locks and carry the pieces; companions and NPCs flinch from them.
-- **Why the dead stir**: with no crowned ruler, the Oath frays. The dead do not wake all at once: the weakest graves
-  first, then the old crypts, then the barrows. Without a crown, within a year Hrathgar himself wakes.
-- **Reforging**: the three pieces must be forged together at the **Oathforge**, the forge the crown was first made at,
-  in the undercroft of the Abbey of the Last Lantern. The smith must be unsworn (the iron would burn anyone else to the
-  bone): the hero, guided by a smith who knows the work (Tobin Harrow of Brindleford, or the Lantern's forge-brother
-  Aedric).
-- **Wearing**: once reforged by unsworn hands, the crown burns no one, except one who betrayed the last wearer:
-  Corvin, who dies if he puts it on.
-- **Breaking**: the reforged crown can be broken for good on the Speaking Stone. The Oath ends, Hrathgar wakes fully,
-  and must be destroyed; after that, the dead of the Vale simply rest, bound by nothing.
+- **The Oath** binds the barrow-dead to sleep and the wearer to rule justly. It is renewed at each coronation at the
+  **Speaking Stone** in the Great Barrow.
+- **The Hollow Crown**: iron, plain, four empty jewel sockets (Hrathgar's jewels were his four sons' eyes, the
+  Barrowborn songs say: the sockets are left empty as a mockery). Broken, it is three pieces:
+  - **the Brow** (the sockets): went into the lake with the king; carried by Hollowmere's underground outflow to the
+    sea cave at **Gullmouth**, with his body.
+  - **the Band** (the back): Corvin's; in the Regent's vault in Kingsmere.
+  - **the Heart** (the inner ring, the oath engraved in the old tongue): Maelis's; buried under Mother Hesk's hives.
+- **Oath-iron** burns with cold anyone **sworn** (born in the Vale under the Oath). The hero is **unsworn**.
+- **Why the dead stir**: no crowned ruler, so the Oath frays; and every grave opened by a poppy-digger's spade breaks
+  it further. Within a year of the game's start, Hrathgar himself wakes.
+- **Reforging** at the **Oathforge** (the Abbey's undercroft), by unsworn hands.
+- **Wearing**: once reforged, the crown burns no one, except one who betrayed the last wearer: Corvin, who dies if he
+  wears it.
+- **Breaking** it on the Speaking Stone ends the Oath. For one night (**the Long Night**) every dead thing in the Vale
+  wakes, before it can rest; Hrathgar must be laid to rest or destroyed; the Barrowborn are freed of nothing anyone can
+  see, and of everything.
 
 ## Factions
-
 ### The Regency
-- **Seat**: Kingsmere, the Regent's hall on the south shore of Hollowmere.
-- **Leader**: Lord Regent **Corvin Ashby**. Also: his son **Aldous**; Captain **Ilse Varrow** at Thornbeck; reeves in
-  every loyal village (Reeve **Odo Pell** in Brindleford).
-- **Wants**: order, the roads safe, taxes paid, the crown rebuilt and a ruler crowned who keeps Corvin in power.
-- **Strength**: soldiers, money (just), the law. **Weakness**: the treasury is empty, the people hate the reeves, and
-  Corvin's secret.
-- **The grey**: the Regency hangs the hungry for poaching, and also keeps the roads open, the plague out of Kingsmere
-  and Carrow's armies over the mountains. Corvin killed his king to save the Vale.
+- **Seat** Kingsmere. **Leader** Lord Regent Corvin Ashby; his son Aldous; Captain Ilse Varrow at Thornbeck; reeves.
+- **Wants** order, the roads safe, the crown reforged, a ruler crowned who keeps the Regency in power.
+- **Its rot** the poppy purse (taxing the drug it hangs others for selling); the reeves' seed-grain seizures in the Wet
+  Years; the Barrowborn laws, enforced harder every year the dead stir ("the grey-eyes call them up").
+- **Its case** Kingsmere has bread, the roads are safe, Carrow is kept out. Corvin killed his king to keep the Vale
+  whole and keep the princess from Haakon. Every bad thing he did, he did for a sum he can show you.
 
 ### The Greenhood
-- **Seat**: the Hollow Oak, a camp hidden in the Greenwood (3600, 1100).
-- **Leader**: **Wren Halloway**. Also: **Brannoc "Red Hen" Mabb** (rogue lieutenant), **Pip Tanner** (Wren's second,
-  a former Regency soldier), the **Sour Apple** band (rogues using the Greenhood's name).
-- **Wants**: the reeves gone, the grain kept in the villages, no more kings: a Vale run by its villages.
-- **Strength**: the woods, the villagers' love, archers. **Weakness**: hunger, no money, rogue bands, Wren's hatred of
-  her uncle.
-- **The grey**: they feed starving villages with stolen tax grain, and they burn the farms of informers.
+- **Seat** the Hollow Oak, the Greenwood. **Leader** Wren Halloway; Pip Tanner; rogue bands.
+- **Wants** no reeves, no crown, no Barrowborn laws: the villages ruling themselves.
+- **Its rot** it sells grave-poppy in the Ditch to buy arrows; it hangs informers, and once (the **Fellowe barn**,
+  Thornbeck, two years ago) burned an informer's family alive in their barn, children too, and Wren covered it up.
+- **Its case** the Greenhood fed Oakhallow through two winters the Regency would have starved it.
 
 ### The Order of the Last Lantern
-- **Seat**: the Abbey of the Last Lantern on the moors (850, 800).
-- **Leaders**: **Lector Anselm Crane** (head of the Order), Sister-Captain **Odalys Venn** (its knights).
-- **Wants (Odalys)**: the crypts guarded, the rite kept, the crown reforged and a worthy ruler crowned, guided by the
-  Order. **Wants (Anselm, secret)**: to wear the crown himself and speak a *changed* oath, binding the dead not to
-  sleep but to serve: an army that never tires, to take Carrow and more.
-- **Strength**: knights, the only ones who know the rite, the Oathforge, oath-iron. **Weakness**: few, old, feared;
-  Anselm's rot.
-- **The grey**: the only ones fighting the dead, and they burn villages "touched by the grave" (Larkspur).
+- **Seat** the Abbey of the Last Lantern. **Leaders** Lector Anselm Crane; Sister-Captain Odalys Venn.
+- **Wants (Odalys)** the dead back in their graves, the rite kept. **Wants (Anselm, secret)** to wear the crown and
+  speak a changed oath that binds the dead to *serve*, an army to make the Vale untouchable and to burn Carrow as
+  Carrow burned his family.
+- **Its rot** the White Fields; the Listeners; the burning of Larkspur's sick (Odalys's order); the Order's founding
+  lie.
+- **Its case** the only ones fighting the dead, for three hundred years, and dying for it.
 
 ### Others
-- **Carrow** (over the eastern mountains): Duke Ferrand wants the barrow hills' silver and iron. His envoy, **Lady
-  Sabeline Marr**, lives in Kingsmere, buys spies, arms and grave-robbers, and offers the hero anything for the pieces.
-- **The Gullhaven smugglers**: **Nell Corrigan** runs the harbour's shadow trade; loyal to coin and to Gullhaven.
-- **The villages**: ten, each with its own people, fears and memory of the hero (see the regions).
-- **The dead**: ghosts, skeletons, draugr, crypt lords, and in the north the barrow-host, under **Hrathgar** and his
-  daughter **Sigrun**, who still keeps the Oath she made.
+- **Carrow**: Duke Ferrand wants the barrows' silver and the poppy trade; his envoy **Lady Sabeline Marr** buys
+  spies, arms, grave-robbers and the hero, if she can.
+- **Gullhaven's smugglers**: **Nell Corrigan**, the Milk House.
+- **The Barrowborn**: no faction, no voice, until someone gives them one. Their elder in Kingsmere's Ditch, **Old
+  Grey Edda**, keeps the true songs.
+- **The dead**: ghosts, skeletons, draugr, crypt lords; in the north the barrow-host, under Hrathgar, and Sigrun.
 
 ## Reputation
-
 ### Factions (-100..100)
 | Range | Standing | Effect |
 |---|---|---|
-| -100..-60 | **Hated** | Attacked on sight by the faction's people; their quests closed |
-| -59..-20 | **Distrusted** | Prices +30% in their places; some quests closed |
+| -100..-60 | **Hated** | Attacked on sight; their quests closed |
+| -59..-20 | **Distrusted** | Prices +30%; some quests closed |
 | -19..19 | **Neutral** | |
 | 20..59 | **Trusted** | Their quests open; prices -10% |
 | 60..100 | **Sworn** | Their best gear; they answer the call in Act III |
 
-Starting values: Regency 0, Greenhood 0, Lantern 0. Raising one often lowers another: helping the Greenhood rob a tax
-cart is `Greenhood +10, Regency -10`.
+Starting at 0. Helping one often costs another.
 
-### Villages (-3..+3)
-| Standing | Name | What it means |
-|---|---|---|
-| -3 | **Burned** | The village is destroyed (only by story choices; it stays ruined) |
-| -2 | **Fearful** | Doors shut, no trade, children hide |
-| -1 | **Wary** | Prices +20%, few words |
-| 0 | **Neutral** | |
-| +1 | **Friendly** | Greetings, small gifts, -10% prices |
-| +2 | **Grateful** | A free room at the inn, the reeve's help, militia in Act III |
-| +3 | **Devoted** | They name something after the hero; a song at the inn; the hero's title used |
+### Places (-3..+3)
+Ten villages and the two towns each keep a standing: **-3 Burned** (by story only; stays ruined), **-2 Fearful**,
+**-1 Wary** (prices +20%), **0 Neutral**, **+1 Friendly** (-10%), **+2 Grateful** (free room, militia in Act III),
+**+3 Devoted** (a song at the inn, the hero's title used, something named for them).
 
 ### Renown and titles
-Villagers and characters call the hero "stranger" until their deeds give them a name. The title in use is the one
-earned last that the speaker would know of: **Ghostbane** (laid three crypts to rest), **the Red Hen's Bane**
-(killed Brannoc), **Hood-friend** (Greenhood Sworn), **the Regent's Hand** (Regency Sworn), **Lantern-sworn**
-(Lantern Sworn), **the Ferryman's Friend** (Brindleford Devoted), **Bridgekeeper** (Middle Downs contracts),
-**the Unsworn** (said by the dead, always).
+"Stranger" until deeds give a name; the title used is the last earned that the speaker would know: **Ghostbane**,
+**the Red Hen's Bane**, **Hood-friend**, **the Regent's Hand**, **Lantern-sworn**, **the Ferryman's Friend**,
+**Bridgekeeper**, **Grey-friend** (the Barrowborn's, after SQ-HM10), **the Unsworn** (said by the dead, always).
 
 ## The map
-
-4096 x 4096 tiles; x east, z south. Mountains ring the Vale (the **Cold Spine** north, the **Carrow Teeth** east,
-the **Sorrow Hills** south); the sea is the west edge (x < 160 from z 1400 to 3000). The map's edge is impassable
-mountain or sea.
+4096 x 4096 tiles; x east, z south. Mountains ring the Vale (the **Cold Spine** north, the **Carrow Teeth** east, the
+**Sorrow Hills** south); the sea is the west edge (x < 160, z 1400–2900).
 
 ```
  z=0   +--------------------------------------------------------------+
-       |   COLD SPINE (mountains)                                     |
+       |   COLD SPINE                                                 |
        |        LANTERN MOORS       THE BARROWS                         |
        |        Abbey*              Great Barrow*                       |
- ~1000 |        Gorse Hollow        Watchers' Crypt      GREENWOOD      |
-       | S      Cairnfold                                Hollow Oak*    |
-       | A  SALTREACH                                    Oakhallow      |
- ~2000 | E  Gullhaven*        HOLLOWMERE (lake)          Spinner's Deep  |
-       | A  Saltcombe         Reedby  Isle  Elderwick    Thornbeck      |
-       |                      KINGSMERE*                                |
- ~3000 |        BRINDLE VALE      MIDDLE DOWNS         SOUTHFIELDS      |
-       |        Brindleford*                           Millbrook        |
-       |        Tallow Green                           Larkspur         |
- ~4000 |   SORROW HILLS (mountains)                    CARROW TEETH ->  |
+ ~1000 |        Gorse Hollow        White Fields          GREENWOOD     |
+       | S      Cairnfold           Watchers' Crypt       Hollow Oak*   |
+       | E  SALTREACH                                     Oakhallow     |
+ ~2000 | A  Gullhaven*        HOLLOWMERE (lake)           Spinner's Deep |
+       |    Saltcombe         Reedby  Isle  Elderwick     Thornbeck     |
+       |                      KINGSMERE* (the Ditch)                    |
+ ~3000 |        BRINDLE VALE      MIDDLE DOWNS          SOUTHFIELDS     |
+       |        Brindleford*                            Millbrook       |
+       |        Tallow Green                            Larkspur        |
+ ~4000 |   SORROW HILLS                                 CARROW TEETH -> |
        +--------------------------------------------------------------+
 ```
 
 ### Regions
-
-| Region | Tiles (x, z) | Character | Towns and villages | Dungeons | Camps |
+| Region | Tiles (x, z) | Towns and villages | Dungeons | Camps | Levels |
 |---|---|---|---|---|---|
-| **Brindle Vale** (start) | 350–1450, 2900–3900 | Gentle green valley, the Brindle river, birch woods, a hill to the south-east | Brindleford, Tallow Green | Bellwarden's Tomb (crypt), Mossjaw Cave | Red Hen |
-| **Middle Downs** | 1450–2600, 2700–3800 | Open rolling grassland, roads, the old toll bridge | — | — | — |
-| **Hollowmere** | 1450–2750, 1400–2700 | The great lake, reed shores, an island ruin | **Kingsmere** (town), Reedby, Elderwick | Drowned Chantry (crypt) | Weed Rats (lake raiders) |
-| **Saltreach Coast** | 0–750, 1400–2900 | Cliffs, coves, dunes, a ruined lighthouse | **Gullhaven** (town), Saltcombe | Gullmouth Sea Cave, Wrecker's Hole (caves) | Wreckers |
-| **Greenwood** | 2800–3950, 700–2600 | Deep old forest, oaks and pines, brooks | Oakhallow, Thornbeck | Spinner's Deep (cave), Hunter's Barrow (crypt) | Sour Apple; the Hollow Oak (Greenhood, friendly) |
-| **Lantern Moors** | 300–1450, 300–1500 | Heather and peat, standing stones, mist | Gorse Hollow | Abbey Undercroft, Cairnfold Crypt | — |
-| **Southfields** | 2600–3900, 2700–3900 | Farmland, orchards, hedgerows, beehives | Millbrook, Larkspur | Larkspur Barrow (crypt) | Deserters |
-| **The Barrows** | 1450–3000, 150–1400 | Bare hills ringed with barrows, cairns, cold wind | — | Watchers' Crypt, the Great Barrow (crypts) | Grave-robbers |
+| **Brindle Vale** (start) | 350–1450, 2900–3900 | Brindleford, Tallow Green | Bellwarden's Tomb, Mossjaw Cave | Red Hen | 1–4 |
+| **Middle Downs** | 1450–2600, 2700–3800 | — | — | — | 4–8 |
+| **Hollowmere** | 1450–2750, 1400–2700 | **Kingsmere**, Reedby, Elderwick | Drowned Chantry | Weed Rats | 4–8 |
+| **Lantern Moors** | 300–1450, 300–1500 | Gorse Hollow | Abbey Undercroft, Cairnfold Crypt | — | 6–11 |
+| **Greenwood** | 2800–3950, 700–2600 | Oakhallow, Thornbeck | Spinner's Deep, Hunter's Barrow | Sour Apple; the Hollow Oak | 6–11 |
+| **Southfields** | 2600–3900, 2700–3900 | Millbrook, Larkspur | Larkspur Barrow | Deserters | 8–12 |
+| **Saltreach Coast** | 0–750, 1400–2900 | **Gullhaven**, Saltcombe | Gullmouth Sea Cave, Wrecker's Hole | Wreckers | 9–13 |
+| **The Barrows** | 1450–3000, 150–1400 | — | Watchers' Crypt, the Great Barrow | Grave-robbers | 12–18 |
 
 ### Key places
-
-| Place | Kind | (x, z) | Region |
-|---|---|---|---|
-| Pilgrim's Shrine (start) | landmark | 480, 3380 | Brindle Vale |
-| Brindleford | village | 900, 3350 | Brindle Vale |
-| Tallow Green | village | 1200, 3050 | Brindle Vale |
-| Chapel of the Quiet Bell / Bellwarden's Tomb | ruin / crypt | 1080, 3180 | Brindle Vale |
-| Mossjaw Cave | cave | 1300, 3650 | Brindle Vale |
-| Red Hen camp | bandit camp | 620, 3560 | Brindle Vale |
-| Hob's Tower | ruin (watchtower) | 1400, 3000 | Brindle Vale |
-| Old Toll Bridge | ruin (bridge) | 1900, 3000 | Middle Downs |
-| **Kingsmere** | town | 2100, 2550 | Hollowmere |
-| Reedby | village | 1550, 2050 | Hollowmere |
-| Elderwick | village | 2600, 1600 | Hollowmere |
-| Drowned Chantry (isle) | ruin / crypt | 2050, 1950 | Hollowmere |
-| Sunken Hall | ruin (shallows) | 1700, 1750 | Hollowmere |
-| Weed Rats camp | bandit camp | 1700, 2400 | Hollowmere |
-| **Gullhaven** | town | 320, 2150 | Saltreach |
-| Saltcombe | village | 400, 2700 | Saltreach |
-| Gullmouth Sea Cave | cave | 200, 1750 | Saltreach |
-| Wrecker's Hole | cave | 250, 2500 | Saltreach |
-| Wreckers' camp | bandit camp | 300, 2420 | Saltreach |
-| Gull Light | ruin (lighthouse) | 180, 2000 | Saltreach |
-| Oakhallow | village | 3200, 1500 | Greenwood |
-| Thornbeck | village (Regency garrison) | 3000, 2300 | Greenwood |
-| The Hollow Oak | Greenhood camp | 3600, 1100 | Greenwood |
-| Sour Apple camp | bandit camp | 3300, 2000 | Greenwood |
-| Spinner's Deep | cave | 3700, 1900 | Greenwood |
-| Hunter's Barrow | ruin / crypt | 3400, 800 | Greenwood |
-| Abbey of the Last Lantern / Undercroft | keep / crypt (Oathforge) | 850, 800 | Lantern Moors |
-| Gorse Hollow | village | 1050, 1150 | Lantern Moors |
-| Cairnfold | ruin / crypt | 550, 1250 | Lantern Moors |
-| Millbrook | village | 3000, 3300 | Southfields |
-| Larkspur | village | 3500, 3100 | Southfields |
-| Larkspur Barrow | ruin / crypt | 3650, 3350 | Southfields |
-| Deserters' camp | bandit camp | 3300, 3700 | Southfields |
-| Watchers' Crypt (watchtower ruin) | ruin / crypt | 2250, 1050 | The Barrows |
-| The Great Barrow | crypt (final) | 2250, 450 | The Barrows |
-| Grave-robbers' camp | bandit camp | 1800, 900 | The Barrows |
+| Place | Kind | (x, z) |
+|---|---|---|
+| Pilgrim's Shrine (start) | landmark | 480, 3380 |
+| Brindleford / Tallow Green | villages | 900, 3350 / 1200, 3050 |
+| Chapel of the Quiet Bell, Bellwarden's Tomb, famine pit | ruin, crypt | 1080, 3180 (pit 1090, 3200) |
+| Mossjaw Cave / Red Hen camp / Hob's Tower | cave / camp / ruin | 1300, 3650 / 620, 3560 / 1400, 3000 |
+| Old Toll Bridge | ruin | 1900, 3000 |
+| **Kingsmere** (the Ditch outside its south wall) | town | 2100, 2550 (Ditch 2050–2150, 2650–2700) |
+| Reedby / Elderwick | villages | 1550, 2050 / 2600, 1600 |
+| Drowned Chantry isle / Sunken Hall / Weed Rats | crypt / ruin / camp | 2050, 1950 / 1700, 1750 / 1700, 2400 |
+| **Gullhaven** (the Milk House) / Saltcombe | town / village | 320, 2150 / 400, 2700 |
+| Gullmouth Sea Cave / Wrecker's Hole / Wreckers / Gull Light | caves, camp, ruin | 200, 1750 / 250, 2500 / 300, 2420 / 180, 2000 |
+| Oakhallow / Thornbeck (Fellowe barn ruin 3060, 2330) | villages | 3200, 1500 / 3000, 2300 |
+| The Hollow Oak / Sour Apple | camps | 3600, 1100 / 3300, 2000 |
+| Spinner's Deep / Hunter's Barrow | cave / crypt | 3700, 1900 / 3400, 800 |
+| Abbey of the Last Lantern (Undercroft, Oathforge, Listening Hall, poppy terraces) | keep, crypt | 850, 800 |
+| Gorse Hollow / Cairnfold | village / ruin, crypt | 1050, 1150 / 550, 1250 |
+| Millbrook / Larkspur / Larkspur Barrow / Deserters | villages, crypt, camp | 3000, 3300 / 3500, 3100 / 3650, 3350 / 3300, 3700 |
+| The White Fields (Lantern poppy farm) | farm | 1700–2700, 800–1100 |
+| Watchers' Crypt / the Great Barrow / Grave-robbers | crypts / camp | 2250, 1050 / 2250, 450 / 1800, 900 |
 
 ### Roads
-- **Pilgrim Road**: Pilgrim's Shrine (480, 3380) → Brindleford → Tallow Green → Hob's Tower (1400, 3000) → Old Toll
-  Bridge (1900, 3000) → Kingsmere (2100, 2550).
-- **Lake Road** round Hollowmere: Kingsmere → Reedby (west) → north shore → Elderwick (east) → Kingsmere.
-- **Salt Road**: Reedby → Gullhaven (320, 2150), branching south to Saltcombe.
-- **Moor Road**: Reedby → north-west → Gorse Hollow → the Abbey.
-- **Barrow Road**: Elderwick → north → the Watchers' Crypt → the Great Barrow (closed until Act III by the Lantern's
-  barrier at the watchtower).
-- **Wood Road**: Kingsmere → Thornbeck → Oakhallow (the Hollow Oak is off-road, found by a trail).
-- **South Road**: Brindleford → east over the Middle Downs → Millbrook → Larkspur.
+- **Pilgrim Road**: Pilgrim's Shrine → Brindleford → Tallow Green → Hob's Tower → Old Toll Bridge → Kingsmere.
+- **Lake Road** round Hollowmere: Kingsmere → Reedby → north shore → Elderwick → Kingsmere.
+- **Salt Road**: Reedby → Gullhaven, branching south to Saltcombe.
+- **Moor Road**: Reedby → Gorse Hollow → the Abbey.
+- **Barrow Road**: Elderwick → the White Fields → the Watchers' Crypt → (gate) → the Great Barrow.
+- **Wood Road**: Kingsmere → Thornbeck → Oakhallow.
+- **South Road**: Brindleford → the Middle Downs → Millbrook → Larkspur.
 
 ### Region gating
-Brindle Vale is open from the start; its exits (east past Hob's Tower, east by the South Road) are blocked by
-the Regency's checkpoint at Hob's Tower ("no one leaves the vale while the dead walk") until MQ04 is done. After
-that the whole Vale is open except the Barrows: their southern fringe (z 800–1400) opens at the end of Act I (MQ12),
-and the Barrow Valley (z 150–800) beyond the Lantern's gate at the Watchers' Crypt stays sealed until MQ26. Levels follow the story: Brindle Vale 1–4
-(prologue), Middle Downs and Hollowmere 4–8, Lantern Moors and Greenwood 6–11 (Act I), Southfields 8–12 and
-Saltreach 9–13 (Act II), the Barrows 14–18 (Act III). The hero reaches about level 4 by the end of the prologue, 10 by
-the end of Act I, 14 by the end of Act II, and 18 at the end.
+Brindle Vale is open from the start; its exits are held by the Regency's checkpoint at Hob's Tower until MQ04. Then
+all is open except the Barrows: the fringe (z 800–1400, the White Fields) opens at the end of Act I (MQ12); the Barrow
+Valley (z 150–800) beyond the Lantern's gate at the Watchers' Crypt stays sealed until MQ26. The hero is about level 4
+after the prologue, 10 after Act I, 14 after Act II, 18 at the end.
