@@ -8,6 +8,7 @@ import { FrameModel, type FrameSpec } from '@voxel/engine/characters';
 import { FOLK } from './brindleford';
 import { HOBS_TOWER_FOLK } from './hobsTower';
 import { HOUSEHOLDS } from './households';
+import { MOMENTS } from './moments';
 import { RED_HEN_FOLK } from './redHen';
 import { TALLOW_GREEN } from './tallowGreen';
 
@@ -37,6 +38,11 @@ export const PEOPLE: Record<string, Person> = Object.fromEntries([
   ...people('Red Hen camp', RED_HEN_FOLK),
   ...people("Hob's Tower", HOBS_TOWER_FOLK),
 ]);
+// The story's turns, each the person another way (moments.ts).
+for (const [name, moments] of Object.entries(MOMENTS)) {
+  const person = PEOPLE[name];
+  person.variants = { ...person.variants, ...Object.fromEntries(Object.entries(moments).map(([k, spec]) => [k, () => new FrameModel(spec)])) };
+}
 
 // A person's id for a URL or a save: their name in lower case, hyphened ('Garrick Fenn' is garrick-fenn).
 export const personId = (name: string): string => name.toLowerCase().replace(/[^a-z]+/g, '-');

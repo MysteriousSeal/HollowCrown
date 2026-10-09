@@ -22,8 +22,10 @@ describe('doors and their households', () => {
       if (standing.length === 0) continue;
       const { door, x0, x1 } = buildingModel(house).layout;
       const modelShift = ((door!.x0 + door!.x1) / 2 - (x0 + x1) / 2) / VOXELS_PER_TILE;
-      // How far along the front (the building's +x) the household's middle stands from the footprint's door.
-      const [dx, dz] = footprint(house).door;
+      // How far along the front (the building's +x) the household's middle stands from the building's middle (the
+      // footprint's centre: an even-sided house's middle falls between tiles).
+      const f = footprint(house);
+      const [dx, dz] = [(f.x0 + f.x1) / 2, (f.z0 + f.z1) / 2];
       const facing = house.facing ?? 0;
       const sides = standing.map((v) => (v.x - dx) * Math.cos(facing) - (v.z - dz) * Math.sin(facing));
       const shift = sides.reduce((a, b) => a + b, 0) / sides.length;

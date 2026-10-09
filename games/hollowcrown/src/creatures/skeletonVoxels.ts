@@ -59,7 +59,7 @@ export const PARTS: Record<BodyPart, (grid: VoxelGrid) => void> = {
 };
 
 // Grave-cloth: a ragged wrap round the hips, a rag hung from one shoulder.
-function rags(joint: Joint, g: VoxelGrid): void {
+export function rags(joint: Joint, g: VoxelGrid): void {
   if (joint === 'torso') {
     for (let x = 0; x <= 8; x++) for (const z of [0, 4]) {
       const low = hashUnit(x, z, 31) < 0.5 ? 0 : 1; // (torn, ragged at the hem)
@@ -73,7 +73,7 @@ function rags(joint: Joint, g: VoxelGrid): void {
 }
 
 // The rusted sword, along +Z from the grip: pommel, grip, guard, a pitted blade.
-function rustySword(): VoxelGrid {
+export function rustySword(): VoxelGrid {
   const g = createGrid([5, 2, 22]);
   fillBox(g, 2, 0, 0, 2, 1, 4, CRACK); // the grip
   setColor(g, 2, 0, 0, IRON);

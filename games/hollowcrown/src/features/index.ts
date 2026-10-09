@@ -1,6 +1,7 @@
 // Every feature of the game, installed in this order. A new feature: its own file here, and one line below.
 
 import type { Feature } from './context';
+import { bot } from './bot';
 import { buildings } from './buildings';
 import { combat } from './combat';
 import { daylight } from './daylight';
@@ -28,6 +29,7 @@ export const FEATURES: Feature[] = [
   hud,
   talk,
   quests,
+  bot,
   encounters,
 ];
 

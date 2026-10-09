@@ -6,6 +6,7 @@ import { BeastModel, BirdModel, FrameModel, SpiderModel } from '@voxel/engine/ch
 import { ALPHA_WOLF, BARROW_HOUND, BEAR, BOAR, WOLF } from './beasts';
 import { BROOD_MOTHER, CAVE_SPIDER, HATCHLING } from './spiderVoxels';
 import { SKELETON, SKELETON_ARCHER } from './skeletonVoxels';
+import { HAMUND, OSSUARY_BROTHER, OSSUARY_GUARD, OSSUARY_SQUIRE } from './cryptDeadVoxels';
 import { ShadeModel } from './ghostVoxels';
 import { BOG_DRAUGR, DRAUGR } from './draugrVoxels';
 import { GHOST } from './spectralVoxels';
@@ -19,6 +20,7 @@ import { RED_HEN_BAND } from '../people/redHen';
 import { DEAD_PILGRIM, sprawl } from '../people/pilgrim';
 import { MULE } from './muleVoxels';
 import { Lying } from './lying';
+import { PerchedFlock } from './perched';
 import { HOBS_TOWER_GUARD } from '../people/hobsTower';
 
 export interface CreatureEntry {
@@ -48,6 +50,10 @@ export const CREATURES: CreatureEntry[] = [
   { id: 'carrowArbalester', name: 'Carrow arbalester', family: 'people', make: () => new FrameModel(CARROW_ARBALESTER) },
   { id: 'skeleton', name: 'Skeleton', family: 'dead', make: () => new FrameModel(SKELETON) },
   { id: 'skeletonArcher', name: 'Skeleton archer', family: 'dead', make: () => new FrameModel(SKELETON_ARCHER) },
+  { id: 'ossuaryGuard', name: 'Ossuary guard (MQ02)', family: 'dead', make: () => new FrameModel(OSSUARY_GUARD) },
+  { id: 'ossuaryBrother', name: 'Ossuary lay brother (MQ02)', family: 'dead', make: () => new FrameModel(OSSUARY_BROTHER) },
+  { id: 'ossuarySquire', name: "The Bellwarden's squire (MQ02)", family: 'dead', make: () => new FrameModel(OSSUARY_SQUIRE) },
+  { id: 'hamund', name: 'Sir Hamund, the Bellwarden (MQ02)', family: 'dead', make: () => new FrameModel(HAMUND) },
   { id: 'ghost', name: 'Ghost', family: 'dead', make: () => new FrameModel(GHOST) },
   { id: 'shade', name: 'Wailing shade', family: 'dead', make: () => new ShadeModel() },
   { id: 'draugr', name: 'Draugr', family: 'dead', make: () => new FrameModel(DRAUGR) },
@@ -67,6 +73,7 @@ export const CREATURES: CreatureEntry[] = [
   { id: 'ashenSmall', name: 'The Ashen (child)', family: 'horror', make: () => new FrameModel(ASHEN_SMALL) },
   { id: 'pitEater', name: 'Pit-eater', family: 'horror', make: () => new FrameModel(PIT_EATER) },
   { id: 'rook', name: 'Carrion rook', family: 'horror', make: () => new BirdModel(ROOK) },
+  { id: 'rookFlock', name: 'Carrion rooks, perched at the gibbet', family: 'horror', make: () => new PerchedFlock(5, 0.6) },
   { id: 'rookLeader', name: 'Carrion rook (leader)', family: 'horror', make: () => new BirdModel(ROOK_LEADER) },
   { id: 'deadPilgrim', name: 'Dead pilgrim woman (MQ01, the ditch)', family: 'remains', make: () => new Lying(new FrameModel(DEAD_PILGRIM), 'back', (m) => sprawl(m as FrameModel)) },
   { id: 'deadMule', name: 'Dead mule (MQ01, the Birchwood)', family: 'remains', make: () => new Lying(new BeastModel(MULE), 'side') },

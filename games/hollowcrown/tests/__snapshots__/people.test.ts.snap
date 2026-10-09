@@ -187,6 +187,23 @@ exports[`people > Gammer Orr: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Garrick Fenn (oar): builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.142,
+    0.591,
+    0.116,
+  ],
+  "min": [
+    -0.142,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1380,
+}
+`;
+
 exports[`people > Garrick Fenn: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -425,6 +442,23 @@ exports[`people > Ned Tolley: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Odo Pell (nightcap): builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.476,
+    0.379,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.128,
+  ],
+  "triangles": 1164,
+}
+`;
+
 exports[`people > Odo Pell: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -592,6 +626,23 @@ exports[`people > Tobin Harrow: builds, poses and keeps their shape 1`] = `
     -0.092,
   ],
   "triangles": 1892,
+}
+`;
+
+exports[`people > Wat (captive): builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.414,
+  "max": [
+    0.13,
+    0.431,
+    0.13,
+  ],
+  "min": [
+    -0.13,
+    -0,
+    -0.081,
+  ],
+  "triangles": 1290,
 }
 `;
 

@@ -3,7 +3,7 @@
 
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
-import { TILE_HEIGHT, loadWorldMap } from '@voxel/engine/world';
+import { TILE_HEIGHT, loadWorldMap, type PlaceData } from '@voxel/engine/world';
 import { buildingModel, doorOf, levelGround, placeModel, placesOf } from '../src/buildings';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
 import { BRINDLEFORD } from '../src/data/world/brindleford';
@@ -73,6 +73,31 @@ describe('Brindleford\'s buildings', () => {
       const [x, z] = doorOf(p);
       const facing = p.facing ?? 0;
       expect((x - cx) * Math.cos(facing) - (z - cz) * Math.sin(facing), p.id).toBeCloseTo(along, 1);
+    }
+  });
+
+  it('let out at the drawn door whatever their size and facing (doorOf, even widths too)', () => {
+    const sizes: Array<[number, number]> = [[3, 3], [4, 3], [5, 4], [6, 4]];
+    for (const size of sizes) {
+      for (const facing of [0, Math.PI / 2, Math.PI, -Math.PI / 2]) {
+        for (const id of ['door-test-a', 'door-test-b', 'door-test-c']) { // (ids whose doors land in different places)
+          const place: PlaceData = { id, kind: 'building', at: [100, 100], facing, props: { size, floors: 1, roof: 'thatch', walls: 'timber', use: 'house', residents: [] } };
+          const model = buildingModel(place);
+          const f = footprint(place);
+          model.root.position.set((f.x0 + f.x1) / 2, 0, (f.z0 + f.z1) / 2); // (as placesOf stands it)
+          model.root.rotation.y = facing;
+          model.root.updateMatrixWorld(true);
+          const { door, z1 } = model.layout;
+          const drawn = new THREE.Vector3(...model.at((door!.x0 + door!.x1 + 1) / 2, 0, z1 + 1)).applyMatrix4(model.root.matrixWorld);
+          const [x, z] = doorOf(place);
+          const [cos, sin] = [Math.cos(facing), Math.sin(facing)];
+          const name = `${size} facing ${facing.toFixed(2)} ${id}`;
+          expect((x - drawn.x) * cos - (z - drawn.z) * sin, name).toBeCloseTo(0, 1); // (along the front: on the door)
+          const out = (x - drawn.x) * sin + (z - drawn.z) * cos;
+          expect(out, name).toBeGreaterThan(0.2); // (out in front of it, not in the wall)
+          expect(out, name).toBeLessThan(1.5);
+        }
+      }
     }
   });
 
