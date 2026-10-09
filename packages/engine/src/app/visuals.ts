@@ -80,15 +80,16 @@ export function visualSystem(clock: () => number): System {
         root.position.set(x, y, z);
         root.rotation.y = visual.heading;
         if (visual.shade) visual.shade.rotation.y = -visual.heading;
-        // The dead topple onto their side and lie there.
+        // The dead fall and lie there: the model lays itself down if it knows how, else it topples onto its side.
         if (world.has(entity, Dead) || visual.fallen > 0) {
           visual.fallen += ((world.has(entity, Dead) ? 1 : 0) - visual.fallen) * Math.min(1, FALL * dt);
-          root.rotation.z = visual.fallen * (Math.PI / 2);
+          if (!visual.model.liesDown) root.rotation.z = visual.fallen * (Math.PI / 2);
           if (visual.shade) visual.shade.visible = visual.fallen < 0.5;
         }
         if (visual.flashed && (visual.flash -= dt) <= 0) endFlash(visual);
         const acting = world.get(entity, Acting);
-        visual.model.animate(time, visual.motion, acting && { name: acting.action, phase: Math.min(1, acting.time / acting.duration) });
+        const action = visual.fallen > 0.001 ? { name: 'dead', phase: visual.fallen } : acting && { name: acting.action, phase: Math.min(1, acting.time / acting.duration) };
+        visual.model.animate(time, visual.motion, action);
       }
     },
   };

@@ -72,6 +72,8 @@ export class FrameModel extends RiggedModel {
   readonly joints = {} as Record<Joint, THREE.Group>;
   readonly ticks: Array<(time: number, walk: number) => void> = []; // what an extra moves each frame
   private readonly gait: Gait;
+  private headZ = 0; // the head joint's own place along z (the dead pose moves it)
+  readonly liesDown = true;
 
   constructor(readonly spec: FrameSpec) {
     super(spec, spec.scale ?? 1);
@@ -98,6 +100,7 @@ export class FrameModel extends RiggedModel {
       hand.rotation.set(...(held.turn ?? [0, 0, 0]));
       this.part(hand, held.grid(), held.grip, held.voxel ?? MODEL_VOXEL);
     }
+    this.headZ = this.joints.head.position.z;
     spec.extra?.(this);
     this.finish((shape.joints.head.at[1] + shape.grid.head[1]) * V * this.scale, this.scale);
   }
@@ -131,6 +134,8 @@ export class FrameModel extends RiggedModel {
     j.head.rotation.x = breath * 4 - g.lean * 0.8 + (g.headBow ?? 0); // (looking ahead, however low it's bent)
     j.head.rotation.z = -this.upper.rotation.z * 0.6 + (g.headTilt ?? 0);
     this.body.position.z = 0;
+    this.body.rotation.x = 0;
+    j.head.position.z = this.headZ;
     if (action) this.act(action);
     for (const tick of this.ticks) tick(time, walk);
   }
@@ -144,6 +149,20 @@ export class FrameModel extends RiggedModel {
       j.rightArm.rotation.x = -0.4 - 2.2 * raise;
       this.upper.rotation.x += 0.3 * strike - 0.1 * raise;
       this.body.position.z = 0.06 * strike;
+    } else if (name === 'dead') {
+      if (this.gait.hover > 0) {
+        // A hovering thing sinks into the ground rather than falling.
+        this.body.position.y = this.gait.hover * (1 - phase) - 0.3 * phase;
+        this.upper.rotation.x = this.gait.lean + (0.6 - this.gait.lean) * phase;
+        return;
+      }
+      // Onto its back, about its feet, lifted so its back rests on the ground; arms flung, a leg bent.
+      this.body.rotation.x = (-Math.PI / 2) * phase;
+      this.body.position.y = 2.5 * V * phase;
+      j.head.position.z = this.headZ + 0.045 * phase; // (the big head kept from propping the body up)
+      j.rightArm.rotation.z = -1.2 * phase;
+      j.leftArm.rotation.set(-0.25 * phase, 0, 0.35 * phase);
+      j.leftLeg.rotation.x = -0.25 * phase;
     } else if (name === 'hurt') {
       const flinch = 1 - phase;
       this.upper.rotation.x -= 0.3 * flinch;

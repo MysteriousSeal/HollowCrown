@@ -15,4 +15,6 @@ export interface Model {
   readonly root: THREE.Object3D;
   readonly height: number; // world units, ground to top (as drawn)
   animate(time: number, motion: number, action?: ModelAction): void;
+  // It lays itself down when dead (handed { name: 'dead', phase: how far fallen }): the visuals don't topple it.
+  readonly liesDown?: boolean;
 }

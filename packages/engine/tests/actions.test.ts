@@ -62,7 +62,18 @@ describe('acting out', () => {
     world.remove(e, Acting);
     world.add(e, Dead, { since: 0 });
     for (let i = 0; i < 60; i++) visuals.update(world, 1 / 60);
-    expect(seen.at(-1)).toBeUndefined();
-    expect(model.root.rotation.z).toBeGreaterThan(1.5);
+    expect(seen.at(-1)).toMatchObject({ name: 'dead' });
+    expect(seen.at(-1)!.phase).toBeGreaterThan(0.95);
+    expect(model.root.rotation.z).toBeGreaterThan(1.5); // (a model that doesn't lie down: toppled for it)
+  });
+
+  it('lays a dead person on their back, a model that does so itself left untoppled', () => {
+    const person = humanModel();
+    expect(person.liesDown).toBe(true);
+    person.animate(1, 0, { name: 'dead', phase: 1 });
+    expect(person.body.rotation.x).toBeCloseTo(-Math.PI / 2);
+    expect(person.body.position.y).toBeGreaterThan(0);
+    person.animate(1, 0);
+    expect(person.body.rotation.x).toBe(0);
   });
 });
