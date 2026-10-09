@@ -8,7 +8,7 @@ import type { ConversationLine } from '@voxel/engine/ui';
 import { QUESTS } from '../data/quests';
 import { Quests, openObjectives } from '../systems/quests';
 import { LastRest } from '../systems/respawn';
-import { complete } from './quests';
+import { complete } from '../features/quests';
 
 // Who keeps a bed, and where (a place id).
 export const BEDS: Record<string, string> = {

@@ -9,7 +9,7 @@ import { PEOPLE_DATA } from '../src/data/people';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
 import { QUESTS } from '../src/data/quests';
 import { complete, isAt, questSystem, talkWith } from '../src/features/quests';
-import { withRest } from '../src/features/rest';
+import { withRest } from '../src/systems/rest';
 import { Creature } from '../src/systems/kills';
 import { LastRest } from '../src/systems/respawn';
 import { Quests, newBook, startQuest } from '../src/systems/quests';

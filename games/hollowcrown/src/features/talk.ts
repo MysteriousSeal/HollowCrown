@@ -14,7 +14,7 @@ import { Resident } from '../systems/villagerDay';
 import { ConversationScreen } from '../ui/screens';
 import type { Feature } from './context';
 import { talkWith } from './quests';
-import { withRest } from './rest';
+import { withRest } from '../systems/rest';
 import { lookOf } from './villagers';
 
 const HERO_NAME = 'You'; // (until the hero forge names them)
