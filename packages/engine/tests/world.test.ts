@@ -7,7 +7,7 @@ const size = { width: 64, depth: 64 };
 describe('terrain', () => {
   it('draws a flat chunk as one rectangle', () => {
     const rects = tierRects(flatTerrain(size, 1), { x0: 0, z0: 0, x1: 16, z1: 16 });
-    expect(rects).toEqual([{ tier: 1, x: 0, z: 0, width: 16, depth: 16 }]);
+    expect(rects).toEqual([{ tier: 1, surface: 0, x: 0, z: 0, width: 16, depth: 16 }]);
   });
 
   it('covers every tile exactly once, each rectangle a single tier', () => {
