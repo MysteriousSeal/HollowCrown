@@ -1,7 +1,7 @@
 // Brindleford's villagers: everyone living in a building of the map, stood just outside its door (a household side by
-// side along its front), facing out; by day they stroll round it (systems/villagerDay.ts). Each is their own model
-// (src/people/ PEOPLE); anyone not modelled yet is the human body of a look drawn from their name: the same name, the
-// same face, every time.
+// side along its front), facing out; by day they stroll round it (systems/villagerDay.ts), and they say things as the
+// hero passes (systems/barks.ts). Each is their own model (src/people/ PEOPLE); anyone not modelled yet is the human
+// body of a look drawn from their name: the same name, the same face, every time.
 
 import { FrameModel, MARCH, bodyPalette, type BodyLook, type Build } from '@voxel/engine/characters';
 import { Interactable, MoveSpeed, Transform, interactable } from '@voxel/engine/gameplay';
@@ -10,6 +10,7 @@ import type { Model } from '@voxel/engine/models';
 import type { PlaceData, WorldMap } from '@voxel/engine/world';
 import { doorOf } from '../buildings';
 import type { BuildingProps } from '../data/world/kinds';
+import { barkSystem } from '../systems/barks';
 import { Resident, villagerDaySystem } from '../systems/villagerDay';
 import { PEOPLE_DATA } from '../data/people';
 import { PEOPLE } from '../people';
@@ -109,7 +110,7 @@ export function figureOf(v: Villager): Model {
 
 export const villagers: Feature = {
   name: 'villagers',
-  install: ({ app, map }) => {
+  install: ({ app, map, hero }) => {
     for (const v of villagersOf(map)) {
       const person = app.world.spawn(
         [Transform, { x: v.x, y: map.groundY(v.x, v.z), z: v.z, facing: v.facing }],
@@ -119,6 +120,6 @@ export const villagers: Feature = {
       );
       app.show(person, figureOf(v));
     }
-    app.addSystems(villagerDaySystem);
+    app.addSystems(villagerDaySystem, barkSystem(hero));
   },
 };
