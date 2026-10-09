@@ -1,6 +1,6 @@
 // The HUD's screens that pause the game behind them (made by features/hud.ts), one up at a time, by their keys: the
 // map (M, drawn the first time it's opened), the journal (J) and the pause menu (Esc; Esc also closes the others:
-// Resume, Sound, Controls). Every pick in the menu clicks.
+// Resume, Save, Load, Sound, Controls). Every pick in the menu clicks.
 // None opens while the game's `busy` (in a conversation, dead).
 
 import type { App } from '@voxel/engine/app';
@@ -9,7 +9,9 @@ import { JournalScreen, MAP_TILES_PER_PIXEL, MapScreen, Menu, drawMapImage, slid
 import type { WorldMap } from '@voxel/engine/world';
 import { CONTROLS } from './controls';
 import { MAP_GROUND, mapLabels, mapMarks } from './mapContent';
+import { Saves } from '../systems/save';
 import { journalEntries, type QuestLogData } from './questLog';
+import { loadPage, savePage } from './savePages';
 
 interface Screen {
   readonly isOpen: boolean;
@@ -17,7 +19,7 @@ interface Screen {
 }
 
 // Installs the screens' keys; the map (once made), for the HUD to keep the hero on it.
-export function pausingScreens(app: App, root: HTMLElement, map: WorldMap, busy: () => boolean, log: () => QuestLogData): () => MapScreen | null {
+export function pausingScreens(app: App, root: HTMLElement, map: WorldMap, busy: () => boolean, log: () => QuestLogData, saveLabel: () => string): () => MapScreen | null {
   let mapScreen: MapScreen | null = null;
   const theMap = (): MapScreen => {
     if (mapScreen) return mapScreen;
@@ -60,6 +62,10 @@ export function pausingScreens(app: App, root: HTMLElement, map: WorldMap, busy:
       if (up) close();
       else open(menu, () => menu.open([
         { label: 'Resume', pick: close },
+        ...(world.hasResource(Saves) ? [
+          { label: 'Save', pick: () => savePage(menu, world.resource(Saves), saveLabel, close) },
+          { label: 'Load', pick: () => loadPage(menu, world.resource(Saves), close) },
+        ] : []),
         { label: 'Sound', pick: soundPage },
         { label: 'Controls', pick: () => menu.page('Controls', CONTROLS) },
       ]));
