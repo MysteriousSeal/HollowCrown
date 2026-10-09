@@ -16,6 +16,11 @@ import { SQ_BV8 } from './sqbv8';
 import { WQ_BV1 } from './wqbv1';
 import { WQ_BV2 } from './wqbv2';
 import { WQ_BV3 } from './wqbv3';
+import { WQ_MD1 } from './wqmd1';
+import { WQ_GW1 } from './wqgw1';
+import { WQ_HM1 } from './wqhm1';
+import { WQ_LM1 } from './wqlm1';
+import { WQ_SR1 } from './wqsr1';
 
-export const QUESTS: Record<string, Quest> = Object.fromEntries([MQ01, MQ02, MQ03, MQ04, SQ_BV1, SQ_BV2, SQ_BV3, SQ_BV4, SQ_BV5, SQ_BV6, SQ_BV7, SQ_BV8, WQ_BV1, WQ_BV2, WQ_BV3].map((q) => [q.id, q]));
+export const QUESTS: Record<string, Quest> = Object.fromEntries([MQ01, MQ02, MQ03, MQ04, SQ_BV1, SQ_BV2, SQ_BV3, SQ_BV4, SQ_BV5, SQ_BV6, SQ_BV7, SQ_BV8, WQ_BV1, WQ_BV2, WQ_BV3, WQ_MD1, WQ_GW1, WQ_HM1, WQ_LM1, WQ_SR1].map((q) => [q.id, q]));
 export type { ChoiceOption, Found, Line, Objective, ObjectiveKind, Quest, QuestStage } from './kinds';
