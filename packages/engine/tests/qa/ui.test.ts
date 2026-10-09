@@ -26,6 +26,7 @@ beforeEach(() => {
   vi.useFakeTimers();
   vi.stubGlobal('document', { createElement: () => new FakeElement() });
   vi.stubGlobal('requestAnimationFrame', (fn: () => void) => setTimeout(fn, 16));
+  vi.stubGlobal('cancelAnimationFrame', (id: ReturnType<typeof setTimeout>) => clearTimeout(id));
 });
 
 afterEach(() => {
