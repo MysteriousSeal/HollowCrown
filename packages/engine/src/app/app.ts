@@ -11,6 +11,7 @@ import type { Model } from '../models';
 import { dayNightSystem, type DayNightOptions } from './dayNight';
 import { CameraTarget, VisualComponent, visualOf, visualSystem } from './visuals';
 
+const PRESENT_ONLY = ['present'] as const; // (while paused: drawn, nothing moving on)
 const MAX_FRAME_DT = 0.1; // seconds: no huge jump after the tab was in the background
 
 export interface AppOptions {
@@ -29,6 +30,7 @@ export class App {
   private stylizer: Stylizer | null = null;
   private post: PostProcessing | null = null;
   private elapsed = 0;
+  private pausedNow = false;
   private last = 0;
 
   constructor(canvas: HTMLCanvasElement, { pixelRatio = 1 }: AppOptions = {}) {
@@ -62,6 +64,21 @@ export class App {
     this.schedule.add(timeOfDaySystem, dayNightSystem(this.lights, this.scene, () => this.post));
   }
 
+  // Paused (a menu open): the input and simulation stop, the time of day with them, while the world stays drawn.
+  get paused(): boolean {
+    return this.pausedNow;
+  }
+
+  pause(): void {
+    this.pausedNow = true;
+    this.world.resource(KeyboardResource).release();
+  }
+
+  resume(): void {
+    this.world.resource(KeyboardResource).release(); // (keys pressed in the menu don't carry into the game)
+    this.pausedNow = false;
+  }
+
   // `entity` drawn as `model`, placed, turned and animated from its Transform each frame. Shown after the start, its
   // materials are styled as it comes in.
   show(entity: Entity, model: Model): void {
@@ -88,7 +105,7 @@ export class App {
     const dt = Math.min(MAX_FRAME_DT, (now - this.last) / 1000);
     this.last = now;
     this.elapsed += dt;
-    this.schedule.run(this.world, dt);
+    this.schedule.run(this.world, dt, this.pausedNow ? PRESENT_ONLY : undefined);
     this.post?.render(this.elapsed);
     requestAnimationFrame(this.frame);
   };
