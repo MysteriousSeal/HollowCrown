@@ -15,6 +15,7 @@ export const MQ01: Quest = {
   level: 1,
   minutes: 30,
   starts: 'the game\'s start',
+  start: { after: [] },
   places: ['pilgrims-shrine', 'birchwood', 'brindleford', 'brindleford-well', 'ferrymans-rest', 'quiet-bell-chapel', 'famine-pit', 'bellwardens-tomb'],
   stages: [
     {

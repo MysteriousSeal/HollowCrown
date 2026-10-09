@@ -12,6 +12,7 @@ export const SQ_BV5: Quest = {
   level: 3,
   minutes: 30,
   starts: 'after MQ03: Odo Pell, nervous',
+  start: { after: ['MQ03'], giver: 'Odo Pell' },
   places: ['reeves-house', 'brindleford', 'ferrymans-rest', 'brindleford-well'],
   stages: [
     {

@@ -12,6 +12,7 @@ export const MQ04: Quest = {
   level: 4,
   minutes: 30,
   starts: 'MQ02 and MQ03 done',
+  start: { after: ['MQ02', 'MQ03'] },
   places: ['ferrymans-rest', 'hobs-tower'],
   stages: [
     {

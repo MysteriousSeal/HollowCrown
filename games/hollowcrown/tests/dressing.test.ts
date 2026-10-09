@@ -17,6 +17,7 @@ const inBuilding = new Set(buildings.flatMap((b) => {
 }));
 const doors = new Set(buildings.map((b) => footprint(b).door.join(',')));
 const WAYS = new Set(['road', 'track', 'path', 'ford']);
+const LAID = new Set(['garden-bed', 'flagstones', 'footbridge', 'rockslide']); // laid on the ground, over a way, or the ground itself
 
 // What's wrong with a prop or a fence touching tile (x, z), if anything.
 function trouble(x: number, z: number): string | undefined {
@@ -30,7 +31,7 @@ function trouble(x: number, z: number): string | undefined {
 
 describe("the Vale's dressing", () => {
   it('stands every prop on open ground', () => {
-    for (const d of DRESSING.filter((d) => d.at && d.kind !== 'garden-bed')) expect(trouble(...d.at!), `${d.note} at (${d.at})`).toBeUndefined();
+    for (const d of DRESSING.filter((d) => d.at && !LAID.has(d.kind))) expect(trouble(...d.at!), `${d.note} at (${d.at})`).toBeUndefined();
   });
 
   it('lays every garden bed (3 tiles by 2) wholly on its garden, a few in each', () => {
