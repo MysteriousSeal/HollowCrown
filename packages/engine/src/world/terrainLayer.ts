@@ -12,9 +12,10 @@ import { addVoxelGround } from './voxelGround';
 
 const BOX_TOP_FACE = 2; // BoxGeometry material groups: +x, -x, +y, -y, +z, -z
 
-// A rectangle of tiles of one tier: its first tile and its size.
+// A rectangle of tiles of one tier and one surface: its first tile and its size.
 export interface TierRect {
   tier: number;
+  surface: number;
   x: number;
   z: number;
   width: number;
@@ -24,8 +25,8 @@ export interface TierRect {
 // `area`'s tiles as the fewest same-tier rectangles a greedy pass finds (each tile in exactly one).
 export function tierRects(terrain: Terrain, area: Area): TierRect[] {
   const [w, d] = [area.x1 - area.x0, area.z1 - area.z0];
-  const tiers = new Int32Array(w * d);
-  for (let z = 0; z < d; z++) for (let x = 0; x < w; x++) tiers[x + z * w] = terrain.tierAt(area.x0 + x, area.z0 + z);
+  const tiers = new Int32Array(w * d); // (a tier and a surface in one: tier * 256 + surface)
+  for (let z = 0; z < d; z++) for (let x = 0; x < w; x++) tiers[x + z * w] = terrain.tierAt(area.x0 + x, area.z0 + z) * 256 + (terrain.surfaceAt?.(area.x0 + x, area.z0 + z) ?? 0);
   const taken = new Uint8Array(w * d);
   const rects: TierRect[] = [];
   for (let z = 0; z < d; z++) {
@@ -43,16 +44,16 @@ export function tierRects(terrain: Terrain, area: Area): TierRect[] {
         depth++;
       }
       for (let k = z; k < z + depth; k++) taken.fill(1, x + k * w, x + width + k * w);
-      rects.push({ tier, x: area.x0 + x, z: area.z0 + z, width, depth });
+      rects.push({ tier: Math.floor(tier / 256), surface: tier % 256, x: area.x0 + x, z: area.z0 + z, width, depth });
     }
   }
   return rects;
 }
 
-// A tile's column: grass on its top face, its sides plain.
-function tileMaterial(tier: number): THREE.Material[] {
-  const color = new THREE.Color(TERRAIN_COLORS[tier % TERRAIN_COLORS.length]);
-  const side = new THREE.MeshStandardMaterial({ color });
+// A tile's column: its top voxel-shaded (grass, or a surface's color), its sides plain.
+function tileMaterial(tier: number, surface?: number): THREE.Material[] {
+  const color = new THREE.Color(surface ?? TERRAIN_COLORS[tier % TERRAIN_COLORS.length]);
+  const side = new THREE.MeshStandardMaterial({ color: TERRAIN_COLORS[tier % TERRAIN_COLORS.length] });
   const top = new THREE.MeshStandardMaterial({ color });
   addVoxelGround(top);
   const materials: THREE.Material[] = Array(6).fill(side);
@@ -60,11 +61,16 @@ function tileMaterial(tier: number): THREE.Material[] {
   return materials;
 }
 
-// The terrain's layer. `tiers`: every tier the land has (their materials made up front, for the stylized look to
-// patch before the first frame); a tile of a tier not listed isn't drawn.
-export function terrainLayer(terrain: Terrain, tiers: readonly number[]): ChunkLayer {
+// The terrain's layer. `tiers`: every tier the land has; `surfaceColors`: each surface's top color, by its number
+// (1..): their materials all made up front, for the stylized look to patch before the first frame. A tile of a tier
+// not listed isn't drawn.
+export function terrainLayer(terrain: Terrain, tiers: readonly number[], surfaceColors: readonly number[] = []): ChunkLayer {
   const area = wholeMap(terrain.size);
-  const kinds = new Map(tiers.map((tier) => [tier, { geometry: new THREE.BoxGeometry(1, (tier + 1) * TILE_HEIGHT, 1), material: tileMaterial(tier) }]));
+  const kinds = new Map<number, { geometry: THREE.BoxGeometry; material: THREE.Material[] }>();
+  for (const tier of tiers) {
+    const geometry = new THREE.BoxGeometry(1, (tier + 1) * TILE_HEIGHT, 1);
+    [undefined, ...surfaceColors].forEach((color, surface) => kinds.set(tier * 256 + surface, { geometry, material: tileMaterial(tier, color) }));
+  }
   const [matrix, at, scale, turn] = [new THREE.Matrix4(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Quaternion()];
   return {
     materials: [...kinds.values()].flatMap((k) => k.material),
@@ -72,15 +78,17 @@ export function terrainLayer(terrain: Terrain, tiers: readonly number[]): ChunkL
     build(key) {
       const tiles = chunkTilesIn(key, area);
       if (!tiles) return [];
-      const byTier = new Map<number, TierRect[]>();
+      const byKind = new Map<number, TierRect[]>();
       for (const rect of tierRects(terrain, tiles)) {
-        const list = byTier.get(rect.tier);
+        const key = rect.tier * 256 + rect.surface;
+        const list = byKind.get(key);
         if (list) list.push(rect);
-        else byTier.set(rect.tier, [rect]);
+        else byKind.set(key, [rect]);
       }
-      return [...byTier].flatMap(([tier, rects]) => {
-        const kind = kinds.get(tier);
+      return [...byKind].flatMap(([key, rects]) => {
+        const kind = kinds.get(key);
         if (!kind) return [];
+        const tier = Math.floor(key / 256);
         const height = (tier + 1) * TILE_HEIGHT;
         const mesh = new THREE.InstancedMesh(kind.geometry, kind.material, rects.length);
         rects.forEach((r, i) => {
