@@ -7,4 +7,6 @@ export { Prompt } from './prompt';
 export {
   Conversation, Script, TALK_KEYS, TYPE_SPEED, Typewriter, placeholderPortrait, type ConversationLine, type OnChoice, type Side, type Speaker,
 } from './conversation';
+export { MAP_TILES_PER_PIXEL, MapView, cssColor, drawMapImage } from './mapImage';
+export { MapScreen, NAMES_FROM_ZOOM, type MapLabel, type MapMark, type MarkShape } from './mapScreen';
 export { ADVANCE_KEYS, Dialogue, DialogueBox, type DialogueData } from './dialogue';
