@@ -126,6 +126,12 @@ export class Conversation {
   private draw(): void {
     const script = this.script!;
     const { side, text } = script.line;
+    // The one speaking lit, the other dimmed (`.speaking` and `.listening`, styled by the game).
+    for (const s of ['left', 'right'] as const) {
+      this.sides[s].el.classList.toggle('speaking', s === side);
+      this.sides[s].el.classList.toggle('listening', s !== side);
+    }
+    this.el.dataset.speaker = side;
     this.speaker.textContent = this.names[side];
     this.text.textContent = text;
     this.hint.textContent = script.last ? 'E · close' : 'E · next';
