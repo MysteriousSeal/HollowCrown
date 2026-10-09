@@ -12,7 +12,6 @@ import { dayNightSystem, type DayNightOptions } from './dayNight';
 import { DebugOverlay } from './debugOverlay';
 import { CameraTarget, VisualComponent, visualOf, visualSystem } from './visuals';
 
-const PRESENT_ONLY = ['present'] as const; // (while paused: drawn, nothing moving on)
 const MAX_FRAME_DT = 0.1; // seconds: no huge jump after the tab was in the background
 
 export interface AppOptions {
@@ -30,7 +29,8 @@ export class App {
   private readonly lights: Lights;
   private stylizer: Stylizer | null = null;
   private post: PostProcessing | null = null;
-  private elapsed = 0;
+  private elapsed = 0; // game seconds (the time scale's)
+  private scale = 1;
   private pausedNow = false;
   private debug: DebugOverlay | null = null;
   private last = 0;
@@ -94,6 +94,18 @@ export class App {
     });
   }
 
+  // How fast the game runs: game seconds a real second (1 normal; 10 for a bot playing it fast). Movement, AI,
+  // combat, the time of day and models' animation all go that much faster, stepped finely enough to play the same;
+  // the drawing keeps the real frame rate.
+  get timeScale(): number {
+    return this.scale;
+  }
+
+  setTimeScale(scale: number): void {
+    if (!(scale >= 0) || !Number.isFinite(scale)) throw new Error(`setTimeScale: scale must be 0 or more, not ${scale}`);
+    this.scale = scale;
+  }
+
   // Paused (a menu open): the input and simulation stop, the time of day with them, while the world stays drawn.
   get paused(): boolean {
     return this.pausedNow;
@@ -134,10 +146,9 @@ export class App {
   private readonly frame = (now: number): void => {
     const dt = Math.min(MAX_FRAME_DT, (now - this.last) / 1000);
     this.last = now;
-    this.elapsed += dt;
     const workStart = performance.now();
     if (this.debug) this.renderer.info.reset();
-    this.schedule.run(this.world, dt, this.pausedNow ? PRESENT_ONLY : undefined);
+    this.elapsed += this.schedule.frame(this.world, dt, { scale: this.scale, paused: this.pausedNow });
     this.post?.render(this.elapsed);
     this.debug?.frame(performance.now() - workStart);
     requestAnimationFrame(this.frame);
