@@ -133,7 +133,7 @@
       .ui-talk[data-speaker='right'] .ui-talk-speaker { text-align: right; }
       .ui-talk-frame {
         width: min(100%, 300px);
-        aspect-ratio: 4 / 5;
+        aspect-ratio: 2 / 3;
         display: grid;
         place-items: end center;
         overflow: hidden;
@@ -169,6 +169,11 @@
       }
       .ui-talk-speaker { font-size: 14px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #e8c27a; }
       .ui-talk-text { flex: 1; margin: 8px 0 10px; font-size: 19px; font-weight: 500; line-height: 1.4; }
+      /* Replies to pick, numbered, lit under the pointer. */
+      .ui-talk-choices { margin: 0 0 8px; padding: 0 0 0 26px; display: flex; flex-direction: column; gap: 4px; }
+      .ui-talk-choice { padding: 3px 8px; font-size: 17px; font-weight: 600; color: var(--sand); border: 1px solid transparent; }
+      .ui-talk-choice::marker { color: #e8c27a; font-weight: 700; }
+      .ui-talk-choice:hover { color: var(--cream); background: rgba(232, 194, 122, 0.12); border-color: rgba(232, 194, 122, 0.45); }
       .ui-talk-hint { text-align: right; font-size: 13px; font-weight: 600; color: var(--muted); }
     </style>
   </head>
