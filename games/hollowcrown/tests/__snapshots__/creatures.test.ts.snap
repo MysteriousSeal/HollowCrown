@@ -476,6 +476,57 @@ exports[`creatures > pitEater: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > pitRisen: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.47,
+    0.129,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.05,
+  ],
+  "triangles": 1492,
+}
+`;
+
+exports[`creatures > pitRisenChild: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.27,
+  "max": [
+    0.075,
+    0.282,
+    0.078,
+  ],
+  "min": [
+    -0.075,
+    -0,
+    -0.03,
+  ],
+  "triangles": 1492,
+}
+`;
+
+exports[`creatures > pitRisenWoman: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.45,
+    0.125,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.05,
+  ],
+  "triangles": 1526,
+}
+`;
+
 exports[`creatures > redHenBrute: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.486,

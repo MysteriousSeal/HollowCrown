@@ -9,7 +9,7 @@ import { SKELETON, SKELETON_ARCHER } from './skeletonVoxels';
 import { ShadeModel } from './ghostVoxels';
 import { BOG_DRAUGR, DRAUGR } from './draugrVoxels';
 import { GHOST } from './spectralVoxels';
-import { HUNGRY, HUNGRY_MOTHER } from './hungryVoxels';
+import { HUNGRY, HUNGRY_MOTHER, PIT_RISEN, PIT_RISEN_CHILD, PIT_RISEN_WOMAN } from './hungryVoxels';
 import { DROWNED, HOLLOWED, PIT_EATER, SEWN } from './fleshVoxels';
 import { ASHEN, ASHEN_SMALL, BLOOMER } from './bloomVoxels';
 import { ROOK, ROOK_LEADER } from './rookVoxels';
@@ -56,6 +56,9 @@ export const CREATURES: CreatureEntry[] = [
   { id: 'barrowGiant', name: 'Barrow-giant', family: 'dead', make: () => new FrameModel(BARROW_GIANT) },
   { id: 'hungry', name: 'The Hungry', family: 'horror', make: () => new FrameModel(HUNGRY) },
   { id: 'hungryMother', name: 'The Hungry (mother)', family: 'horror', make: () => new FrameModel(HUNGRY_MOTHER) },
+  { id: 'pitRisen', name: 'The Hungry, risen from the pit', family: 'horror', make: () => new FrameModel(PIT_RISEN) },
+  { id: 'pitRisenWoman', name: 'The Hungry, risen from the pit (Bet)', family: 'horror', make: () => new FrameModel(PIT_RISEN_WOMAN) },
+  { id: 'pitRisenChild', name: 'The Hungry, risen from the pit (child)', family: 'horror', make: () => new FrameModel(PIT_RISEN_CHILD) },
   { id: 'drowned', name: 'The Drowned', family: 'horror', make: () => new FrameModel(DROWNED) },
   { id: 'bloomer', name: 'Bloomer', family: 'horror', make: () => new FrameModel(BLOOMER) },
   { id: 'hollowed', name: 'The Hollowed', family: 'horror', make: () => new FrameModel(HOLLOWED) },
