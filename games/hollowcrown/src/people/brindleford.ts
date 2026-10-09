@@ -1,9 +1,9 @@
 // Brindleford's named folk (docs/story/regions/brindle-vale.md, the people's table), each dressed as the bible has
 // them, in the order it lists them. Who uses it: people/index.ts (PEOPLE).
 
-import { cuff, type FrameSpec } from '@voxel/engine/characters';
+import { cuff, gloves, type FrameSpec } from '@voxel/engine/characters';
 import { wrap } from '@voxel/engine/voxel';
-import { apron, body, cap, coif, folk, forearms, K, ladle, lantern, ledger, longSkirtLeg, shoes, skirt, sleeves, W } from './kit';
+import { apron, body, cap, coif, dusted, folk, forearms, hammer, K, ladle, lantern, ledger, longSkirtLeg, OLD, right, shawl, shoes, skirt, sleeves, staff, W } from './kit';
 
 // Garrick Fenn, the innkeeper: an old ferryman gone to fat at the middle, his forearms still a ferryman's (the
 // sleeves rolled off them), a long white apron, a woad kerchief knotted at the throat from the river days.
@@ -73,9 +73,60 @@ const CUTHWIN = folk({ build: 'male', skin: 1, hair: 4, dye: 4, hairStyle: 'bald
   },
 }, { held: { leftArm: lantern }, gait: { speed: 1.1 } });
 
+// Tobin Harrow, the smith: big and black-bearded, his arms bare and thick from the hammer, a long scorched leather
+// apron from the chest to the shin, one glove, soot on everything, the hammer in his fist.
+const TOBIN = folk({ build: 'male', skin: 2, hair: 1, dye: 4, hairStyle: 'cropped', beard: true, expression: 'calm' }, {
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => ((x + y) % 4 ? W.linenDark : W.linenShade));
+    apron(g, o, f, 7, 5, (x, y) => (y === -5 ? K.leather : (x * 5 + y * 3) % 11 === 0 ? W.soot : K.leatherDark));
+  },
+  arm: (g, o, _f, j) => {
+    sleeves(g, o, 7, () => W.linenDark); // (barely: a smith's arms bare)
+    forearms(g, o);
+    if (!right(j)) gloves(g, o, (_x, y) => (y === 1 ? K.leather : K.leatherDark));
+  },
+  leg: (g, o) => {
+    body(g, o, (_x, y) => (y >= 3 ? W.woolDark : 0));
+    shoes(g, o, 2, () => K.leatherDark);
+  },
+}, { held: { rightArm: hammer }, after: dusted(W.soot, K.charcoal, 0.06, 7) });
+
+// Wat, the smith's apprentice, 16: not yet grown, a shaggy fair mop, a linen shirt with the sleeves rolled, a short
+// leather apron, a smut of soot on him.
+const WAT = folk({ build: 'male', skin: 0, hair: 2, dye: 3, hairStyle: 'shaggy', beard: false, expression: 'wistful' }, {
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => ((x + y) % 5 ? W.linen : W.linenShade));
+    apron(g, o, f, 0, 3, () => K.leather);
+  },
+  arm: (g, o) => sleeves(g, o, 5, (_x, y) => (y === 5 ? W.roll : W.linen)),
+  leg: (g, o) => {
+    body(g, o, (_x, y) => (y >= 2 ? W.wool : 0));
+    shoes(g, o, 1, () => K.leatherDark);
+  },
+}, { scale: 0.92, after: dusted(W.soot, K.charcoal, 0.04, 11) });
+
+// Nan Wicket, the herbalist, 70: bent nearly double over her stick, white hair under a linen coif, a moss-green dress
+// to the ground, a madder shawl fringed round her shoulders, bunches of herbs hung at her belt.
+const NAN_WICKET = folk({ build: 'female', skin: 0, hair: 7, dye: 2, hairStyle: 'bun', beard: false, expression: 'sly' }, {
+  head: (g, o) => coif(g, o, (x, z) => ((x + z) % 4 ? W.linen : W.linenShade), W.linenShade),
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => (y === 2 ? K.leatherDark : (x + y) % 4 ? W.moss : W.mossDark));
+    shawl(g, o, f, (x, y) => ((x + y) % 3 ? W.shawl : W.shawlDark));
+    skirt(g, o, f, 5, (x, y, z) => (x === f.w && z >= 1 && z <= 3 && y >= -3 ? (y === -1 ? K.string : W.herb) : (x + y) % 4 ? W.moss : W.mossDark)); // the herbs at her right hip
+  },
+  arm: (g, o) => sleeves(g, o, 2, (_x, y) => (y === 2 ? W.mossDark : W.moss)),
+  leg: (g, o) => {
+    longSkirtLeg(g, o, (x, y) => ((x + y) % 4 ? W.moss : W.mossDark));
+    shoes(g, o, 0, () => K.leatherDark);
+  },
+}, { held: { rightArm: staff(8, 'plain', 4) }, gait: OLD });
+
 export const FOLK: Record<string, FrameSpec> = {
   'Garrick Fenn': GARRICK,
   'Elsa Fenn': ELSA,
   'Odo Pell': ODO_PELL,
   'Father Cuthwin': CUTHWIN,
+  'Tobin Harrow': TOBIN,
+  'Wat': WAT,
+  'Nan Wicket': NAN_WICKET,
 };

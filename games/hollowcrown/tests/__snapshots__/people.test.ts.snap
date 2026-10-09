@@ -51,6 +51,23 @@ exports[`people > Garrick Fenn: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Nan Wicket: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.108,
+    0.466,
+    0.164,
+  ],
+  "min": [
+    -0.108,
+    -0,
+    -0.072,
+  ],
+  "triangles": 1560,
+}
+`;
+
 exports[`people > Odo Pell: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -65,5 +82,39 @@ exports[`people > Odo Pell: builds, poses and keeps their shape 1`] = `
     -0.108,
   ],
   "triangles": 1012,
+}
+`;
+
+exports[`people > Tobin Harrow: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.142,
+    0.45,
+    0.172,
+  ],
+  "min": [
+    -0.142,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1760,
+}
+`;
+
+exports[`people > Wat: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.414,
+  "max": [
+    0.115,
+    0.414,
+    0.084,
+  ],
+  "min": [
+    -0.115,
+    -0,
+    -0.084,
+  ],
+  "triangles": 1368,
 }
 `;
