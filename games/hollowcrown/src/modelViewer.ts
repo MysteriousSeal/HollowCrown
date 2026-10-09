@@ -1,6 +1,6 @@
-// The model viewer (models.html, with `npm run dev`): every creature of the Vale (creatures/index.ts) and every
-// building of Brindleford (buildings/index.ts) and its folk (people/index.ts), every tree (nature/trees.ts) and meadow plant (nature/meadows.ts) in the
-// engine's viewer. `?only=wolf,smithy` shows just those.
+// The model viewer (models.html, with `npm run dev`): every creature of the Vale (creatures/index.ts), every
+// building of Brindleford (buildings/index.ts) and its folk (people/index.ts), every tree (nature/trees.ts), meadow
+// plant (nature/meadows.ts) and prop (props/) in the engine's viewer. `?only=wolf,smithy` shows just those.
 
 import { startModelViewer } from '@voxel/engine/tools';
 import { CREATURES } from './creatures';
@@ -9,6 +9,8 @@ import { placeModel } from './buildings';
 import { BRINDLEFORD } from './data/world/brindleford';
 import { SPECIES, VARIANTS, treeModel } from './nature/trees';
 import { MEADOW_SHAPES } from './nature/meadows';
+import { PROP_SHAPES } from './props';
+import { PROPS } from './props/palette';
 import { NATURE_LOOK } from './nature/palette';
 import { VoxelModel } from '@voxel/engine/models';
 import { STRUCTURE_VOXEL } from '@voxel/engine/structures';
@@ -26,5 +28,6 @@ startModelViewer(
     ...(BRINDLEFORD.places ?? []).filter((p) => p.kind === 'building' || p.kind === 'fixture').map((p) => ({ id: p.id, name: p.name ?? p.id, group: 'Brindleford', make: () => placeModel(p)! })),
     ...SPECIES.flatMap((s) => Array.from({ length: VARIANTS }, (_, v) => ({ id: `${s}${v}`, name: `${s} ${v + 1}`, group: 'Trees', make: () => treeModel(s, v) }))),
     ...Object.entries(MEADOW_SHAPES).map(([id, grid]) => ({ id, name: id, group: 'Meadows', make: () => new VoxelModel(grid(), NATURE_LOOK, { voxel: STRUCTURE_VOXEL }) })),
+    ...Object.entries(PROP_SHAPES).map(([id, grid]) => ({ id, name: id, group: 'Props', make: () => new VoxelModel(grid(), { palette: PROPS.colors }, { voxel: STRUCTURE_VOXEL }) })),
   ].filter(({ id }) => !only || only.includes(id)),
 );
