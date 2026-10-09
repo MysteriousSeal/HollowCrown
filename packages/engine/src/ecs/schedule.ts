@@ -20,9 +20,9 @@ export class Schedule {
     return this;
   }
 
-  // One frame of `dt` seconds.
-  run(world: World, dt: number): void {
-    for (const stage of STAGES) for (const system of this.systems) if (system.stage === stage) system.update(world, dt);
+  // One frame of `dt` seconds (`stages`: only those, e.g. just presenting while the game is paused).
+  run(world: World, dt: number, stages: readonly Stage[] = STAGES): void {
+    for (const stage of STAGES) if (stages.includes(stage)) for (const system of this.systems) if (system.stage === stage) system.update(world, dt);
     world.clearEvents();
   }
 }

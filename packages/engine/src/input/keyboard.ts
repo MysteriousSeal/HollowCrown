@@ -1,9 +1,9 @@
 // The keyboard, as a resource: which actions are held, and which were pressed since a system last took the press. A
-// game binds keys to actions (WASD and the arrows to the four directions, E to interact, by default).
+// game binds keys to actions (WASD and the arrows to the four directions, E to interact, Shift to sprint, by default).
 
 import { defineResource } from '../ecs';
 
-export type Action = 'up' | 'down' | 'left' | 'right' | 'interact';
+export type Action = 'up' | 'down' | 'left' | 'right' | 'interact' | 'sprint';
 
 export const DEFAULT_BINDINGS: Readonly<Record<string, Action>> = {
   KeyW: 'up',
@@ -15,6 +15,8 @@ export const DEFAULT_BINDINGS: Readonly<Record<string, Action>> = {
   KeyD: 'right',
   ArrowRight: 'right',
   KeyE: 'interact',
+  ShiftLeft: 'sprint',
+  ShiftRight: 'sprint',
 };
 
 export class Keyboard {
@@ -25,7 +27,13 @@ export class Keyboard {
     window.addEventListener('keydown', (e) => this.onKey(e, true));
     window.addEventListener('keyup', (e) => this.onKey(e, false));
     // keyup never fires if focus leaves the page mid-press (alt-tab): nothing stays held.
-    window.addEventListener('blur', () => this.held.clear());
+    window.addEventListener('blur', () => this.release());
+  }
+
+  // Nothing held or pressed any more (focus lost, the game paused): no one walks on by themselves after.
+  release(): void {
+    this.held.clear();
+    this.pressed.clear();
   }
 
   // Whether `action` was pressed since this was last asked (a key held down counts once, not every repeat).

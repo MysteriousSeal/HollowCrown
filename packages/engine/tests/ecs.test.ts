@@ -38,4 +38,17 @@ describe('World', () => {
     expect(seen).toEqual([mover]);
     expect(world.eventsOf(Moved)).toEqual([]); // (cleared after the frame)
   });
+
+  it('runs only the stages asked for (paused: just presenting)', () => {
+    const ran: string[] = [];
+    const schedule = new Schedule().add(
+      { name: 'a', stage: 'present', update: () => ran.push('present') },
+      { name: 'b', stage: 'input', update: () => ran.push('input') },
+      { name: 'c', stage: 'simulate', update: () => ran.push('simulate') },
+    );
+    schedule.run(new World(), 0.1, ['present']);
+    expect(ran).toEqual(['present']);
+    schedule.run(new World(), 0.1);
+    expect(ran).toEqual(['present', 'input', 'simulate', 'present']);
+  });
 });
