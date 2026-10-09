@@ -1,5 +1,5 @@
-// The Vale's buildings' colors: limewashed plaster gone cream, oak gone grey-brown, river stone, late-summer thatch,
-// the slate of the better houses, painted shutters (each house its own), lamplit windows; and their props' (a sign's
+// The Vale's buildings' colors, EvenHold's: limewashed plaster gone cream, near-black oak, river stone, straw thatch,
+// the warm slate of the better houses, painted shutters (each house its own), lamplit windows; and their props' (a sign's
 // paint, iron, embers, bronze, flowers). One palette for every building, each painting its parts from it.
 
 import { namedPalette } from '@voxel/engine/voxel';
@@ -7,17 +7,17 @@ import type { RoofStyle, StructureColor, WallStyle } from '@voxel/engine/structu
 
 export const VILLAGE = namedPalette({
   // walls
-  plaster: 0xe6d9bb, plasterShade: 0xccbd9a,
+  plaster: 0xe9dfc6, plasterShade: 0xd6caad,
   daub: 0xc8b28a, daubShade: 0xab9671,
-  timber: 0x5b3e2a, timberDark: 0x3d2a1d,
-  stone: 0x9b958a, stoneLight: 0xb7b1a4, stoneDark: 0x75706a,
+  timber: 0x3a281c, timberDark: 0x2a1d14,
+  stone: 0x8e8b82, stoneLight: 0xa4a097, stoneDark: 0x75726a,
   // roofs
-  thatch: 0xc39a55, thatchLight: 0xd9b871, thatchDark: 0x8c6a3b,
-  slate: 0x56616c, slateLight: 0x6d7985, slateDark: 0x3e4651,
+  thatch: 0xb58f4e, thatchLight: 0xd0ad66, thatchDark: 0x8a6a3a,
+  slate: 0x5f6672, slateLight: 0x77808c, slateDark: 0x474d57,
   shingle: 0x7b5b3f, shingleLight: 0x92704d, shingleDark: 0x5b432f,
   // openings
-  door: 0x7a5233, doorDark: 0x573a23,
-  window: 0xffc26a, // (glows)
+  door: 0x5a3a22, doorDark: 0x46301c,
+  window: 0xffd98a, // (glows)
   green: 0x4e6a57, blue: 0x4c5e77, red: 0x7b4034, // shutters
   inside: 0x1c1612,
   // props
