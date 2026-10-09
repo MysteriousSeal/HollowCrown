@@ -1,9 +1,9 @@
 // What hangs on the Vale's buildings and stands round them, as voxel grids (at the buildings' voxel: 16 a tile), and
 // what's painted onto them: an inn's sign, lanterns, an anvil, a mill wheel, a bell-cote, window boxes, drying herbs,
-// a chandler's sign, wax vats and drying candles; a well and a notice board, standing on their own.
+// a chandler's sign, wax vats and drying candles, moss on a roof; a well and a notice board, standing on their own.
 
 import { hashUnit } from '@voxel/engine/math';
-import type { StructureLayout } from '@voxel/engine/structures';
+import type { StructureLayout, StructureSpec } from '@voxel/engine/structures';
 import { colorAt, createGrid, fillBox, fillEllipsoid, setColor, type VoxelGrid } from '@voxel/engine/voxel';
 import { C } from './palette';
 
@@ -231,5 +231,22 @@ export function dryingCandles(g: VoxelGrid, layout: StructureLayout): void {
     if (layout.door && x >= layout.door.x0 - 1 && x <= layout.door.x1 + 1) continue;
     setColor(g, x, layout.eaves - 1, layout.z1 + 1, C.rope);
     for (let y = layout.eaves - 4; y < layout.eaves - 1; y++) setColor(g, x, y, layout.z1 + 1, C.wax);
+  }
+}
+
+// Moss creeping up a roof from its eaves: on the roof's covering (`spec`'s roof colors) in its lowest courses, patchy,
+// thinning as it climbs.
+export function mossy(g: VoxelGrid, layout: StructureLayout, spec: StructureSpec): void {
+  const roof = new Set([spec.colors.roof, spec.colors.roofLight, spec.colors.roofDark]);
+  const [sx, , sz] = g.size;
+  for (let y = layout.eaves - 2; y < layout.eaves + 5; y++) {
+    const chance = 0.45 - (y - layout.eaves + 2) * 0.07;
+    for (let x = 0; x < sx; x++) {
+      for (let z = 0; z < sz; z++) {
+        if (!roof.has(colorAt(g, x, y, z)) || colorAt(g, x, y + 1, z) !== 0) continue; // (its top face only)
+        const h = hashUnit(Math.floor(x / 2), Math.floor(z / 2), 77 + y);
+        if (h < chance) setColor(g, x, y, z, h < chance * 0.4 ? C.mossLight : C.moss);
+      }
+    }
   }
 }

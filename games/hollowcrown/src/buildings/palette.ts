@@ -1,6 +1,6 @@
 // The Vale's buildings' colors, EvenHold's: limewashed plaster gone cream, near-black oak, river stone, straw thatch,
-// the warm slate of the better houses, painted shutters (each house its own), lamplit windows; and their props' (a sign's
-// paint, iron, embers, bronze, flowers). One palette for every building, each painting its parts from it.
+// the warm slate of the better houses, painted shutters (each house its own), lamplit windows, moss on the roofs; and
+// their props' (a sign's paint, iron, embers, bronze, flowers, wax). One palette for every building.
 
 import { namedPalette } from '@voxel/engine/voxel';
 import type { RoofStyle, StructureColor, WallStyle } from '@voxel/engine/structures';
@@ -25,6 +25,7 @@ export const VILLAGE = namedPalette({
   bronze: 0x6e8b60, signRed: 0x8a3a2e, signCream: 0xe9dcc0,
   flower: 0xb9443a, flowerGold: 0xe1b94c, leaf: 0x5b7a3a, herb: 0x7d8b4c,
   water: 0x3b6a86, rope: 0x9c8461, paper: 0xe7ddc6, heron: 0x8f98a0, wax: 0xeadfb8,
+  moss: 0x6f9148, mossLight: 0x88a955, // (on roofs, up from the eaves)
 });
 
 export const C = VILLAGE.C;
