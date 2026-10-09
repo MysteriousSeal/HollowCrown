@@ -1,5 +1,5 @@
-// Every person of the Vale with a name, by that name exactly as the bible writes it (docs/story/regions/
-// brindle-vale.md): how each is made. The game places them (gameplay), the model viewer (models.html) shows them all.
+// Every person of the Vale with a name (docs/story/regions/brindle-vale.md), by their full name exactly as the map's
+// residents have it (data/world/brindleford.ts: 'Tamsin Reede', 'Cob Fletcher'): how each is made. The game places them (gameplay), the model viewer (models.html) shows them all.
 
 import type { Model } from '@voxel/engine/models';
 import { FrameModel, type FrameSpec } from '@voxel/engine/characters';

@@ -51,7 +51,7 @@ exports[`people > Bran Hollin: builds, poses and keeps their shape 1`] = `
 }
 `;
 
-exports[`people > Cob: builds, poses and keeps their shape 1`] = `
+exports[`people > Cob Fletcher: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
   "max": [
@@ -170,7 +170,7 @@ exports[`people > Garrick Fenn: builds, poses and keeps their shape 1`] = `
 }
 `;
 
-exports[`people > Gert: builds, poses and keeps their shape 1`] = `
+exports[`people > Gert Hollin: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
   "max": [
@@ -374,7 +374,7 @@ exports[`people > Simkin Orr: builds, poses and keeps their shape 1`] = `
 }
 `;
 
-exports[`people > Tamsin: builds, poses and keeps their shape 1`] = `
+exports[`people > Tamsin Reede: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
   "max": [
@@ -442,7 +442,7 @@ exports[`people > Wenna: builds, poses and keeps their shape 1`] = `
 }
 `;
 
-exports[`people > Wynn: builds, poses and keeps their shape 1`] = `
+exports[`people > Wynn Tidy: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
   "max": [
