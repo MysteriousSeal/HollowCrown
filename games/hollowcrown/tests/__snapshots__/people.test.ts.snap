@@ -1,5 +1,22 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`people > Dunstan: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.467,
+    0.108,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.108,
+  ],
+  "triangles": 2072,
+}
+`;
+
 exports[`people > Elsa Fenn: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -51,6 +68,40 @@ exports[`people > Garrick Fenn: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Jory: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.464,
+    0.141,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.075,
+  ],
+  "triangles": 1602,
+}
+`;
+
+exports[`people > Kit: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.315,
+  "max": [
+    0.088,
+    0.315,
+    0.064,
+  ],
+  "min": [
+    -0.088,
+    -0,
+    -0.064,
+  ],
+  "triangles": 1640,
+}
+`;
+
 exports[`people > Nan Wicket: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -98,7 +149,7 @@ exports[`people > Tobin Harrow: builds, poses and keeps their shape 1`] = `
     -0,
     -0.092,
   ],
-  "triangles": 1760,
+  "triangles": 1892,
 }
 `;
 
@@ -115,6 +166,6 @@ exports[`people > Wat: builds, poses and keeps their shape 1`] = `
     -0,
     -0.084,
   ],
-  "triangles": 1368,
+  "triangles": 1418,
 }
 `;

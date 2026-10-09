@@ -2,7 +2,9 @@
 // them, in the order it lists them. Who uses it: people/index.ts (PEOPLE).
 
 import { cuff, gloves, type FrameSpec } from '@voxel/engine/characters';
+import { noise3 } from '@voxel/engine/math';
 import { wrap } from '@voxel/engine/voxel';
+import { tornHem } from '../creatures/kit';
 import { apron, body, cap, coif, dusted, folk, forearms, hammer, K, ladle, lantern, ledger, longSkirtLeg, OLD, right, shawl, shoes, skirt, sleeves, staff, W } from './kit';
 
 // Garrick Fenn, the innkeeper: an old ferryman gone to fat at the middle, his forearms still a ferryman's (the
@@ -121,6 +123,49 @@ const NAN_WICKET = folk({ build: 'female', skin: 0, hair: 7, dye: 2, hairStyle: 
   },
 }, { held: { rightArm: staff(8, 'plain', 4) }, gait: OLD });
 
+// Dunstan, the miller: a stout bearded man in a linen cap, a brown jerkin open over his shirt, and flour on all of
+// it: his beard, his brows, his sleeves.
+const DUNSTAN = folk({ build: 'male', skin: 0, hair: 0, dye: 3, hairStyle: 'short', beard: true, expression: 'stern' }, {
+  head: (g, o) => cap(g, o, W.linen, W.linenShade),
+  torso: (g, o, f) => {
+    body(g, o, (x, y, z) => (y === 3 ? K.leatherDark : z === 4 && x >= 3 && x <= 5 ? W.linen : W.woolLight)); // the jerkin, open at the front
+    skirt(g, o, f, 2, (x, _y, z) => (z === f.d && x >= 3 && x <= 5 ? 0 : W.woolLight));
+  },
+  arm: (g, o) => sleeves(g, o, 3, (_x, y) => (y === 3 ? W.roll : W.linen)),
+  leg: (g, o) => {
+    body(g, o, (_x, y) => (y >= 2 ? W.wool : 0));
+    shoes(g, o, 1, () => K.leatherDark);
+  },
+}, { after: dusted(W.flour, W.flourDust, 0.22, 13) });
+
+// Jory, Dunstan's son, 20, a sleeper: thin and grey-pale, the colour gone from his cheeks, his lips blue, a shirt too
+// big for him hanging loose, his head low; flour on him from the mill.
+const JORY = folk({ build: 'male', skin: 4, hair: 1, dye: 4, hairStyle: 'shaggy', beard: false, expression: 'wistful' }, {
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => ((x + y) % 4 ? W.linenShade : W.linenDark));
+    skirt(g, o, f, 2, (x, _y, z) => ((x + z) % 3 ? W.linenShade : W.linenDark)); // untucked
+  },
+  arm: (g, o) => sleeves(g, o, 2, (_x, y) => (y === 2 ? W.linenDark : W.linenShade)),
+  leg: (g, o) => {
+    body(g, o, (_x, y) => (y >= 2 ? W.woolDark : 0));
+    shoes(g, o, 0, () => K.leatherDark);
+  },
+}, {
+  swaps: { mouth: 0x4a5a8a, cheek: 0xc4bcae },
+  gait: { lean: 0.1, headBow: 0.18, speed: 1.0, armSwing: 0.15 },
+  after: dusted(W.flour, W.flourDust, 0.06, 17),
+});
+
+// Kit, the orphan, 10: small, a red shaggy mop, a man's old tunic in rags hanging to his knees, its sleeves torn off
+// short, barefoot.
+const KIT = folk({ build: 'male', skin: 0, hair: 3, dye: 3, hairStyle: 'shaggy', beard: false, expression: 'cheerful' }, {
+  torso: (g, o, f) => {
+    body(g, o, (x, y, z) => (noise3(x, y, z, 21) < 0.25 ? K.ragDark : K.rag));
+    skirt(g, o, f, 4, (x, y, z) => (y >= -2 - tornHem(x, z, 21) ? ((x + z) % 4 ? K.rag : K.ragDark) : 0)); // a torn hem
+  },
+  arm: (g, o) => sleeves(g, o, 5, (_x, y) => (y === 5 ? K.ragDark : K.rag)),
+}, { scale: 0.7 });
+
 export const FOLK: Record<string, FrameSpec> = {
   'Garrick Fenn': GARRICK,
   'Elsa Fenn': ELSA,
@@ -129,4 +174,7 @@ export const FOLK: Record<string, FrameSpec> = {
   'Tobin Harrow': TOBIN,
   'Wat': WAT,
   'Nan Wicket': NAN_WICKET,
+  'Dunstan': DUNSTAN,
+  'Jory': JORY,
+  'Kit': KIT,
 };
