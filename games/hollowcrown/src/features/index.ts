@@ -7,6 +7,7 @@ import { debug } from './debug';
 import { hud } from './hud';
 import { land } from './land';
 import { nature } from './nature';
+import { quests } from './quests';
 import { sprint } from './sprint';
 import { talk } from './talk';
 import { villagers } from './villagers';
@@ -23,6 +24,7 @@ export const FEATURES: Feature[] = [
   sprint,
   hud,
   talk,
+  quests,
 ];
 
 export type { Feature, GameContext } from './context';
