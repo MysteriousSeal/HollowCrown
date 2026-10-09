@@ -12,6 +12,7 @@ describe('kills', () => {
     expect(isWhat('the Hungry', { id: 'hungry', name: 'The Hungry' })).toBe(true);
     expect(isWhat('brood mother', { id: 'broodMother', name: 'Brood mother' })).toBe(true);
     expect(isWhat('wolf', { id: 'alphaWolf', name: 'Alpha wolf' })).toBe(false);
+    expect(isWhat('Red Hen bandit', { id: 'bandit', name: 'Red Hen brute' })).toBe(true); // (MQ03's camp)
   });
 
   it("tells this frame's creature deaths, what each was and where it fell", () => {

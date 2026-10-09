@@ -16,6 +16,7 @@ import type { Spot } from '../data/people/kinds';
 import { QUESTS, type Line, type Objective, type QuestStage } from '../data/quests';
 import { strangerModel } from '../people/stranger';
 import { deathsOf, isWhat, needed } from '../systems/kills';
+import { startReady } from '../systems/questStarts';
 import { Quests, completeObjective, newBook, openObjectives, startQuest } from '../systems/quests';
 import { ConversationScreen, QuestLog } from '../ui/screens';
 import type { Feature } from './context';
@@ -59,9 +60,11 @@ export function linesOf(objective: Objective, name: string, fallback: Line): Con
   return lines;
 }
 
-// What `name` says when talked to, and what it does for the quests: each open 'talk' with them played and done as
-// it closes, then each 'choose' with them played and done by the reply picked. None asked of them: their first words.
+// What `name` says when talked to, and what it does for the quests: any quest they give, given first
+// (systems/questStarts.ts); each open 'talk' with them played and done as it closes, then each 'choose' with them
+// played and done by the reply picked. None asked of them: their first words.
 export function talkWith(world: World, name: string): { lines: ConversationLine[]; onChoice: (line: number, choice: number) => void; onClose: () => void } {
+  if (world.hasResource(Quests)) startReady(world.resource(Quests), QUESTS, name).forEach((stage) => begin(world, stage));
   const asked = world.hasResource(Quests) ? openObjectives(world.resource(Quests), QUESTS).filter(({ objective }) => objective.who === name) : [];
   const firstWords = PEOPLE_DATA[name]?.firstWords ?? '…';
   if (asked.length === 0) return { lines: [{ side: 'right', text: firstWords }], onChoice: () => {}, onClose: () => {} };
@@ -94,6 +97,7 @@ export function questSystem(map: WorldMap, hero: number): System {
     update(world) {
       const at = world.get(hero, Transform);
       if (!at || !world.hasResource(Quests)) return;
+      startReady(world.resource(Quests), QUESTS).forEach((stage) => begin(world, stage));
       const deaths = deathsOf(world);
       for (const { quest, objective } of openObjectives(world.resource(Quests), QUESTS)) {
         if (objective.kind === 'fight' && objective.what) {
@@ -105,14 +109,15 @@ export function questSystem(map: WorldMap, hero: number): System {
         }
         if (!objective.at || objective.who || !isAt(map, objective.at, at.x, at.z)) continue;
         if (BY_BEING_THERE.has(objective.kind)) complete(world, quest, objective.id);
-        else if (objective.kind === 'choose') ask(world, quest, objective);
+        else if (objective.kind === 'choose' || objective.kind === 'talk') ask(world, quest, objective);
       }
     },
   };
 }
 
-// A choice that's nobody's, asked on the conversation screen (once it's free): the hero's portrait, and facing them
-// what the choice is over if it's one of the dead lying out (the pilgrim in the ditch), else nobody.
+// A choice or a talk that's nobody's in the village (the pilgrim in the ditch, Hesper chained in the camp), played on
+// the conversation screen once it's free: the hero's portrait, and facing them what it's over if it's one of the dead
+// lying out, else nobody; a talk done as it closes.
 function ask(world: World, quest: string, objective: Objective): void {
   if (!world.hasResource(ConversationScreen)) return;
   const screen = world.resource(ConversationScreen);
@@ -125,7 +130,8 @@ function ask(world: World, quest: string, objective: Objective): void {
     releasePortrait(you);
     if (it) releasePortrait(it);
   };
-  screen.open({ name: 'You', portrait: you }, { name: '', portrait: it }, lines, close, (_, choice) => complete(world, quest, objective.id, objective.options![choice]?.sets));
+  const done = () => (close(), objective.kind === 'talk' && complete(world, quest, objective.id));
+  screen.open({ name: 'You', portrait: you }, { name: '', portrait: it }, lines, done, (_, choice) => complete(world, quest, objective.id, objective.options![choice]?.sets));
 }
 
 // The body lying at `spot` (a tile: within a tile of it), as its creature.
