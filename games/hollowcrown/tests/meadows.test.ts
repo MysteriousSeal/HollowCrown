@@ -8,12 +8,12 @@ import { VoxelModel } from '@voxel/engine/models';
 import { covers, loadWorldMap } from '@voxel/engine/world';
 import { obstaclesOf } from '../src/buildings';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
-import { MEADOW_SHAPES, meadowGrowth, meadowLayer } from '../src/nature/meadows';
+import { MEADOW_SHAPES, meadowChunks, meadowGrowthIn, meadowLayer } from '../src/nature/meadows';
 import { NATURE_LOOK } from '../src/nature/palette';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
 const built = obstaclesOf(map);
-const byChunk = meadowGrowth(map, built);
+const byChunk = new Map([...meadowChunks(map)].map((k) => [k, meadowGrowthIn(map, k, built)]));
 const all = [...byChunk.values()].flat();
 const meadows = map.data.areas.filter((a) => a.kind === 'meadow');
 
@@ -39,7 +39,7 @@ describe('the Vale\'s meadows', () => {
 
   it('draw a chunk as one instanced mesh a shape', () => {
     const [key, plants] = [...byChunk.entries()].sort((a, b) => b[1].length - a[1].length)[0];
-    const meshes = meadowLayer(map, byChunk).build(key) as THREE.InstancedMesh[];
+    const meshes = meadowLayer(map, built).build(key) as THREE.InstancedMesh[];
     expect(meshes.length).toBeLessThanOrEqual(Object.keys(MEADOW_SHAPES).length);
     expect(meshes.reduce((n, m) => n + m.count, 0)).toBe(plants.length);
   });
