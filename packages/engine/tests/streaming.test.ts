@@ -68,10 +68,20 @@ describe('chunk streaming', () => {
     }).not.toThrow();
     for (const group of scene.children) for (const o of group.children) expect(o).toBeInstanceOf(THREE.Group);
   });
+
+  it('splits a places chunk into a step per place', () => {
+    const places = Array.from({ length: 3 }, (_, i) => ({ kind: 'prop', at: [2 + i, 2] }) as unknown as PlaceData);
+    const layer = placesLayer(places, () => new THREE.Group(), []);
+    const steps = layer.buildSteps!('0,0');
+    expect(steps).toHaveLength(3);
+    expect(steps[0]()).toHaveLength(1);
+    expect(layer.buildSteps!('5,5')).toEqual([]);
+  });
 });
 
 // Timings in node, on the CPU only (no GPU upload): generous budgets, there to catch a build growing many times over.
-describe('chunk build cost', () => {
+// They mean nothing on a busy machine, so they run only when asked: PERF=1 npx vitest run packages/engine/tests/streaming.test.ts
+describe.runIf(process.env.PERF)('chunk build cost', () => {
   const time = (run: () => unknown, times = 5) => {
     for (let i = 0; i < 3; i++) run(); // (warm up: the first builds run cold, before the JIT has optimized them)
     const start = performance.now();
@@ -87,7 +97,7 @@ describe('chunk build cost', () => {
       surfaceAt: (x, z) => (x + z * 3) % 5 === 0 ? 1 : 0,
     };
     const layer = terrainLayer(terrain, [0, 1, 2, 3, 4, 5, 6], [0x998866]);
-    const ms = time(() => layer.build("3,3"));
+    const ms = time(() => layer.build('3,3'));
     expect(ms).toBeLessThan(FRAME_BUILD_BUDGET * 2);
   });
 
