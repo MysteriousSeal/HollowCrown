@@ -9,17 +9,10 @@
 // merge when their four corner AO values match too.
 
 import * as THREE from 'three';
-import { colorAt, type VoxelGrid } from './grid';
+import type { VoxelGrid } from './grid';
 
 // Light reaching a face corner with 3, 2, 1 or 0 of its neighbours open.
 const AO_LEVELS = [0.5, 0.68, 0.85, 1];
-// Corner order matches the quad's p0..p3: (-u,-v), (+u,-v), (+u,+v), (-u,+v).
-const CORNER_SIGNS = [
-  [-1, -1],
-  [1, -1],
-  [1, 1],
-  [-1, 1],
-];
 
 // Plain coordinates, no tuple: this runs several times per voxel face, and
 // allocating there dominated meshing time on large grids.
@@ -76,6 +69,7 @@ function meshFaces(
   for (let c = 1; c <= Math.min(255, palette.length); c++) buckets[c] = bucket(c);
   const linearPalette = palette.map((hex) => new THREE.Color(hex));
   const quadSize = [0, 0, 0];
+  const base = [origin.x, origin.y, origin.z];
   const ao = [1, 1, 1, 1];
 
   for (let d = 0; d < 3; d++) {
@@ -155,7 +149,7 @@ function meshFaces(
             const [a, b] = CORNER_UV[c];
             for (let axis = 0; axis < 3; axis++) {
               const along = axis === u ? a * quadSize[u] : axis === v ? b * quadSize[v] : 0;
-              positions.push(origin.getComponent(axis) + (x[axis] + along) * voxelSize);
+              positions.push(base[axis] + (x[axis] + along) * voxelSize);
               normals.push(axis === d ? sign : 0);
             }
             colors.push(color.r * ao[c], color.g * ao[c], color.b * ao[c]);
@@ -183,17 +177,30 @@ function meshFaces(
 // empty voxel (ax, ay, az) the face looks into. A corner boxed in by both
 // side neighbours is fully occluded whatever the diagonal holds.
 function cornerOcclusion(grid: VoxelGrid, ax: number, ay: number, az: number, u: number, v: number): number {
-  const du = [0, 0, 0];
-  const dv = [0, 0, 0];
-  let packed = 0;
-  for (let c = 0; c < 4; c++) {
-    const [su, sv] = CORNER_SIGNS[c];
-    du[u] = su;
-    dv[v] = sv;
-    const s1 = colorAt(grid, ax + du[0], ay + du[1], az + du[2]) !== 0 ? 1 : 0;
-    const s2 = colorAt(grid, ax + dv[0], ay + dv[1], az + dv[2]) !== 0 ? 1 : 0;
-    const diagonal = colorAt(grid, ax + du[0] + dv[0], ay + du[1] + dv[1], az + du[2] + dv[2]) !== 0 ? 1 : 0;
-    packed |= (s1 && s2 ? 0 : 3 - s1 - s2 - diagonal) << (c * 2);
-  }
-  return packed;
+  // The eight voxels round it in its u-v plane, read once (no allocation: this runs for every face).
+  const { size, cells } = grid;
+  const at = [ax, ay, az];
+  const filled = (du: number, dv: number): number => {
+    const pu = at[u] + du;
+    const pv = at[v] + dv;
+    if (pu < 0 || pv < 0 || pu >= size[u] || pv >= size[v]) return 0;
+    const pd = at[3 - u - v];
+    if (pd < 0 || pd >= size[3 - u - v]) return 0;
+    const p0 = u === 0 ? pu : v === 0 ? pv : pd;
+    const p1 = u === 1 ? pu : v === 1 ? pv : pd;
+    const p2 = u === 2 ? pu : v === 2 ? pv : pd;
+    return cells[p0 + size[0] * (p1 + size[1] * p2)] !== 0 ? 1 : 0;
+  };
+  const left = filled(-1, 0);
+  const right = filled(1, 0);
+  const down = filled(0, -1);
+  const up = filled(0, 1);
+  // Corners in the quad's p0..p3 order: (-u,-v), (+u,-v), (+u,+v), (-u,+v).
+  const corner = (s1: number, s2: number, diagonal: number) => (s1 && s2 ? 0 : 3 - s1 - s2 - diagonal);
+  return (
+    corner(left, down, filled(-1, -1)) |
+    (corner(right, down, filled(1, -1)) << 2) |
+    (corner(right, up, filled(1, 1)) << 4) |
+    (corner(left, up, filled(-1, 1)) << 6)
+  );
 }
