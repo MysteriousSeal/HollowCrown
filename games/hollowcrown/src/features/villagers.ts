@@ -11,7 +11,9 @@ import type { PlaceData, WorldMap } from '@voxel/engine/world';
 import { doorOf } from '../buildings';
 import type { BuildingProps } from '../data/world/kinds';
 import { barkSystem } from '../systems/barks';
+import { lastingName } from '../systems/save';
 import { Resident, villagerDaySystem } from '../systems/villagerDay';
+import { Persistent } from '@voxel/engine/save';
 import { PEOPLE_DATA } from '../data/people';
 import { PEOPLE } from '../people';
 import { GESTURES } from '../people/gestures';
@@ -114,6 +116,7 @@ export const villagers: Feature = {
   install: ({ app, map, hero }) => {
     for (const v of villagersOf(map)) {
       const person = app.world.spawn(
+        [Persistent, lastingName.villager(v.name)],
         [Transform, { x: v.x, y: map.groundY(v.x, v.z), z: v.z, facing: v.facing }],
         [MoveSpeed, 1.2],
         [Interactable, interactable(`Talk to ${v.name}`)],

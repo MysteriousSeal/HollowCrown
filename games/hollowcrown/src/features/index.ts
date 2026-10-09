@@ -12,6 +12,7 @@ import { hud } from './hud';
 import { land } from './land';
 import { nature } from './nature';
 import { quests } from './quests';
+import { saving } from './saving';
 import { sound } from './sound';
 import { sprint } from './sprint';
 import { talk } from './talk';
@@ -34,6 +35,7 @@ export const FEATURES: Feature[] = [
   bot,
   encounters,
   sound,
+  saving,
   devStart,
 ];
 

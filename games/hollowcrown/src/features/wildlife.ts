@@ -4,9 +4,11 @@
 
 import { hashUnit } from '@voxel/engine/math';
 import { Attack, Faction, Health, Hostile, MoveSpeed, Transform, Wander, attack, health, hostile, wander } from '@voxel/engine/gameplay';
+import { Persistent } from '@voxel/engine/save';
 import type { Point } from '@voxel/engine/world';
 import { CREATURES } from '../creatures';
 import { Creature } from '../systems/kills';
+import { lastingName } from '../systems/save';
 import type { Feature } from './context';
 
 // An animal: which creature (src/creatures CREATURES' id), where it roams round, how far (tiles), its pace (tiles a
@@ -42,6 +44,7 @@ export const wildlife: Feature = {
       const entry = CREATURES.find((c) => c.id === creature);
       if (!entry) throw new Error(`wildlife: no creature '${creature}'`);
       const animal = app.world.spawn(
+        [Persistent, lastingName.animal(i)],
         [Transform, { x, y: map.groundY(x, z), z, facing: hashUnit(x, z, i) * Math.PI * 2 }],
         [MoveSpeed, speed],
         [Wander, wander({ x, z }, { radius: roam, speed, pause: [1, 5] })],
