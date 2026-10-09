@@ -71,6 +71,8 @@ export const LIFE: Record<string, RegionLife> = {
       { kind: 'hen', note: 'hens on Tallow Green', where: { on: ['grass', 'path'], near: { at: [1200, 3050], radius: 20 } }, hours: [5, 20], density: 15, group: [2, 5], tame: true },
       { kind: 'sheep', note: "the Cobbes' sheep on the fallow end of their fields", where: { on: ['grass'], in: ['cobbe-fields'] }, hours: [6, 20], density: 40, group: [5, 12], tame: true },
       { kind: 'sheep', note: "sheep on the south pastures, Wenna's charge", where: { on: ['grass'], near: { at: [1030, 3500], radius: 25 } }, hours: [6, 20], density: 25, group: [6, 14], tame: true },
+      { kind: 'sheep', note: 'sheep on Shrine Rise, the first thing alive the hero sees', where: { on: ['grass'], in: ['shrine-pasture'] }, hours: [5, 21], density: 60, group: [4, 9], tame: true },
+      { kind: 'dog', note: "the Shrine Rise shepherd's dog, minding them", where: { in: ['shrine-pasture'] }, hours: [5, 21], density: 1, tame: true },
       { kind: 'cow', note: "the Cobbes' cows, by the barn", where: { on: ['grass'], near: { at: [985, 3425], radius: 15 } }, hours: [6, 20], density: 15, group: [2, 4], tame: true },
     ],
     quiet: [
