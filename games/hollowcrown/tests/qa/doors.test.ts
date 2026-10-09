@@ -12,10 +12,8 @@ const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
 const VOXELS_PER_TILE = 16;
 
 describe('doors and their households', () => {
-  // BUG (environment/gameplay): buildings/index.ts:27 now builds a plain house from a shared look's seed, but
-  // features/villagers.ts:77 still works its door's shift out from the house's own id, so households stand up to half
-  // a tile off their door. Filed to gameplay (villagers.ts) and environment.
-  it.skip("centres every household on its house's door, as the model builds it", () => {
+  // (Was a bug: villagers worked the door's shift out on their own and four households stood off it. Fixed: doorOf.)
+  it("centres every household on its house's door, as the model builds it", () => {
     const people = villagersOf(map).filter((v) => !v.seated);
     const wrong: string[] = [];
     for (const house of map.places('building').filter((p) => (p.props as BuildingProps).use === 'house')) {
