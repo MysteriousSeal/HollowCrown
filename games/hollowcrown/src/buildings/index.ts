@@ -18,8 +18,21 @@ import {
 
 const TILE = 16; // voxels a tile
 
-// A number from a place's id, to vary what's built for it (the same every time).
-const seedOf = (id: string) => [...id].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7) % 10007;
+// A number from a place's id, to vary what's built for it (the same every time). A plain house gets one of LOOKS
+// seeds, not its own: houses alike in size and build then look alike, built once and their meshes shared (lookOf).
+const hashOf = (id: string) => [...id].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7) % 10007;
+const LOOKS = 4;
+const UNIQUE = new Set(['holt-house', 'megs-house']); // (houses with something of their own)
+const shared = (place: PlaceData) => (place.props as BuildingProps).use === 'house' && !UNIQUE.has(place.id);
+const seedOf = (place: PlaceData) => (shared(place) ? 101 + (hashOf(place.id) % LOOKS) * 1013 : hashOf(place.id));
+
+// What a place looks like, as a key: places with the same one are built once (placesOf), sharing their meshes.
+function lookOf(place: PlaceData): string {
+  if (place.kind === 'fixture') return fixtureOf(place)?.suffix ?? place.id;
+  if (!shared(place)) return place.id;
+  const b = place.props as BuildingProps;
+  return `house ${b.size} ${b.floors} ${b.roof} ${b.walls} ${seedOf(place)}`;
+}
 
 // The spec every building starts from: walls inset from its footprint (room for the eaves), a storey a little over a
 // person and a half, a door, small windows, a chimney at one end.
@@ -91,7 +104,7 @@ const BY_USE: Record<BuildingProps['use'], Make> = {
 // A placed building's model, its front toward +z, centred on its footprint.
 export function buildingModel(place: PlaceData): StructureModel {
   const b = place.props as BuildingProps;
-  const seed = seedOf(place.id);
+  const seed = seedOf(place);
   return BY_USE[b.use](baseSpec(b, seed), seed, place);
 }
 
@@ -113,20 +126,26 @@ export function placeModel(place: PlaceData): Model | null {
   return place.kind === 'building' ? buildingModel(place) : place.kind === 'fixture' ? fixtureModel(place) : null;
 }
 
-// The layer of every drawn place on `map`: each built once (kept for when its chunk comes back), stood on the ground
-// in the middle of its footprint, turned the way it faces.
+// The layer of every drawn place on `map`: each built once (kept for when its chunk comes back; places that look
+// alike share one build's meshes), stood on the ground in the middle of its footprint, turned the way it faces.
 export function placesOf(map: WorldMap): ChunkLayer {
   const built = new Map<string, THREE.Object3D | null>();
+  const looks = new Map<string, THREE.Object3D | null>();
   const make = (place: PlaceData): THREE.Object3D | null => {
     if (!built.has(place.id)) {
-      const model = placeModel(place);
-      if (model) {
-        const [cx, cz] = place.kind === 'building' ? centreOf(place) : place.at;
-        model.root.position.set(cx, map.groundY(...place.at), cz);
-        model.root.rotation.y = place.facing ?? 0;
-        model.animate(0, 0);
+      const look = lookOf(place);
+      if (!looks.has(look)) {
+        const model = placeModel(place);
+        model?.animate(0, 0);
+        looks.set(look, model?.root ?? null);
       }
-      built.set(place.id, model?.root ?? null);
+      const root = looks.get(look)?.clone() ?? null; // (a clone shares its meshes' geometry)
+      if (root) {
+        const [cx, cz] = place.kind === 'building' ? centreOf(place) : place.at;
+        root.position.set(cx, map.groundY(...place.at), cz);
+        root.rotation.y = place.facing ?? 0;
+      }
+      built.set(place.id, root);
     }
     return built.get(place.id)!;
   };

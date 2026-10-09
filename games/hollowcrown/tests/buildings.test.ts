@@ -49,6 +49,19 @@ describe('Brindleford\'s buildings', () => {
     expect(counts).toMatchSnapshot();
   });
 
+  it('share their meshes where they look alike: fewer builds than buildings', () => {
+    const layer = placesOf(map);
+    const keys = new Set(drawn.map((p) => `${Math.floor(p.at[0] / 16)},${Math.floor(p.at[1] / 16)}`));
+    const geometries = new Set<THREE.BufferGeometry>();
+    for (const o of [...keys].flatMap((k) => layer.build(k))) o.traverse((m) => (m as THREE.Mesh).isMesh && geometries.add((m as THREE.Mesh).geometry));
+    const meshes = drawn.reduce((n, p) => {
+      let count = 0;
+      placeModel(p)!.root.traverse((m) => (count += (m as THREE.Mesh).isMesh ? 1 : 0));
+      return n + count;
+    }, 0);
+    expect(geometries.size).toBeLessThan(meshes * 0.8);
+  });
+
   it('turn the mill\'s wheel', () => {
     const mill = placeModel(drawn.find((p) => p.id === 'brindle-mill')!)!;
     const wheel = mill.root.children[0].children.at(-1)!;
