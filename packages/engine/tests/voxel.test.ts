@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  box, colorAt, createGrid, erase, fillBox, fillEllipsoid, greedyMesh, namedPalette, over, recolor, roundNormals, setColor, stamp, wrap,
+  box, colorAt, createGrid, erase, fillBox, fillEllipsoid, greedyMesh, greedyMeshSplit, namedPalette, over, recolor, roundNormals, setColor, stamp, wrap,
 } from '../src/voxel';
 import * as THREE from 'three';
 
@@ -79,5 +79,20 @@ describe('meshing', () => {
     expect(one.getAttribute('position').count).toBeLessThan(both.getAttribute('position').count);
     const rounded = roundNormals(both.clone(), g, 1, new THREE.Vector3());
     expect(rounded.getAttribute('position').count).toBe(both.getAttribute('position').count);
+  });
+
+  it('sorts the faces into two meshes in one pass, as two filtered passes would', () => {
+    const g = createGrid([12, 10, 8]);
+    fillBox(g, 0, 0, 0, 11, 9, 7, 1);
+    fillBox(g, 3, 3, 7, 5, 5, 7, 2); // a window on the front
+    fillBox(g, 8, 2, 7, 9, 6, 7, 3);
+    const palette = [0x887766, 0xffcc66, 0x553322];
+    const origin = new THREE.Vector3();
+    const glows = (c: number) => c === 2;
+    const [lit, glowing] = greedyMeshSplit(g, palette, 0.1, origin, glows);
+    const positions = (geometry: THREE.BufferGeometry) => [...geometry.getAttribute('position').array];
+    expect(positions(lit)).toEqual(positions(greedyMesh(g, palette, 0.1, origin, (c) => !glows(c))));
+    expect(positions(glowing)).toEqual(positions(greedyMesh(g, palette, 0.1, origin, glows)));
+    expect(positions(glowing).length).toBeGreaterThan(0);
   });
 });
