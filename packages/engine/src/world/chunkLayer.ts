@@ -3,6 +3,7 @@
 import type * as THREE from 'three';
 
 export interface ChunkLayer {
+  readonly name?: string; // what it is (terrain, trees), for warnings
   readonly materials: THREE.Material[];
   chunkKeys(): Iterable<string>;
   build(chunkKey: string): THREE.Object3D[];

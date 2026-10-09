@@ -100,7 +100,9 @@ export class ChunkStreamer {
   }
 
   private stepsOf(chunk: Chunk, layer: ChunkLayer, key: string): Step[] {
-    const add = (objects: THREE.Object3D[]) => {
+    const add = (made: THREE.Object3D[]) => {
+      const objects = made.filter((o) => (o as THREE.Object3D | undefined)?.isObject3D);
+      if (objects.length < made.length) this.warnOnce(layer, key);
       if (objects.length === 0) return;
       chunk.group.add(...objects);
       const built = chunk.built.get(layer);
@@ -109,6 +111,14 @@ export class ChunkStreamer {
     };
     const steps = layer.buildSteps?.(key) ?? [() => layer.build(key)];
     return steps.map((step) => () => add(step()));
+  }
+
+  // A layer that built something not a 3D object (undefined, null), told once: what it built is left out.
+  private readonly warned = new Set<ChunkLayer>();
+  private warnOnce(layer: ChunkLayer, key: string): void {
+    if (this.warned.has(layer)) return;
+    this.warned.add(layer);
+    console.warn(`chunk layer "${layer.name ?? `#${this.layers.indexOf(layer)}`}" built something not a 3D object in chunk ${key} (left out; told once)`);
   }
 
   private unload(key: string, group: THREE.Group): void {

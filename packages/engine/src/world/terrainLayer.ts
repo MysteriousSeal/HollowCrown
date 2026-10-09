@@ -83,6 +83,7 @@ export function terrainLayer(terrain: Terrain, tiers: readonly number[], surface
   }
   const [matrix, at, scale, turn] = [new THREE.Matrix4(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Quaternion()];
   return {
+    name: 'terrain',
     materials: [...kinds.values()].flatMap((k) => k.material),
     chunkKeys: () => chunkKeysIn(area),
     build(key) {
