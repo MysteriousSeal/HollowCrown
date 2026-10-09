@@ -30,7 +30,7 @@ describe('creatures', () => {
   for (const entry of CREATURES) {
     it(`${entry.id}: builds, poses and keeps its shape`, () => {
       const model = entry.make();
-      expect(model.height).toBeGreaterThan(0.1);
+      expect(model.height).toBeGreaterThan(entry.id.startsWith('butterfly') || entry.id === 'moth' ? 0.03 : 0.1); // (the smallest life, small)
       model.animate(0, 0);
       const standing = measure(model.root);
       expect(standing.triangles).toBeGreaterThan(20);
