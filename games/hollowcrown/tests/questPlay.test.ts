@@ -64,7 +64,7 @@ describe('quest play', () => {
 
   it('names anyone else speaking in a talk (Garrick, at the well with Cuthwin)', () => {
     const { world } = atStage('dawn');
-    expect(talkWith(world, 'Father Cuthwin').lines.at(-1)!.text).toMatch(/^Garrick Fenn: /);
+    expect(talkWith(world, 'Father Cuthwin').lines.at(-1)!.who).toBe('Garrick Fenn');
   });
 
   it('has only first words for someone the quests ask nothing of', () => {
