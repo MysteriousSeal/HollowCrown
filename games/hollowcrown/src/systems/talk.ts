@@ -1,9 +1,9 @@
 // Talking: pressing interact by a villager starts a talk with them. While it lasts, the villager stops where they
 // stand (no strolling: villagerDay.ts leaves the Talking alone), the two turn to face each other, and the hero stays
-// put. When it ends, they let each other go; the press that closed it doesn't start the talk again.
+// put, swinging nothing. When it ends, they let each other go; the press that closed it doesn't start the talk again.
 
 import { defineComponent, type Entity, type System, type World } from '@voxel/engine/ecs';
-import { FaceToward, Interact, MoveIntent, Wander, faceToward } from '@voxel/engine/gameplay';
+import { AttackIntent, FaceToward, Interact, MoveIntent, Wander, faceToward } from '@voxel/engine/gameplay';
 
 // Who's talking now (a villager in a talk has it).
 export const Talking = defineComponent<true>('Talking');
@@ -21,6 +21,8 @@ export function talkSystem(talk: Talk, hero: Entity, can: (entity: Entity) => bo
     name: 'talk',
     stage: 'input',
     update(world) {
+      // No swinging while talking, nor on the press that closed it (Space talks too).
+      if (talk.with !== null || talk.justEnded) world.remove(hero, AttackIntent);
       if (talk.with !== null) {
         world.add(hero, MoveIntent, { x: 0, z: 0 });
         world.add(talk.with, MoveIntent, { x: 0, z: 0 });
