@@ -46,6 +46,21 @@ describe('time scale', () => {
     expect(steps).toHaveLength(MAX_STEPS);
   });
 
+  it('lets each step\'s systems read an event once, however many steps a frame takes', () => {
+    const Ping = defineEvent<number>('Ping');
+    const world = new World();
+    let emitted = 0;
+    let read = 0;
+    const schedule = new Schedule().add(
+      { name: 'read', stage: 'input', update: (w) => (read += w.eventsOf(Ping).length) },
+      { name: 'emit', stage: 'simulate', update: (w) => (w.emit(Ping, 1), emitted++) },
+      { name: 'readAfter', stage: 'simulate', update: (w) => (read += w.eventsOf(Ping).length) },
+    );
+    schedule.frame(world, 1 / 60, { scale: 10 });
+    expect(emitted).toBe(10);
+    expect(read).toBe(10); // (by the system after the emitter, in its own step; never again in later steps)
+  });
+
   it('passes no time while paused, presenting still', () => {
     const world = new World();
     let simulated = 0;
