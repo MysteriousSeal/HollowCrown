@@ -1,4 +1,4 @@
-// A model viewer (a dev tool): every creature model of a game in a lineup, in the engine's light and look, a human
+// A model viewer (a dev tool): every model of a game (creatures, buildings) in a lineup, in the engine's light and look, a human
 // beside the one in focus for scale. Left/right pick a model; W walks them; space stops the turning; Z zooms in and
 // out; A frames the whole lineup.
 
@@ -34,6 +34,7 @@ export function startModelViewer(canvas: HTMLCanvasElement, label: HTMLElement, 
     model: Model;
     turn: THREE.Group;
     at: THREE.Vector3;
+    half: number; // half its widest, turning
     name: string;
   }
   let along = 0;
@@ -41,13 +42,14 @@ export function startModelViewer(canvas: HTMLCanvasElement, label: HTMLElement, 
     const model = make();
     const turn = new THREE.Group();
     turn.add(model.root);
-    const width = Math.max(0.5, model.height * 0.9);
+    const box = new THREE.Box3().setFromObject(model.root);
+    const width = Math.max(0.5, model.height * 0.9, Math.hypot(box.max.x - box.min.x, box.max.z - box.min.z)); // (its widest, turning)
     along += width / 2;
     const at = RIGHT.clone().multiplyScalar(along);
     along += width / 2 + GAP;
     turn.position.copy(at);
     scene.add(turn);
-    return { model, turn, at, name };
+    return { model, turn, at, half: width / 2, name };
   });
 
   const hero = humanModel();
@@ -104,7 +106,7 @@ export function startModelViewer(canvas: HTMLCanvasElement, label: HTMLElement, 
     }
     // The hero stands just left of the one in focus, facing the camera.
     const s = shown[selected];
-    const heroAt = s.at.clone().addScaledVector(RIGHT, -Math.max(0.35, s.model.height * 0.55)).add(new THREE.Vector3(0.15, 0, 0.15));
+    const heroAt = s.at.clone().addScaledVector(RIGHT, -Math.max(0.35, s.half + 0.1)).add(new THREE.Vector3(0.15, 0, 0.15));
     hero.root.position.set(heroAt.x, 0, heroAt.z);
     hero.animate(time, 0);
     hero.root.rotation.y = Math.PI / 4;
