@@ -102,14 +102,20 @@ export const mail = (x: number, y: number, z: number) => ((x + y + z) % 2 ? K.ma
 export function polearm(length: number, head: 'spear' | 'pike' | 'mace'): () => VoxelGrid {
   return () => {
     const g = createGrid([3, 3, length]);
-    fillBox(g, 1, 1, 0, 1, 1, length - 5, (_x, _y, z) => (z % 6 === 0 ? K.woodDark : K.wood));
+    const tip = length - 1;
+    fillBox(g, 1, 1, 0, 1, 1, head === 'mace' ? tip - 4 : tip - 6, (_x, _y, z) => (z % 6 === 0 ? K.woodDark : K.wood));
     if (head === 'mace') {
-      fillBox(g, 0, 0, length - 5, 2, 2, length - 2, (x, y, z) => ((x + y + z) % 2 ? K.steelDark : K.steelMid)); // flanged
-      fillBox(g, 1, 1, length - 1, 1, 1, length - 1, K.steel);
+      fillBox(g, 0, 0, tip - 4, 2, 2, tip - 1, (x, y, z) => ((x + y + z) % 2 ? K.steelDark : K.steelMid)); // flanged
+      fillBox(g, 1, 1, tip, 1, 1, tip, K.steel);
+    } else if (head === 'spear') {
+      fillBox(g, 1, 1, tip - 6, 1, 1, tip - 6, K.steelDark); // the socket
+      for (let i = 0; i < 6; i++) { // a leaf blade: widest low, narrowing to its point
+        const wide = i >= 1 && i <= 3;
+        fillBox(g, wide ? 0 : 1, 1, tip - 5 + i, wide ? 2 : 1, 1, tip - 5 + i, i === 5 || !wide ? K.steelMid : K.steel);
+      }
     } else {
-      fillBox(g, 1, 0, length - 5, 1, 2, length - 4, K.steelDark); // the socket
-      fillBox(g, 1, 1, length - 4, 1, 1, length - 1, K.steel);
-      if (head === 'spear') fillBox(g, 0, 1, length - 3, 2, 1, length - 2, K.steelMid); // a leaf blade
+      fillBox(g, 1, 1, tip - 5, 1, 1, tip, (_x, _y, z) => (z === tip ? K.steelMid : K.steel)); // a long square point
+      fillBox(g, 1, 1, tip - 11, 1, 1, tip - 6, K.steelDark); // the langets, strapping it down the haft
     }
     return g;
   };

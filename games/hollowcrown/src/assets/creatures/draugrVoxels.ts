@@ -186,12 +186,12 @@ export function draugrFrame(look: DraugrLook): FrameSpec {
       bulk(joint, g, o, look);
     },
     glows: DRAUGR_GLOW,
-    scale: look.bog ? 1.3 : 1.45,
+    scale: look.bog ? 1.3 : 1.6,
     gait: { ...SHAMBLE, speed: 0.8, legSwing: 0.4, armSwing: 0.15, sway: 0.05, lean: 0.08 },
     held: { rightArm: look.sword ? { grid: longsword, grip: [3.5, 1, 4.5], turn: [-0.8, 0, 0] } : { grid: axe, grip: [1.5, 5.5, 2], turn: [-1.1, 0, 0] } },
   };
 }
-export const DRAUGR = draugrFrame({ head: 'helm', beard: GREY, garb: 'fur', sword: false });
+export const DRAUGR = draugrFrame({ head: 'helm', beard: GREY, garb: 'mail', sword: false });
 export const BOG_DRAUGR = draugrFrame({ head: 'bare', beard: RED, garb: 'jerkin', sword: true, bog: true });
 
 // A long sword, held forward (+Z) from the hand: a pommel, a bound grip, a crossguard, a long straight blade, bright along its edge.

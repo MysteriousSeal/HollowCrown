@@ -1,4 +1,4 @@
-// A foe on two legs (skeletons, draugr, the horrors, people): the hero's joints (human/bodyVoxels.ts), each part
+// A creature on two legs (skeletons, the undead, monsters, people): the human body's joints (human/bodyVoxels.ts), each part
 // its own grid. A frame either paints its parts from nothing (a skeleton's bones) or starts from the human body
 // itself (`base`: a look) and dresses it, its grids padded round the body so gear can stand off it (a helm's brim, a
 // cloak, a skirt); one mesh a part, so nothing worn shares a face with the skin under it.
@@ -28,6 +28,8 @@ export interface Gait {
   sway: number; // side to side (radians), slow
   hover: number; // world units off the ground (bobbing), 0 to walk
   bob: number; // rise at each step
+  headBow?: number; // the head hung forward (radians), always
+  headTilt?: number; // and to one side
 }
 export const MARCH: Gait = { speed: 1.6, legSwing: 0.7, armSwing: 0.55, reach: 0, lean: 0, sway: 0, hover: 0, bob: 0.012 };
 export const SHAMBLE: Gait = { speed: 1.0, legSwing: 0.45, armSwing: 0.2, reach: 0, lean: 0.12, sway: 0.08, hover: 0, bob: 0.008 };
@@ -122,8 +124,8 @@ export class FrameModel implements CreatureModel {
     this.body.position.y = g.hover + (g.hover ? Math.sin(time * 1.8) * 0.02 : Math.abs(s) * g.bob + breath * (1 - walk));
     this.upper.rotation.x = g.lean;
     this.upper.rotation.z = Math.sin(time * 0.9) * g.sway;
-    j.head.rotation.x = breath * 4 - g.lean * 0.8; // (looking ahead, however low it's bent)
-    j.head.rotation.z = -this.upper.rotation.z * 0.6;
+    j.head.rotation.x = breath * 4 - g.lean * 0.8 + (g.headBow ?? 0); // (looking ahead, however low it's bent)
+    j.head.rotation.z = -this.upper.rotation.z * 0.6 + (g.headTilt ?? 0);
     for (const tick of this.ticks) tick(time, walk);
   }
 }

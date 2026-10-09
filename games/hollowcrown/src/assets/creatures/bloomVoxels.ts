@@ -24,13 +24,13 @@ const noise = (x: number, y: number, z: number, salt: number) => hashUnit(x * 7 
 
 const BLOOMER_LOOK: BodyLook = { build: 'male', skin: 2, hair: 3, dye: 3, hairStyle: 'cropped', beard: false, expression: 'calm' };
 
-// A poppy at (x, y, z) (body-relative), facing up: four white petals round a dark heart, one shaded.
+// A poppy at (x, y, z) (body-relative), facing up: a ring of white petals two voxels out round a dark heart, its cup
+// under it: big enough to read as a flower from the camera.
 function poppy(g: VoxelGrid, o: Size, x: number, y: number, z: number): void {
-  box(g, o, x - 1, y, z, x + 1, y, z, G.petal);
-  box(g, o, x, y, z - 1, x, y, z + 1, G.petal);
-  box(g, o, x - 1, y, z - 1, x - 1, y, z - 1, G.petalShade);
-  box(g, o, x, y, z, x, y, z, G.heart);
-  box(g, o, x, y + 1, z, x, y + 1, z, G.petalShade); // (its cup)
+  box(g, o, x - 2, y, z - 1, x + 2, y, z + 1, (px) => (Math.abs(px - x) === 2 ? G.petalShade : G.petal));
+  box(g, o, x - 1, y, z - 2, x + 1, y, z + 2, (_px, _py, pz) => (Math.abs(pz - z) === 2 ? G.petalShade : G.petal));
+  box(g, o, x - 1, y + 1, z - 1, x + 1, y + 1, z + 1, (px, _py, pz) => (px === x && pz === z ? G.heart : G.petal)); // (petals curling up)
+  box(g, o, x, y - 1, z, x, y - 1, z, G.stemDark);
 }
 
 function bloomerPaint(joint: Joint, g: VoxelGrid, o: Size): void {
@@ -80,7 +80,7 @@ function rootMat(model: FrameModel): void {
 }
 
 export const BLOOMER: FrameSpec = {
-  palette: bodyColors(bodyPalette(BLOOMER_LOOK), { skin: 0x8e8270, skinShade: 0x6e6454, skinLight: 0xa49884, skinDeep: 0x3a3028 }, [
+  palette: bodyColors(bodyPalette(BLOOMER_LOOK), { skin: 0x8e8270, skinShade: 0x6e6454, skinLight: 0xa49884, skinDeep: 0x3a3028, hair: 0x4a4236, hairLight: 0x5a5244, hairDark: 0x3a3329 }, [
     0x6a5a44, 0x4c4032, 0xc8d0a8, 0x8a9a6a, 0xf6f2ea, 0xd8d2c4, 0x2a2a22, 0x5a4a34, 0, 0, 0,
   ]),
   base: BLOOMER_LOOK,
@@ -100,8 +100,10 @@ function ashenPaint(joint: Joint, g: VoxelGrid, o: Size): void {
     if (c === C.eye || c === C.mouth) return G.ember; // burning eyes, an open burning mouth
     if (c === C.glint) return G.emberDim;
     if (c >= C.cloth && c <= C.clothLight) return noise(x, y, z, salt) < 0.5 ? G.ash : 0; // tatters, grey
+    // Cracks, not speckle: thin glowing seams running diagonally across the charred skin, brighter at their hearts.
+    const seam = (x * 3 + y * 5 + z * 2 + salt) % 19;
     const n = noise(x, y, z, salt + 30);
-    return n < 0.07 ? G.ember : n < 0.14 ? G.emberDim : 0; // embers in the cracks
+    return seam === 0 && n < 0.7 ? (n < 0.4 ? G.ember : G.emberDim) : 0;
   });
   if (joint === 'torso') box(g, o, -1, -2, 0, 9, -1, 4, (x, y, z) => ((x === -1 || x === 9 || z === 0 || z === 4) && noise(x, y, z, 27) < 0.5 ? G.ash : 0)); // a burnt hem
 }

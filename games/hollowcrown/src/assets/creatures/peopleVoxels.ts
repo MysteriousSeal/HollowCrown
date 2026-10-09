@@ -44,9 +44,8 @@ const pole = (grid: () => VoxelGrid): Held => ({ grid, grip: [1, 1, 5], turn: UP
 
 export const BANDIT = person({ build: 'male', skin: 2, hair: 3, dye: 3, hairStyle: 'shaggy', beard: true, expression: 'sly' }, {
   head: (g, o) => {
-    hood(g, o, (x, y, z) => (noise(x, y, z, 1) < 0.3 ? K.ragDark : K.rag));
-    box(g, o, 10, 10, 3, 11, 13, 3, (_x, y) => (y >= 12 ? K.red : K.redDark)); // the Red Hen's feathers
-    box(g, o, 11, 11, 4, 11, 12, 4, K.red);
+    hood(g, o, (x, y, z) => (noise(x, y, z, 1) < 0.3 ? K.redDark : K.red)); // a hood dyed red, the Red Hen's
+    for (const [x, z, h] of [[4, 3, 4], [5, 4, 5], [6, 3, 4], [5, 2, 3]]) box(g, o, x, 12, z, x, 11 + h, z, (_x, y) => (y >= 10 + h ? K.white : K.red)); // a crest of hen's feathers, white-tipped
   },
   torso: (g, o) => {
     torsoCover(g, o, (x, y, z) => (y === 3 ? (x === 4 && z === 4 ? K.steelMid : K.leatherDark) : y === 8 && z >= 3 ? K.red : noise(x, y, z, 2) < 0.15 ? K.rag : (x + y) % 5 ? K.leather : K.leatherLight));
@@ -67,8 +66,10 @@ export const BANDIT = person({ build: 'male', skin: 2, hair: 3, dye: 3, hairStyl
 
 const HERON_LOOK: BodyLook = { build: 'male', skin: 0, hair: 0, dye: 4, hairStyle: 'cropped', beard: false, expression: 'stern' };
 // The heron: standing, its long neck up, its beak to the right, white on the grey.
-const heron = (x: number, y: number) => ((x === 4 && y >= 4 && y <= 7) || (y === 7 && x === 5) || (y >= 2 && y <= 4 && x >= 3 && x <= 4) || (x === 3 && y <= 1) ? K.white : 0);
-const tabardFront = (x: number, y: number, z: number) => (x >= 2 && x <= 6 && (z === 4 || z === 0) ? (z === 4 && heron(x, y + 1) ? K.white : y === 8 ? K.greyDark : K.grey) : 0);
+// A heron standing: a body, a long neck rising to the head, the beak out to its right, legs below (x 1..7, y 0..8).
+const heron = (x: number, y: number) =>
+  (y >= 2 && y <= 4 && x >= 2 && x <= 5) || (x === 5 && y >= 5 && y <= 7) || (y === 8 && x >= 4 && x <= 5) || (y === 8 && x === 6) || (y === 7 && x === 7) || (y <= 1 && (x === 3 || x === 4)) ? K.white : 0;
+const tabardFront = (x: number, y: number, z: number) => (x >= 1 && x <= 7 && (z === 4 || z === 0) ? (z === 4 && heron(x, y) ? K.white : y === 8 ? K.greyDark : K.grey) : 0);
 
 const heronLegs = (g: VoxelGrid, o: Size) => {
   legCover(g, o, 1, 6, (_x, y) => (y === 6 ? K.greyDark : K.grey));
@@ -91,7 +92,7 @@ export const HERON_SPEARMAN = person(HERON_LOOK, {
 }, {
   held: {
     rightArm: pole(polearm(34, 'spear')),
-    leftArm: { grid: roundShield(K.grey, K.steelDark, (x, y) => heron(x - 1, y - 1)), grip: [5, 5, 0], turn: [0, 0.35, 0] },
+    leftArm: { grid: roundShield(K.grey, K.steelDark, (x, y) => heron(x, y - 1)), grip: [5, 5, 0], turn: [0, 0.35, 0] },
   },
 });
 
@@ -99,7 +100,7 @@ export const HERON_CROSSBOWMAN = person({ ...HERON_LOOK, skin: 1, hair: 2 }, {
   head: kettleHelm,
   torso: (g, o) => {
     torsoCover(g, o, (x, y) => (y === 3 ? K.leatherDark : x % 2 ? K.padded : K.paddedDark)); // the quilted coat
-    torsoCover(g, o, (x, y, z) => (z === 4 && heron(x, y + 1) && x >= 2 && x <= 6 ? K.greyLight : 0)); // the heron, stitched
+    torsoCover(g, o, (x, y, z) => (z === 4 && heron(x, y) ? K.white : 0)); // the heron, stitched
     skirt(g, o, 3, (x) => (x % 2 ? K.padded : K.paddedDark));
   },
   arm: (g, o) => sleeves(g, o, 2, (_x, y) => (y % 2 ? K.padded : K.paddedDark)),
@@ -112,7 +113,7 @@ export const GREENHOOD = person({ build: 'male', skin: 2, hair: 0, dye: 2, hairS
   head: (g, o) => {
     hood(g, o, (x, y, z) => ((x + y + z) % 5 === 0 ? K.greenDark : K.green));
     brow(g, o, () => K.greenDark);
-    over(g, o, (x, y, z) => (z === 10 && y >= 4 && y <= 6 && x >= 1 && x <= 9 && (x + y) % 3 !== 0 ? K.charcoal : 0)); // smeared across the eyes
+    over(g, o, (x, y, z) => (z === 10 && ((y === 3 && (x === 2 || x === 3 || x === 7 || x === 8)) || (y === 2 && (x === 3 || x === 7))) ? K.charcoal : 0)); // charcoal streaked down from the eyes
   },
   torso: (g, o) => {
     torsoCover(g, o, (x, y, z) => (y === 3 ? K.leatherDark : y === 8 ? K.green : (x + z) % 4 === 0 ? K.leatherLight : K.leather));
@@ -139,9 +140,9 @@ export const LANTERN_KNIGHT = person({ build: 'male', skin: 0, hair: 4, dye: 4, 
   head: bascinet,
   torso: (g, o) => {
     torsoCover(g, o, (x, y, z) => (y === 8 ? K.steel : x === 0 || x === 8 ? K.steelDark : z === 4 ? K.steel : K.steelMid));
-    torsoCover(g, o, (x, y, z) => (x >= 1 && x <= 7 && y <= 7 && (z === 4 || z === 0) ? (y === 3 ? K.leatherDark : (x + y) % 6 === 0 ? K.grey : K.greyLight) : 0)); // the surcoat
+    torsoCover(g, o, (x, y, z) => (x >= 1 && x <= 7 && y <= 7 && (z === 4 || z === 0) ? (y === 3 ? K.leatherDark : x === 1 || x === 7 || y === 7 ? K.brassDark : K.charcoal) : 0)); // the surcoat, dark, brass-edged
     lanternOnBreast(g, o);
-    skirt(g, o, 4, (x, y, z) => (x >= 1 && x <= 7 && (z === -1 || z === 5) ? (y === -4 ? K.greyDark : K.greyLight) : y >= -2 ? K.steelMid : 0)); // its skirts, steel at the hips
+    skirt(g, o, 4, (x, y, z) => (x >= 1 && x <= 7 && (z === -1 || z === 5) ? (y === -4 ? K.brassDark : K.charcoal) : y >= -2 ? K.steelMid : 0)); // its skirts, steel at the hips
   },
   arm: (g, o) => {
     plate(g, o, 0, 8, 4);
@@ -166,7 +167,7 @@ const carrow = (held: Partial<FrameSpec['held']>) =>
     head: (g, o) => sallet(g, o, K.plume),
     torso: (g, o) => {
       torsoCover(g, o, (x) => parti(x));
-      torsoCover(g, o, (x, y, z) => (y >= 4 && (z === 4 || z === 0 || x === 0 || x === 8) ? (y === 8 || x === 4 ? K.steel : K.steelMid) : y === 3 ? K.leatherDark : 0)); // the breastplate
+      torsoCover(g, o, (x, y, z) => (y >= 5 && y <= 7 && z === 4 && x >= 3 && x <= 5 ? (x === 4 ? K.steel : K.steelMid) : y === 3 ? K.leatherDark : 0)); // a breastplate over the chest's middle, the colours round it
       skirt(g, o, 3, (x, y, z) => (y >= -1 && (z === 5 || z === -1) ? K.steelMid : parti(x < 4 ? 0 : 8, z < 0)));
     },
     arm: (g, o, j) => {

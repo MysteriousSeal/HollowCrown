@@ -8,7 +8,7 @@ import { SHADE, personMaterial } from '../human/humanParts';
 
 export type Size = [number, number, number];
 
-// Beasts' voxels (and held arms'): a little coarser than the body's 1/60, as EvenHold's.
+// Beasts' voxels (and held arms'): a little coarser than the body's 1/60.
 export const CREATURE_VOXEL = 0.025;
 
 // A creature on screen, as the model viewer (and the game) drives it: placed by its root, posed each frame from
@@ -48,7 +48,7 @@ export const creatureMaterial = (): THREE.MeshStandardMaterial => (lit ??= perso
 // Eyes, embers, venom: drawn unlit, so they burn in the dark (and bloom).
 let glow: THREE.MeshBasicMaterial | null = null;
 export const glowMaterial = (): THREE.MeshBasicMaterial => (glow ??= new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false }));
-// The see-through dead (ghosts, the Hungry): lit, but faded.
+// The see-through dead (ghosts, wraiths): lit, but faded.
 // `glow`: the cold light they give off of themselves (a ghost's blue; a sicklier one's grey-green).
 export function spectralMaterial(opacity: number, glow = 0x6688bb): THREE.MeshStandardMaterial {
   return new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, transparent: true, opacity, depthWrite: false, emissive: glow, emissiveIntensity: 0.35 });

@@ -1,4 +1,4 @@
-// A spider (its parts given by a SpiderSpec), after EvenHold's spider rig: its parts
+// A spider (its parts given by a SpiderSpec): its parts
 // on their joints. Walking, its legs go in two alternating fours (one side's first and third with the other's second
 // and fourth), each swung on and lifted; at rest, now and then a leg twitches, its abdomen swells as it breathes, its
 // fangs work.

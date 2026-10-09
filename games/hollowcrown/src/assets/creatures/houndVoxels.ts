@@ -9,9 +9,9 @@ import { hashUnit, namedPalette } from '@voxel/engine/characters/creatures/creat
 import { BODY_GRID, HEAD_GRID, LEG_GRID, TAIL_GRID } from './wolfVoxels';
 
 const P = namedPalette({
-  bone: 0xf2f0e8,
-  boneShade: 0xcac8c0,
-  boneDark: 0x8a8884,
+  bone: 0xe4e8e8,
+  boneShade: 0xb4bcbe,
+  boneDark: 0x767e82,
   hide: 0x2e2622,
   hideDark: 0x1e1816,
   iron: 0x5e6268,

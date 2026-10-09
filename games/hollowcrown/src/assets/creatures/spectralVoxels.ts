@@ -68,6 +68,6 @@ export const GHOST: FrameSpec = {
   base: GHOST_LOOK,
   paint: ghostPaint,
   glows: GLOW,
-  material: spectralMaterial(0.86),
+  material: spectralMaterial(0.62, 0x7aa8e8),
   gait: DRIFT,
 };

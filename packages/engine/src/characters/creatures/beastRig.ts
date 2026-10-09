@@ -1,4 +1,4 @@
-// A four-legged creature (a wolf, a boar, a bear, a hound...): voxel parts on joints, after EvenHold's beast rig.
+// A four-legged creature (a wolf, a boar, a bear, a hound...): voxel parts on joints.
 // Walking, its legs trot in diagonal pairs with a bob of the body and the head; standing, it breathes, its head
 // turns now and then, its tail wags low.
 

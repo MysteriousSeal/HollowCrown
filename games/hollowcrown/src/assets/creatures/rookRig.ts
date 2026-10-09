@@ -11,7 +11,7 @@ import { CREATURE_VOXEL as V, addPart, addShade, joint, namedPalette, type Creat
 
 const colors = {
   feather: 0x221f26,
-  sheen: 0x3c3858,
+  sheen: 0x2e3442,
   featherDark: 0x121014,
   nape: 0x221f26, // (the leader's greyer)
   face: 0xb4a49c,
@@ -44,12 +44,14 @@ function body(): VoxelGrid {
 // The head: the skull dark, the bald grey face round the beak's base, the beak long and heavy, eyes either side.
 function head(): VoxelGrid {
   const g = createGrid(HEAD);
-  fillBox(g, 0, 0, 0, 4, 4, 3, (_x, y) => (y === 4 ? C.sheen : C.feather));
-  fillBox(g, 0, 0, 2, 4, 3, 3, C.face); // bald-faced
+  for (let x = 0; x < 5; x++) for (let y = 0; y < 5; y++) for (let z = 0; z < 4; z++) { // a round skull
+    if (((x - 2) / 2.6) ** 2 + ((y - 2.2) / 2.5) ** 2 + ((z - 1.6) / 2.3) ** 2 > 1) continue;
+    setColor(g, x, y, z, z >= 2 && y <= 3 ? C.face : y >= 4 ? C.sheen : C.feather); // bald-faced in front
+  }
   fillBox(g, 1, 4, 0, 3, 4, 1, C.nape);
   setColor(g, 0, 3, 3, C.eye);
   setColor(g, 4, 3, 3, C.eye);
-  fillBox(g, 1, 1, 4, 3, 2, 5, (_x, y) => (y === 2 ? C.beakLight : C.beak)); // the beak
+  fillBox(g, 1, 1, 4, 3, 2, 5, (_x, y) => (y === 2 ? C.beakLight : C.beak)); // the beak, long and heavy, tapering
   fillBox(g, 2, 1, 6, 2, 2, 6, C.beak);
   setColor(g, 2, 1, 7, C.beak);
   return g;
@@ -58,11 +60,14 @@ function head(): VoxelGrid {
 // A wing, folded: from the shoulder (high z) back past the tail, the long primaries ragged at the tip.
 function wing(): VoxelGrid {
   const g = createGrid(WING);
-  fillBox(g, 0, 0, 0, 1, 2, 9, (x, y, z) => {
-    if (z < 3 && y === 2 && z % 2 === 0) return 0; // (ragged tips)
-    if (y === 2) return x === 1 ? C.sheen : C.feather;
-    return z < 4 ? C.featherDark : C.feather;
-  });
+  for (let z = 0; z < 10; z++) {
+    const top = z >= 6 ? 2 : z >= 3 ? 1 : 0; // deep at the shoulder, thinning back to the primaries
+    const outer = z >= 2 ? 1 : 0; // the tips one feather thick
+    for (let y = 0; y <= top; y++) for (let x = 0; x <= outer; x++) {
+      if (z < 3 && z % 2 === 1) continue; // (ragged tips: the long primaries apart)
+      setColor(g, x, y, z, y === top && x === outer ? C.sheen : z < 4 ? C.featherDark : C.feather);
+    }
+  }
   return g;
 }
 
