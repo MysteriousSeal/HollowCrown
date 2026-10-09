@@ -1,4 +1,5 @@
-// QA: MQ01's first fight can be won. The Birchwood's two wolves (as wildlife.ts makes them) against the hero (as
+// QA: MQ01's first fight can be won. The Birchwood's two wolves (the 'birchwood-wolves' encounter, as the foes' data
+// makes them) against the hero (as
 // combat.ts makes them), through the engine's real systems on open ground: a player who stands and swings at the
 // nearest wolf kills both and lives; one who stands still and doesn't fight dies.
 
@@ -11,19 +12,21 @@ import {
 import { TerrainResource, flatTerrain } from '@voxel/engine/world';
 import { HERO } from '../../src/data/hero';
 import { HERO_SIDE } from '../../src/features/combat';
-import { WILDLIFE } from '../../src/features/wildlife';
+import { BRINDLE_VALE_ENCOUNTERS } from '../../src/data/world/encounters';
+import { FOES } from '../../src/systems/foes';
 
 function fight(swings: boolean) {
   const world = new World();
   world.setResource(TerrainResource, flatTerrain({ width: 200, depth: 200 }, 1));
   const { damage, ...blow } = HERO.blow;
   const hero = world.spawn([Player, true], [Transform, { x: 100, y: 0, z: 100, facing: 0 }], [Health, health(HERO.hp)], [Attack, attack(damage, blow)], [Faction, HERO_SIDE]);
-  const wolves = WILDLIFE.filter((a) => a.creature === 'wolf').map((w, i) => {
+  const pack = BRINDLE_VALE_ENCOUNTERS.find((e) => e.id === 'birchwood-wolves')!;
+  const f = FOES[pack.foe];
+  const wolves = Array.from({ length: pack.count }, (_, i) => {
     const [x, z] = [100 + i * 1.5, 104];
-    const f = w.fights!;
     return world.spawn(
-      [Transform, { x, y: 0, z, facing: Math.PI }], [MoveSpeed, w.speed], [Wander, wander({ x, z }, { radius: w.roam, speed: w.speed })],
-      [Health, health(w.hp)], [Faction, w.creature], [Hostile, hostile({ sight: f.sight, speed: f.run, home: { x, z } })], [Attack, attack(f.damage, { cooldown: f.cooldown })],
+      [Transform, { x, y: 0, z, facing: Math.PI }], [MoveSpeed, f.speed], [Wander, wander({ x, z }, { radius: 4, speed: f.speed })],
+      [Health, health(f.hp)], [Faction, pack.foe], [Hostile, hostile({ sight: f.sight, speed: f.run, home: { x, z } })], [Attack, attack(f.damage, { cooldown: f.cooldown })],
     );
   });
   const [health1, health2] = healthSystems();

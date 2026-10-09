@@ -12,6 +12,7 @@ export const SQ_BV2: Quest = {
   level: 2,
   minutes: 30,
   starts: 'after SQ-BV1, or the third talk with Kit',
+  start: { after: ['SQ-BV1'], giver: 'Kit' },
   places: ['cobbe-barn', 'kingsmere', 'hollow-oak', 'brindleford'],
   stages: [
     {

@@ -7,5 +7,6 @@ export const CONTROLS: Array<[string, string]> = [
   ['E', 'Talk, use'],
   ['M', 'Map (+ and − to zoom)'],
   ['J', 'Journal (W and S to pick a quest)'],
+  ['N', 'Sound on or off'],
   ['Esc', 'Pause, close'],
 ];

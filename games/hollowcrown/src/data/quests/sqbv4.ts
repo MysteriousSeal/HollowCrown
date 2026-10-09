@@ -11,6 +11,7 @@ export const SQ_BV4: Quest = {
   level: 3,
   minutes: 25,
   starts: "after MQ02: Father Cuthwin, given the Bell-Tongue",
+  start: { after: ['MQ02'], giver: 'Father Cuthwin' },
   places: ['shrine-house', 'smithy', 'quiet-bell-chapel', 'famine-pit'],
   stages: [
     {

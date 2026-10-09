@@ -22,6 +22,8 @@ import { MULE } from './muleVoxels';
 import { FOX, RABBIT } from './smallBeasts';
 import { DEER_DOE, DEER_STAG } from './deerVoxels';
 import { COW, DOG, SHEEP } from './farmBeasts';
+import { BRIMSTONE, CABBAGE_WHITE, FROG, MOTH, PEACOCK } from './smallLife';
+import { CHAFFINCH, CROW, HEN_BROWN, HEN_WHITE, MALLARD_DRAKE, MALLARD_DUCK, SPARROW } from './birdVoxels';
 import { Lying } from './lying';
 import { PerchedFlock } from './perched';
 import { HOBS_TOWER_GUARD } from '../people/hobsTower';
@@ -45,6 +47,18 @@ export const CREATURES: CreatureEntry[] = [
   { id: 'sheep', name: 'Sheep', family: 'beast', make: () => new BeastModel(SHEEP) },
   { id: 'cow', name: 'Cow', family: 'beast', make: () => new BeastModel(COW) },
   { id: 'dog', name: 'Farm dog', family: 'beast', make: () => new BeastModel(DOG) },
+  { id: 'sparrow', name: 'House sparrow', family: 'beast', make: () => new BirdModel(SPARROW) },
+  { id: 'chaffinch', name: 'Chaffinch', family: 'beast', make: () => new BirdModel(CHAFFINCH) },
+  { id: 'crow', name: 'Crow', family: 'beast', make: () => new BirdModel(CROW) },
+  { id: 'mallardDrake', name: 'Mallard (drake)', family: 'beast', make: () => new BirdModel(MALLARD_DRAKE) },
+  { id: 'mallardDuck', name: 'Mallard (duck)', family: 'beast', make: () => new BirdModel(MALLARD_DUCK) },
+  { id: 'henBrown', name: 'Hen (brown)', family: 'beast', make: () => new BirdModel(HEN_BROWN) },
+  { id: 'henWhite', name: 'Hen (white)', family: 'beast', make: () => new BirdModel(HEN_WHITE) },
+  { id: 'butterflyWhite', name: 'Cabbage white', family: 'beast', make: () => new BirdModel(CABBAGE_WHITE) },
+  { id: 'butterflyPeacock', name: 'Peacock butterfly', family: 'beast', make: () => new BirdModel(PEACOCK) },
+  { id: 'butterflyBrimstone', name: 'Brimstone', family: 'beast', make: () => new BirdModel(BRIMSTONE) },
+  { id: 'moth', name: 'Moth', family: 'beast', make: () => new BirdModel(MOTH) },
+  { id: 'frog', name: 'Frog', family: 'beast', make: () => new BeastModel(FROG) },
   { id: 'mule', name: 'Mule', family: 'beast', make: () => new BeastModel(MULE) },
   { id: 'spider', name: 'Giant spider', family: 'beast', make: () => new SpiderModel(CAVE_SPIDER) },
   { id: 'spiderling', name: 'Spiderling', family: 'beast', make: () => new SpiderModel(HATCHLING) },

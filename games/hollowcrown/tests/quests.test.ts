@@ -35,6 +35,8 @@ describe('the quests', () => {
         }
       }
       for (const next of q.next) expect(next).toMatch(/^(MQ|SQ-)/);
+      for (const before of q.start.after) expect(QUESTS[before], `${q.id} after ${before}`).toBeDefined();
+      if (q.start.giver) expect(PEOPLE_DATA[q.start.giver], `${q.id}'s giver`).toBeDefined();
     });
   }
 });

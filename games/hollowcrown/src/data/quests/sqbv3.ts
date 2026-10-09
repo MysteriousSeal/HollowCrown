@@ -11,6 +11,7 @@ export const SQ_BV3: Quest = {
   level: 3,
   minutes: 30,
   starts: 'after MQ02: Agna Bee, at her hives',
+  start: { after: ['MQ02'], giver: 'Agna Bee' },
   places: ['tallow-green', 'agnas-hives', 'clover-meadow', 'nine-sisters'],
   stages: [
     {

@@ -204,6 +204,57 @@ exports[`creatures > broodMother: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > butterflyBrimstone: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.061,
+  "max": [
+    0.044,
+    0.044,
+    0.044,
+  ],
+  "min": [
+    -0.044,
+    -0,
+    -0.079,
+  ],
+  "triangles": 124,
+}
+`;
+
+exports[`creatures > butterflyPeacock: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.061,
+  "max": [
+    0.044,
+    0.044,
+    0.044,
+  ],
+  "min": [
+    -0.044,
+    -0,
+    -0.079,
+  ],
+  "triangles": 124,
+}
+`;
+
+exports[`creatures > butterflyWhite: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.061,
+  "max": [
+    0.044,
+    0.044,
+    0.044,
+  ],
+  "min": [
+    -0.044,
+    -0,
+    -0.079,
+  ],
+  "triangles": 124,
+}
+`;
+
 exports[`creatures > carrowArbalester: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.45,
@@ -238,6 +289,23 @@ exports[`creatures > carrowPikeman: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > chaffinch: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.213,
+  "max": [
+    0.075,
+    0.188,
+    0.125,
+  ],
+  "min": [
+    -0.075,
+    -0,
+    -0.075,
+  ],
+  "triangles": 376,
+}
+`;
+
 exports[`creatures > cow: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.413,
@@ -252,6 +320,23 @@ exports[`creatures > cow: builds, poses and keeps its shape 1`] = `
     -0.268,
   ],
   "triangles": 406,
+}
+`;
+
+exports[`creatures > crow: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.266,
+  "max": [
+    0.106,
+    0.266,
+    0.255,
+  ],
+  "min": [
+    -0.106,
+    0,
+    -0.128,
+  ],
+  "triangles": 790,
 }
 `;
 
@@ -391,6 +476,23 @@ exports[`creatures > fox: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > frog: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.113,
+  "max": [
+    0.075,
+    0.125,
+    0.1,
+  ],
+  "min": [
+    -0.075,
+    -0,
+    -0.063,
+  ],
+  "triangles": 172,
+}
+`;
+
 exports[`creatures > ghost: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.45,
@@ -439,6 +541,40 @@ exports[`creatures > hamund: builds, poses and keeps its shape 1`] = `
     -0.112,
   ],
   "triangles": 3184,
+}
+`;
+
+exports[`creatures > henBrown: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.338,
+  "max": [
+    0.1,
+    0.313,
+    0.15,
+  ],
+  "min": [
+    -0.1,
+    0,
+    -0.1,
+  ],
+  "triangles": 542,
+}
+`;
+
+exports[`creatures > henWhite: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.338,
+  "max": [
+    0.1,
+    0.313,
+    0.15,
+  ],
+  "min": [
+    -0.1,
+    0,
+    -0.1,
+  ],
+  "triangles": 542,
 }
 `;
 
@@ -541,6 +677,57 @@ exports[`creatures > lanternKnight: builds, poses and keeps its shape 1`] = `
     -0.108,
   ],
   "triangles": 1844,
+}
+`;
+
+exports[`creatures > mallardDrake: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.263,
+  "max": [
+    0.1,
+    0.238,
+    0.225,
+  ],
+  "min": [
+    -0.1,
+    -0,
+    -0.125,
+  ],
+  "triangles": 618,
+}
+`;
+
+exports[`creatures > mallardDuck: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.263,
+  "max": [
+    0.1,
+    0.238,
+    0.225,
+  ],
+  "min": [
+    -0.1,
+    -0,
+    -0.125,
+  ],
+  "triangles": 610,
+}
+`;
+
+exports[`creatures > moth: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.066,
+  "max": [
+    0.047,
+    0.047,
+    0.056,
+  ],
+  "min": [
+    -0.047,
+    -0,
+    -0.084,
+  ],
+  "triangles": 124,
 }
 `;
 
@@ -915,6 +1102,23 @@ exports[`creatures > skeletonArcher: builds, poses and keeps its shape 1`] = `
     -0.175,
   ],
   "triangles": 1410,
+}
+`;
+
+exports[`creatures > sparrow: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.213,
+  "max": [
+    0.075,
+    0.188,
+    0.125,
+  ],
+  "min": [
+    -0.075,
+    -0,
+    -0.075,
+  ],
+  "triangles": 374,
 }
 `;
 

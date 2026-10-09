@@ -34,7 +34,7 @@ describe('the place label', () => {
 
 describe('the controls page', () => {
   it('lists walking, sprint, talk, the map, the journal and pause', () => {
-    expect(CONTROLS.map(([key]) => key)).toEqual(['WASD', 'Shift', 'E', 'M', 'J', 'Esc']);
+    expect(CONTROLS.map(([key]) => key)).toEqual(['WASD', 'Shift', 'E', 'M', 'J', 'N', 'Esc']);
   });
 });
 

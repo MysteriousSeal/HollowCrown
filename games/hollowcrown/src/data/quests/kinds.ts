@@ -50,7 +50,8 @@ export interface Quest {
   act: 'prologue' | 'act-1' | 'act-2' | 'act-3';
   level: number;
   minutes: number; // about how long it plays
-  starts: string; // what starts it
+  starts: string; // what starts it, in words
+  start: { after: string[]; giver?: string }; // the quests done first; who gives it (a villager's name; none: it starts by itself)
   places: string[]; // every place or area it uses, by id
   stages: QuestStage[];
   rewards: { xp: number; copper?: number; items: string[]; other: string[] };

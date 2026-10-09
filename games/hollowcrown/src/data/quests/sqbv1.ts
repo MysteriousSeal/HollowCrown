@@ -11,6 +11,7 @@ export const SQ_BV1: Quest = {
   level: 2,
   minutes: 25,
   starts: 'after MQ01: Dunstan, or the notice board',
+  start: { after: ['MQ01'], giver: 'Dunstan' },
   places: ['brindle-mill', 'brindleford-notices', 'famine-pit', 'hanging-oak', 'herbalists-cottage', 'shrine-house', 'reeves-house'],
   stages: [
     {
