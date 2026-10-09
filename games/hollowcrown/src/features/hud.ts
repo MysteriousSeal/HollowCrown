@@ -1,12 +1,12 @@
 // The HUD over the scene (styled in index.html): the region's name fading in large as the hero comes into it (and
 // at the start); villagers' names over their heads as the hero nears them; the named place the hero is near, small
 // in the top-left corner, and notices sliding in under it (a quest started, an objective done, a new place); the time
-// of day in the top-right, the quest followed under it; what E would do, low in the middle; the conversation screen (ConversationScreen, for gameplay to open); and the screens
+// of day in the top-right, the quest followed under it; the hero's health, bottom left; what E would do, low in the middle; the conversation screen (ConversationScreen, for gameplay to open); and the screens
 // that pause the game (ui/pausingScreens.ts: the map, the journal, the pause menu).
 
 import type { System } from '@voxel/engine/ecs';
-import { InReach, TimeOfDay, Transform } from '@voxel/engine/gameplay';
-import { Banner, Conversation, CornerLabel, Prompt, Toasts, TrackerPanel, WorldLabels, createOverlay, fadeByDistance, type WorldLabel } from '@voxel/engine/ui';
+import { Health, InReach, TimeOfDay, Transform } from '@voxel/engine/gameplay';
+import { Banner, Conversation, CornerLabel, Meter, Prompt, Toasts, TrackerPanel, WorldLabels, createOverlay, fadeByDistance, type WorldLabel } from '@voxel/engine/ui';
 import { Resident } from '../systems/villagerDay';
 import { clockText, nearPlaceName, regionBanner, regionOf } from '../ui/hudText';
 import { pausingScreens } from '../ui/pausingScreens';
@@ -33,6 +33,7 @@ export const hud: Feature = {
     const tracker = new TrackerPanel(root);
     const toasts = new Toasts(root);
     const prompt = new Prompt(root);
+    const heroHealth = new Meter(root, 'ui-hero-health');
     const conversation = world.setResource(ConversationScreen, new Conversation(root));
     const placeholderLog = startLog();
     const logOf = () => (world.hasResource(QuestLog) ? world.resource(QuestLog) : placeholderLog);
@@ -64,6 +65,10 @@ export const hud: Feature = {
         questsWere = snapshot(log);
         const reach = world.hasResource(InReach) ? world.resource(InReach) : null;
         prompt.set(reach?.entity != null && !conversation.isOpen ? 'E' : null, reach?.label);
+
+        const life = world.get(hero, Health);
+        heroHealth.el.hidden = !life;
+        if (life) heroHealth.set(life.hp, life.max);
 
         const at = world.get(hero, Transform);
         if (!at) return;
