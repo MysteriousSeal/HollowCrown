@@ -1,7 +1,8 @@
 // The quests: MQ01 starts with the game, at the Pilgrim's Shrine, and the quest book (systems/quests.ts) is kept as
 // the hero plays. Being somewhere does a 'go', a 'search' or a 'take' there; reaching a choice that's nobody's (a
-// body in a ditch) asks it there; talking to someone does what's asked of them (features/talk.ts). A stage with an
-// hour moves the clock to it. The HUD's quest log (its tracker, journal, notices) is the book itself.
+// body in a ditch) asks it there; talking to someone does what's asked of them (features/talk.ts); enough of a foe
+// killed wins a fight. A stage with an hour moves the clock to it. The HUD's quest log (its tracker, journal,
+// notices) is the book itself.
 
 import type { System, World } from '@voxel/engine/ecs';
 import { TimeOfDay, Transform } from '@voxel/engine/gameplay';
@@ -10,6 +11,7 @@ import type { Point, WorldMap } from '@voxel/engine/world';
 import { PEOPLE_DATA } from '../data/people';
 import type { Spot } from '../data/people/kinds';
 import { QUESTS, type Line, type Objective, type QuestStage } from '../data/quests';
+import { deathsOf, isWhat, needed } from '../systems/kills';
 import { Quests, completeObjective, newBook, openObjectives, startQuest } from '../systems/quests';
 import { ConversationScreen, QuestLog } from '../ui/screens';
 import type { Feature } from './context';
@@ -74,15 +76,25 @@ export function talkWith(world: World, name: string): { lines: ConversationLine[
   };
 }
 
-// Each frame: whatever the hero has reached done, and a choice that's nobody's asked where it's found.
+// Each frame: whatever the hero has reached done, a choice that's nobody's asked where it's found, and each death
+// counted toward the fight it's part of (done once enough have fallen).
 function questSystem(map: WorldMap, hero: number): System {
+  const kills = new Map<string, number>(); // by quest/objective
   return {
     name: 'quests',
     stage: 'simulate',
     update(world) {
       const at = world.get(hero, Transform);
       if (!at || !world.hasResource(Quests)) return;
+      const deaths = deathsOf(world);
       for (const { quest, objective } of openObjectives(world.resource(Quests), QUESTS)) {
+        if (objective.kind === 'fight' && objective.what) {
+          const key = `${quest}/${objective.id}`;
+          const fallen = (kills.get(key) ?? 0) + deaths.filter((d) => isWhat(objective.what!, d)).length;
+          kills.set(key, fallen);
+          if (fallen >= needed(objective)) complete(world, quest, objective.id);
+          continue;
+        }
         if (!objective.at || objective.who || !isAt(map, objective.at, at.x, at.z)) continue;
         if (BY_BEING_THERE.has(objective.kind)) complete(world, quest, objective.id);
         else if (objective.kind === 'choose') ask(world, quest, objective);
