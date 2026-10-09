@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { loadWorldMap } from '@voxel/engine/world';
 import { PLACE_KINDS, START_PLACE, WORLD_MAP } from '../src/data/world';
 import { CONTROLS } from '../src/ui/controls';
+import { riseChoices } from '../src/ui/deathScreen';
 import { clockText, nearPlaceName, regionBanner, regionOf } from '../src/ui/hudText';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
@@ -44,5 +45,12 @@ describe('the clock', () => {
     expect(clockText(6.25)).toBe('Dawn · 06:10');
     expect(clockText(23.99)).toBe('Night · 23:50');
     expect(clockText(24.5)).toBe('Night · 00:30');
+  });
+});
+
+describe('the death screen', () => {
+  it('offers the last rest only once the hero has rested, and always the shrine', () => {
+    expect(riseChoices(false).map((c) => c.at)).toEqual(['shrine']);
+    expect(riseChoices(true).map((c) => c.at)).toEqual(['rest', 'shrine']);
   });
 });

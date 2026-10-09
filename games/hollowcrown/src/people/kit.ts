@@ -33,7 +33,7 @@ const CLOTH = {
   iron: 0x3e3e42, ironLight: 0x6a6a70, soot: 0x2e2a28,
   herb: 0x6a8a3a, milk: 0xf6f4ee,
   wax: 0xe8d8a8, honey: 0xd09a30, fur: 0x5a4636, bruise: 0x7a5a6a,
-  mud: 0x5a4a38, mudLight: 0x7a6650, pewter: 0x9a9a92,
+  mud: 0x5a4a38, mudLight: 0x7a6650, pewter: 0x9a9a92, wound: 0x5e1614, rust: 0x8a4a26, rustDark: 0x5e3018,
 };
 const NAMES = Object.keys(CLOTH) as Array<keyof typeof CLOTH>;
 const FIRST = BODY_COLOR_COUNT + GEAR_COLORS.length + 1;

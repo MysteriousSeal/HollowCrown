@@ -2,7 +2,7 @@
 // door, and every landmark's own thing by its landmark.
 
 import { describe, expect, it } from 'vitest';
-import { loadWorldMap, type Point } from '@voxel/engine/world';
+import { covers, loadWorldMap, type Point } from '@voxel/engine/world';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
 import { DRESSING } from '../src/data/world/dressing';
 import { footprint } from '../src/data/world/kinds';
@@ -59,6 +59,18 @@ describe("the Vale's dressing", () => {
         }
       }
     }
+  });
+
+  it("stands Tallow Green's oak on its green and Agna's skeps in their clearing, out of the woods", () => {
+    const woods = WORLD_MAP.areas.find((a) => a.id === 'brindle-woods')!;
+    const hives = DRESSING.filter((d) => d.kind === 'hive');
+    expect(hives.length).toBeGreaterThanOrEqual(3);
+    for (const h of hives) {
+      expect(covers(woods.shape, ...h.at!), h.note).toBe(false);
+      expect(Math.hypot(h.at![0] - 1180, h.at![1] - 3000)).toBeLessThanOrEqual(5);
+    }
+    const oak = DRESSING.find((d) => d.kind === 'old-oak')!;
+    expect(oak.at).toEqual(map.place('tallow-green-oak')!.at);
   });
 
   it('has the gibbet, the nine Sisters and the Hanging Oak by their landmarks', () => {

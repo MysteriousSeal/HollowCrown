@@ -3,6 +3,7 @@
 // blow, bare-handed or with the shrine's rusty knife (features/combat.ts).
 
 import { MARCH, type BodyLook, type Gait } from '@voxel/engine/characters';
+import { STRANGER_LOOK } from '../people/stranger';
 
 export const HERO: {
   look: BodyLook;
@@ -12,7 +13,7 @@ export const HERO: {
   hp: number;
   blow: { damage: number; reach: number; arc: number; cooldown: number };
 } = {
-  look: { build: 'male', skin: 0, hair: 0, dye: 1, hairStyle: 'short', beard: false },
+  look: STRANGER_LOOK, // (robbed at the shrine: people/stranger.ts dresses it)
   speed: 3.2, // tiles a second
   gait: { ...MARCH, speed: 2.3 }, // (strides a second: about 0.7 tiles each, matching the pace)
   sprint: {

@@ -4,10 +4,12 @@
 
 import { describe, expect, it } from 'vitest';
 import { loadWorldMap } from '@voxel/engine/world';
+import { levelGround } from '../../src/buildings';
 import { PLACE_KINDS, WORLD_MAP } from '../../src/data/world';
 import { footprint } from '../../src/data/world/kinds';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
+levelGround(map); // (as the buildings feature does, before anything is drawn)
 
 describe('uneven ground', () => {
   it('is really uneven somewhere in the Vale (the relief is on)', () => {
@@ -16,10 +18,8 @@ describe('uneven ground', () => {
     expect(tops.size).toBeGreaterThan(1);
   });
 
-  // BUG (engine/environment): world/relief.ts raises and lowers every bare tile, a building's footprint too, while
-  // buildings/index.ts:160 stands the building at its middle tile's height: houses float over dips and the grass
-  // comes up through their floors. Filed.
-  it.skip('lets every building stand level, its footprint all at its floor', () => {
+  // (Was a bug: 15 buildings floated over dips, grass through their floors. Fixed: engine's flatten, levelGround.)
+  it('lets every building stand level, its footprint all at its floor', () => {
     const uneven: string[] = [];
     for (const b of map.places('building')) {
       const floor = map.groundY(...b.at);

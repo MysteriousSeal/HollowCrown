@@ -1,16 +1,20 @@
 // The HUD over the scene (styled in index.html): the region's name fading in large as the hero comes into it (and
-// at the start); villagers' names over their heads as the hero nears them; the named place the hero is near, small
+// at the start); villagers' names over their heads as the hero nears them, and what they say in passing (barks) in a
+// bubble over them; the named place the hero is near, small
 // in the top-left corner, and notices sliding in under it (a quest started, an objective done, a new place); the time
 // of day in the top-right, the quest followed under it; the hero's health, bottom left, and a hurt foe's over its head; the damage
 // of every blow, floating up from where it landed; what E would do, low in the middle; the conversation screen (ConversationScreen, for gameplay to open); and the screens
-// that pause the game (ui/pausingScreens.ts: the map, the journal, the pause menu).
+// that pause the game (ui/pausingScreens.ts: the map, the journal, the pause menu), and the
+// death screen (ui/deathScreen.ts).
 
 import { VisualComponent } from '@voxel/engine/app';
 import { KeyboardResource } from '@voxel/engine/input';
 import type { Entity, System } from '@voxel/engine/ecs';
 import { Dead, Health, Hit, InReach, TimeOfDay, Transform } from '@voxel/engine/gameplay';
 import { Banner, Conversation, CornerLabel, FloatingText, Meter, Prompt, Toasts, TrackerPanel, WorldLabels, createOverlay, fadeByDistance, meterShare, type WorldLabel } from '@voxel/engine/ui';
+import { Barked } from '../systems/barks';
 import { Resident } from '../systems/villagerDay';
+import { deathScreen } from '../ui/deathScreen';
 import { clockText, nearPlaceName, regionBanner, regionOf } from '../ui/hudText';
 import { pausingScreens } from '../ui/pausingScreens';
 import { questNews, snapshot, startLog, trackedOf } from '../ui/questLog';
@@ -25,6 +29,7 @@ const TAG_FAR = 8;
 const BAR_NEAR = 12;
 const BAR_FAR = 16;
 const ABOVE = 0.15;
+const BARK_SECONDS = 4; // a bark's bubble on screen, fading over its last half second
 
 export const hud: Feature = {
   name: 'hud',
@@ -34,6 +39,8 @@ export const hud: Feature = {
     const tags = new WorldLabels(root, app.camera);
     const bars = new WorldLabels(root, app.camera, 'ui-world-bar');
     const damage = new FloatingText(root, app.camera);
+    const bubbles = new WorldLabels(root, app.camera, 'ui-bubble');
+    const barks = new Map<Entity, { line: string; until: number }>();
     const banner = new Banner(root);
     const place = new CornerLabel(root, 'top-left', 'ui-place');
     const clock = new CornerLabel(root, 'top-right', 'ui-clock');
@@ -44,7 +51,7 @@ export const hud: Feature = {
     const conversation = world.setResource(ConversationScreen, new Conversation(root));
     const placeholderLog = startLog();
     const logOf = () => (world.hasResource(QuestLog) ? world.resource(QuestLog) : placeholderLog);
-    const theMap = pausingScreens(app, root, map, conversation, logOf);
+    const theMap = pausingScreens(app, root, map, () => conversation.isOpen || world.has(hero, Dead), logOf);
     // A key a conversation took (to go on, to close it) isn't the hero's too: no swing, no talk again.
     let talking = false;
     window.addEventListener('keydown', () => (talking = conversation.isOpen), { capture: true });
@@ -100,6 +107,15 @@ export const hud: Feature = {
           if (at) damage.add(String(Math.round(points)), at.x, overHead(target, at.y), at.z, target === hero ? 'ui-float-hurt' : '');
         }
         damage.update();
+        const now = performance.now() / 1000;
+        for (const { entity, line } of world.eventsOf(Barked)) barks.set(entity, { line, until: now + BARK_SECONDS });
+        const saying: WorldLabel[] = [];
+        for (const [entity, { line, until }] of barks) {
+          const at = world.get(entity, Transform);
+          if (!at || until <= now) barks.delete(entity);
+          else saying.push({ key: entity, text: line, x: at.x, y: overHead(entity, at.y) + 0.12, z: at.z, alpha: Math.min(1, (until - now) * 2) });
+        }
+        bubbles.show(saying);
         const life = world.get(hero, Health);
         heroHealth.el.hidden = !life;
         if (life) heroHealth.set(life.hp, life.max);
@@ -127,6 +143,6 @@ export const hud: Feature = {
         }
       },
     };
-    app.addSystems(system);
+    app.addSystems(system, deathScreen(app, root, hero));
   },
 };

@@ -6,10 +6,10 @@
 // the mother, a shawl over her head and her hair down her back, carries her child, a bundle with a small pale face.
 // They drift low, reaching.
 
-import { hashUnit } from '@voxel/engine/math';
-import { box, createGrid, fillBox, fillEllipsoid, namedPalette, setColor, type Size, type VoxelGrid } from '@voxel/engine/voxel';
+import { hashUnit, noise3 } from '@voxel/engine/math';
+import { box, createGrid, fillBox, fillEllipsoid, namedPalette, over, setColor, type Size, type VoxelGrid } from '@voxel/engine/voxel';
 import { spectralMaterial } from '@voxel/engine/models';
-import { type FrameSpec, type Gait, type Joint } from '@voxel/engine/characters';
+import { SHAMBLE, type FrameSpec, type Gait, type Joint } from '@voxel/engine/characters';
 import { tornHem } from './kit';
 
 const P = namedPalette({
@@ -23,6 +23,10 @@ const P = namedPalette({
   ragDark: 0x4c4a40,
   hair: 0x3c3e3a,
   crust: 0xb08a52,
+  earth: 0x4a3c2c, // (the pit's, on those risen from it)
+  earthLight: 0x6a5640,
+  poppy: 0xb8282a, // grave-poppy, grown through them
+  poppyStem: 0x4a6a32,
 });
 const { C } = P;
 const DRIFT: Gait = { speed: 0.7, legSwing: 0.18, armSwing: 0.1, reach: 0.4, lean: 0.15, sway: 0.05, hover: 0.03, bob: 0 };
@@ -76,11 +80,23 @@ function limb(g: VoxelGrid, o: Size, arm: boolean, salt: number): void {
   }
 }
 
-function paint(mother: boolean) {
+// Risen from the pit: its earth caked on the legs and the rags (thickest low down), and a grave-poppy grown up through
+// the hair.
+function earthen(g: VoxelGrid, o: Size, joint: Joint, poppy: boolean): void {
+  const leg = joint.endsWith('Leg');
+  over(g, o, (x, y, z, c) => (c !== C.glow && c !== C.pit && (leg || (joint === 'torso' && y <= 1)) && noise3(x, y, z, 61) < (leg ? 0.55 - y * 0.06 : 0.35) ? (y % 2 ? C.earth : C.earthLight) : 0));
+  if (poppy && joint === 'head') {
+    box(g, o, 2, 9, 3, 2, 11, 3, (_x, y) => (y === 11 ? C.poppy : C.poppyStem));
+    box(g, o, 5, 9, 2, 5, 10, 2, (_x, y) => (y === 10 ? C.poppy : C.poppyStem));
+  }
+}
+
+function paint(kind: HungryKind) {
   return (joint: Joint, g: VoxelGrid, o: Size) => {
-    if (joint === 'head') head(g, o, mother);
-    else if (joint === 'torso') torso(g, o, mother);
+    if (joint === 'head') head(g, o, !!kind.shawl);
+    else if (joint === 'torso') torso(g, o, !!kind.shawl);
     else limb(g, o, joint.endsWith('Arm'), joint.length);
+    if (kind.risen) earthen(g, o, joint, !!kind.poppy);
   };
 }
 
@@ -102,16 +118,35 @@ function babe(): VoxelGrid {
   return g;
 }
 
-const hungry = (mother: boolean): FrameSpec => ({
+// One of the Hungry: a shawl over her head (the women), what's in their hands, how they move; risen from the pit
+// (MQ01's midnight), the earth on them, a poppy through their hair, walking it, not drifting.
+interface HungryKind {
+  shawl?: boolean;
+  held?: FrameSpec['held'];
+  gait?: Gait;
+  scale?: number;
+  risen?: boolean;
+  poppy?: boolean;
+}
+const hungry = (kind: HungryKind): FrameSpec => ({
   palette: P.colors,
   pad: true,
   sizes: { head: HEAD },
-  paint: paint(mother),
+  paint: paint(kind),
   glows: new Set([C.glow]),
   material: spectralMaterial(0.92, 0x5a6a58),
-  gait: mother ? { ...DRIFT, reach: 0.15, lean: 0.12 } : DRIFT,
-  held: mother ? { leftArm: { grid: babe, grip: [2, 2.5, 0], turn: [-1.2, 0, 0] } } : { rightArm: { grid: crust, grip: [1.5, 1, 1.5], turn: [-0.3, 0, 0] } },
+  gait: kind.gait ?? DRIFT,
+  held: kind.held,
+  scale: kind.scale,
 });
 
-export const HUNGRY = hungry(false);
-export const HUNGRY_MOTHER = hungry(true);
+export const HUNGRY = hungry({ held: { rightArm: { grid: crust, grip: [1.5, 1, 1.5], turn: [-0.3, 0, 0] } } });
+export const HUNGRY_MOTHER = hungry({ shawl: true, gait: { ...DRIFT, reach: 0.15, lean: 0.12 }, held: { leftArm: { grid: babe, grip: [2, 2.5, 0], turn: [-1.2, 0, 0] } } });
+
+// The famine pit's dead, come down from Chapel Hill at MQ01's midnight to the houses they lived in: they walk, reaching,
+// heads low, the earth still on them. A man; a woman in a shawl (Old Meg's sister Bet, put in the pit alive with
+// fever); a child (the Tidys' two are in there).
+const RISE: Gait = { ...SHAMBLE, reach: 0.45, lean: 0.18, speed: 0.8, headBow: 0.15 };
+export const PIT_RISEN = hungry({ risen: true, poppy: true, gait: RISE });
+export const PIT_RISEN_WOMAN = hungry({ risen: true, shawl: true, gait: { ...RISE, reach: 0.55, headTilt: 0.2 } });
+export const PIT_RISEN_CHILD = hungry({ risen: true, poppy: true, scale: 0.6, gait: { ...RISE, speed: 1.1, reach: 0.3 } });

@@ -1,7 +1,6 @@
 // SQ-BV8, A Candle for Elsa (docs/story/regions/brindle-vale.md): Elsa and Hal Wicke want to marry, and Garrick sets a
 // bride-price no chandler's son could pay. The hero talks to him at the river with whatever they know: a wedding in
-// the square, or an empty room upstairs. (Hal is Tallow Green's: named in the text.) Used by the quest system and
-// the journal.
+// the square, or an empty room upstairs. Used by the quest system and the journal.
 
 import type { Point } from '@voxel/engine/world';
 import type { Quest } from './kinds';
@@ -15,7 +14,7 @@ export const SQ_BV8: Quest = {
   level: 4,
   minutes: 30,
   starts: 'after MQ03: Elsa, crying in the yard, or Hal Wicke',
-  places: ['ferrymans-rest', 'tallow-green', 'brindleford-well'],
+  places: ['ferrymans-rest', 'tallow-green', 'chandlery', 'brindleford-well'],
   stages: [
     {
       id: 'elsa', title: 'Crying in the yard',
@@ -33,7 +32,7 @@ export const SQ_BV8: Quest = {
       id: 'hal', title: "The chandler's son",
       objectives: [
         {
-          id: 'hal', kind: 'talk', text: 'Hear Hal out, in Tallow Green.', at: 'tallow-green',
+          id: 'hal', kind: 'talk', text: 'Hear Hal out, in Tallow Green.', at: 'chandlery', who: 'Hal Wicke',
           lines: [
             { who: 'Hal Wicke', text: "Twenty silver for a cook. He wants me gone, that's all it means." },
             { who: 'Hal Wicke', text: "I make candles. I'd make her a hundred. I'd make her a house of them." },

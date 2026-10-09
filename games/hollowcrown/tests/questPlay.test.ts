@@ -34,6 +34,7 @@ describe('quest play', () => {
   it('moves the clock to a stage\'s hour as it begins', () => {
     const { world, book } = atStage('road-east');
     complete(world, 'MQ01', 'pilgrim');
+    complete(world, 'MQ01', 'wolves');
     complete(world, 'MQ01', 'brindleford');
     expect(book.quests[0].stage).toBe('the-bell');
     expect(world.resource(TimeOfDay).hours).toBe(21);
@@ -48,7 +49,7 @@ describe('quest play', () => {
     expect(book.quests[0].stage).toBe('the-inn');
   });
 
-  it("asks Garrick's choice at the inn, its reply setting the flag, and on through midnight to dawn", () => {
+  it("asks Garrick's choice at the inn, its reply setting the flag, and on to midnight (the wait isn't played: it doesn't hold the inn)", () => {
     const { world, book } = atStage('the-inn');
     const talk = talkWith(world, 'Garrick Fenn');
     const asked = talk.lines.findIndex((l) => l.choices);
@@ -57,9 +58,8 @@ describe('quest play', () => {
     talk.onChoice(asked, 1);
     talk.onClose();
     expect(book.flags.hero_reason).toBe('work');
-    expect(book.quests[0].stage).toBe('dawn'); // (midnight's fight isn't played yet: passed through)
-    expect(book.flags.mq01_dead_walked).toBe(true);
-    expect(world.resource(TimeOfDay).hours).toBe(6);
+    expect(book.quests[0].stage).toBe('midnight');
+    expect(world.resource(TimeOfDay).hours).toBe(0);
   });
 
   it('names anyone else speaking in a talk (Garrick, at the well with Cuthwin)', () => {

@@ -26,13 +26,14 @@ describe('quests', () => {
     expect(book.quests[0]).toEqual({ quest: 'MQ01', stage: 'road-east', done: [] });
   });
 
-  it("sets a choice's flags, and lets the unplayable (the wolves) not hold the road back", () => {
+  it("sets a choice's flags, and holds the road until the wolves are dead", () => {
     const book = newBook();
     startQuest(book, QUESTS, 'MQ01');
     for (const id of ['feather', 'bowl', 'first-words']) completeObjective(book, QUESTS, 'MQ01', id);
     completeObjective(book, QUESTS, 'MQ01', 'pilgrim', { pilgrim_jerkin: 'covered' });
     expect(book.flags.pilgrim_jerkin).toBe('covered');
-    expect(completeObjective(book, QUESTS, 'MQ01', 'brindleford')?.id).toBe('the-bell');
+    expect(completeObjective(book, QUESTS, 'MQ01', 'brindleford')).toBeUndefined();
+    expect(completeObjective(book, QUESTS, 'MQ01', 'wolves')?.id).toBe('the-bell');
   });
 
   it("sets a stage's flags as it ends, and finishes the quest after its last", () => {
