@@ -23,6 +23,8 @@
         color: var(--cream);
       }
       .ui-overlay [hidden] { display: none !important; }
+      /* The engine's debug overlay (development only, bottom left) kept out from under a screen. */
+      body:has(.ui-talk:not([hidden]), .ui-map:not([hidden]), .ui-journal:not([hidden]), .ui-menu:not([hidden]), .ui-end:not([hidden])) > div[style*="z-index: 1000"] { display: none !important; } /* (over its own inline display) */
 
       /* A region's name as the hero comes into it: across the top, fading in and out. */
       .ui-banner {
@@ -243,8 +245,10 @@
       .ui-talk-side.listening { filter: brightness(0.45) saturate(0.6); transform: scale(0.95); }
       /* The panel's speaker name sits toward the side speaking. */
       .ui-talk[data-speaker='right'] .ui-talk-speaker { text-align: right; }
+      .ui-talk-side.absent { visibility: hidden; } /* no one there (a choice to oneself) */
       .ui-talk-frame {
-        width: min(100%, 300px);
+        height: min(450px, calc(100vh - 230px));
+        max-width: 100%;
         aspect-ratio: 2 / 3;
         display: grid;
         place-items: end center;
