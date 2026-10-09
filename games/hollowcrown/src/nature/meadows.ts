@@ -91,8 +91,7 @@ export const MEADOW_SHAPES: Record<string, () => VoxelGrid> = Object.fromEntries
 
 // The layer of the meadows' grass and flowers (instanced.ts), each chunk's worked out as it first comes near.
 export function meadowLayer(map: WorldMap, keepOut: Obstacles): ChunkLayer {
-  const shapes = new Map(Object.entries(MEADOW_SHAPES).map(([key, make]) => [key, natureGeometry(make())]));
-  return instancedLayer(map, meadowChunks(map), (key) => meadowGrowthIn(map, key, keepOut), shapes, 0.1);
+  return instancedLayer(map, meadowChunks(map), (key) => meadowGrowthIn(map, key, keepOut), (shape) => natureGeometry(MEADOW_SHAPES[shape]()), 0.1);
 }
 
 // Every tuft and clump in `map`'s meadows at once, by chunk (for tests and tools: the game grows them a chunk at a time).

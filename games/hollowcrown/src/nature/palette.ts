@@ -16,6 +16,8 @@ export const NATURE = namedPalette({
   // pine needles, shade to light, their fresh tips and cones (trees.ts)
   pine0: 0x173f3a, pine1: 0x1f5446, pine2: 0x286a50, pine3: 0x33805a, pine4: 0x459865, pine5: 0x62b170, pine6: 0x8fcb7f,
   pineTip: 0x74bd72, cone: 0x7a4e2c,
+  // the Hanging Oak's rope and hollow (landmarks.ts)
+  rope: 0x9c8461, hollow: 0x1c1410,
   // meadow grass, a shade either side of the ground's, gone to seed (meadows.ts)
   grassDark: 0x4a8239, grass: 0x62a44a, grassLight: 0x8cbf5c, seedHead: 0xc8b46a,
   // wildflowers: poppy, cornflower, oxeye daisy and its eye, buttercup, their stems (meadows.ts)

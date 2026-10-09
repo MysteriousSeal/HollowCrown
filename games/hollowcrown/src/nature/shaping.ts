@@ -6,7 +6,7 @@
 
 import { hashUnit, noise3 } from '@voxel/engine/math';
 import { SUN_DIRECTION } from '@voxel/engine/render';
-import { colorAt, createGrid, forEachVoxel, inGrid, nibble, setColor, type Size, type VoxelGrid } from '@voxel/engine/voxel';
+import { colorAt, createGrid, forEachVoxel, inGrid, isSurface, setColor, voxelIndex, type Size, type VoxelGrid } from '@voxel/engine/voxel';
 import { N } from './palette';
 
 const SUN = SUN_DIRECTION.toArray();
@@ -108,17 +108,29 @@ const MARK = 200; // a leaf voxel's puff while it's being built (MARK + its inde
 // (`ragged`: how much), then each shaded by its own puff's light in `bands`, lit where open to the sky, dark on the
 // underside; now and then (`odd`) a voxel of another color (a leaf turned gold).
 export function leaves(g: VoxelGrid, puffs: Volume[], bands: readonly number[], seed: number, ragged: number, odd?: { color: number; chance: number }): void {
-  forEachVoxel(g, (x, y, z) => {
-    if (colorAt(g, x, y, z) !== 0) return;
-    let [best, depth] = [-1, 1];
-    puffs.forEach((p, i) => {
-      const d = Math.hypot((x + 0.5 - p.cx) / p.rx, (y + 0.5 - p.cy) / p.ry, (z + 0.5 - p.cz) / p.rz);
-      if (d <= depth) [best, depth] = [i, d];
-    });
-    if (best >= 0) setColor(g, x, y, z, MARK + best);
+  // each puff over its own box only, keeping how deep the voxel is in the puff that has it so far
+  const depth = new Float32Array(g.cells.length).fill(1);
+  const [sx, sy, sz] = g.size;
+  puffs.forEach((p, i) => {
+    for (let z = Math.max(0, Math.floor(p.cz - p.rz)); z <= Math.min(sz - 1, Math.ceil(p.cz + p.rz)); z++) {
+      for (let y = Math.max(0, Math.floor(p.cy - p.ry)); y <= Math.min(sy - 1, Math.ceil(p.cy + p.ry)); y++) {
+        for (let x = Math.max(0, Math.floor(p.cx - p.rx)); x <= Math.min(sx - 1, Math.ceil(p.cx + p.rx)); x++) {
+          const at = voxelIndex(g, x, y, z);
+          if (g.cells[at] !== 0 && g.cells[at] < MARK) continue; // (wood stays)
+          const d = Math.hypot((x + 0.5 - p.cx) / p.rx, (y + 0.5 - p.cy) / p.ry, (z + 0.5 - p.cz) / p.rz);
+          if (d <= depth[at]) [depth[at], g.cells[at]] = [d, MARK + i];
+        }
+      }
+    }
   });
+  // the outlines nibbled: some of the leaves open to the air, above the lower half of their puff, knocked out
   const rand = seeded(seed);
-  puffs.forEach((p, i) => nibble(g, rand, ragged, Math.floor(p.cy - p.ry * 0.5), MARK + i));
+  const doomed: number[] = [];
+  forEachVoxel(g, (x, y, z) => {
+    const c = colorAt(g, x, y, z);
+    if (c >= MARK && y >= Math.floor(puffs[c - MARK].cy - puffs[c - MARK].ry * 0.5) && isSurface(g, x, y, z) && rand() < ragged) doomed.push(voxelIndex(g, x, y, z));
+  });
+  for (const at of doomed) g.cells[at] = 0;
   shadeMarked(g, (i) => puffs[i], bands, seed, 0.35, -0.55, odd);
 }
 
