@@ -180,6 +180,15 @@ worn flat by feet and wheels, or dug and laid flat by hand. The unevenness fades
 stopping in a step. Water lies flat. The map data draws the tiers and the surfaces; the terrain renders the unevenness
 over them, and it is lighter wherever a surface is walked.
 
+**The land is alive everywhere.** No stretch of the realm is empty ground between places. The grass is long or
+grazed, flowered or burnt by the season, broken by bushes and stones; there is always something moving: rabbits
+in the meadows, deer at the wood's edge at dawn and dusk, rooks over the stubble, ducks on a pond, frogs in the
+marsh, hens and dogs in every village, sheep and cows in the fields. And the in-between land has purpose, drawn by
+hand: hedgerows along the roads, field strips round the villages, a lone farm, a shepherd's hut, a track that goes
+somewhere. Each region's life is its own (`src/data/world/life.ts`): what lives where, by surface and hour, how
+thick, and what grows underfoot. The life is ambient: it scatters from the hero, it doesn't fight, and it falls quiet
+where something is wrong (no birds near the famine pit, no frogs by the Marsh Cairn).
+
 ### Regions
 | Region | Tiles (x, z) | Towns and villages | Dungeons | Camps | Levels |
 |---|---|---|---|---|---|
