@@ -16,6 +16,7 @@ import type { Spot } from '../data/people/kinds';
 import { QUESTS, type Line, type Objective, type QuestStage } from '../data/quests';
 import { strangerModel } from '../people/stranger';
 import { deathsOf, isWhat, needed } from '../systems/kills';
+import { startReady } from '../systems/questStarts';
 import { Quests, completeObjective, newBook, openObjectives, startQuest } from '../systems/quests';
 import { ConversationScreen, QuestLog } from '../ui/screens';
 import type { Feature } from './context';
@@ -59,9 +60,11 @@ export function linesOf(objective: Objective, name: string, fallback: Line): Con
   return lines;
 }
 
-// What `name` says when talked to, and what it does for the quests: each open 'talk' with them played and done as
-// it closes, then each 'choose' with them played and done by the reply picked. None asked of them: their first words.
+// What `name` says when talked to, and what it does for the quests: any quest they give, given first
+// (systems/questStarts.ts); each open 'talk' with them played and done as it closes, then each 'choose' with them
+// played and done by the reply picked. None asked of them: their first words.
 export function talkWith(world: World, name: string): { lines: ConversationLine[]; onChoice: (line: number, choice: number) => void; onClose: () => void } {
+  if (world.hasResource(Quests)) startReady(world.resource(Quests), QUESTS, name).forEach((stage) => begin(world, stage));
   const asked = world.hasResource(Quests) ? openObjectives(world.resource(Quests), QUESTS).filter(({ objective }) => objective.who === name) : [];
   const firstWords = PEOPLE_DATA[name]?.firstWords ?? '…';
   if (asked.length === 0) return { lines: [{ side: 'right', text: firstWords }], onChoice: () => {}, onClose: () => {} };
@@ -94,6 +97,7 @@ export function questSystem(map: WorldMap, hero: number): System {
     update(world) {
       const at = world.get(hero, Transform);
       if (!at || !world.hasResource(Quests)) return;
+      startReady(world.resource(Quests), QUESTS).forEach((stage) => begin(world, stage));
       const deaths = deathsOf(world);
       for (const { quest, objective } of openObjectives(world.resource(Quests), QUESTS)) {
         if (objective.kind === 'fight' && objective.what) {
