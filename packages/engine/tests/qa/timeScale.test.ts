@@ -23,10 +23,9 @@ describe('a frame in several steps', () => {
     expect(seen()).toBe(1);
   });
 
-  // BUG (engine): ecs/schedule.ts frame() keeps a frame's events through all its steps ("the frame's events kept for
-  // all of it"), so a system reading them in the simulate stage sees an event again every step: at 30 fps (two steps)
-  // or a time scale of 10, a wolf's death counts two or ten times toward MQ01's fight (features/quests.ts:90). Filed.
-  it.skip('reads one event once however many steps the frame takes (30 fps, or a time scale of 10)', () => {
+  // (Was a bug: a frame's events were read again in each of its steps, a death counted twice at 30 fps. Fixed by
+  // engine: events live per step.)
+  it('reads one event once however many steps the frame takes (30 fps, or a time scale of 10)', () => {
     for (const [dt, scale] of [[1 / 30, 1], [1 / 60, 10]]) {
       const { world, schedule, seen } = scene();
       schedule.frame(world, dt, { scale });
