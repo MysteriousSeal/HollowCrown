@@ -124,6 +124,19 @@
       .ui-hero-health.low .ui-meter-fill { animation: ui-pulse 0.9s ease-in-out infinite alternate; }
       @keyframes ui-pulse { to { filter: brightness(1.45); } }
 
+      /* A hurt foe's health over its head: a short red bar in a dark trough, filled to --share. */
+      .ui-world-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 46px;
+        height: 7px;
+        background: linear-gradient(90deg, #c8402e calc(var(--share, 1) * 100%), rgba(20, 13, 9, 0.85) 0);
+        border: 2px solid var(--ink);
+        box-shadow: 0 0 0 1px rgba(239, 220, 184, 0.6);
+        will-change: transform, opacity;
+      }
+
       /* What E would do: a keycap, then the action, low in the middle. */
       .ui-prompt {
         position: absolute;
