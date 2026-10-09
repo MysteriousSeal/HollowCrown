@@ -12,7 +12,10 @@ const obstacles = obstaclesOf(map);
 
 describe('wildlife', () => {
   it('is made of creatures the bestiary has', () => {
-    for (const a of WILDLIFE) expect(CREATURES.some((c) => c.id === a.creature), a.creature).toBe(true);
+    for (const a of WILDLIFE) {
+      expect(CREATURES.some((c) => c.id === a.creature), a.creature).toBe(true);
+      expect(a.roam > 0 && a.speed > 0, a.note).toBe(true);
+    }
   });
 
   it('stands on walkable ground, clear of walls', () => {

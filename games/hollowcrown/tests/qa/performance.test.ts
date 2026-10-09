@@ -1,6 +1,7 @@
 // QA: the world builds fast enough to stream as the hero walks. Working out a chunk of the map (its tiers merged into
 // rectangles), building a terrain chunk's meshes, and building Brindleford's busiest places chunk (its buildings
 // modelled for the first time) each stay under a budget: measured on the studio's machine, with 5-10x headroom.
+// Timings mean nothing on a busy machine, so these run only when asked: PERF=1 npx vitest run tests/qa/performance.test.ts
 
 import { describe, expect, it } from 'vitest';
 import { CHUNK_SIZE, chunkTilesIn, loadWorldMap, terrainLayer, tierRects } from '@voxel/engine/world';
@@ -38,7 +39,7 @@ function busiestPlacesChunk(): string {
   return [...counts].sort((a, b) => b[1] - a[1])[0][0];
 }
 
-describe('world-build performance', () => {
+describe.runIf(process.env.PERF)('world-build performance', () => {
   it(`works out a chunk of the world map in under ${BUDGET_MS.workOutChunk} ms`, () => {
     const tiles = chunkTilesIn(BRINDLEFORD_CHUNK, WHOLE)!;
     expect(timed(() => tierRects(map, tiles))).toBeLessThan(BUDGET_MS.workOutChunk);

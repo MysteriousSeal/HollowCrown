@@ -1,0 +1,46 @@
+// Every named person of the Vale builds, poses, stands on the ground, and keeps their shape: height, triangles and
+// bounds snapshotted (a change to a model shows up here, to be accepted on purpose), drawn in about what the
+// fighting people are (creatures/peopleVoxels.ts).
+
+import * as THREE from 'three';
+import { describe, expect, it } from 'vitest';
+import { PEOPLE, personId } from '../src/people';
+
+const round = (n: number) => Math.round(n * 1000) / 1000;
+
+function measure(root: THREE.Object3D): { triangles: number; min: number[]; max: number[] } {
+  root.updateMatrixWorld(true);
+  let triangles = 0;
+  const box = new THREE.Box3();
+  root.traverse((o) => {
+    const mesh = o as THREE.Mesh;
+    if (!mesh.isMesh || mesh.geometry.type === 'PlaneGeometry') return; // (the shade square under the feet)
+    triangles += (mesh.geometry.index?.count ?? mesh.geometry.getAttribute('position').count) / 3;
+    box.expandByObject(mesh);
+  });
+  return { triangles, min: box.min.toArray().map(round), max: box.max.toArray().map(round) };
+}
+
+describe('people', () => {
+  it('keys each person by their own name, every id unique', () => {
+    for (const [key, person] of Object.entries(PEOPLE)) expect(person.name).toBe(key);
+    const ids = Object.keys(PEOPLE).map(personId);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  for (const person of Object.values(PEOPLE)) {
+    it(`${person.name}: builds, poses and keeps their shape`, () => {
+      const model = person.make();
+      expect(model.height).toBeGreaterThan(0.25);
+      model.animate(0, 0);
+      const standing = measure(model.root);
+      expect(standing.triangles).toBeGreaterThan(600);
+      expect(standing.triangles).toBeLessThan(2600); // (about the fighting people's)
+      expect(standing.min[1]).toBeGreaterThan(-0.06); // (on the ground, not in it)
+      expect({ height: round(model.height), ...standing }).toMatchSnapshot();
+      for (const t of [0.4, 1.3, 2.9]) model.animate(t, 1); // (walking: no throw, no NaN)
+      model.root.updateMatrixWorld(true);
+      model.root.traverse((o) => expect(Number.isFinite(o.matrixWorld.elements[13])).toBe(true));
+    });
+  }
+});
