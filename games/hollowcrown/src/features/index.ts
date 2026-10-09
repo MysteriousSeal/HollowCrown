@@ -3,6 +3,7 @@
 import type { Feature } from './context';
 import { buildings } from './buildings';
 import { daylight } from './daylight';
+import { debug } from './debug';
 import { hud } from './hud';
 import { land } from './land';
 import { nature } from './nature';
@@ -13,6 +14,7 @@ import { wildlife } from './wildlife';
 
 export const FEATURES: Feature[] = [
   daylight,
+  debug,
   land,
   buildings,
   nature,

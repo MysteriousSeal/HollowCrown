@@ -5,6 +5,180 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### 2026-10-09 21:54 — Side quest: Honey and Wax
+
+[`4add7e8`](https://github.com/MysteriousSeal/HollowCrown/commit/4add7e8) · Design
+
+SQ-BV3, Honey and Wax, is written as quest data. It isn't playable yet.
+
+### 2026-10-09 21:54 — Side quest: Kit's Father
+
+[`ea07c64`](https://github.com/MysteriousSeal/HollowCrown/commit/ea07c64) · Design
+
+SQ-BV2, Kit's Father, is written as quest data. It isn't playable yet.
+
+### 2026-10-09 21:53 — Side quest: The Flour Thief
+
+[`472a9a1`](https://github.com/MysteriousSeal/HollowCrown/commit/472a9a1) · Design
+
+SQ-BV1, The Flour Thief, is written as quest data. It isn't playable yet.
+
+### 2026-10-09 21:53 — Chunk timing tests made optional
+
+[`84d4a9b`](https://github.com/MysteriousSeal/HollowCrown/commit/84d4a9b) · Director
+
+Tests: chunk build timings run only when asked for. The streaming logic is always tested.
+
+### 2026-10-09 21:53 — Esc pauses the game
+
+[`84eb8e9`](https://github.com/MysteriousSeal/HollowCrown/commit/84eb8e9) · UI
+
+Esc pauses the game behind a menu with Resume and a Controls page that lists the keys. Opening the map pauses it too.
+
+### 2026-10-09 21:52 — Two villager models found missing
+
+[`f6e85fc`](https://github.com/MysteriousSeal/HollowCrown/commit/f6e85fc) · QA
+
+A test showed that Tamsin's and Wynn's models never appeared in the game.
+
+### 2026-10-09 21:52 — The land is gently uneven
+
+[`7f43ea0`](https://github.com/MysteriousSeal/HollowCrown/commit/7f43ea0) · Design
+
+The world bible now says the land is gently uneven everywhere, while roads, paths, squares and floors stay level.
+
+### 2026-10-09 21:52 — Meadow cost at the start
+
+[`3ccb6f4`](https://github.com/MysteriousSeal/HollowCrown/commit/3ccb6f4) · QA
+
+A test showed that growing the meadows slows the start of the game.
+
+### 2026-10-09 21:51 — Menus
+
+[`d5d398b`](https://github.com/MysteriousSeal/HollowCrown/commit/d5d398b) · UI
+
+The engine's UI kit gains menus: a framed list of choices, and a page of keys with a way back.
+
+### 2026-10-09 21:51 — Lighter meadow flowers
+
+[`f372f71`](https://github.com/MysteriousSeal/HollowCrown/commit/f372f71) · Environment
+
+The meadow flowers cost less to draw, and tests now hold plants to a budget.
+
+### 2026-10-09 21:51 — Pause
+
+[`5a8020e`](https://github.com/MysteriousSeal/HollowCrown/commit/5a8020e) · Engine
+
+The game and its clock can stop while the scene is still drawn. Keys are let go when you pause or switch windows.
+
+### 2026-10-09 21:51 — The quest tracker
+
+[`4df2bbf`](https://github.com/MysteriousSeal/HollowCrown/commit/4df2bbf) · UI
+
+Under the clock, the top-right corner shows the quest you're following: its name, its stage and what to do now.
+
+### 2026-10-09 21:51 — Forest cost at the start
+
+[`c6fe49d`](https://github.com/MysteriousSeal/HollowCrown/commit/c6fe49d) · QA
+
+Tests time fresh map chunks. One test showed that the trees add 300 to 600 ms to the start.
+
+### 2026-10-09 21:51 — Four more villagers appear in game
+
+[`df819b9`](https://github.com/MysteriousSeal/HollowCrown/commit/df819b9) · Characters
+
+Tamsin Reede, Wynn Tidy, Cob Fletcher and Gert Hollin now appear in the world as themselves.
+
+### 2026-10-09 21:50 — Meadows in bloom
+
+[`c2f111f`](https://github.com/MysteriousSeal/HollowCrown/commit/c2f111f) · Environment
+
+The hay and clover meadows have grass, poppies, cornflowers, daisies and buttercups.
+
+### 2026-10-09 21:50 — No more hitches on new chunks
+
+[`6145598`](https://github.com/MysteriousSeal/HollowCrown/commit/6145598) · Engine
+
+Chunks build a step at a time within each frame's budget, so walking no longer stutters as new ground loads.
+
+### 2026-10-09 21:50 — Reachability through the forests
+
+[`7b2811d`](https://github.com/MysteriousSeal/HollowCrown/commit/7b2811d) · QA
+
+Tests: every place can still be reached with the trees' trunks in the way.
+
+### 2026-10-09 21:50 — Press E to talk
+
+[`dc354cb`](https://github.com/MysteriousSeal/HollowCrown/commit/dc354cb) · Gameplay
+
+Press E by a villager to talk. Your portraits face each other and they say their first words.
+
+### 2026-10-09 21:50 — The Fletchers and the Hollins
+
+[`a361674`](https://github.com/MysteriousSeal/HollowCrown/commit/a361674) · Characters
+
+Alys Fletcher with her longbow, one-handed Cob, Bran Hollin with his eel trap, and Gert.
+
+### 2026-10-09 21:49 — The map
+
+[`6491f5d`](https://github.com/MysteriousSeal/HollowCrown/commit/6491f5d) · UI
+
+M opens the map of the Vale, with roads, rivers and marsh, named regions, places marked by kind and your arrow. Zoom with the mouse wheel or + and -.
+
+### 2026-10-09 21:49 — README's playable list refreshed
+
+[`5465fb8`](https://github.com/MysteriousSeal/HollowCrown/commit/5465fb8) · Docs
+
+The README now lists trees, the villagers' models and the clock, and says that talking is coming next.
+
+### 2026-10-09 21:49 — One changelog entry per update
+
+[`c1637e7`](https://github.com/MysteriousSeal/HollowCrown/commit/c1637e7) · Docs
+
+The changelog now has one entry per update, newest first, each linked to its commit.
+
+### 2026-10-09 21:48 — The Vale's dressing as data
+
+[`c96c9ae`](https://github.com/MysteriousSeal/HollowCrown/commit/c96c9ae) · Design
+
+Fences round the Cobbes' strips and the gardens, hay ricks, the gibbet, the Nine Sisters and the Hanging Oak are placed as data.
+
+### 2026-10-09 21:48 — Sibyl, Gammer, Simkin and Ned
+
+[`9dbbbe0`](https://github.com/MysteriousSeal/HollowCrown/commit/9dbbbe0) · Characters
+
+Sibyl Hask in her own weaving, Gammer and Simkin Orr bent over their sticks, and Ned Tolley the drover.
+
+### 2026-10-09 21:48 — Doors test re-enabled
+
+[`2159522`](https://github.com/MysteriousSeal/HollowCrown/commit/2159522) · QA
+
+Tests: every household stands at its drawn door.
+
+### 2026-10-09 21:48 — Wat is away
+
+[`1ee4031`](https://github.com/MysteriousSeal/HollowCrown/commit/1ee4031) · Gameplay
+
+Wat is away from the smithy until his quest.
+
+### 2026-10-09 21:48 — The engine's map kit
+
+[`1856134`](https://github.com/MysteriousSeal/HollowCrown/commit/1856134) · UI
+
+A small world map drawn once, and a map screen with names, marks and the hero's arrow.
+
+### 2026-10-09 21:48 — Quest places reachable
+
+[`bb4c738`](https://github.com/MysteriousSeal/HollowCrown/commit/bb4c738) · QA
+
+Tests: every quest objective and every stop in a villager's day can be reached from the shrine.
+
+### 2026-10-09 21:47 — The Reedes, Joan Lusk and the Tidys
+
+[`ca00e9f`](https://github.com/MysteriousSeal/HollowCrown/commit/ca00e9f) · Characters
+
+Rolf Reede with his reed bundle, Tamsin, Joan Lusk the carter, Edric Tidy with his crook and Wynn with her cup of milk.
+
 ### 2026-10-09 21:47 — Households stand at their real doors
 
 [`4b5f83f`](https://github.com/MysteriousSeal/HollowCrown/commit/4b5f83f) · Gameplay
@@ -16,6 +190,12 @@ Every household now gathers at its own house's drawn door.
 [`9f8a13e`](https://github.com/MysteriousSeal/HollowCrown/commit/9f8a13e) · Environment
 
 The Birchwood, Brindle Woods and the Mosshill pines are full of trees, and their trunks block your way.
+
+### 2026-10-09 21:46 — Every model has a villager
+
+[`e00a6c7`](https://github.com/MysteriousSeal/HollowCrown/commit/e00a6c7) · QA
+
+Tests: each person's model belongs to a resident, and anyone who sits can sit.
 
 ### 2026-10-09 21:46 — Old Meg, Hob, Ada and Wenna
 
@@ -58,6 +238,12 @@ Lit and glowing faces are meshed in one pass, so buildings build faster.
 [`e3343d7`](https://github.com/MysteriousSeal/HollowCrown/commit/e3343d7) · Environment
 
 Villagers stand by the spot where each building's drawn door opens.
+
+### 2026-10-09 21:45 — The talk prompt
+
+[`6e6a9ea`](https://github.com/MysteriousSeal/HollowCrown/commit/6e6a9ea) · UI
+
+Near someone you can talk to, "E · Talk" shows low in the middle of the screen.
 
 ### 2026-10-09 21:44 — Brindleford's 27 villagers written as data
 

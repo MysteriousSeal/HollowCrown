@@ -8,17 +8,21 @@ year. You come over the western mountains on the pilgrim road, a stranger, into 
 
 ## Playable now
 
-This is an early build. You can walk the world, but there are no quests or combat yet.
+This is an early build. You can walk the world and talk to its people, but quests can't be played through yet and
+there's no combat.
 
 - Brindle Vale, drawn by hand: roads, the river, marsh, low swells in the meadows and woods, Chapel Hill and Mosshill.
 - Brindleford: its 20 buildings, which you can't walk through, plus footpaths, kitchen gardens, ploughed strips and a duck pond.
-- The Birchwood, Brindle Woods and the Mosshill pines are full of trees, and you can't walk through their trunks.
-- The villagers stroll round their doors by day and stand at them by night. Many of them already have their own models.
+- The Birchwood, Brindle Woods and the Mosshill pines are full of trees, and you can't walk through their trunks. The
+  hay and clover meadows are in bloom.
+- Brindleford's 27 villagers, each with their own model. They stroll round their doors by day and stand at them by night.
+- Talk: press E by a villager. A visual-novel screen opens, with your portraits face to face and their first words.
 - Wolves and boars roam the edges of the Birchwood.
 - Day and night: the game starts at dusk, and a full day takes 24 minutes. The time of day shows in the top-right corner.
+- The quest tracker under the clock shows the first quest, The Stranger at the Ford, and what to do now.
 - On-screen names: the region's name fades in as you enter it, and the place you're near shows in the top-left corner.
-- Hold Shift to sprint.
-- Coming next: talking to villagers with E. The conversation screen is built, but it isn't connected to the villagers yet.
+- The map of the Vale (M), with regions, places and your arrow.
+- A pause menu (Esc) that lists the controls.
 - The model viewer at `/models.html` shows the creatures, Brindleford's buildings and folk, and the trees.
 
 ## Running it
@@ -39,7 +43,10 @@ URL to show only some of the models.
 |---|---|
 | WASD or the arrow keys | Walk |
 | Shift (held) | Sprint |
-| E | Talk to a villager (coming soon). The key is bound, but nothing in the world responds to it yet. |
+| E | Talk to a villager nearby, and move a conversation on |
+| 1-9 or a click | Pick a reply in a conversation |
+| M | Open or close the map (mouse wheel or + and - to zoom) |
+| Esc | Pause menu, or close the map |
 
 ## Scripts
 

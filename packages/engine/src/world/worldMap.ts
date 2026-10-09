@@ -7,6 +7,7 @@
 import { CHUNK_SIZE } from './chunks';
 import type { Area, MapSize } from './grid';
 import { boundsOf, covers, type Point, type Shape } from './shapes';
+import { RELIEF_STEP, reliefAt } from './relief';
 import { TILE_HEIGHT, tileOf, type Terrain } from './terrain';
 
 // ---- the data ----
@@ -54,6 +55,7 @@ export interface PlaceData {
 export interface WorldMapData {
   size: MapSize;
   baseTier: number; // the land's height wherever no patch says otherwise
+  relief?: boolean; // bare land a little uneven, tile by tile (relief.ts); surfaces (roads, water) stay flat. Default on.
   surfaceKinds: Record<string, SurfaceKind>;
   land: LandPatch[];
   surfaces: SurfacePatch[];
@@ -65,7 +67,7 @@ export interface WorldMapData {
 export type WorldMapPart = Partial<Pick<WorldMapData, 'land' | 'surfaces' | 'areas' | 'places'>>;
 
 // One map of its settings and its pieces, in order (a later piece's land and surfaces drawn over an earlier one's).
-export function composeWorldMap(base: Pick<WorldMapData, 'size' | 'baseTier' | 'surfaceKinds'>, ...parts: WorldMapPart[]): WorldMapData {
+export function composeWorldMap(base: Pick<WorldMapData, 'size' | 'baseTier' | 'surfaceKinds' | 'relief'>, ...parts: WorldMapPart[]): WorldMapData {
   return {
     ...base,
     land: parts.flatMap((p) => p.land ?? []),
@@ -140,6 +142,7 @@ export function loadWorldMap(data: WorldMapData, rules: PlaceRules = {}): WorldM
 interface Chunk {
   tiers: Uint8Array;
   surfaces: Uint8Array;
+  relief: Int8Array | null; // (null: flat)
 }
 
 export class WorldMap implements Terrain {
@@ -171,7 +174,13 @@ export class WorldMap implements Terrain {
   }
 
   groundY(x: number, z: number): number {
-    return this.tierAt(x, z) * TILE_HEIGHT;
+    return this.tierAt(x, z) * TILE_HEIGHT + this.reliefAt(x, z) * RELIEF_STEP;
+  }
+
+  reliefAt(x: number, z: number): number {
+    const [tx, tz] = [tileOf(x), tileOf(z)];
+    if (!this.onMap(tx, tz)) return 0;
+    return this.chunkOf(tx, tz).relief?.[this.cell(tx, tz)] ?? 0;
   }
 
   surfaceAt(x: number, z: number): number {
@@ -248,7 +257,7 @@ export class WorldMap implements Terrain {
     const key = this.chunkIndex(cx, cz);
     const cached = this.chunks.get(key);
     if (cached) return cached;
-    const chunk: Chunk = { tiers: new Uint8Array(CHUNK_SIZE * CHUNK_SIZE).fill(this.data.baseTier), surfaces: new Uint8Array(CHUNK_SIZE * CHUNK_SIZE) };
+    const chunk: Chunk = { tiers: new Uint8Array(CHUNK_SIZE * CHUNK_SIZE).fill(this.data.baseTier), surfaces: new Uint8Array(CHUNK_SIZE * CHUNK_SIZE), relief: null };
     const [x0, z0] = [cx * CHUNK_SIZE, cz * CHUNK_SIZE];
     for (const i of this.landByChunk.get(key) ?? []) {
       const { shape, tier } = this.data.land[i];
@@ -258,6 +267,13 @@ export class WorldMap implements Terrain {
       const { shape, surface } = this.data.surfaces[i];
       const n = this.surfaceNames.indexOf(surface) + 1;
       this.paint(shape, x0, z0, (c) => (chunk.surfaces[c] = n));
+    }
+    if (this.data.relief ?? true) {
+      const relief = (chunk.relief = new Int8Array(CHUNK_SIZE * CHUNK_SIZE));
+      for (let z = 0; z < CHUNK_SIZE; z++) for (let x = 0; x < CHUNK_SIZE; x++) {
+        const c = x + z * CHUNK_SIZE;
+        if (chunk.surfaces[c] === 0) relief[c] = reliefAt(x0 + x, z0 + z);
+      }
     }
     this.chunks.set(key, chunk);
     return chunk;
