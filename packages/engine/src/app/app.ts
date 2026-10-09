@@ -3,11 +3,12 @@
 
 import * as THREE from 'three';
 import { Schedule, World, type Entity, type System } from '../ecs';
-import { CAMERA_OFFSET, PostProcessing, addLights, computeMovementAxes, createCamera, resizeCamera, stylize, type Stylizer } from '../render';
+import { CAMERA_OFFSET, PostProcessing, type Lights, addLights, computeMovementAxes, createCamera, resizeCamera, stylize, type Stylizer } from '../render';
 import { ChunkStreamer, type ChunkLayer } from '../world';
-import { Transform, movementSystem } from '../gameplay';
+import { TimeOfDay, Transform, hoursPerSecond, movementSystem, timeOfDaySystem } from '../gameplay';
 import { Keyboard, KeyboardResource, ScreenAxes, playerInputSystem } from '../input';
 import type { Model } from '../models';
+import { dayNightSystem, type DayNightOptions } from './dayNight';
 import { CameraTarget, VisualComponent, visualOf, visualSystem } from './visuals';
 
 const MAX_FRAME_DT = 0.1; // seconds: no huge jump after the tab was in the background
@@ -24,6 +25,7 @@ export class App {
   private readonly renderer: THREE.WebGLRenderer;
   private readonly streamer: ChunkStreamer;
   private readonly pixelRatio: number;
+  private readonly lights: Lights;
   private stylizer: Stylizer | null = null;
   private post: PostProcessing | null = null;
   private elapsed = 0;
@@ -36,7 +38,7 @@ export class App {
     this.renderer.setPixelRatio(pixelRatio);
     const upscale = window.devicePixelRatio / pixelRatio;
     canvas.style.imageRendering = upscale > 1 && Number.isInteger(upscale) ? 'pixelated' : 'auto';
-    addLights(this.scene);
+    this.lights = addLights(this.scene);
     this.streamer = new ChunkStreamer(this.scene);
     this.world.setResource(KeyboardResource, new Keyboard());
     this.world.setResource(ScreenAxes, computeMovementAxes());
@@ -51,6 +53,13 @@ export class App {
   // More systems, run in their stage after the engine's own.
   addSystems(...systems: System[]): void {
     this.schedule.add(...systems);
+  }
+
+  // Time moving on (the TimeOfDay resource) and the world lit for the hour: dawn, day, dusk and a dark blue night.
+  enableDayNight({ startHour = 17, dayMinutes = 24 }: DayNightOptions = {}): void {
+    if (!(dayMinutes > 0)) throw new Error(`enableDayNight: dayMinutes must be above 0, not ${dayMinutes}`);
+    this.world.setResource(TimeOfDay, { hours: ((startHour % 24) + 24) % 24, rate: hoursPerSecond(dayMinutes) });
+    this.schedule.add(timeOfDaySystem, dayNightSystem(this.lights, this.scene, () => this.post));
   }
 
   // `entity` drawn as `model`, placed, turned and animated from its Transform each frame. Shown after the start, its

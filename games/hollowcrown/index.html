@@ -4,9 +4,108 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hollowcrown</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
       html, body { margin: 0; height: 100%; overflow: hidden; background: #f2c9a8; }
       #app { width: 100%; height: 100%; display: block; }
+
+      /* The HUD (the engine's UI kit, features/hud.ts): cream Fredoka on dark ink, hard shadows, a sand keycap.
+         Nothing in it takes the mouse; it keeps to the edges so the scene stays in view. */
+      .ui-overlay {
+        --cream: #f8ecd4;
+        --ink: #2e1f14;
+        --sand: #efdcb8;
+        --muted: #c9b8a0;
+        --panel: rgba(38, 26, 17, 0.9);
+        font-family: 'Fredoka', system-ui, sans-serif;
+        color: var(--cream);
+      }
+      .ui-overlay [hidden] { display: none !important; }
+
+      /* A region's name as the hero comes into it: across the top, fading in and out. */
+      .ui-banner {
+        position: absolute;
+        top: 16%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        text-shadow: 2px 2px 0 var(--ink), -1px -1px 0 var(--ink), 1px -1px 0 var(--ink), -1px 1px 0 var(--ink);
+        opacity: 0;
+        transition: opacity 0.8s;
+        white-space: nowrap;
+      }
+      .ui-banner.shown { opacity: 1; }
+      .ui-banner-title { font-size: 44px; font-weight: 700; letter-spacing: 0.12em; }
+      .ui-banner-sub { font-size: 18px; font-weight: 600; color: var(--muted); }
+
+      /* A small label in a corner (the place nearby, the clock). */
+      .ui-label {
+        position: absolute;
+        padding: 5px 12px 6px;
+        font-size: 16px;
+        font-weight: 600;
+        background: var(--panel);
+        border: 2px solid var(--sand);
+        box-shadow: 3px 3px 0 rgba(46, 31, 20, 0.5);
+        white-space: nowrap;
+      }
+      .ui-top-left { top: 16px; left: 18px; }
+      .ui-top-right { top: 16px; right: 18px; }
+      .ui-bottom-left { bottom: 16px; left: 18px; }
+      .ui-bottom-right { bottom: 16px; right: 18px; }
+
+      /* What E would do: a keycap, then the action, low in the middle. */
+      .ui-prompt {
+        position: absolute;
+        bottom: 22%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 12px 5px 6px;
+        font-size: 17px;
+        font-weight: 700;
+        background: var(--panel);
+        border: 2px solid var(--sand);
+        box-shadow: 3px 3px 0 rgba(46, 31, 20, 0.5);
+        white-space: nowrap;
+      }
+      .ui-key {
+        min-width: 26px;
+        height: 26px;
+        padding: 0 5px;
+        box-sizing: border-box;
+        display: grid;
+        place-items: center;
+        font: 700 15px/1 'Fredoka', system-ui, sans-serif;
+        color: var(--ink);
+        background: #ffd98a;
+        border: 2px solid var(--ink);
+        box-shadow: inset 0 -3px 0 #e8903a;
+      }
+
+      /* A dialogue: the speaker's name in gold, one line at a time, low on the screen. */
+      .ui-dialogue {
+        position: absolute;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(640px, calc(100% - 32px));
+        box-sizing: border-box;
+        padding: 12px 18px 10px;
+        background: var(--panel);
+        border: 2px solid var(--sand);
+        box-shadow: 3px 3px 0 rgba(46, 31, 20, 0.5);
+      }
+      .ui-dialogue-speaker { display: block; font-size: 15px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e8c27a; }
+      .ui-dialogue-line { margin: 6px 0 8px; font-size: 18px; font-weight: 500; line-height: 1.35; }
+      .ui-dialogue-hint { display: block; text-align: right; font-size: 13px; font-weight: 600; color: var(--muted); }
     </style>
   </head>
   <body>
