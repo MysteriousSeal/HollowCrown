@@ -38,10 +38,8 @@ const SPLIT_13_FLIPPED = [...SPLIT_13].reverse();
 
 // `origin` is the world position of the grid's (0,0,0) corner; each voxel
 // is `voxelSize` world units. `include`, if given, limits which colors get
-// faces: meshing the same grid twice with complementary filters splits one
-// model into two meshes (e.g. glowing windows with an emissive material)
-// with no faces hidden between them, since occupancy still comes from the
-// whole grid.
+// faces (occupancy still comes from the whole grid, so no faces are hidden
+// between two meshes of complementary colors).
 export function greedyMesh(
   grid: VoxelGrid,
   palette: number[],
@@ -49,9 +47,33 @@ export function greedyMesh(
   origin: THREE.Vector3,
   include: (color: number) => boolean = () => true,
 ): THREE.BufferGeometry {
-  const positions: number[] = [];
-  const normals: number[] = [];
-  const colors: number[] = [];
+  return meshFaces(grid, palette, voxelSize, origin, (color) => (include(color) ? 0 : -1))[0];
+}
+
+// One model as two meshes in a single pass (e.g. glowing windows apart, in an
+// emissive material): the faces of colors `second` picks go to the second
+// geometry, the rest to the first, with no faces hidden between them.
+export function greedyMeshSplit(
+  grid: VoxelGrid,
+  palette: number[],
+  voxelSize: number,
+  origin: THREE.Vector3,
+  second: (color: number) => boolean,
+): [THREE.BufferGeometry, THREE.BufferGeometry] {
+  return meshFaces(grid, palette, voxelSize, origin, (color) => (second(color) ? 1 : 0));
+}
+
+// Every face, into the geometry `bucket` says (0 or 1; -1: no face).
+function meshFaces(
+  grid: VoxelGrid,
+  palette: number[],
+  voxelSize: number,
+  origin: THREE.Vector3,
+  bucket: (color: number) => number,
+): [THREE.BufferGeometry, THREE.BufferGeometry] {
+  const out = [0, 1].map(() => ({ positions: [] as number[], normals: [] as number[], colors: [] as number[] }));
+  const buckets = new Int8Array(256).fill(-1);
+  for (let c = 1; c <= Math.min(255, palette.length); c++) buckets[c] = bucket(c);
   const linearPalette = palette.map((hex) => new THREE.Color(hex));
   const quadSize = [0, 0, 0];
   const ao = [1, 1, 1, 1];
@@ -81,7 +103,7 @@ export function greedyMesh(
         for (x[u] = 0; x[u] < width; x[u]++, n++, index += stride[u]) {
           const a = aInside ? cells[index] : 0;
           const b = bInside ? cells[index + stride[d]] : 0;
-          const face = a !== 0 && b === 0 && include(a) ? a : a === 0 && b !== 0 && include(b) ? -b : 0;
+          const face = a !== 0 && b === 0 && buckets[a] >= 0 ? a : a === 0 && b !== 0 && buckets[b] >= 0 ? -b : 0;
           if (face === 0) {
             mask[n] = 0;
             continue;
@@ -128,6 +150,7 @@ export function greedyMesh(
           const order = ao[0] + ao[2] > ao[1] + ao[3] ? (face > 0 ? SPLIT_13 : SPLIT_13_FLIPPED) : face > 0 ? SPLIT_02 : SPLIT_02_FLIPPED;
           const color = linearPalette[(key & 255) - 1];
           const sign = face > 0 ? 1 : -1;
+          const { positions, normals, colors } = out[buckets[key & 255]];
           for (const c of order) {
             const [a, b] = CORNER_UV[c];
             for (let axis = 0; axis < 3; axis++) {
@@ -146,11 +169,14 @@ export function greedyMesh(
     }
   }
 
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
-  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-  return geometry;
+  const [first, second] = out.map(({ positions, normals, colors }) => {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    return geometry;
+  });
+  return [first, second];
 }
 
 // Packed 2-bit AO per face corner (3 = fully open), sampled around the

@@ -3,5 +3,5 @@ export { colorAt, createGrid, forEachVoxel, inGrid, setColor, voxelIndex, type S
 export { fillBox, fillEllipsoid, insideEllipsoid, isSurface, nibble, voxelLine, type Ellipsoid } from './shapes';
 export { box, erase, over, recolor, stamp, wrap, type Paint } from './paint';
 export { namedPalette } from './palette';
-export { greedyMesh } from './greedyMesh';
+export { greedyMesh, greedyMeshSplit } from './greedyMesh';
 export { roundNormals } from './roundedNormals';
