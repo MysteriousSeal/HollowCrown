@@ -20,6 +20,8 @@ import { RED_HEN_BAND } from '../people/redHen';
 import { DEAD_PILGRIM, sprawl } from '../people/pilgrim';
 import { MULE } from './muleVoxels';
 import { FOX, RABBIT } from './smallBeasts';
+import { DEER_DOE, DEER_STAG } from './deerVoxels';
+import { COW, DOG, SHEEP } from './farmBeasts';
 import { Lying } from './lying';
 import { PerchedFlock } from './perched';
 import { HOBS_TOWER_GUARD } from '../people/hobsTower';
@@ -38,6 +40,11 @@ export const CREATURES: CreatureEntry[] = [
   { id: 'bear', name: 'Brown bear', family: 'beast', make: () => new BeastModel(BEAR) },
   { id: 'rabbit', name: 'Rabbit', family: 'beast', make: () => new BeastModel(RABBIT) },
   { id: 'fox', name: 'Fox', family: 'beast', make: () => new BeastModel(FOX) },
+  { id: 'deerDoe', name: 'Red deer (doe)', family: 'beast', make: () => new BeastModel(DEER_DOE) },
+  { id: 'deerStag', name: 'Red deer (stag)', family: 'beast', make: () => new BeastModel(DEER_STAG) },
+  { id: 'sheep', name: 'Sheep', family: 'beast', make: () => new BeastModel(SHEEP) },
+  { id: 'cow', name: 'Cow', family: 'beast', make: () => new BeastModel(COW) },
+  { id: 'dog', name: 'Farm dog', family: 'beast', make: () => new BeastModel(DOG) },
   { id: 'mule', name: 'Mule', family: 'beast', make: () => new BeastModel(MULE) },
   { id: 'spider', name: 'Giant spider', family: 'beast', make: () => new SpiderModel(CAVE_SPIDER) },
   { id: 'spiderling', name: 'Spiderling', family: 'beast', make: () => new SpiderModel(HATCHLING) },
