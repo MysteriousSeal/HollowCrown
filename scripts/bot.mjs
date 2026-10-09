@@ -7,7 +7,8 @@ import { spawn } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
+import { chromium } from 'playwright';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const URL = 'http://localhost:5173';
@@ -49,20 +50,6 @@ async function devServer() {
   throw new Error(`the dev server didn't answer at ${URL} within a minute`);
 }
 
-// Playwright: the workspace's, else one npx has cached.
-async function playwright() {
-  try {
-    return await import('playwright');
-  } catch {
-    const npx = join(homedir(), '.npm', '_npx');
-    for (const dir of existsSync(npx) ? readdirSync(npx) : []) {
-      const entry = join(npx, dir, 'node_modules', 'playwright', 'index.mjs');
-      if (existsSync(entry)) return import(pathToFileURL(entry).href);
-    }
-    throw new Error('playwright is not installed: npm i -D playwright');
-  }
-}
-
 // The Chromium cached by Playwright, newest first: for when its own build isn't there.
 function cachedChromium() {
   const builds = existsSync(CACHE) ? readdirSync(CACHE).filter((d) => /^chromium-\d+$/.test(d)).sort().reverse() : [];
@@ -77,7 +64,6 @@ function cachedChromium() {
 
 async function main() {
   const server = await devServer();
-  const { chromium } = await playwright();
   const options = { headless: false, args: ['--window-size=1440,900'] };
   let browser;
   try {
