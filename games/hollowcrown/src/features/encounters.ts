@@ -1,6 +1,7 @@
-// Encounters: foes a quest's stage brings when it begins (MQ01's midnight: the famine dead come down into
-// Brindleford). Each kind fights as the bestiary says (docs/story/bestiary.md): the Hungry don't attack first, they
-// go to the houses; struck, they turn on whoever struck them.
+// Encounters: foes that keep a place (the Red Hen's band at their camp), and foes a quest's stage brings when it
+// begins (MQ01's midnight: the famine dead come down into Brindleford). Each kind fights as the bestiary says
+// (docs/story/bestiary.md): the band on sight; the Hungry don't attack first, they go to the houses, and struck, they
+// turn on whoever struck them.
 
 import type { Entity, System } from '@voxel/engine/ecs';
 import { Attack, Faction, Health, Hit, Hostile, MoveSpeed, Transform, Wander, attack, health, hostile, wander } from '@voxel/engine/gameplay';
@@ -20,7 +21,14 @@ interface Foe {
 }
 const FOES: Record<string, Foe> = {
   hungry: { hp: 10, damage: 3, cooldown: 1.2, speed: 1.4, provoked: true }, // (MQ01's midnight)
+  bandit: { hp: 16, damage: 4, cooldown: 1.1, speed: 1.6, provoked: false }, // (the Red Hen camp)
 };
+
+// Foes keeping a place from the start: which creature, where each stands, the ground they wander (tiles round it).
+export const KEEPERS: Array<{ creature: string; at: Point[]; roam: number; note: string }> = [
+  // The Red Hen camp (620, 3560): five of the band in the birch clearing, round the fire (Brannoc is MQ03's).
+  { creature: 'bandit', at: [[617, 3557], [623, 3557], [616, 3562], [624, 3563], [620, 3565]], roam: 2, note: 'the Red Hen camp' },
+];
 
 // What a stage brings, by quest/stage: which creature, where each stands, the ground they wander (tiles round it).
 export const ENCOUNTERS: Record<string, { creature: string; at: Point[]; roam: number }> = {
@@ -42,7 +50,7 @@ function spawnFoe(app: Parameters<Feature['install']>[0]['app'], map: WorldMap, 
     [Attack, attack(foe.damage, { cooldown: foe.cooldown })],
     [Faction, creature],
   );
-  if (!foe.provoked) app.world.add(entity, Hostile, hostile({ speed: foe.speed * 2, home: { x, z } }));
+  if (!foe.provoked) app.world.add(entity, Hostile, hostile({ sight: 6, leash: 12, speed: foe.speed * 2, home: { x, z } }));
   app.show(entity, entry.make());
   return entity;
 }
@@ -65,6 +73,7 @@ export const provokeSystem: System = {
 export const encounters: Feature = {
   name: 'encounters',
   install: ({ app, map }) => {
+    for (const { creature, at, roam } of KEEPERS) for (const spot of at) spawnFoe(app, map, creature, spot, roam);
     const seen = new Set<string>(); // stages begun so far, by quest/stage
     const system: System = {
       name: 'encounters',
