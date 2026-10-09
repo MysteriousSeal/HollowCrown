@@ -13,10 +13,12 @@ export interface Speaker {
   portrait?: HTMLCanvasElement | HTMLImageElement;
 }
 
-// A line, and the replies offered once it's said (picked with a click or 1-9; the conversation goes on after).
+// A line, who says it (`who`: someone else than that side's speaker, a third voice; its portrait still lit), and
+// the replies offered once it's said (picked with a click or 1-9; the conversation goes on after).
 export interface ConversationLine {
   side: Side;
   text: string;
+  who?: string;
   choices?: string[];
 }
 
@@ -195,14 +197,14 @@ export class Conversation {
 
   private draw(): void {
     const script = this.script!;
-    const { side, text } = script.line;
+    const { side, text, who } = script.line;
     // The one speaking lit, the other dimmed (`.speaking` and `.listening`, styled by the game).
     for (const s of ['left', 'right'] as const) {
       this.sides[s].el.classList.toggle('speaking', s === side);
       this.sides[s].el.classList.toggle('listening', s !== side);
     }
     this.el.dataset.speaker = side;
-    this.speaker.textContent = this.names[side];
+    this.speaker.textContent = who ?? this.names[side];
     this.choices.hidden = true;
     this.type(text);
     this.hint.textContent = script.last ? 'E · close' : 'E · next';
