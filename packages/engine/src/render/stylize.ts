@@ -45,7 +45,12 @@ vWorldHeight = (modelMatrix * stylizeWorld).y;`;
 
 if (!LIGHTS_CHUNK.includes('float cel')) throw new Error('stylize: Three.js lighting chunk changed; update the cel patch');
 
-// Shared by every patched program; set each frame to the camera focus height.
+// Every material is patched once, whichever scene it's in (the game's, a portrait's), all sharing one focus height:
+// patching one twice would declare its shader additions twice.
+const patched = new WeakSet<THREE.Material>();
+const focusY = { value: 0 };
+
+// Set each frame to the camera focus height.
 export interface Stylizer {
   setFocusHeight(y: number): void;
   patch(materials: THREE.Material[]): void; // (materials made after: a streamed world's regions', as they're drawn)
@@ -57,8 +62,6 @@ export function stylize(scene: THREE.Scene, materials: THREE.Material[] = []): S
   scene.fog = new THREE.Fog(FOG_COLOR, FOG_NEAR, FOG_FAR);
   scene.background = new THREE.Color(FOG_COLOR);
 
-  const focusY = { value: 0 };
-  const patched = new Set<THREE.Material>();
   const patchAll = (list: THREE.Material[]) => {
     for (const m of list) {
       if (!(m instanceof THREE.MeshStandardMaterial) || patched.has(m)) continue;
