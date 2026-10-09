@@ -32,7 +32,7 @@ describe('quests, followed', () => {
     for (const q of Object.values(QUESTS)) {
       const book = newBook();
       startQuest(book, QUESTS, q.id);
-      const progress = book.log[0];
+      const progress = book.quests[0];
       for (let guard = 0; !progress.finished && guard < 100; guard++) {
         const stage = q.stages.find((s) => s.id === progress.stage)!;
         const next = stage.objectives.find((o) => !o.optional && !UNPLAYABLE.has(o.kind) && !progress.done.includes(o.id));
