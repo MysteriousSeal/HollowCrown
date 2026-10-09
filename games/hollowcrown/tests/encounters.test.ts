@@ -17,10 +17,10 @@ const obstacles = obstaclesOf(map);
 
 describe('encounters', () => {
   it("bring creatures that exist, to a quest's stage, on open ground", () => {
-    for (const [key, { creature, at }] of Object.entries(ENCOUNTERS)) {
+    for (const [key, { creature, at, models }] of Object.entries(ENCOUNTERS)) {
       const [quest, stage] = key.split('/');
       expect(QUESTS[quest]?.stages.some((s) => s.id === stage), key).toBe(true);
-      expect(CREATURES.some((c) => c.id === creature), key).toBe(true);
+      for (const model of models ?? [creature]) expect(CREATURES.some((c) => c.id === model), `${key} ${model}`).toBe(true);
       for (const [x, z] of at) expect(map.walkable(x, z) && !obstacles.blocks(x, z, 0.2), `${key} ${x},${z}`).toBe(true);
     }
   });

@@ -36,14 +36,18 @@ export class Schedule {
   }
 
   // One real frame of `dt` seconds, at a time scale: the input and simulation stepped through the game time it
-  // covers (steps of MAX_STEP or less), then the presentation once; the frame's events kept for all of it. Returns
-  // the game time that passed.
+  // covers (steps of MAX_STEP or less), each step's events read by its own systems once, then the presentation once,
+  // with every event of the frame. Returns the game time that passed.
   frame(world: World, dt: number, { scale = 1, paused = false }: FrameOptions = {}): number {
     const time = paused ? 0 : dt * Math.max(0, scale);
     if (time > 0) {
       const steps = Math.min(MAX_STEPS, Math.ceil(time / MAX_STEP - 1e-9));
-      for (let i = 0; i < steps; i++) this.stages(world, time / steps, PLAY);
+      for (let i = 0; i < steps; i++) {
+        this.stages(world, time / steps, PLAY);
+        world.endStep();
+      }
     } else if (!paused) this.stages(world, 0, PLAY);
+    world.beginPresent();
     this.stages(world, time, ['present']);
     world.clearEvents();
     return time;

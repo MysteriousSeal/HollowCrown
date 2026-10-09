@@ -2,6 +2,8 @@
 
 import type { Quest } from './kinds';
 import { MQ01 } from './mq01';
+import { MQ02 } from './mq02';
+import { MQ03 } from './mq03';
 import { SQ_BV1 } from './sqbv1';
 import { SQ_BV2 } from './sqbv2';
 import { SQ_BV3 } from './sqbv3';
@@ -11,5 +13,5 @@ import { SQ_BV6 } from './sqbv6';
 import { SQ_BV7 } from './sqbv7';
 import { SQ_BV8 } from './sqbv8';
 
-export const QUESTS: Record<string, Quest> = Object.fromEntries([MQ01, SQ_BV1, SQ_BV2, SQ_BV3, SQ_BV4, SQ_BV5, SQ_BV6, SQ_BV7, SQ_BV8].map((q) => [q.id, q]));
+export const QUESTS: Record<string, Quest> = Object.fromEntries([MQ01, MQ02, MQ03, SQ_BV1, SQ_BV2, SQ_BV3, SQ_BV4, SQ_BV5, SQ_BV6, SQ_BV7, SQ_BV8].map((q) => [q.id, q]));
 export type { ChoiceOption, Line, Objective, ObjectiveKind, Quest, QuestStage } from './kinds';

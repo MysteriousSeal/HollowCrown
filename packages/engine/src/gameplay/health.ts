@@ -36,11 +36,12 @@ export const isAlive = (world: World, entity: Entity): boolean => world.has(enti
 // Two systems share the work: one in the simulate stage (after the engine's attacks), one at the start of the
 // present stage for blows a game's own simulate systems land after it. Each Hit is counted once.
 export function healthSystems(clock: () => number = () => 0): [System, System] {
-  const counted = new WeakMap<readonly unknown[], number>(); // this frame's Hit list -> how many of it are counted
+  const counted = new WeakSet<object>(); // the blows already taken
   const update = (world: World) => {
-    const hits = world.eventsOf(Hit);
-    for (let i = counted.get(hits) ?? 0; i < hits.length; i++) {
-      const { target, by, damage } = hits[i];
+    for (const hit of world.eventsOf(Hit)) {
+      if (counted.has(hit)) continue;
+      counted.add(hit);
+      const { target, by, damage } = hit;
       if (!isAlive(world, target) || !(damage > 0)) continue;
       const h = world.read(target, Health);
       h.hp = Math.max(0, h.hp - damage);
@@ -50,7 +51,6 @@ export function healthSystems(clock: () => number = () => 0): [System, System] {
       if (intent) [intent.x, intent.z] = [0, 0];
       world.emit(Died, { entity: target, by });
     }
-    counted.set(hits, hits.length);
   };
   return [
     { name: 'health', stage: 'simulate', update },
