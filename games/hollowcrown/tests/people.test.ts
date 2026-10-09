@@ -64,6 +64,7 @@ describe('people', () => {
       m.animate(1, 0);
       gesture(m, 1);
       expect(m.joints.rightArm.rotation.x).toBeCloseTo(rest, 5);
+      m.animate(1, 0, { name, phase: 0.5 }); // (and through the engine's action hook)
     });
   }
 });
