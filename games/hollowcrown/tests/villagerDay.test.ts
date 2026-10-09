@@ -3,7 +3,8 @@
 
 import { describe, expect, it } from 'vitest';
 import { World } from '@voxel/engine/ecs';
-import { MoveIntent, TimeOfDay, Transform, Wander } from '@voxel/engine/gameplay';
+import { Acting, MoveIntent, TimeOfDay, Transform, Wander } from '@voxel/engine/gameplay';
+import { GESTURES } from '../src/people/gestures';
 import { Resident, isDay, villagerDaySystem } from '../src/systems/villagerDay';
 
 const setup = (hours: number, seated = false) => {
@@ -37,6 +38,26 @@ describe('villagerDay', () => {
     villagerDaySystem.update(world, 1 / 60);
     expect(world.read(person, MoveIntent)).toEqual({ x: 0, z: 0 });
     expect(world.read(person, Transform).facing).toBe(0);
+  });
+
+  it('now and then gestures in a pause, at most once a pause, with a gesture people have', () => {
+    let gestured = 0;
+    for (let i = 0; i < 20; i++) {
+      const { world, person } = setup(12);
+      villagerDaySystem.update(world, 1 / 60);
+      Object.assign(world.read(person, Wander), { target: null, wait: 5, steps: i });
+      villagerDaySystem.update(world, 1 / 60);
+      const acting = world.get(person, Acting);
+      if (acting) {
+        gestured++;
+        expect(GESTURES[acting.action]).toBeDefined();
+        world.remove(person, Acting);
+        villagerDaySystem.update(world, 1 / 60);
+        expect(world.has(person, Acting)).toBe(false); // (not twice in one pause)
+      }
+    }
+    expect(gestured).toBeGreaterThan(3);
+    expect(gestured).toBeLessThan(17);
   });
 
   it('leaves the seated sat', () => {
