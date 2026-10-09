@@ -20,6 +20,7 @@ import { RED_HEN_BAND } from '../people/redHen';
 import { DEAD_PILGRIM, sprawl } from '../people/pilgrim';
 import { MULE } from './muleVoxels';
 import { Lying } from './lying';
+import { PerchedFlock } from './perched';
 import { HOBS_TOWER_GUARD } from '../people/hobsTower';
 
 export interface CreatureEntry {
@@ -72,6 +73,7 @@ export const CREATURES: CreatureEntry[] = [
   { id: 'ashenSmall', name: 'The Ashen (child)', family: 'horror', make: () => new FrameModel(ASHEN_SMALL) },
   { id: 'pitEater', name: 'Pit-eater', family: 'horror', make: () => new FrameModel(PIT_EATER) },
   { id: 'rook', name: 'Carrion rook', family: 'horror', make: () => new BirdModel(ROOK) },
+  { id: 'rookFlock', name: 'Carrion rooks, perched at the gibbet', family: 'horror', make: () => new PerchedFlock(5, 0.6) },
   { id: 'rookLeader', name: 'Carrion rook (leader)', family: 'horror', make: () => new BirdModel(ROOK_LEADER) },
   { id: 'deadPilgrim', name: 'Dead pilgrim woman (MQ01, the ditch)', family: 'remains', make: () => new Lying(new FrameModel(DEAD_PILGRIM), 'back', (m) => sprawl(m as FrameModel)) },
   { id: 'deadMule', name: 'Dead mule (MQ01, the Birchwood)', family: 'remains', make: () => new Lying(new BeastModel(MULE), 'side') },
