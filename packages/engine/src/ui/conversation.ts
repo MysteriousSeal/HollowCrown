@@ -13,10 +13,15 @@ export interface Speaker {
   portrait?: HTMLCanvasElement | HTMLImageElement;
 }
 
+// A line, and the replies offered once it's said (picked with a click or 1-9; the conversation goes on after).
 export interface ConversationLine {
   side: Side;
   text: string;
+  choices?: string[];
 }
+
+// What's told of a reply picked: the line it answered (its index) and which reply (its index).
+export type OnChoice = (line: number, choice: number) => void;
 
 // Where a conversation's reading is: its line (and who says it), and whether it's over.
 export class Script {
@@ -24,6 +29,10 @@ export class Script {
 
   constructor(readonly lines: ConversationLine[]) {
     if (lines.length === 0) throw new Error('conversation: no lines');
+  }
+
+  get at(): number {
+    return this.index;
   }
 
   get line(): ConversationLine {
@@ -99,6 +108,8 @@ export class Conversation {
   private readonly speaker = element('b', 'ui-talk-speaker');
   private readonly text = element('p', 'ui-talk-text');
   private readonly hint = element('small', 'ui-talk-hint');
+  private readonly choices = element('ol', 'ui-talk-choices');
+  private onChoice: OnChoice | undefined;
   private names: Record<Side, string> = { left: '', right: '' };
   private script: Script | null = null;
   private onClose: (() => void) | undefined;
@@ -108,17 +119,26 @@ export class Conversation {
 
   constructor(root: HTMLElement, private readonly keys = TALK_KEYS) {
     const panel = element('div', 'ui-talk-panel');
-    panel.append(this.speaker, this.text, this.hint);
+    panel.append(this.speaker, this.text, this.choices, this.hint);
     this.el.append(this.sides.left.el, panel, this.sides.right.el);
     this.el.hidden = true;
+    this.choices.hidden = true;
     root.append(this.el);
     window.addEventListener('keydown', (event) => {
       // Not the key press that opened it, nor a held key's repeats.
-      if (!this.script || event.repeat || event.timeStamp <= this.openedAt || !this.keys.includes(event.code)) return;
+      if (!this.script || event.repeat || event.timeStamp <= this.openedAt) return;
+      const pick = /^Digit([1-9])$/.exec(event.code);
+      if (pick && this.asking) this.pick(Number(pick[1]) - 1);
+      else if (this.keys.includes(event.code)) this.advance();
+      else return;
       event.preventDefault();
-      this.advance();
     });
     this.el.addEventListener('click', () => this.advance());
+  }
+
+  // Whether replies are up, waiting for one to be picked.
+  get asking(): boolean {
+    return !this.choices.hidden;
   }
 
   get isOpen(): boolean {
@@ -126,10 +146,11 @@ export class Conversation {
   }
 
   // Opens between `left` (the hero, say) and `right`, on the first of `lines`; `onClose` when the last is passed (or
-  // it's closed).
-  open(left: Speaker, right: Speaker, lines: ConversationLine[], onClose?: () => void): void {
+  // it's closed); `onChoice` when a reply is picked.
+  open(left: Speaker, right: Speaker, lines: ConversationLine[], onClose?: () => void, onChoice?: OnChoice): void {
     this.script = new Script(lines);
     this.onClose = onClose;
+    this.onChoice = onChoice;
     this.openedAt = performance.now();
     this.names = { left: left.name, right: right.name };
     this.sides.left.set(left);
@@ -143,10 +164,22 @@ export class Conversation {
     if (!this.script) return;
     if (this.typing && !this.typing.done) {
       this.text.textContent = this.typing.finish();
+      this.offer();
       return;
     }
+    if (this.asking) return;
     if (this.script.advance()) this.draw();
     else this.close();
+  }
+
+  // Picks reply `index` of the line's (if offered), and goes on.
+  pick(index: number): void {
+    const script = this.script;
+    const offered = script?.line.choices ?? [];
+    if (!script || !this.asking || index < 0 || index >= offered.length) return;
+    this.choices.hidden = true;
+    this.onChoice?.(script.at, index);
+    if (this.script === script) this.advance();
   }
 
   close(): void {
@@ -170,8 +203,27 @@ export class Conversation {
     }
     this.el.dataset.speaker = side;
     this.speaker.textContent = this.names[side];
+    this.choices.hidden = true;
     this.type(text);
     this.hint.textContent = script.last ? 'E · close' : 'E · next';
+  }
+
+  // The line's replies, once it's all written out.
+  private offer(): void {
+    const offered = this.script?.line.choices;
+    if (!offered?.length || this.asking) return;
+    this.choices.replaceChildren(
+      ...offered.map((choice, i) => {
+        const item = element('li', 'ui-talk-choice', choice);
+        item.addEventListener('click', (event) => {
+          event.stopPropagation();
+          this.pick(i);
+        });
+        return item;
+      }),
+    );
+    this.choices.hidden = false;
+    this.hint.textContent = '1-9 · reply';
   }
 
   // Writes `text` out a frame at a time.
@@ -185,6 +237,7 @@ export class Conversation {
       this.text.textContent = typing.tick(Math.max(0, now - last) / 1000);
       last = now;
       if (!typing.done) this.frame = requestAnimationFrame(step);
+      else this.offer();
     };
     this.frame = requestAnimationFrame(step);
   }
