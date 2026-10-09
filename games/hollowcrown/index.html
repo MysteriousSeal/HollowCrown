@@ -137,6 +137,19 @@
         will-change: transform, opacity;
       }
 
+      /* Damage dealt, floating up from the blow: bold cream with an ink edge; the hero's own hurt in red. */
+      .ui-float {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--cream);
+        text-shadow: 2px 2px 0 var(--ink), -1px -1px 0 var(--ink), 1px -1px 0 var(--ink), -1px 1px 0 var(--ink);
+        will-change: transform, opacity;
+      }
+      .ui-float-hurt { color: #ff6a4a; }
+
       /* What E would do: a keycap, then the action, low in the middle. */
       .ui-prompt {
         position: absolute;

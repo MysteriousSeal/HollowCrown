@@ -18,6 +18,17 @@ import { Dialogue } from '../src/ui/dialogue';
 import { MapView, cssColor } from '../src/ui/mapImage';
 import { ToastQueue } from '../src/ui/toasts';
 import { meterShare } from '../src/ui/meter';
+import { floatAt } from '../src/ui/floatingText';
+
+describe('floatAt', () => {
+  it('rises and fades over its life, popping in large', () => {
+    const [start, mid, end] = [floatAt(0, 1), floatAt(0.5, 1), floatAt(1, 1)];
+    expect([start.rise, start.alpha, start.scale]).toEqual([0, 1, 1.35]);
+    expect(mid.alpha).toBe(1);
+    expect(mid.rise).toBeGreaterThan(end.rise / 2);
+    expect([end.alpha, end.scale]).toEqual([0, 1]);
+  });
+});
 
 describe('meterShare', () => {
   it('is the share full, kept between empty and full', () => {
