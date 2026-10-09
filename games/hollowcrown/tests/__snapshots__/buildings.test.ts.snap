@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Brindleford's buildings > keep to a triangle budget, and come out as they did 1`] = `
+{
+  "brindle-mill": 12140,
+  "brindleford-notices": 318,
+  "brindleford-well": 1082,
+  "cobbe-barn": 7084,
+  "cobbe-farmhouse": 6030,
+  "ferry-cottage": 5270,
+  "ferrymans-rest": 12886,
+  "fletcher-house": 5206,
+  "hask-house": 5336,
+  "herbalists-cottage": 5538,
+  "hollin-house": 4940,
+  "holt-house": 4962,
+  "lusk-house": 4844,
+  "megs-house": 5324,
+  "orr-house": 5274,
+  "reede-house": 5082,
+  "reeves-house": 8042,
+  "shrine-house": 6176,
+  "smithy": 4180,
+  "tidy-house": 4914,
+}
+`;
