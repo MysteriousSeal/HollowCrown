@@ -162,3 +162,20 @@ export function barrow(): VoxelGrid {
   }
   return g;
 }
+
+// A bee skep on its stand: a dome of coiled straw, its coils banded light and dark, the bees' way in a dark notch at its
+// foot (+z), on a plank set on a stake at knee height.
+export function skep(): VoxelGrid {
+  const g = createGrid([11, 14, 11]);
+  fillBox(g, 4, 0, 4, 6, 3, 6, P.post); // the stake
+  fillBox(g, 1, 4, 1, 9, 4, 9, P.rail); // the plank
+  for (let y = 0; y < 9; y++) {
+    const r = 4.6 * Math.sqrt(1 - (Math.max(0, y - 3) / 6) ** 2);
+    for (let x = 0; x < 11; x++) {
+      for (let z = 0; z < 11; z++) if (Math.hypot(x - 5, z - 5) <= r) setColor(g, x, 5 + y, z, y % 3 === 2 ? P.hayShade : y > 5 ? P.hayLight : P.hay);
+    }
+  }
+  fillBox(g, 4, 5, 9, 6, 5, 10, 0); // the way in
+  fillBox(g, 4, 5, 8, 6, 5, 8, P.tar);
+  return g;
+}
