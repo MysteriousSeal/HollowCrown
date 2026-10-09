@@ -1,10 +1,14 @@
 // Brindleford's buildings stand where they can: on dry, open ground, none in another or on a road, every door
-// reachable on foot from the well; and everyone living in them is someone the region's bible knows.
+// reachable on foot from the well, their walls in the way; and everyone living in them is someone the region's bible
+// knows.
 
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { loadWorldMap, type PlaceData } from '@voxel/engine/world';
+import { World } from '@voxel/engine/ecs';
+import { BODY_RADIUS, MoveIntent, MoveSpeed, Transform, movementSystem } from '@voxel/engine/gameplay';
+import { ObstaclesResource, TerrainResource, loadWorldMap, type PlaceData } from '@voxel/engine/world';
+import { obstaclesOf } from '../src/buildings';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
 import { BRINDLEFORD } from '../src/data/world/brindleford';
 import { footprint, type BuildingProps } from '../src/data/world/kinds';
@@ -61,3 +65,30 @@ describe('Brindleford', () => {
     }
   });
 });
+
+describe('Brindleford\'s walls', () => {
+  const obstacles = obstaclesOf(map);
+
+  it('stand in the way of every building and fixture, and leave every door clear', () => {
+    expect(obstacles.size).toBe(buildings.length + 2);
+    for (const b of buildings) {
+      expect(obstacles.blocks(...centre(b), BODY_RADIUS), `${b.id}'s middle`).toBe(true);
+      expect(obstacles.blocks(...footprint(b).door, BODY_RADIUS), `${b.id}'s door`).toBe(false);
+    }
+  });
+
+  it('keep the hero out of the inn', () => {
+    const world = new World();
+    world.setResource(TerrainResource, map);
+    world.setResource(ObstaclesResource, obstacles);
+    const door = footprint(map.place('ferrymans-rest')!).door;
+    const hero = world.spawn([Transform, { x: door[0], y: 0, z: door[1], facing: 0 }], [MoveIntent, { x: 0, z: -1 }], [MoveSpeed, 3.2]);
+    for (let i = 0; i < 60; i++) movementSystem.update(world, 1 / 30);
+    expect(world.read(hero, Transform).z).toBeGreaterThan(footprint(map.place('ferrymans-rest')!).z1 + 0.5 - 3 / 16);
+  });
+});
+
+function centre(p: PlaceData): [number, number] {
+  const f = footprint(p);
+  return [(f.x0 + f.x1) / 2, (f.z0 + f.z1) / 2];
+}
