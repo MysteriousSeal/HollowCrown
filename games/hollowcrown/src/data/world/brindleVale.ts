@@ -69,7 +69,7 @@ export const BRINDLE_VALE: ValePart = {
   ],
   areas: [
     { id: 'birchwood', kind: 'forest', name: 'The Birchwood', shape: { polygon: [[450, 3450], [760, 3430], [800, 3700], [520, 3760]] }, props: { trees: ['birch', 'oak'] } },
-    { id: 'brindle-woods', kind: 'forest', name: 'Brindle Woods', shape: { polygon: [[950, 2950], [1350, 2960], [1300, 3010], [1235, 3022], [1170, 3018], [1100, 3060], [1000, 3120]] }, props: { trees: ['oak', 'birch'] } }, // (north of Tallow Green, round its hives)
+    { id: 'brindle-woods', kind: 'forest', name: 'Brindle Woods', shape: { polygon: [[950, 2950], [1350, 2960], [1300, 3010], [1235, 3022], [1192, 3020], [1192, 2992], [1168, 2992], [1166, 3018], [1100, 3060], [1000, 3120]] }, props: { trees: ['oak', 'birch'] } }, // (north of Tallow Green, a clearing for its hives)
     { id: 'mosshill-pines', kind: 'forest', name: 'Mosshill pines', shape: { polygon: [[1150, 3520], [1450, 3500], [1450, 3800], [1200, 3800]] }, props: { trees: ['pine'] } },
     { id: 'hay-meadows', kind: 'meadow', name: 'The hay meadows', shape: { rect: [750, 3250, 1050, 3500] } },
     { id: 'clover-meadow', kind: 'meadow', name: 'The clover meadow', shape: { rect: [1100, 2980, 1300, 3120] } },
