@@ -30,8 +30,8 @@ export const TALLOW_GREEN: ValePart = {
   surfaces: [
     ...FOOTPATHS.map((line) => ({ note: 'a Tallow Green footpath', shape: { line, width: 1.5 }, surface: 'path' as const })),
     { note: "the path up to Agna's hives", shape: { line: HIVE_PATH, width: 1.5 }, surface: 'path' },
-    { note: "Tallow Green's north lane", shape: { line: NORTH_LANE, width: 2 }, surface: 'track' },
-    { note: "Tallow Green's west lane", shape: { line: WEST_LANE, width: 2 }, surface: 'track' },
+    { note: "Tallow Green's north lane", shape: { line: NORTH_LANE, width: 1.5 }, surface: 'track' },
+    { note: "Tallow Green's west lane", shape: { line: WEST_LANE, width: 1.5 }, surface: 'track' },
   ],
   areas: [
     { id: 'tallow-green-green', kind: 'green', name: "Tallow Green's green", shape: { polygon: GREEN } },

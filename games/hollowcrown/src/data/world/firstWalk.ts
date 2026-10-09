@@ -15,7 +15,7 @@ const ROCKSLIDE_FOOT: Point[] = [[300, 3290], [428, 3296], [462, 3332], [471, 33
 // The Shrine Brook: down off the rise north of the road, under it, into the Birchwood to a pool. Two wide, too deep
 // to wade but for the culvert where the road crosses.
 const BROOK: Point[] = [[596, 3150], [604, 3240], [606, 3300], [612, 3340], [618, 3369], [630, 3400], [646, 3440], [660, 3468]];
-const BROOK_CROSSING: Point[] = [[606, 3371], [630, 3369]]; // the Pilgrim Road again, over the culvert
+const BROOK_CROSSING: Point[] = [[608, 3370], [628, 3370]]; // the Pilgrim Road again, over the culvert
 
 // The shepherd's hut on Shrine Rise, its path down to the road, its pasture fenced round it.
 const SHRINE_RISE = { polygon: [[530, 3292], [560, 3284], [592, 3292], [598, 3318], [586, 3340], [556, 3346], [530, 3336], [522, 3312]] as Point[] };
@@ -34,7 +34,7 @@ export const FIRST_WALK: ValePart = {
     { note: 'the rockslide', shape: { polygon: ROCKSLIDE }, surface: 'rock' },
     { note: 'the Shrine Brook', shape: { line: BROOK, width: 2 }, surface: 'river' },
     { note: 'the Shrine Brook, its pool', shape: { circle: [662, 3472, 4] }, surface: 'water' },
-    { note: 'the Pilgrim Road, over the culvert', shape: { line: BROOK_CROSSING, width: 3 }, surface: 'road' },
+    { note: 'the Pilgrim Road, over the culvert', shape: { line: BROOK_CROSSING, width: 2 }, surface: 'road' },
     { note: "the shepherd's path down Shrine Rise", shape: { line: HUT_PATH, width: 1.5 }, surface: 'path' },
   ],
   areas: [
@@ -55,8 +55,8 @@ function building(id: string, name: string, at: Point, facing: number, props: Bu
 
 // The props along the walk, by the environment's kinds.
 export const FIRST_WALK_DRESSING: Dressing[] = [
-  // The shrine's clearing: worn flagstones round the post, the road leaving east over them.
-  { kind: 'flagstones', note: "the Pilgrim's Shrine's flagstones", at: [480, 3380], rect: [475, 3375, 485, 3385] },
+  // The shrine's clearing: a small apron of worn flagstones before the post.
+  { kind: 'flagstones', note: "the Pilgrim's Shrine's flagstones", at: [480, 3380], rect: [479, 3379, 481, 3381] },
   { kind: 'rockslide', note: 'the rockslide across the west pass', at: [462, 3380], radius: 8, facing: EAST },
   // The robbery's leavings, a little east of the shrine: the cart in the ditch, the pilgrims' things strewn.
   { kind: 'handcart', note: "an overturned handcart, the Red Hen's leavings", at: [566, 3378], facing: WEST },
