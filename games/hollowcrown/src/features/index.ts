@@ -2,6 +2,7 @@
 
 import type { Feature } from './context';
 import { bot } from './bot';
+import { ambient } from './ambient';
 import { buildings } from './buildings';
 import { captives } from './captives';
 import { combat } from './combat';
@@ -9,6 +10,7 @@ import { daylight } from './daylight';
 import { encounters } from './encounters';
 import { debug } from './debug';
 import { devStart } from './devStart';
+import { discovery } from './discovery';
 import { hud } from './hud';
 import { land } from './land';
 import { nature } from './nature';
@@ -33,9 +35,11 @@ export const FEATURES: Feature[] = [
   hud,
   talk,
   quests,
+  discovery,
   bot,
   encounters,
   roaming,
+  ambient,
   sound,
   saving,
   devStart,

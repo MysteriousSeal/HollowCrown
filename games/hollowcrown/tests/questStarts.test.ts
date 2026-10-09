@@ -1,9 +1,9 @@
-// Quest starts: MQ02 starts by itself once MQ01 is over and is followed; a side quest waits for its giver and its
-// quests before, and doesn't take the tracker from the main quest.
+// Quest starts (design's `start`): MQ02 starts by itself once MQ01 is over and is followed; a side quest waits for
+// its giver and its quests before, and doesn't take the tracker from the main quest.
 
 import { describe, expect, it } from 'vitest';
 import { QUESTS } from '../src/data/quests';
-import { QUEST_STARTS, readyToStart, startReady } from '../src/systems/questStarts';
+import { readyToStart, startReady } from '../src/systems/questStarts';
 import { newBook, startQuest } from '../src/systems/quests';
 
 const afterMQ01 = () => {
@@ -14,13 +14,6 @@ const afterMQ01 = () => {
 };
 
 describe('quest starts', () => {
-  it('names only quests that are written, and givers only after what they wait on', () => {
-    for (const [id, s] of Object.entries(QUEST_STARTS)) {
-      expect(QUESTS[id], id).toBeDefined();
-      for (const a of s.after) expect(QUESTS[a], `${id} after ${a}`).toBeDefined();
-    }
-  });
-
   it('starts MQ02 by itself after MQ01, followed', () => {
     const book = afterMQ01();
     expect(startReady(book, QUESTS).map((s) => s.id)).toEqual([QUESTS.MQ02.stages[0].id]);
