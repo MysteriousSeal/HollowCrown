@@ -6,15 +6,20 @@
 
 import type { Entity, System, World } from '@voxel/engine/ecs';
 import { TimeOfDay, Transform } from '@voxel/engine/gameplay';
+import { releasePortrait, renderPortrait } from '@voxel/engine/render';
 import type { ConversationLine } from '@voxel/engine/ui';
 import type { Point, WorldMap } from '@voxel/engine/world';
+import { CREATURES } from '../creatures';
+import { HERO } from '../data/hero';
 import { PEOPLE_DATA } from '../data/people';
 import type { Spot } from '../data/people/kinds';
 import { QUESTS, type Line, type Objective, type QuestStage } from '../data/quests';
+import { strangerModel } from '../people/stranger';
 import { deathsOf, isWhat, needed } from '../systems/kills';
 import { Quests, completeObjective, newBook, openObjectives, startQuest } from '../systems/quests';
 import { ConversationScreen, QuestLog } from '../ui/screens';
 import type { Feature } from './context';
+import { BODIES } from './encounters';
 
 // How near the hero must come to a spot to be there (tiles), by what it is.
 const NEAR: Record<string, number> = { village: 12, building: 4, fixture: 3, landmark: 5, tile: 2.5 };
@@ -106,13 +111,28 @@ export function questSystem(map: WorldMap, hero: number): System {
   };
 }
 
-// A choice that's nobody's, asked on the conversation screen (once it's free): the hero alone with it.
+// A choice that's nobody's, asked on the conversation screen (once it's free): the hero's portrait, and facing them
+// what the choice is over if it's one of the dead lying out (the pilgrim in the ditch), else nobody.
 function ask(world: World, quest: string, objective: Objective): void {
   if (!world.hasResource(ConversationScreen)) return;
   const screen = world.resource(ConversationScreen);
   if (screen.isOpen) return;
   const lines = linesOf(objective, 'hero', { who: 'hero', text: objective.text });
-  screen.open({ name: 'You' }, { name: '' }, lines, undefined, (_, choice) => complete(world, quest, objective.id, objective.options![choice]?.sets));
+  const you = renderPortrait(strangerModel(HERO.look, HERO.gait), { facing: 'right', animate: true });
+  const body = bodyAt(objective.at);
+  const it = body ? renderPortrait(body.make(), { facing: 'left', framing: 'full' }) : undefined;
+  const close = () => {
+    releasePortrait(you);
+    if (it) releasePortrait(it);
+  };
+  screen.open({ name: 'You', portrait: you }, { name: '', portrait: it }, lines, close, (_, choice) => complete(world, quest, objective.id, objective.options![choice]?.sets));
+}
+
+// The body lying at `spot` (a tile: within a tile of it), as its creature.
+function bodyAt(spot: Spot | undefined) {
+  if (!spot || typeof spot === 'string') return undefined;
+  const lying = BODIES.find((b) => Math.hypot(b.at[0] - spot[0], b.at[1] - spot[1]) < 1.5);
+  return lying && CREATURES.find((c) => c.id === lying.model);
 }
 
 export const quests: Feature = {

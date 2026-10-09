@@ -17,6 +17,7 @@ export function placesLayer(places: readonly PlaceData[], make: (place: PlaceDat
     else byChunk.set(key, [place]);
   }
   return {
+    name: 'places',
     materials,
     chunkKeys: () => byChunk.keys(),
     build: (key) => (byChunk.get(key) ?? []).flatMap((p) => make(p) ?? []),

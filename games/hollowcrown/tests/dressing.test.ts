@@ -73,6 +73,19 @@ describe("the Vale's dressing", () => {
     expect(oak.at).toEqual(map.place('tallow-green-oak')!.at);
   });
 
+  it('runs hedgerows beside the roads, never on a road, a track, water or a building', () => {
+    const hedges = DRESSING.filter((d) => d.kind === 'hedge');
+    expect(hedges.length).toBeGreaterThanOrEqual(8);
+    for (const h of hedges) {
+      const [[ax, az], [bx, bz]] = h.line as [Point, Point];
+      const steps = Math.ceil(Math.hypot(bx - ax, bz - az));
+      for (let s = 0; s <= steps; s++) {
+        const [x, z] = [Math.round(ax + ((bx - ax) * s) / steps), Math.round(az + ((bz - az) * s) / steps)];
+        expect(trouble(x, z), `${h.note} at (${x}, ${z})`).toBeUndefined();
+      }
+    }
+  });
+
   it('has the gibbet, the nine Sisters and the Hanging Oak by their landmarks', () => {
     const near = (kind: string, id: string, within: number) => DRESSING.filter((d) => d.kind === kind && Math.hypot(d.at![0] - map.place(id)!.at[0], d.at![1] - map.place(id)!.at[1]) <= within);
     expect(near('gibbet', 'gibbet', 0)).toHaveLength(1);

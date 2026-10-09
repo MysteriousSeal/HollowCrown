@@ -19,6 +19,7 @@ import { BANDIT, CARROW_ARBALESTER, CARROW_PIKEMAN, GREENHOOD, HERON_CROSSBOWMAN
 import { RED_HEN_BAND } from '../people/redHen';
 import { DEAD_PILGRIM, sprawl } from '../people/pilgrim';
 import { MULE } from './muleVoxels';
+import { FOX, RABBIT } from './smallBeasts';
 import { Lying } from './lying';
 import { PerchedFlock } from './perched';
 import { HOBS_TOWER_GUARD } from '../people/hobsTower';
@@ -35,6 +36,8 @@ export const CREATURES: CreatureEntry[] = [
   { id: 'alphaWolf', name: 'Alpha wolf', family: 'beast', make: () => new BeastModel(ALPHA_WOLF) },
   { id: 'boar', name: 'Boar', family: 'beast', make: () => new BeastModel(BOAR) },
   { id: 'bear', name: 'Brown bear', family: 'beast', make: () => new BeastModel(BEAR) },
+  { id: 'rabbit', name: 'Rabbit', family: 'beast', make: () => new BeastModel(RABBIT) },
+  { id: 'fox', name: 'Fox', family: 'beast', make: () => new BeastModel(FOX) },
   { id: 'mule', name: 'Mule', family: 'beast', make: () => new BeastModel(MULE) },
   { id: 'spider', name: 'Giant spider', family: 'beast', make: () => new SpiderModel(CAVE_SPIDER) },
   { id: 'spiderling', name: 'Spiderling', family: 'beast', make: () => new SpiderModel(HATCHLING) },

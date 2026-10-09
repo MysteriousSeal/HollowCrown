@@ -5,6 +5,7 @@
 import type { Entity, World } from '@voxel/engine/ecs';
 import { Health, TimeOfDay, Transform } from '@voxel/engine/gameplay';
 import type { ConversationLine } from '@voxel/engine/ui';
+import { PEOPLE_DATA } from '../data/people';
 import { QUESTS } from '../data/quests';
 import { Quests, openObjectives } from '../systems/quests';
 import { LastRest } from '../systems/respawn';
@@ -15,7 +16,7 @@ export const BEDS: Record<string, string> = {
   'Garrick Fenn': 'ferrymans-rest',
 };
 export const MORNING = 6; // the hour a night's sleep ends
-const OFFER: ConversationLine = { side: 'right', text: 'Bed\'s made. You want it?', choices: ['Sleep till morning', 'Not yet'] };
+const OFFER = { line: 'Bed\'s made. You want it?', yes: '[Sleep till morning]', no: 'Not yet.' }; // (anyone without their own)
 
 // A night's sleep at `place`: its waits over (or the clock to morning), the hero whole, their last rest here.
 export function rest(world: World, hero: Entity, place: string): void {
@@ -35,6 +36,12 @@ export function rest(world: World, hero: Entity, place: string): void {
 
 type Talked = { lines: ConversationLine[]; onChoice: (line: number, choice: number) => void; onClose: () => void };
 
+// `name`'s offer of their bed, in their words (src/data/people), the hero's yes first.
+export function offerOf(name: string): ConversationLine {
+  const { line, yes, no } = PEOPLE_DATA[name]?.bed ?? OFFER;
+  return { side: 'right', text: line, choices: [yes, no] };
+}
+
 // A talk with `name`, and their bed offered at its end if they keep one and it's only their first words (nothing
 // else asked of them).
 export function withRest(world: World, hero: Entity, name: string, talk: Talked): Talked {
@@ -43,7 +50,7 @@ export function withRest(world: World, hero: Entity, name: string, talk: Talked)
   const at = talk.lines.length;
   let sleep = false;
   return {
-    lines: [...talk.lines, OFFER],
+    lines: [...talk.lines, offerOf(name)],
     onChoice: (line, choice) => (line === at ? (sleep = choice === 0) : talk.onChoice(line, choice)),
     onClose: () => {
       talk.onClose();
