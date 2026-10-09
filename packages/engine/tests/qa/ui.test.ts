@@ -1,5 +1,5 @@
 // QA: the UI kit's components on a stand-in page (a few fake elements, fake timers and frames): a banner shows and
-// fades when it should, and never stays up after it's hidden.
+// fades when it should, and never stays up after it's hidden (nor after a time shorter than a frame).
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Banner } from '../../src/ui/banner';
@@ -47,9 +47,8 @@ describe('Banner', () => {
     expect(shown(banner)).toBe(false);
   });
 
-  // BUG (ui): banner.ts:23 adds `.shown` on the next frame even when the banner was hidden in between, and nothing
-  // takes it off again: a banner shown then hidden at once stays on screen for good. Filed to ui.
-  it.skip('stays hidden when hidden before its first frame', () => {
+  // (Was a bug: the next frame's `.shown` came after a hide and stayed for good. Fixed by ui.)
+  it('stays hidden when hidden before its first frame', () => {
     const banner = new Banner(new FakeElement() as unknown as HTMLElement);
     banner.show('Brindle Vale');
     banner.hide();
@@ -57,8 +56,7 @@ describe('Banner', () => {
     expect(shown(banner)).toBe(false);
   });
 
-  // BUG (ui): same cause: a time shorter than a frame fades it before it's shown, then the frame shows it for good.
-  it.skip('fades even when its time is shorter than a frame', () => {
+  it('fades even when its time is shorter than a frame', () => {
     const banner = new Banner(new FakeElement() as unknown as HTMLElement);
     banner.show('Brindle Vale', '', 0.005);
     vi.runAllTimers();
