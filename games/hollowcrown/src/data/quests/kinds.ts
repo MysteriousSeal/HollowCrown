@@ -2,6 +2,7 @@
 // objectives (where, with whom, what), the choices in it and the story flags they set (docs/story/choices.md), and its
 // rewards.
 
+import type { Point } from '@voxel/engine/world';
 import type { Spot } from '../people/kinds';
 
 // What an objective asks: to get somewhere, speak to someone, pick something up, win a fight, choose, look round, or
@@ -44,6 +45,10 @@ export interface QuestStage {
   sets?: Record<string, string | boolean>; // flags set as the stage ends
 }
 
+// Found in the wild, not given: the hero comes within `radius` of a tile, or examines something there with E (`prop`:
+// its model, a dressing kind or a creature id, placed by the map's dressing; `label`: the prompt, "Examine the cart").
+export type Found = { at: Point; radius: number } | { examine: { at: Point; prop: string; label: string } };
+
 export interface Quest {
   id: string; // 'MQ01'
   name: string;
@@ -51,7 +56,8 @@ export interface Quest {
   level: number;
   minutes: number; // about how long it plays
   starts: string; // what starts it, in words
-  start: { after: string[]; giver?: string }; // the quests done first; who gives it (a villager's name; none: it starts by itself)
+  start: { after: string[]; giver?: string; found?: Found }; // the quests done first; who gives it (a villager's name),
+  // or where it's found in the wild; neither: it starts by itself
   places: string[]; // every place or area it uses, by id
   stages: QuestStage[];
   rewards: { xp: number; copper?: number; items: string[]; other: string[] };

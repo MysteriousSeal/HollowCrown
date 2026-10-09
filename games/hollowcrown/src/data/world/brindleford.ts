@@ -50,10 +50,10 @@ export const BRINDLEFORD: ValePart = {
     // The duck pond, past the East Lane's end: a muddy, reedy rim round still water.
     { note: 'the duck pond, its rim', shape: { circle: [952, 3354, 5] }, surface: 'marsh' },
     { note: 'the duck pond', shape: { circle: [952, 3354, 3.5] }, surface: 'water' },
-    { note: 'the square', shape: { circle: [905, 3350, 5] }, surface: 'road' },
-    { note: 'Mill Lane', shape: { line: MILL_LANE, width: 2 }, surface: 'road' },
-    { note: 'the East Lane', shape: { line: EAST_LANE, width: 2 }, surface: 'road' },
-    { note: "the Cobbes' track", shape: { line: FARM_TRACK, width: 2 }, surface: 'track' },
+    { note: 'the square', shape: { circle: [905, 3350, 4] }, surface: 'road' },
+    { note: 'Mill Lane', shape: { line: MILL_LANE, width: 1.5 }, surface: 'road' },
+    { note: 'the East Lane', shape: { line: EAST_LANE, width: 1.5 }, surface: 'road' },
+    { note: "the Cobbes' track", shape: { line: FARM_TRACK, width: 1.5 }, surface: 'track' },
   ],
   areas: [
     { id: 'cobbe-fields', kind: 'field', name: "The Cobbes' fields", shape: { rect: [930, 3434, 990, 3470] }, props: { crop: 'hay' } },

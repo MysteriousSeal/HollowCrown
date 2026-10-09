@@ -8,22 +8,29 @@ year. You come over the western mountains on the pilgrim road, a stranger, into 
 
 ## Playable now
 
-This is an early build. You can walk the world and talk to its people, but quests can't be played through yet and
-there's no combat.
+This is an early build, but the opening of the story plays from start to finish.
 
-- Brindle Vale, drawn by hand: roads, the river, marsh, low swells in the meadows and woods, Chapel Hill and Mosshill.
-- Brindleford: its 20 buildings, which you can't walk through, plus footpaths, kitchen gardens, ploughed strips and a duck pond.
-- The Birchwood, Brindle Woods and the Mosshill pines are full of trees, and you can't walk through their trunks. The
-  hay and clover meadows are in bloom.
-- Brindleford's 27 villagers, each with their own model. They stroll round their doors by day and stand at them by night.
-- Talk: press E by a villager. A visual-novel screen opens, with your portraits face to face and their first words.
-- Wolves and boars roam the edges of the Birchwood.
-- Day and night: the game starts at dusk, and a full day takes 24 minutes. The time of day shows in the top-right corner.
-- The quest tracker under the clock shows the first quest, The Stranger at the Ford, and what to do now.
-- On-screen names: the region's name fades in as you enter it, and the place you're near shows in the top-left corner.
-- The map of the Vale (M), with regions, places and your arrow.
-- A pause menu (Esc) that lists the controls.
-- The model viewer at `/models.html` shows the creatures, Brindleford's buildings and folk, and the trees.
+- **The story so far:** you arrive at the Pilgrim's Shrine as a robbed stranger. MQ01 (The Stranger at the Ford) plays
+  through to its midnight fight and dawn at the well. MQ02 to MQ04 follow, and the side quests start when you meet the
+  people who give them.
+- **Combat:** strike with Space, and take the rusty knife from the shrine's bowl. The wolves of the Birchwood, the Red
+  Hen band and the walking dead fight back. Foes show health bars and damage numbers. If you die, you can rise again
+  at your last rest or at the shrine.
+- **Talking:** press E by a villager to open a visual-novel screen with portraits, replies and choices. Villagers' names
+  float over their heads, and they call out to you as you pass.
+- **Brindle Vale, drawn by hand:** Brindleford's 20 buildings, Tallow Green and its chandlery, roads, the river and
+  marsh, hedgerows, farms and fields, forests, blooming meadows, and ground cover over all the land.
+  The ground is gently uneven, and the camera zooms through five levels.
+- **Life:** Brindleford's and Tallow Green's villagers stroll, fidget and keep to their doors. 23 kinds of wildlife
+  roam by ground and hour, including deer, sheep, foxes, rabbits, birds, butterflies and frogs.
+- **Day and night:** the game starts at dusk, and a full day takes 24 minutes. Sleep at the Ferryman's Rest (ask
+  Garrick) to pass the night and heal.
+- **Sound:** footsteps, blows and snarls, plus birds, crickets, owls, wind and the river through the day.
+- **Screens:** the map (M), the journal (J), and the pause menu (Esc) with Save, Load, Sound and Controls. The game
+  autosaves on quest steps, when you sleep and every two minutes.
+- **On-screen:** region and place names, the time of day, the quest tracker, notices, your health bar, and a debug
+  overlay in development.
+- **Model viewer:** `/models.html` shows the creatures, Brindleford's buildings and folk, and the trees.
 
 ## Running it
 
@@ -37,16 +44,32 @@ npm run dev
 Open the URL Vite prints (usually http://localhost:5173). The model viewer is at `/models.html`. Add `?only=` to its
 URL to show only some of the models.
 
+In development, these URL options are available:
+
+| Option | What it does |
+|---|---|
+| `?at=x,z` | Start on that tile (ignored if the tile can't be walked on) |
+| `?time=h` | Start at that hour (0 to 24) |
+| `?bot` | The bot plays the game, with a badge saying what it's doing |
+| `?speed=n` | Run the bot's game n times faster (0.25 to 50, default 10) |
+
+`npm run bot` does the same in a Chromium window you can watch. It reuses the dev server if one is running and
+otherwise starts it.
+
 ## Controls
 
 | Key | Action |
 |---|---|
 | WASD or the arrow keys | Walk |
 | Shift (held) | Sprint |
-| E | Talk to a villager nearby, and move a conversation on |
+| Space | Attack |
+| E | Talk to a villager nearby, and move a conversation on (Enter also works) |
 | 1-9 or a click | Pick a reply in a conversation |
-| M | Open or close the map (mouse wheel or + and - to zoom) |
-| Esc | Pause menu, or close the map |
+| M | Open or close the map |
+| J | Open or close the journal |
+| N | Mute or unmute the sound |
+| Esc | Pause menu (Save, Load, Sound, Controls), or close a screen |
+| Mouse wheel | Zoom the camera, or zoom the map when it's open (+ and - also work on the map) |
 
 ## Scripts
 
@@ -59,6 +82,7 @@ Run these from the repo root.
 | `npm run typecheck` | Type-check the engine and the game |
 | `npm test` | Run the test suite (Vitest) |
 | `npm run preview` | Serve the production build |
+| `npm run bot` | Watch the bot play the game in a Chromium window |
 
 ## Repo layout
 

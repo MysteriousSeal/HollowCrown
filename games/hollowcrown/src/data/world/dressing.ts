@@ -6,9 +6,11 @@
 import type { Point } from '@voxel/engine/world';
 import { FIRST_WALK_DRESSING, SHRINE_PASTURE } from './firstWalk';
 import { EAST, NORTH, SOUTH } from './kinds';
+import { WILD_PROPS } from './wildProps';
 
 export type DressingKind = 'fence' | 'hay-rick' | 'gibbet' | 'standing-stone' | 'hanging-oak' | 'garden-bed' | 'barrow' | 'old-oak' | 'hive' | 'hedge'
-  | 'flagstones' | 'rockslide' | 'milestone' | 'handcart' | 'belongings' | 'thicket' | 'lone-tree' | 'footbridge';
+  | 'flagstones' | 'rockslide' | 'milestone' | 'handcart' | 'belongings' | 'thicket' | 'lone-tree' | 'footbridge'
+  | 'body' | 'childs-shoe' | 'cellar-hatch' | 'wolf-den' | 'notice' | 'hermit-fire';
 
 export interface Dressing {
   kind: DressingKind;
@@ -17,6 +19,7 @@ export interface Dressing {
   radius?: number; // a barrow's, a thicket's, a scatter's, in tiles
   rect?: [number, number, number, number]; // flagstones' extent, tiles [x0, z0, x1, z1]
   species?: 'oak' | 'birch' | 'pine'; // a lone tree's
+  pose?: 'dying' | 'dead' | 'hanged' | 'drowned'; // a body's
   facing?: number; // radians, 0 toward +z
   line?: Point[]; // a fence's run, corner to corner, on tile edges (half tiles); a hedge's, point to point
 }
@@ -112,5 +115,6 @@ export const DRESSING: Dressing[] = [
   ...HEDGES,
   // The first walk's own (firstWalk.ts), and the Shrine Rise pasture's fence, its gate on the hut's path.
   ...FIRST_WALK_DRESSING,
+  ...WILD_PROPS, // (the wild side quests')
   ...fenceRound('Shrine Rise pasture', SHRINE_PASTURE, 'south', 3),
 ];

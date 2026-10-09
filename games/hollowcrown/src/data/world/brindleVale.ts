@@ -11,8 +11,13 @@ import { NORTH, SOUTH, WEST, type ValePart } from './kinds';
 const BRINDLE: Point[] = [[880, 2950], [870, 3100], [865, 3240], [870, 3350], [840, 3600], [800, 3800]];
 
 // (Through Tallow Green it runs up the green's east side: tallowGreen.ts.)
-const PILGRIM_ROAD: Point[] = [[480, 3380], [600, 3370], [870, 3350], [900, 3350], [910, 3348], [914, 3340], [1000, 3280], [1199, 3066], [1215, 3039], [1320, 3010], [1400, 3000], [1900, 3000]];
-const SOUTH_ROAD: Point[] = [[900, 3350], [902, 3366], [1000, 3420], [1000, 3480], [1200, 3460], [1450, 3450]];
+// The roads wind a little, as roads worn by feet and carts do: no long straight runs.
+const PILGRIM_ROAD: Point[] = [
+  [480, 3380], [518, 3378], [552, 3374], [590, 3370], [626, 3370], [662, 3365], [700, 3362], [742, 3359], [784, 3355], [826, 3353], [870, 3350],
+  [900, 3350], [910, 3348], [914, 3340], [950, 3316], [1000, 3280], [1199, 3066], [1215, 3039], [1268, 3022], [1320, 3010], [1400, 3000],
+  [1500, 2996], [1600, 3003], [1700, 2997], [1800, 3002], [1900, 3000],
+];
+const SOUTH_ROAD: Point[] = [[900, 3350], [902, 3366], [950, 3394], [1000, 3420], [1003, 3450], [1000, 3480], [1200, 3460], [1320, 3457], [1450, 3450]];
 const CHAPEL_PATH: Point[] = [[1000, 3280], [1080, 3180]];
 // A rise drawn round (cx, cz): its radius every eighth of a turn, east first, then round through south (+z), so a hill
 // can lean and bulge where the bible needs it.
@@ -62,10 +67,10 @@ export const BRINDLE_VALE: ValePart = {
     { note: 'the ford', shape: { circle: [870, 3350, 6] }, surface: 'ford' },
     { note: 'the ledge behind Brindle Falls', shape: { line: [[877, 2950], [883, 2950]], width: 2 }, surface: 'ford' },
     { note: 'the Stepping Stones', shape: { line: [[835, 3620], [865, 3620]], width: 3 }, surface: 'ford' },
-    { note: 'the Pilgrim Road', shape: { line: PILGRIM_ROAD, width: 3 }, surface: 'road' },
-    { note: 'the South Road', shape: { line: SOUTH_ROAD, width: 3 }, surface: 'road' },
-    { note: 'the Chapel Path', shape: { line: CHAPEL_PATH, width: 2 }, surface: 'track' },
-    { note: "the shepherds' track", shape: { line: SHEPHERDS_TRACK, width: 2 }, surface: 'track' },
+    { note: 'the Pilgrim Road', shape: { line: PILGRIM_ROAD, width: 2 }, surface: 'road' },
+    { note: 'the South Road', shape: { line: SOUTH_ROAD, width: 2 }, surface: 'road' },
+    { note: 'the Chapel Path', shape: { line: CHAPEL_PATH, width: 1.5 }, surface: 'track' },
+    { note: "the shepherds' track", shape: { line: SHEPHERDS_TRACK, width: 1.5 }, surface: 'track' },
   ],
   areas: [
     { id: 'birchwood', kind: 'forest', name: 'The Birchwood', shape: { polygon: [[478, 3418], [505, 3398], [560, 3392], [640, 3392], [690, 3402], [725, 3410], [760, 3430], [800, 3700], [520, 3760], [455, 3470]] }, props: { trees: ['birch', 'oak'] } },
