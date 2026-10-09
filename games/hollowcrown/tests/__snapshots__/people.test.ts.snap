@@ -13,7 +13,7 @@ exports[`people > Ada Cobbe: builds, poses and keeps their shape 1`] = `
     -0,
     -0.108,
   ],
-  "triangles": 1370,
+  "triangles": 1478,
 }
 `;
 
@@ -31,6 +31,23 @@ exports[`people > Dunstan: builds, poses and keeps their shape 1`] = `
     -0.108,
   ],
   "triangles": 2072,
+}
+`;
+
+exports[`people > Edric Tidy: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.467,
+    0.108,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.108,
+  ],
+  "triangles": 1226,
 }
 `;
 
@@ -102,6 +119,23 @@ exports[`people > Hob Cobbe: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Joan Lusk: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.108,
+    0.467,
+    0.092,
+  ],
+  "min": [
+    -0.108,
+    -0,
+    -0.125,
+  ],
+  "triangles": 1584,
+}
+`;
+
 exports[`people > Jory: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -149,7 +183,7 @@ exports[`people > Nan Wicket: builds, poses and keeps their shape 1`] = `
     -0,
     -0.072,
   ],
-  "triangles": 1560,
+  "triangles": 1668,
 }
 `;
 
@@ -183,7 +217,41 @@ exports[`people > Old Meg: builds, poses and keeps their shape 1`] = `
     -0,
     -0.086,
   ],
-  "triangles": 1444,
+  "triangles": 1552,
+}
+`;
+
+exports[`people > Rolf Reede: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.483,
+    0.125,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.125,
+  ],
+  "triangles": 1612,
+}
+`;
+
+exports[`people > Tamsin: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.108,
+    0.467,
+    0.108,
+  ],
+  "min": [
+    -0.108,
+    -0,
+    -0.108,
+  ],
+  "triangles": 1440,
 }
 `;
 
@@ -235,5 +303,22 @@ exports[`people > Wenna: builds, poses and keeps their shape 1`] = `
     -0.075,
   ],
   "triangles": 1462,
+}
+`;
+
+exports[`people > Wynn: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.108,
+    0.467,
+    0.108,
+  ],
+  "min": [
+    -0.108,
+    -0,
+    -0.108,
+  ],
+  "triangles": 1332,
 }
 `;
