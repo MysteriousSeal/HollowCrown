@@ -3,19 +3,15 @@
 // out; A frames the whole lineup.
 
 import * as THREE from 'three';
-import { CAMERA_OFFSET, TERRAIN_COLORS } from '../render/constants';
-import { createCamera, resizeCamera } from '../render/camera';
-import { addLights } from '../render/lighting';
-import { PostProcessing } from '../render/postprocessing';
-import { stylize } from '../render/stylize';
-import { HumanRig } from '../characters/human/humanRig';
-import type { CreatureModel } from '../characters/creatures/creatureMesh';
+import { CAMERA_OFFSET, PostProcessing, TERRAIN_COLORS, addLights, createCamera, resizeCamera, stylize } from '../render';
+import { humanModel } from '../characters';
+import type { Model } from '../models';
 
 // A model the viewer shows: its name, the group it's listed under, and how it's made.
 export interface ViewerEntry {
   name: string;
   group: string;
-  make(): CreatureModel;
+  make(): Model;
 }
 
 // Runs the viewer on `canvas`, its caption in `label`.
@@ -35,7 +31,7 @@ export function startModelViewer(canvas: HTMLCanvasElement, label: HTMLElement, 
   scene.add(ground);
 
   interface Shown {
-    model: CreatureModel;
+    model: Model;
     turn: THREE.Group;
     at: THREE.Vector3;
     name: string;
@@ -54,7 +50,7 @@ export function startModelViewer(canvas: HTMLCanvasElement, label: HTMLElement, 
     return { model, turn, at, name };
   });
 
-  const hero = new HumanRig();
+  const hero = humanModel();
   scene.add(hero.root);
   const stylizer = stylize(scene);
   const post = new PostProcessing(renderer, scene, camera);
@@ -109,7 +105,8 @@ export function startModelViewer(canvas: HTMLCanvasElement, label: HTMLElement, 
     // The hero stands just left of the one in focus, facing the camera.
     const s = shown[selected];
     const heroAt = s.at.clone().addScaledVector(RIGHT, -Math.max(0.35, s.model.height * 0.55)).add(new THREE.Vector3(0.15, 0, 0.15));
-    hero.update(heroAt.x, 0, heroAt.z, dt);
+    hero.root.position.set(heroAt.x, 0, heroAt.z);
+    hero.animate(time, 0);
     hero.root.rotation.y = Math.PI / 4;
 
     const target = whole ? RIGHT.clone().multiplyScalar(along / 2) : s.at.clone().setY(s.model.height * 0.4);

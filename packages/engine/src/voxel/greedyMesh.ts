@@ -9,17 +9,7 @@
 // merge when their four corner AO values match too.
 
 import * as THREE from 'three';
-
-export interface VoxelGrid {
-  size: [number, number, number]; // voxel counts along x, y, z
-  // Palette index + 1 per voxel (0 = empty), laid out x fastest, then y, then z.
-  cells: Uint8Array;
-}
-
-export function voxelIndex(grid: VoxelGrid, x: number, y: number, z: number): number {
-  const [sx, sy] = grid.size;
-  return x + sx * (y + sy * z);
-}
+import { colorAt, type VoxelGrid } from './grid';
 
 // Light reaching a face corner with 3, 2, 1 or 0 of its neighbours open.
 const AO_LEVELS = [0.5, 0.68, 0.85, 1];
@@ -45,12 +35,6 @@ const SPLIT_02 = [0, 1, 2, 0, 2, 3];
 const SPLIT_13 = [0, 1, 3, 1, 2, 3];
 const SPLIT_02_FLIPPED = [...SPLIT_02].reverse();
 const SPLIT_13_FLIPPED = [...SPLIT_13].reverse();
-
-function cellAt(grid: VoxelGrid, x: number, y: number, z: number): number {
-  const [sx, sy, sz] = grid.size;
-  if (x < 0 || y < 0 || z < 0 || x >= sx || y >= sy || z >= sz) return 0;
-  return grid.cells[x + sx * (y + sy * z)];
-}
 
 // `origin` is the world position of the grid's (0,0,0) corner; each voxel
 // is `voxelSize` world units. `include`, if given, limits which colors get
@@ -180,9 +164,9 @@ function cornerOcclusion(grid: VoxelGrid, ax: number, ay: number, az: number, u:
     const [su, sv] = CORNER_SIGNS[c];
     du[u] = su;
     dv[v] = sv;
-    const s1 = cellAt(grid, ax + du[0], ay + du[1], az + du[2]) !== 0 ? 1 : 0;
-    const s2 = cellAt(grid, ax + dv[0], ay + dv[1], az + dv[2]) !== 0 ? 1 : 0;
-    const diagonal = cellAt(grid, ax + du[0] + dv[0], ay + du[1] + dv[1], az + du[2] + dv[2]) !== 0 ? 1 : 0;
+    const s1 = colorAt(grid, ax + du[0], ay + du[1], az + du[2]) !== 0 ? 1 : 0;
+    const s2 = colorAt(grid, ax + dv[0], ay + dv[1], az + dv[2]) !== 0 ? 1 : 0;
+    const diagonal = colorAt(grid, ax + du[0] + dv[0], ay + du[1] + dv[1], az + du[2] + dv[2]) !== 0 ? 1 : 0;
     packed |= (s1 && s2 ? 0 : 3 - s1 - s2 - diagonal) << (c * 2);
   }
   return packed;

@@ -17,10 +17,14 @@ export class ChunkStreamer {
   private readonly layers: ChunkLayer[] = [];
   private readonly loaded = new Map<string, { group: THREE.Group; built: Map<ChunkLayer, THREE.Object3D[]> }>();
 
+  private lastKey = '';
+  private pending = true; // chunks near the camera still to build
+
   constructor(private readonly scene: THREE.Scene) {}
 
   layer(layer: ChunkLayer): void {
     this.layers.push(layer);
+    for (const [key, chunk] of this.loaded) this.buildInto(chunk, layer, key); // (a layer added late: into what's built)
   }
 
   // Every material any layer draws with, loaded or not.
@@ -31,13 +35,18 @@ export class ChunkStreamer {
   // Loads up to `budget` missing chunks near (x, z), nearest first, and
   // drops far ones. Returns how many chunks it built.
   update(x: number, z: number, budget = 1): number {
+    // Nothing to do while the camera stays in the same chunk and every chunk round it is built.
+    const key = `${Math.floor(x / CHUNK_SIZE)},${Math.floor(z / CHUNK_SIZE)}`;
+    if (key === this.lastKey && !this.pending) return 0;
+    this.lastKey = key;
     for (const [key, chunk] of this.loaded) {
       if (distanceToChunk(key, x, z) > UNLOAD_RADIUS) this.unload(key, chunk.group);
     }
     const wanted = chunksWithin(x, z, LOAD_RADIUS).filter((key) => !this.loaded.has(key));
     wanted.sort((a, b) => distanceToChunk(a, x, z) - distanceToChunk(b, x, z));
     const toBuild = wanted.slice(0, budget);
-    for (const key of toBuild) this.load(key);
+    for (const chunk of toBuild) this.load(chunk);
+    this.pending = wanted.length > toBuild.length;
     return toBuild.length;
   }
 

@@ -7,8 +7,7 @@
 // shows at edges and corners, shading across the faces between them.
 
 import * as THREE from 'three';
-import type { VoxelGrid } from './greedyMesh';
-import { colorAt } from './voxelShapes';
+import { colorAt, type VoxelGrid } from './grid';
 
 const STRENGTH = 0.55; // 0: flat faces, 1: fully rounded
 
