@@ -1,5 +1,5 @@
 // What a save keeps (the engine's save: names that last, a schema): where every lasting entity stands, its health and
-// whether it's dead; the quest book, the hour, the last rest. Kept resources are loaded into the objects already in
+// whether it's dead; the quest book, the hour, the last rest, the roaming foes' days. Kept resources are loaded into the objects already in
 // use (the HUD's quest log is the quest book itself), not swapped for new ones. The Saves resource is the game's
 // SaveGame (who uses it: the pause menu's Save and Load pages; the autosaves).
 
@@ -9,15 +9,15 @@ import { AutosaveNow, keep, keepResource, type SaveGame, type SaveSchema } from 
 import { QUESTS } from '../data/quests';
 import { Quests, type QuestBook } from './quests';
 import { LastRest } from './respawn';
+import { Roaming } from './roaming';
 
 export const Saves = defineResource<SaveGame>('Saves');
 export const SAVE_VERSION = 1;
 
-// Lasting names: the hero, a villager by their name, an animal or a camp's foe by its table and place in it.
+// Lasting names: the hero, a villager by their name, a camp's foe by its camp and place in it.
 export const lastingName = {
   hero: 'hero',
   villager: (name: string) => `villager:${name}`,
-  animal: (i: number) => `animal:${i}`,
   keeper: (band: string, i: number) => `keeper:${band}:${i}`,
 };
 
@@ -37,6 +37,7 @@ export function saveSchema(world: World): SaveSchema {
       keepResource(Quests, { key: 'quests', load: (json) => into(world.resource(Quests), { items: [], ...(json as object) }) as QuestBook }),
       keepResource(TimeOfDay, { key: 'time', load: (json) => into(world.resource(TimeOfDay), json) }),
       keepResource(LastRest, { key: 'rest' }),
+      keepResource(Roaming, { key: 'roaming', load: (json) => into(world.resource(Roaming), json) }),
     ],
   };
 }

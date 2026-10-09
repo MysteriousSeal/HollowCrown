@@ -238,6 +238,23 @@ exports[`creatures > carrowPikeman: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > chaffinch: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.213,
+  "max": [
+    0.075,
+    0.188,
+    0.125,
+  ],
+  "min": [
+    -0.075,
+    -0,
+    -0.075,
+  ],
+  "triangles": 376,
+}
+`;
+
 exports[`creatures > cow: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.413,
@@ -252,6 +269,23 @@ exports[`creatures > cow: builds, poses and keeps its shape 1`] = `
     -0.268,
   ],
   "triangles": 406,
+}
+`;
+
+exports[`creatures > crow: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.266,
+  "max": [
+    0.106,
+    0.266,
+    0.255,
+  ],
+  "min": [
+    -0.106,
+    0,
+    -0.128,
+  ],
+  "triangles": 790,
 }
 `;
 
@@ -442,6 +476,40 @@ exports[`creatures > hamund: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > henBrown: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.338,
+  "max": [
+    0.1,
+    0.313,
+    0.15,
+  ],
+  "min": [
+    -0.1,
+    0,
+    -0.1,
+  ],
+  "triangles": 542,
+}
+`;
+
+exports[`creatures > henWhite: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.338,
+  "max": [
+    0.1,
+    0.313,
+    0.15,
+  ],
+  "min": [
+    -0.1,
+    0,
+    -0.1,
+  ],
+  "triangles": 542,
+}
+`;
+
 exports[`creatures > heronCrossbowman: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.45,
@@ -541,6 +609,40 @@ exports[`creatures > lanternKnight: builds, poses and keeps its shape 1`] = `
     -0.108,
   ],
   "triangles": 1844,
+}
+`;
+
+exports[`creatures > mallardDrake: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.263,
+  "max": [
+    0.1,
+    0.238,
+    0.225,
+  ],
+  "min": [
+    -0.1,
+    -0,
+    -0.125,
+  ],
+  "triangles": 618,
+}
+`;
+
+exports[`creatures > mallardDuck: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.263,
+  "max": [
+    0.1,
+    0.238,
+    0.225,
+  ],
+  "min": [
+    -0.1,
+    -0,
+    -0.125,
+  ],
+  "triangles": 610,
 }
 `;
 
@@ -915,6 +1017,23 @@ exports[`creatures > skeletonArcher: builds, poses and keeps its shape 1`] = `
     -0.175,
   ],
   "triangles": 1410,
+}
+`;
+
+exports[`creatures > sparrow: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.213,
+  "max": [
+    0.075,
+    0.188,
+    0.125,
+  ],
+  "min": [
+    -0.075,
+    -0,
+    -0.075,
+  ],
+  "triangles": 374,
 }
 `;
 
