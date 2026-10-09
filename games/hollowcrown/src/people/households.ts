@@ -2,9 +2,10 @@
 // (Old Meg, the first, is with the named folk in brindleford.ts; the Holt house stands empty). Who uses it:
 // people/index.ts (PEOPLE).
 
-import { cloak, hood, type FrameSpec } from '@voxel/engine/characters';
+import { cloak, cuff, hood, HUMAN_VOXEL_SIZE, longbow, type FrameSpec } from '@voxel/engine/characters';
+import { noise3 } from '@voxel/engine/math';
 import { box } from '@voxel/engine/voxel';
-import { apron, body, cap, coif, cup, folk, K, longSkirtLeg, OLD, shawl, shoes, skirt, sleeves, staff, strawHat, W } from './kit';
+import { apron, body, cap, coif, cup, eelTrap, folk, K, longSkirtLeg, OLD, right, shawl, shoes, skirt, sleeves, staff, strawHat, stump, W } from './kit';
 
 const linenCoif = (g: Parameters<typeof coif>[0], o: Parameters<typeof coif>[1]) => coif(g, o, (x, _y, z) => ((x + z) % 4 ? W.linen : W.linenShade), W.linenShade);
 
@@ -154,6 +155,71 @@ const NED_TOLLEY = folk({ build: 'male', skin: 1, hair: 1, dye: 2, hairStyle: 's
   },
 }, { held: { rightArm: staff(15, 'plain', 5) } });
 
+// ---- the Fletchers' ----
+
+// Alys Fletcher, the fletcher, 33, the vale's best shot: auburn hair, a moss jerkin, a quiver of her own arrows on
+// her back, a bracer on her bow arm, the longbow.
+const ALYS_FLETCHER = folk({ build: 'female', skin: 1, hair: 6, dye: 2, hairStyle: 'bun', beard: false, expression: 'calm' }, {
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => (y === 3 ? K.leatherDark : (x + y) % 4 ? W.moss : W.mossDark));
+    skirt(g, o, f, 3, (x, y) => (y === -3 ? W.mossDark : (x + y) % 4 ? W.moss : W.mossDark));
+    box(g, o, 2, 1, -2, 4, 10, -2, (x, y) => (y === 10 ? (x === 3 ? K.red : K.fletch) : y === 1 || y === 9 ? K.leatherDark : K.leather)); // the quiver
+  },
+  arm: (g, o, _f, j) => {
+    sleeves(g, o, 2, (_x, y) => (y === 2 ? W.linenShade : W.linen));
+    if (!right(j)) cuff(g, o, 2, 3, () => K.leatherDark); // the bracer
+  },
+  leg: (g, o) => {
+    body(g, o, () => W.woolDark);
+    shoes(g, o, 2, (_x, y) => (y === 2 ? K.leatherLight : K.leather));
+  },
+}, { held: { leftArm: { grid: longbow(27, K.wood), grip: [0, 7.5, 2], voxel: HUMAN_VOXEL_SIZE } } });
+
+// Cob Fletcher, 36: back from the Regency's levy in its faded heron-grey coat, stained, his right hand gone at the
+// wrist, the stump bound in rag.
+const COB = folk({ build: 'male', skin: 0, hair: 0, dye: 3, hairStyle: 'short', beard: true, expression: 'stern' }, {
+  torso: (g, o, f) => {
+    body(g, o, (x, y, z) => (y === 3 ? K.leatherDark : noise3(x, y, z, 31) < 0.2 ? W.heronDark : W.heron));
+    skirt(g, o, f, 3, (x, y) => (x === 4 ? 0 : y === -3 ? W.heronDark : W.heron));
+  },
+  arm: (g, o, f, j) => {
+    sleeves(g, o, 2, (_x, y) => (y === 2 ? W.heronDark : W.heron));
+    if (right(j)) stump(g, o, f);
+  },
+  leg: (g, o) => {
+    body(g, o, (_x, y) => (y >= 2 ? W.wool : 0));
+    shoes(g, o, 2, () => K.leatherDark);
+  },
+});
+
+// ---- the Hollins' ----
+
+// Bran Hollin, the eel-trapper, 25: a shirt with the sleeves rolled, breeches rolled to the knee, bare wet shins and
+// feet, a wicker eel trap under his arm.
+const BRAN_HOLLIN = folk({ build: 'male', skin: 0, hair: 2, dye: 1, hairStyle: 'short', beard: false, expression: 'calm' }, {
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => (y === 3 ? W.string : (x + y) % 4 ? W.linenShade : W.linenDark));
+    skirt(g, o, f, 1, () => W.linenShade);
+  },
+  arm: (g, o) => sleeves(g, o, 5, (_x, y) => (y === 5 ? W.linenDark : W.linenShade)),
+  leg: (g, o) => body(g, o, (_x, y) => (y >= 4 ? (y === 4 ? W.wool : W.woolDark) : 0)),
+}, { held: { leftArm: eelTrap } });
+
+// Gert Hollin, his mother, 60, who tells everyone everything: grey hair under a red kerchief, a brown dress, an apron.
+const GERT = folk({ build: 'female', skin: 0, hair: 4, dye: 0, hairStyle: 'bun', beard: false, expression: 'sly' }, {
+  head: (g, o) => coif(g, o, (_x, _y, z) => (z <= 2 ? W.kerchiefDark : W.kerchief), W.kerchiefDark),
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => ((x + y) % 4 ? W.woolLight : W.wool));
+    skirt(g, o, f, 5, (x, y) => ((x + y) % 4 ? W.woolLight : W.wool));
+    apron(g, o, f, 0, 4, (_x, y) => (y === -4 ? W.apronHem : W.apron));
+  },
+  arm: (g, o) => sleeves(g, o, 2, () => W.woolLight),
+  leg: (g, o) => {
+    longSkirtLeg(g, o, (x, y) => ((x + y) % 4 ? W.woolLight : W.wool));
+    shoes(g, o, 0, () => K.leatherDark);
+  },
+});
+
 export const HOUSEHOLDS: Record<string, FrameSpec> = {
   'Rolf Reede': ROLF_REEDE,
   'Tamsin': TAMSIN,
@@ -164,4 +230,8 @@ export const HOUSEHOLDS: Record<string, FrameSpec> = {
   'Gammer Orr': GAMMER_ORR,
   'Simkin Orr': SIMKIN_ORR,
   'Ned Tolley': NED_TOLLEY,
+  'Alys Fletcher': ALYS_FLETCHER,
+  'Cob': COB,
+  'Bran Hollin': BRAN_HOLLIN,
+  'Gert': GERT,
 };
