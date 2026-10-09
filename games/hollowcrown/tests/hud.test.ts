@@ -3,7 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import { loadWorldMap } from '@voxel/engine/world';
 import { PLACE_KINDS, START_PLACE, WORLD_MAP } from '../src/data/world';
-import { nearPlaceName, regionBanner, regionOf } from '../src/ui/hudText';
+import { clockText, nearPlaceName, regionBanner, regionOf } from '../src/ui/hudText';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
 const [sx, sz] = map.place(START_PLACE)!.at;
@@ -27,5 +27,15 @@ describe('the place label', () => {
 
   it('names nothing out in the open', () => {
     expect(nearPlaceName(map.places(), sx + 40, sz - 40)).toBeNull();
+  });
+});
+
+describe('the clock', () => {
+  it('reads the part of the day and the time to ten minutes', () => {
+    expect(clockText(17.7)).toBe('Dusk · 17:40');
+    expect(clockText(0)).toBe('Night · 00:00');
+    expect(clockText(6.25)).toBe('Dawn · 06:10');
+    expect(clockText(23.99)).toBe('Night · 23:50');
+    expect(clockText(24.5)).toBe('Night · 00:30');
   });
 });

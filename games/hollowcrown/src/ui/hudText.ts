@@ -41,3 +41,15 @@ export function nearPlaceName(places: PlaceData[], x: number, z: number): string
   }
   return best;
 }
+
+// The parts of the day, by the hour each starts at.
+const DAY_PARTS: Array<[number, string]> = [[0, 'Night'], [5, 'Dawn'], [7, 'Morning'], [12, 'Afternoon'], [17, 'Dusk'], [20, 'Evening'], [22, 'Night']];
+
+// The clock: the part of the day and the time to ten minutes ("Dusk · 17:40"), from `hours` (0 to 24, wrapping).
+export function clockText(hours: number): string {
+  const minutes = Math.floor((((hours % 24) + 24) % 24) * 6) * 10;
+  const [h, m] = [Math.floor(minutes / 60), minutes % 60];
+  let part = DAY_PARTS[0][1];
+  for (const [from, name] of DAY_PARTS) if (h >= from) part = name;
+  return `${part} · ${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
