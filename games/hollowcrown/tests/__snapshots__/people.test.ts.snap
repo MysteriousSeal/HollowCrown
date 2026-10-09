@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`people > Garrick Fenn: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.142,
+    0.45,
+    0.092,
+  ],
+  "min": [
+    -0.142,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1336,
+}
+`;
