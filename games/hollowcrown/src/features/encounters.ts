@@ -24,28 +24,41 @@ const FOES: Record<string, Foe> = {
   bandit: { hp: 16, damage: 4, cooldown: 1.1, speed: 1.6, provoked: false }, // (the Red Hen camp)
 };
 
-// Foes keeping a place from the start: which creature, where each stands, the ground they wander (tiles round it).
-export const KEEPERS: Array<{ creature: string; at: Point[]; roam: number; note: string }> = [
+// A band of foes: what kind they are (FOES), where each stands, the ground they wander (tiles round it), and each
+// one's own model (CREATURES' id, in order; none: the kind's own).
+export interface Band {
+  creature: string;
+  at: Point[];
+  roam: number;
+  models?: string[];
+}
+
+// Foes keeping a place from the start.
+export const KEEPERS: Array<Band & { note: string }> = [
   // The Red Hen camp (620, 3560): five of the band in the birch clearing, round the fire (Brannoc is MQ03's).
   { creature: 'bandit', at: [[617, 3557], [623, 3557], [616, 3562], [624, 3563], [620, 3565]], roam: 2, note: 'the Red Hen camp' },
 ];
 
-// What a stage brings, by quest/stage: which creature, where each stands, the ground they wander (tiles round it).
-export const ENCOUNTERS: Record<string, { creature: string; at: Point[]; roam: number }> = {
-  // MQ01, Midnight: four of the Hungry walk in up the East Lane from the hill, going to the houses.
-  'MQ01/midnight': { creature: 'hungry', at: [[944, 3353], [941, 3352], [938, 3354], [935, 3353]], roam: 6 },
+// What a stage brings, by quest/stage.
+export const ENCOUNTERS: Record<string, Band> = {
+  // MQ01, Midnight: four of the Hungry walk in up the East Lane from the pit, going to the houses: a man with a
+  // poppy in his hair, Bet (Old Meg's sister), a child, a mother carrying hers.
+  'MQ01/midnight': {
+    creature: 'hungry', at: [[944, 3353], [941, 3352], [938, 3354], [935, 3353]], roam: 6,
+    models: ['pitRisen', 'pitRisenWoman', 'pitRisenChild', 'hungryMother'],
+  },
 };
 
-// Spawns `creature` at (x, z), fighting as its kind does.
-function spawnFoe(app: Parameters<Feature['install']>[0]['app'], map: WorldMap, creature: string, [x, z]: Point, roam: number): Entity {
-  const entry = CREATURES.find((c) => c.id === creature);
+// Spawns one of `creature`'s kind at (x, z) as `model`, fighting as its kind does (and counted as it, for quests).
+function spawnFoe(app: Parameters<Feature['install']>[0]['app'], map: WorldMap, creature: string, model: string, [x, z]: Point, roam: number): Entity {
+  const entry = CREATURES.find((c) => c.id === model);
   const foe = FOES[creature];
-  if (!entry || !foe) throw new Error(`encounters: no creature or foe '${creature}'`);
+  if (!entry || !foe) throw new Error(`encounters: no creature '${model}' or foe '${creature}'`);
   const entity = app.world.spawn(
     [Transform, { x, y: map.groundY(x, z), z, facing: Math.PI }],
     [MoveSpeed, foe.speed],
     [Wander, wander({ x, z }, { radius: roam, speed: foe.speed, pause: [1, 4] })],
-    [Creature, { id: entry.id, name: entry.name }],
+    [Creature, { id: creature, name: entry.name }],
     [Health, health(foe.hp)],
     [Attack, attack(foe.damage, { cooldown: foe.cooldown })],
     [Faction, creature],
@@ -73,7 +86,9 @@ export const provokeSystem: System = {
 export const encounters: Feature = {
   name: 'encounters',
   install: ({ app, map }) => {
-    for (const { creature, at, roam } of KEEPERS) for (const spot of at) spawnFoe(app, map, creature, spot, roam);
+    const spawnBand = ({ creature, at, roam, models }: Band) =>
+      at.forEach((spot, i) => spawnFoe(app, map, creature, models?.[i] ?? creature, spot, roam));
+    KEEPERS.forEach(spawnBand);
     const seen = new Set<string>(); // stages begun so far, by quest/stage
     const system: System = {
       name: 'encounters',
@@ -85,7 +100,7 @@ export const encounters: Feature = {
           if (finished || seen.has(key)) continue;
           seen.add(key);
           const brings = ENCOUNTERS[key];
-          if (brings) for (const at of brings.at) spawnFoe(app, map, brings.creature, at, brings.roam);
+          if (brings) spawnBand(brings);
         }
       },
     };
