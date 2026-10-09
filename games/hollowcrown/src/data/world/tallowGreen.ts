@@ -48,7 +48,7 @@ export const TALLOW_GREEN: ValePart = {
     building('tg-house-north', 'A house on the green', [1205, 3034], SOUTH, cottage([])),
     // Osmund's and Hal's: candles, wax, tallow; a shop. Hal dug the barrow for a bride-price (SQ-BV3, SQ-BV8).
     building('chandlery', 'The chandlery', [1212, 3034], SOUTH, {
-      size: [5, 3], floors: 2, roof: 'shingle', walls: 'timber', use: 'house', residents: ['Osmund Wicke', 'Hal Wicke'],
+      size: [5, 3], floors: 2, roof: 'shingle', walls: 'timber', use: 'chandler', residents: ['Osmund Wicke', 'Hal Wicke'],
     }),
 
     // West of the green (doors to the west lane).
