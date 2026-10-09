@@ -34,9 +34,11 @@ function begin(world: World, stage: QuestStage | undefined): void {
   if (stage?.hour !== undefined && world.hasResource(TimeOfDay)) world.resource(TimeOfDay).hours = stage.hour;
 }
 
-// Objective `id` of `quest` done (with its choice's flags), and the stage it begins, begun.
-export function complete(world: World, quest: string, id: string, sets?: Record<string, string | boolean>): void {
-  begin(world, completeObjective(world.resource(Quests), QUESTS, quest, id, sets));
+// Objective `id` of `quest` done (with its choice's flags), and the stage it begins, begun (returned).
+export function complete(world: World, quest: string, id: string, sets?: Record<string, string | boolean>): QuestStage | undefined {
+  const stage = completeObjective(world.resource(Quests), QUESTS, quest, id, sets);
+  begin(world, stage);
+  return stage;
 }
 
 // The lines an objective plays, talking with `name` (the hero on the left, everyone else on the right, named if it
