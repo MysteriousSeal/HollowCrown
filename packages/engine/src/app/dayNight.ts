@@ -27,7 +27,7 @@ export function dayNightSystem(lights: Lights, scene: THREE.Scene, post: () => P
       lights.sky.intensity = sky.skyIntensity;
       if (scene.fog) scene.fog.color.copy(sky.fogColor);
       if (scene.background instanceof THREE.Color) scene.background.copy(sky.fogColor);
-      post()?.setShaftLight(sky.daylight);
+      post()?.setShaftLight(sky.daylight * sky.daylight); // (gone well before dark)
     },
   };
 }

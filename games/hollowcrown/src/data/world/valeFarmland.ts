@@ -33,7 +33,7 @@ export const VALE_FARMLAND: ValePart = {
   surfaces: [
     ...BRINDLEFORD_WEST.map((rect) => ({ note: "a strip of Brindleford's west fields", shape: { rect }, surface: 'field' as const })),
     ...TALLOW_GREEN_STRIPS.map((rect) => ({ note: "a strip of Tallow Green's fields", shape: { rect }, surface: 'field' as const })),
-    { note: "the Wyke farm's track, grassed over", shape: { line: WYKE_TRACK, width: 2 }, surface: 'track' },
+    { note: "the Wyke farm's track, grassed over", shape: { line: WYKE_TRACK, width: 1.5 }, surface: 'track' },
     { note: "the Wyke farm's yard", shape: { circle: [644, 3294, 2.5] }, surface: 'path' },
     { note: "the Wyke farm's yard, to the barn door", shape: { line: [[645, 3292], [647, 3288]], width: 1.5 }, surface: 'path' },
     { note: "the North Rise sheep-walk", shape: { line: RISE_WALK, width: 1.5 }, surface: 'track' },
