@@ -15,7 +15,7 @@ Main quests here: MQ09, MQ10, MQ20 (heist), MQ24.
 | **Pine ridges** | x 3600–3950, z 700–1400 and 1700–2100 | Spinner's Deep in the second |
 | **The Oakbrook** | (3700, 800) → Hollowmere (2700, 2100) | Fords at Oakhallow (3200, 1500) and the Wood Road (2950, 2150) |
 | **Clearings** | Oakhallow (3150–3250, 1450–1560), the Hollow Oak (3560–3640, 1060–1140), Thornbeck's fields (2950–3050, 2250–2350) | |
-| **The Old Road** | (2850, 1800) → (3600, 1800) | Overgrown royal road; lynx country |
+| **The Old Road** | (2850, 1800) → (3600, 1800) | Overgrown royal road; gibbets; a sleeper who hunts it (CT-GW2) |
 
 ## Oakhallow — village (3200, 1500)
 10 log houses round a sawpit and a felled giant oak used as the village table. Loves the Greenhood, hates reeves. Maud
@@ -43,7 +43,7 @@ didn't light it alone).
 | **Hunter's Barrow** | 3400, 800 | Crypt under a Barrow War hunting lodge (SQ-GW4) |
 | **Sour Apple camp** | 3300, 2000 | Crab-apple thicket; 6 rogues, **Corliss Crabbe** |
 | **The Greatest Oak** | 3350, 1250 | Twelve tiles round; a carving of Osric and Sigrun, and under it a Barrowborn one (a woman in chains) |
-| **The Charcoal Pits** | 3100, 1750 | Smudge's pits; a lynx den |
+| **The Charcoal Pits** | 3100, 1750 | Smudge's pits; a bear's wallow nearby |
 | **The Old Road's Milestone** | 3300, 1800 | "Kingsmere 40 leagues", old tongue |
 | **Hermit's Spring** | 3800, 1400 | Heals fully once a day |
 
@@ -63,7 +63,7 @@ didn't light it alone).
 ### SQ-GW2 — Thornbeck's Garrison
 - **Giver**: Varrow. **Level** 8. **Time** 40 min.
 1. Desertions; no pay from Kingsmere; soldiers stealing from farmers.
-2. Tasks: the deserters (two at the Charcoal Pits, ashamed; one dead to a lynx); a theft to judge between a soldier and
+2. Tasks: the deserters (two at the Charcoal Pits, ashamed; one dead to a bear); a theft to judge between a soldier and
    Cole Thorne; the pay from Kingsmere (Hiram, Corvin or Aldous), and the Sour Apple's ambush if SQ-GW1 isn't done.
 3. **The turn**: Varrow, over ale, about the Fellowe barn: *"Fellowe told us where the hoods camped. We never went. I
    didn't have the men. Then they burned his family. I sent his name to Kingsmere and nobody came. That's what talking to
@@ -154,10 +154,15 @@ didn't light it alone).
    Either way, telling Varrow about the rug: she makes Brock burn it.
 - **Rewards**: 180 xp; 140 (or 70) silver; a **bear-hide cloak** if killed.
 
-### CT-GW2 — The Lynx of the Old Road
-- **Board** (Oakhallow): *"The grey cat of the Old Road took three dogs and a child's arm. 100 silver. — A. Fell."*
-  **Level** 9. **Time** 15 min.
-1. A **giant lynx** (level 10) and her two kits.
-2. **The turn**: the "child" was a poacher's boy, 15, taking her kits for Carrow furriers; she took his arm defending
-   them. Kill her (`killed`) or leave her and show Aldred the snares (`spared`, half pay).
-- **Rewards**: 140 xp; 100 (or 50) silver; a **lynx-fur hood**.
+### CT-GW2 — The Thing on the Old Road
+- **Board** (Oakhallow): *"Something on the Old Road took three dogs and a boy's arm. It walks like a man. 100 silver.
+  — A. Fell."* **Level** 9. **Time** 20 min.
+1. Tracks that are bare feet; dogs' bones under a gibbet; at night, humming.
+2. **The Hollowed** (level 10): **Ruddock**, a trapper, Smudge's brother, three years a sleeper; he eats raw what he
+   catches; the milk he buys from the hoods ran out when Wren's sellers moved to the Ditch. He speaks in his dead wife's
+   voice. Two more sleepers follow him.
+3. **The turn**: the boy whose arm he took was the hood who sold to him, come to collect a debt.
+4. Choice (`old_road`): **kill him** (`killed`); **throw him a vial** and, while he kneels to it, bind him and bring him to
+   Mother Rook (`rook`: she tries to wean him; he lives, ruined; Smudge weeps; half pay from Aldred, who wanted him dead);
+   **tell Wren** her sellers made him (`wren_told`: she moves the poppy table out of the Hollow Oak, a beat in her arc).
+- **Rewards**: 140 xp; 100 (or 50) silver; Ruddock's **trapper's hood**.

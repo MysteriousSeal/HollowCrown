@@ -25,8 +25,9 @@ people near it feel the cold and step back. From the first piece, the hero dream
 - **Where**: Gullmouth Sea Cave. **Level** 11. **Time** 75 min.
 1. Rowing in at low tide past the Gull Light's rocks; inside, a cathedral of rock where the lake's underground river
    falls into the sea; the light green and wrong.
-2. **The cave** (3 levels; the lowest floods at the tide's turn, pushing the hero upward): cave worms, bats, drowned
-   sailors; a wreck inside the cave with Carrow coin and the bodies of Sabeline's last divers, crabs in their eye-holes.
+2. **The cave** (3 levels; the lowest floods at the tide's turn, pushing the hero upward): **the Drowned** (sailors,
+   and Sabeline's last divers, risen, Carrow coin still in their belts); in the dry upper level, a **pit-eater**'s nest
+   of gnawed bones (the wreckers fed it); a wreck inside the cave.
 3. **King Edric** (crypt lord, level 12): seven years in salt water, swollen, white, crusted with barnacles, the **Brow**
    on his head like a crown, sea-lice in his beard. Two phases; between them, lucid: *"Corvin... let go of the oar,
    Corvin, I'm sorry, I'll not sign... Rhosyn? Where's my girl — Maelis — "*
@@ -94,8 +95,9 @@ The hero answers each (tones). Answers that listen honestly (not agreeing, not m
    headwoman **Rosamund Pye**: *"We heard them. All afternoon. The knights sang hymns to cover it."*
 2. Isolde's theory: the fever is *grave-rot* from the barrow on the hill, opened last spring by **poppy-diggers**:
    Larkspur's own sleepers, digging the barrow-witch's grave to plant poppy on her.
-3. **Larkspur Barrow** (crypt, level 12): diseased skeletons (blows cause **rot**: a new debuff), rats, the diggers'
-   bodies (the poppy grows out of them now), the witch's chamber.
+3. **Larkspur Barrow** (crypt, level 12): **Bloomers** (the diggers' bodies, poppy grown
+   out of their mouths and eyes, swaying), **the Hollowed** (three Larkspur sleepers still digging, who must be knocked
+   down, not killed, if the hero can help it), skeletons whose blows cause **rot** (a new debuff), the witch's chamber.
 4. **Old Mother Grisel** (crypt lord, level 13): rot-ghosts, a poisoned floor. Dying: *"They planted their flowers in
    my mouth. Let them eat what grows."*
 5. Seal the grave with the oath-iron ward; gather barrow-moss.

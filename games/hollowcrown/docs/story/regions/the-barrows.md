@@ -18,7 +18,7 @@ Main quests here: MQ26, MQ27, MQ28.
 |---|---|---|
 | **The barrow hills** | the whole region, tiers 2–6 | Short grass, heather, bare rock |
 | **Barrow mounds** | ~60 small (decoration), 9 **war cairns** (SQ-BR5) | Some opened: holes, spoil heaps |
-| **The White Fields** | x 1700–2700, z 800–1100 | Poppy over every mound; the Lantern's drying sheds at (2200, 950) |
+| **The White Fields** | x 1700–2700, z 800–1100 | Poppy over every mound; the Lantern's drying sheds at (2200, 950); **Bloomers** swaying on the oldest mounds, **the Sewn** at night, carrion rooks over all of it |
 | **The Barrow Road** | Elderwick → (2400, 1300) → the White Fields → the Watchers' Crypt → the valley → the Great Barrow | Old paving under turf |
 | **The Barrow Valley** | x 1900–2600, z 200–800 | Cliffs round it; dozens of great mounds; the Great Barrow at its head |
 | **Coldstep Pass** | (2900, 500) | Into the Carrow Teeth; snow (CT-BR2) |

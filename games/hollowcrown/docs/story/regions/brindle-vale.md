@@ -99,8 +99,8 @@ gate facing east, torches. The stock (Wat). The back tent (Hesper, chained). 5 b
 (level 4). After MQ03: empty, a burned tent, Hesper's chain on the ground.
 
 ### Mossjaw Cave (1300, 3650)
-A mouth in a gorse knoll. Two chambers and a deep tunnel: wolves at the mouth, bats, spiders, the brood mother; a side
-crack (Wenna) (SQ-BV6).
+A mouth in a gorse knoll. Two chambers and a deep tunnel: wolves at the mouth; a **pit-eater**'s nest in the first chamber;
+spiders, the brood mother; a side crack (Wenna) (SQ-BV6).
 
 ### Hob's Tower (1400, 3000)
 A ruined round watchtower over the Pilgrim Road; the Regency checkpoint at its foot (Sergeant Matthias Crow, 3
@@ -122,8 +122,9 @@ soldiers); at night, howling (CT-BV1).
 | The Birchwood's north edge (650, 3420) | wolves | 1 | 2 (MQ01) |
 | The Birchwood's edges | boars | 2 | 3 singles |
 | Mosshill slopes | wolves | 3 | 2 packs of 3 |
-| Brindle Woods | lynx | 3 | 1 |
-| Chapel Hill | famine ghosts | 2 | 2 at night until MQ02 (none if `famine_pit: blessed`) |
+| The Hanging Oak, the Pilgrim Road's gibbet (700, 3380) | carrion rooks | 2 | a flock of 12 at dusk |
+| Chapel Hill | the Hungry | 2 | 2 at night until MQ02 (none if `famine_pit: blessed`) |
+| Chapel Hill's famine pit, at night after MQ02 | the Hollowed | 3 | Jory and two sleepers, harvesting: hostile only if disturbed (none if `jory_weaned`) |
 | Southern Marsh | ghost | 3 | 1 |
 
 ---
@@ -206,8 +207,10 @@ soldiers); at night, howling (CT-BV1).
 ### SQ-BV6 — Mossjaw
 - **Giver**: Ada Cobbe, frantic (or Scrap the dog, barking). **Level** 4. **Time** 40 min. **After** MQ01.
 1. Wenna went after a lost ewe two days ago. Hob Cobbe says she'll turn up; he won't look at anyone.
-2. Scrap leads across the Shepherds' track to **Mossjaw**: 3 wolves at the mouth; bats; the ewe's remains; spiders in
-   the second chamber; the **brood mother** in the deep tunnel (level 4); behind her, in a crack too narrow for her,
+2. Scrap leads across the Shepherds' track to **Mossjaw**: 3 wolves at the mouth; in the first chamber the ewe's remains, and
+   the one who ate it: **old Aldo**, a pit-eater (level 4), a Brindleford man who vanished in the Wet Years; he flees the
+   hero's torch, and he left Wenna alone because she gave him her bread (if spared, he's seen once more, leaving a
+   rabbit at the Cobbes' door); spiders in the second chamber; the **brood mother** in the deep tunnel (level 4); behind her, in a crack too narrow for her,
    Wenna, starving, bruised, alive, with a knife.
 3. **The turn**: she didn't follow a ewe. She ran. Hob owes the Red Hen for poppy and has sold a year of her labour to
    Brannoc's camp to pay it: hauling water, gutting game, mending stolen clothes. He told Ada she'd be "in service in

@@ -24,7 +24,7 @@ Walled in a half-moon against the lake; 60 buildings; outside the south wall, **
 |---|---|---|
 | **South Gate** | (2100, 2640) | The main gate; the siege's first stand |
 | **Market Square** | (2100, 2580) | Stalls, the notice board, the bell-founder's |
-| **Gallows Square** | (2040, 2560) | Gallows (three ropes, rarely all empty), stocks, the courthouse |
+| **Gallows Square** | (2040, 2560) | Gallows (three ropes, rarely all empty), stocks, the courthouse; at dusk a flock of **carrion rooks** works the ropes and goes for anyone bleeding |
 | **The Heron and Pike** | (2150, 2570) | Tavern, rooms, cards, rumours; landlord **Dannet Lowe** |
 | **The Velvet Lamp** | (2170, 2590) | A brothel, warm, expensive, run by **Madam Ottilie**, who pays the Regency and the Greenhood both and is nobody's fool; the girls and boys there hear every secret in Kingsmere (SQ-HM5, SQ-HM9) |
 | **Harbour** | (2100–2200, 2470–2520) | Piers, ferries, the harbour master |
@@ -33,7 +33,7 @@ Walled in a half-moon against the lake; 60 buildings; outside the south wall, **
 | **Craft Lane** | (2160, 2600) | Armourer **Gunnhild Rask** (levels 5–12), tailor, bowyer |
 | **The Old Water-Gate** | (2130, 2470) | Sealed; the Chamberlain's signet opens it |
 | **The Envoy's House** | (2200, 2520) | Sabeline's: Carrow-blue shutters, a lake terrace |
-| **The Ditch** | (2050–2150, 2650–2700), outside the wall | The Barrowborn quarter: lean-tos, mud, the old cemetery where sleepers lie on the graves, Grey Edda's hut |
+| **The Ditch** | (2050–2150, 2650–2700), outside the wall | The Barrowborn quarter: lean-tos, mud, the old cemetery where sleepers lie on the graves (at night, **the Hollowed** prowl it), the sewers under the wall (a **pit-eater**), Grey Edda's hut |
 
 | Name | Who | Notes |
 |---|---|---|

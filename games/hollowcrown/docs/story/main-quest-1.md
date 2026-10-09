@@ -29,7 +29,7 @@ vale.
    (`hero_reason`). The bell stops. The silence is worse.
 5. **Midnight**: the dead come down from Chapel Hill: not knights, not old bones: **villagers**. Ghosts in famine
    rags, thin as sticks, a woman carrying a child. Old Meg screams a name at one of them: it's her sister. Garrick takes
-   an oar and goes out; Pell holds the well with his sword shaking. The hero fights (4 famine ghosts, level 1–2); they
+   an oar and goes out; Pell holds the well with his sword shaking. The hero fights (4 of **the Hungry**, famine-wraiths, level 1–2); they
    don't attack people first: they go to the houses they lived in, and only fight when stopped. One whispers to the
    hero: *"Hungry... so hungry... the reeve put us in the pit..."*
 6. **Dawn**: the village at the well. Old Meg won't stop crying. **Father Cuthwin**: the dead came from the
@@ -47,7 +47,7 @@ vale.
 2. **The famine pit**: a long low mound beside the chapel wall, the turf broken from inside. Grave-poppy grows thick
    on it, white as frost; it's been harvested (stems cut clean, a dropped sickle with a mill's mark: Jory's: SQ-BV1).
    Sixty dead of the Wet Years, buried without rites because the Lantern charged a silver a grave and Brindleford had
-   none. The hero can say the words Cuthwin knows over it (if they ask him first: a short rite: the famine ghosts don't
+   none. The hero can say the words Cuthwin knows over it (if they ask him first: a short rite: the Hungry don't
    return: `famine_pit: blessed`) or leave it.
 3. **The chapel**: roofless, the bell hanging in the half-tower. Two skeletons at the altar. The stairs down are sealed
    by an **oath-iron grate**, white with frost in summer. Cuthwin's palms blister at the bars. The hero's don't.
@@ -194,7 +194,7 @@ MQ11 and MQ12. Each faction's first quest shows its best face; its second, its r
    talking to us."* (SQ-GW8.)
 2. **Oakhallow**: the villagers won't say where the camp is (unless wren token, Greenhood ≥ 20, or SQ-GW3's first
    step).
-3. The trail of wren carvings; a lynx's den; **Kestrel** (12), Wren's scout, drops from a tree with a knife.
+3. The trail of wren carvings; a wolf den; a gibbet at a crossing with a hanged hood on it and a flock of **carrion rooks** that rise at the hero; **Kestrel** (12), Wren's scout, drops from a tree with a knife.
 4. **The Hollow Oak**: children, the wounded, a hanging larder, a crate of poppy-milk being cut into vials by two
    hoods who stop when they see the hero. **Wren**, bow half drawn. Her greeting depends on `bv_red_hen`
    (`hesper_judged`: *"I heard a woman took Brannoc's head off with his own cleaver. I'd like to buy her a drink."*).

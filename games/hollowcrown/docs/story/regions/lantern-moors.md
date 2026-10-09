@@ -13,7 +13,7 @@ Main quests here: MQ07, MQ08, MQ22, MQ23.
 |---|---|---|
 | **The moor** | most of the region, tiers 2–5 | Heather, rocks, peat cuttings |
 | **The Abbey Crag** | (850, 800) | One road up its south side; the poppy terraces on its east slope |
-| **Black Fen** | x 400–700, z 900–1150 | Bog, pools, mist; the Fen Path |
+| **Black Fen** | x 400–700, z 900–1150 | Bog, pools, mist; the Fen Path; at night, **the Sewn** who escaped the Abbey wander here, shrieking at sounds |
 | **The Cold Spine's foot** | z 300–500 | Scree, the mountains |
 | **The Grey Stones** | (1200, 600) | An avenue of thirty standing stones |
 | **The Moor Road** | Reedby → (1350, 1700) → Gorse Hollow → the Abbey | |
@@ -35,7 +35,9 @@ shepherd **Tam Gorse**; Bryn's mother, **Ailsa**, who hasn't seen her daughter i
 
 ## Cairnfold (550, 1250)
 The ruined hill fort of the Night of Lanterns: broken ring walls, the burned barrow-halls (black stone, bones fused in
-the walls), the keep stump; the crypt beneath (MQ08). The **Hermit** in a cell in the outer wall.
+the walls), the keep stump; the crypt beneath (MQ08). The **Hermit** in a cell in the outer wall. After MQ22, at night,
+**the Ashen** walk the burned halls, smouldering, small ones among them; they don't leave the ring walls; they pass the
+Hermit's cell every night and he reads them names until dawn.
 
 ## Landmarks
 | Landmark | (x, z) | What |

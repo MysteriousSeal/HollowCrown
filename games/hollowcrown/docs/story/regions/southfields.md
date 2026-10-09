@@ -147,10 +147,17 @@ families won't say their names).
    (`hedge_graves`: Millbrook +1).
 - **Rewards**: 120 xp; 80 silver; a **boar-tusk necklace**.
 
-### CT-SF2 — The Grain-Worm
+### CT-SF2 — The Granary's Guest
 - **Board** (Millbrook): *"Something under the old granary eats grain and dogs. 130 silver. — G. Mill."* **Level** 11.
   **Time** 20 min.
-1. The old granary (2960, 3330); the floor caved in; tunnels of the Barrow War; a **cave worm** (level 11) and its brood.
-2. **The turn**: the tunnels are Barrowborn hiding-holes from the Barrow War; children's bones in the deepest one, with
-   toys. The hero can bring one, a carved wooden bird, to Grey Edda in the Ditch (she knows the carving: a song).
-- **Rewards**: 160 xp; 130 silver.
+1. The old granary (2960, 3330); the floor caved into tunnels of the Barrow War; gnawed dog bones; a child's toy.
+2. **A pit-eater** (level 11): **Ewan Mill**, Gerda's brother, who went into the tunnels in the Wet Years with their
+   dead parents and came out alone, fat, and never came out again. Gerda has left bread at the hole for nine years and
+   told no one.
+3. **The turn**: the tunnels are Barrowborn hiding-holes from the Barrow War; children's bones in the deepest one, with
+   toys; Osric sleeps among them, with them. He's gentle with the toys.
+4. Choice (`granary`): **kill him** (`killed`); **tell Gerda you know** and leave him (`left`: she pays half, and asks the
+   hero to wall up the hole with him on the right side of it, which they can do or not); **bring him out** into the light
+   (he dies of it within a day, in Gerda's arms) (`brought_out`). A carved wooden bird from the deepest tunnel can be
+   taken to Grey Edda in the Ditch (she knows the carving: a song).
+- **Rewards**: 160 xp; 130 (or 65) silver.

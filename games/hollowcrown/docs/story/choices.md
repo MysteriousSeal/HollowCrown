@@ -86,10 +86,10 @@ confession needs its own key (MQ21).
 | Region | Flags |
 |---|---|
 | Hollowmere | `hm_weed_rats`, `osric_stone`, `aldous_just` / `aldous_hard`, `hm_gallows`, `orme` / `brayne_exposed`, `hm_lights`, `saw_maelis_saved`, `rhosyn_message`, `elderwick_wall`, `wall_whole` / `wall_lane_out`, `edric_letter`, `ditch_songs`, `edda_promise`, `toll`, `willows` |
-| Saltreach | `nell_cargo`, `gull_light`, `garth` (`garth_drowned` / `garth_driven_out`), `widow_ring`, `gullhaven_harbour`, `anselm_pages`, `oswin_given`, `sabeline_mother`, `sorrow_ledger`, `pearl_freed`, `clifftop` |
-| Greenwood | `sour_apple`, `varrow_trusts`, `oak_wedding`, `ulfar_lore`, `wren_letter_given`, `brannoc_*`, `fellowe` (`truth` / `regency` / `kept` / `pip_confessed`), `bear`, `lynx` |
+| Saltreach | `nell_cargo`, `gull_light`, `garth` (`garth_drowned` / `garth_driven_out`), `widow_ring`, `gullhaven_harbour`, `anselm_pages`, `oswin_given`, `tide_wife` (`destroyed` / `sorrel_given` / `rested`), `sabeline_mother`, `sorrow_ledger`, `pearl_freed`, `clifftop` |
+| Greenwood | `sour_apple`, `varrow_trusts`, `oak_wedding`, `ulfar_lore`, `wren_letter_given`, `brannoc_*`, `fellowe` (`truth` / `regency` / `kept` / `pip_confessed`), `bear`, `old_road` (`killed` / `rook` / `wren_told`) |
 | Lantern Moors | `bryn`, `bryn_voices`, `peat` (`warded` / `buried` / `tithe_cut`), `archive_pages`, `smith_book`, `cairnfold_chronicle`, `true_rite`, `cuthwin`, `cuthwin_testimony`, `hode_dead`, `odalys_doubts`, `lowell`, `terraces_drained`, `standing_man` |
-| Southfields | `burned_row`, `odalys_knelt`, `deserters`, `ralf_judged`, `isolde_hives`, `tithe`, `scarecrow`, `isolde_clean`, `hedge_graves` |
+| Southfields | `burned_row`, `odalys_knelt`, `deserters`, `ralf_judged`, `isolde_hives`, `tithe`, `scarecrow`, `isolde_clean`, `hedge_graves`, `granary` (`killed` / `left` / `brought_out`) |
 | The Barrows | `grave_robbers`, `agent_caught`, `watchers_oath`, `adit`, `sigrun_freed`, `cairn_names`, `white_fields`, `white_ledger`, `hounds`, `coldstep` |
 
 **Knots** (either order must work):

@@ -91,7 +91,7 @@ smokehouse keeper **Old Fenwick**.
 ### SQ-SR4 — The Widow's Ring
 - **Giver**: Widow Saltash, on the harbour wall. **Level** 9. **Time** 20 min.
 1. Her husband's wedding ring went down with his boat off the Drowned Bell.
-2. Low tide at the wreck (Jonno's "map" got the wrong ship): crabs (**new** look on the spider), a chest of Carrow letters
+2. Low tide at the wreck (Jonno's "map" got the wrong ship): two of **the Drowned** (the Carrow ship's sailors), a chest of Carrow letters
    (lore: Carrow's poppy contracts, signed by the Lantern's bursar). No ring.
 3. The ring is on Garth Hollin's finger (SQ-SR3). Give it to her (`widow_ring`). She gives the hero her husband's
    **sea-knife**, and tells them her husband was the wreckers' first: *"He saw a light. He thought it was home."*
@@ -139,13 +139,18 @@ smokehouse keeper **Old Fenwick**.
 
 ## Contracts
 
-### CT-SR1 — The Thing in the Tide-Cave
-- **Board** (Gullhaven): *"Something big in Wrecker's Hole eats our pots and our boys' courage. 150 silver. — the
-  Fishwives."* **Level** 11. **Time** 20 min.
-1. The lower flooded cave at low tide; **the Tide-Worm** (giant cave worm, level 12) surfacing under the hero; its brood.
-2. **The turn**: in its gut-tunnels, the bones of a dozen men in wreckers' rope: Sorrel's crew fed the worm their
-   witnesses. It grew fat on murder.
-- **Rewards**: 200 xp; 150 silver; the worm's tooth.
+### CT-SR1 — The Tide-Wife
+- **Board** (Gullhaven): *"Something in Wrecker's Hole pulls our boys under. Singing. 150 silver. — the Fishwives."*
+  **Level** 11. **Time** 25 min.
+1. The lower flooded cave at low tide: drowned men standing in the water up to their chests, facing the same way.
+2. **The Tide-Wife** (the Drowned, level 12): **Morwen Sorrel**, Old Sorrel's wife, who drowned herself after she
+   learned what her husband's beacon did; she gathers the wreckers' victims round her and sings them into the deep
+   water, and takes any man who comes in, to give her husband's crimes back to the sea.
+3. **The turn**: she's taking boys because Sorrel's son is one of the fishwives' boys; she wants *him*.
+4. Choice (`tide_wife`): **fight** her and her drowned (`destroyed`); **bring Sorrel** (alive, if SQ-SR3 left him so, or
+   his body) to the water: she takes him and the cave goes quiet (`sorrel_given`); **Rite of Rest**, with the boy's
+   promise to light a candle at the Gull Light each year (`rested`).
+- **Rewards**: 200 xp; 150 silver.
 
 ### CT-SR2 — The Cliff-Top Pack
 - **Board** (Saltcombe): *"Wolves take the sheep on the heath. 90 silver."* **Level** 10. **Time** 20 min.

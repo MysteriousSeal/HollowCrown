@@ -14,6 +14,7 @@ written here (or this is changed first).
 | [writing-guide.md](writing-guide.md) | Tone, themes and rules, the hero's voice and tones, quest design, dialogue style, the Vale's words |
 | [world.md](world.md) | The Vale's story and the truth under it, the timeline, the Night of Still Water, the Oath and the crown, factions, reputation, the map |
 | [grave-poppy.md](grave-poppy.md) | The drug: what it does, who profits, where it's grown and sold, the Listeners |
+| [bestiary.md](bestiary.md) | Every enemy type (23 in four families), how each looks and fights, where it's met, the unique bosses |
 | [characters.md](characters.md) | The main cast: look, wants, stain, wound, voice, arc, fates |
 | [romances.md](romances.md) | Wren, Isolde/Maelis, Sabeline, Odalys: beats, scenes, conflicts, endings |
 | [main-quest-1.md](main-quest-1.md) | Prologue (Brindle Vale) and Act I: *Three Claims* |
@@ -49,8 +50,10 @@ camp, the White Fields, 8 regions (the Middle Downs between them).
 - **Flags** in `code`: the world state, all in [choices.md](choices.md).
 - **Reputation**: Regency, Greenhood, Lantern -100..100; places -3..+3; written `Regency +10`, `Brindleford +1`.
 - **Dialogue tones**: Kind, Hard, Sly, Blunt ([writing-guide.md](writing-guide.md)).
-- **Monsters** are the game's (wolves, boars, bears, lynxes, bandits, ghosts, skeletons, draugr, spiders, bats, cave
-  worms, crypt lords) unless marked **new** (skeleton hounds, barrow-giants, crab looks).
+- **Enemies** are the 23 types of [bestiary.md](bestiary.md): beasts (wolves, boars, bears, spiders), people (bandits,
+  Regency herons, Greenhood hoods, Lantern knights, Carrow mercenaries), the Oath's dead (ghosts, skeletons, draugr,
+  barrow-hounds, barrow-giants, crypt lords) and the Vale's horrors (the Hungry, the Drowned, the Ashen, Bloomers, the
+  Hollowed, the Sewn, pit-eaters, carrion rooks).
 
 ## The deeper truths (spoilers for the writers)
 - The Oath's founding story is a lie: Osric won by massacre (**the Night of Lanterns** at Cairnfold), took Sigrun by

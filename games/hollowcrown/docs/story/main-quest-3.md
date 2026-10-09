@@ -13,7 +13,8 @@ crown, knowing now what it is.
 2. **The Listening Hall**: a long vault lit by poppy-lamps; on stone biers over the Order's graves, **seven living
    Listeners**, eyes sewn shut, wax tablets in their laps, murmuring barrow-tongue in a round; cups of milk at their
    lips; the smell of cloves and rot. One is **Novice Bryn**, if SQ-LM1 ended `stayed`. One turns her head toward the
-   hero: *"You're the one they can't hear. It's so quiet round you."*
+   hero: *"You're the one they can't hear. It's so quiet round you."* In the dark beyond the biers, **the Sewn**: the
+   Listeners who lived past their minds, hunting by sound; the hero crosses the hall in silence or fights them.
    Choice (`listeners`):
    - **Free them**: cut the threads, carry them up (the withdrawal kills two within a day, whatever is done; the rest
      go to Isolde, Mother Rook or Sister Hild) (`freed`).
@@ -59,8 +60,9 @@ crown, knowing now what it is.
 
 ## MQ25 — The Siege of Kingsmere
 - **Where**: Kingsmere at night. **Level** 16. **Time** 65 min.
-1. The barrow-host over the Middle Downs: skeletons, draugr in barrow-iron, ghosts, **barrow-giants** (**new**: huge
-   draugr grown through with roots), **the Grey Rider** (Hrathgar's herald, level 17). They come at the walls silently,
+1. The barrow-host over the Middle Downs: skeletons, draugr in barrow-iron, ghosts, barrow-hounds, **barrow-giants**,
+   and behind them **the Ashen**, Cairnfold's burned, walking past the walls toward the Ditch, not to attack it: to stand
+   round it, smouldering, all night (a scene the Ditch's pogrom happens beside); **the Grey Rider** (Hrathgar's herald, level 17). They come at the walls silently,
    in good order, as an army; the living scream; the dead don't.
 2. **Three stands**; the hero chooses where to fight each time: **the South Gate**, **the Harbour** (the drowned of
    Hollowmere walking up out of the lake, Lady Rhosyn's ghost among them, unless laid to rest in SQ-HM6), **the Hall**
@@ -78,8 +80,9 @@ crown, knowing now what it is.
 
 ## MQ26 — The Watchers' Road
 - **Where**: Elderwick → the White Fields → the Watchers' Crypt (2250, 1050). **Level** 17. **Time** 50 min.
-1. The White Fields after the dead passed: the novices' bodies in the poppy, the poppy grown up through them already,
-   white in the black. The Lantern's oath-iron gate on the Barrow Road, broken from the north.
+1. The White Fields after the dead passed: the novices' bodies in the poppy, the poppy grown up through them already:
+   **Bloomers**, swaying, and **the Sewn** wandering the fields, shrieking barrow-tongue at every sound; carrion rooks
+   in hundreds. The Lantern's oath-iron gate on the Barrow Road, broken from the north.
 2. **The Watchers' Crypt**: undead knights, barrow-hounds; **Sir Eadric Long**, the First Watcher, who once fled his
    post. With the Watchers' oath (SQ-BR2), he kneels and fights for the hero; without it, he must be beaten.
 3. On the far side, the Barrow Valley: dozens of great mounds, every one open, a black sky.
@@ -107,7 +110,8 @@ crown, knowing now what it is.
 ## MQ28 — The Great Barrow
 - **Where**: the Great Barrow. **Level** 18. **Time** 90 min.
 1. **The barrow** (5 levels): Hrathgar's hall-guard in root-grown iron; the **Hall of the Wives**, where the women who
-   burned at Cairnfold were laid, their ash in jars, their names on the jars; the **Hall of Sigrun** (her vigil); the
+   burned at Cairnfold were laid, their ash in jars, their names on the jars, and **the Ashen** among the jars, who let
+   the hero pass if they speak the names (`cairn_names`) and burn them if not; the **Hall of Sigrun** (her vigil); the
    **Speaking Stone**; Hrathgar on his throne behind it, standing up for the first time in 303 years, roots tearing.
 2. **Anselm** (if he fled): at the Stone before the hero, his bound dead round him, trying to speak the changed oath
    with no crown; it fails; Hrathgar takes him by the head (*"So this is the Lantern, now."*) and the hero can save him
