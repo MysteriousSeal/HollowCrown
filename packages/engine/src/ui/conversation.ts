@@ -98,7 +98,9 @@ class Portrait {
     this.el.append(this.frame, this.plate);
   }
 
+  // Its speaker (none: no name and no portrait, the side left empty, `.absent`).
   set(speaker: Speaker): void {
+    this.el.classList.toggle('absent', !speaker.name && !speaker.portrait);
     this.plate.textContent = speaker.name;
     this.frame.replaceChildren(...(speaker.portrait ? [speaker.portrait] : []));
   }
