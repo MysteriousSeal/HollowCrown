@@ -6,6 +6,7 @@
 // that pause the game (ui/pausingScreens.ts: the map, the journal, the pause menu).
 
 import { VisualComponent } from '@voxel/engine/app';
+import { KeyboardResource } from '@voxel/engine/input';
 import type { Entity, System } from '@voxel/engine/ecs';
 import { Dead, Health, Hit, InReach, TimeOfDay, Transform } from '@voxel/engine/gameplay';
 import { Banner, Conversation, CornerLabel, FloatingText, Meter, Prompt, Toasts, TrackerPanel, WorldLabels, createOverlay, fadeByDistance, meterShare, type WorldLabel } from '@voxel/engine/ui';
@@ -44,6 +45,15 @@ export const hud: Feature = {
     const placeholderLog = startLog();
     const logOf = () => (world.hasResource(QuestLog) ? world.resource(QuestLog) : placeholderLog);
     const theMap = pausingScreens(app, root, map, conversation, logOf);
+    // A key a conversation took (to go on, to close it) isn't the hero's too: no swing, no talk again.
+    let talking = false;
+    window.addEventListener('keydown', () => (talking = conversation.isOpen), { capture: true });
+    window.addEventListener('keydown', () => {
+      if (!talking) return;
+      const keyboard = world.resource(KeyboardResource);
+      keyboard.takePress('attack');
+      keyboard.takePress('interact');
+    });
     let questsWere: ReturnType<typeof snapshot> = [];
     const placesSeen = new Set<string>();
     let region: string | undefined;

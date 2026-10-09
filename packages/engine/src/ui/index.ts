@@ -3,6 +3,7 @@
 export { createOverlay, element } from './overlay';
 export { BANNER_SECONDS, Banner } from './banner';
 export { CornerLabel, type Corner } from './label';
+export { END_CHOICES_AFTER, EndScreen } from './endScreen';
 export { FLOAT_SECONDS, FloatingText, floatAt } from './floatingText';
 export { JournalScreen, type JournalEntry, type JournalItem } from './journal';
 export { Menu, type MenuItem } from './menu';
