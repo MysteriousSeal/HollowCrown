@@ -167,6 +167,20 @@ export function placesOf(map: WorldMap): ChunkLayer {
   return placesLayer(map.places().filter((p) => p.kind === 'building' || p.kind === 'fixture'), make, [litMaterial(), glowMaterial()]);
 }
 
+// The ground under every building and fixture on `map` made level, a tile round it too (no wall over a dip, no grass
+// through a floor). Once, as the map loads, before anything's drawn on it.
+export function levelGround(map: WorldMap): void {
+  for (const place of map.places()) {
+    if (place.kind === 'building') {
+      const f = footprint(place);
+      map.flatten({ rect: [f.x0 - 1, f.z0 - 1, f.x1 + 1, f.z1 + 1] });
+    } else if (place.kind === 'fixture' && fixtureOf(place)) {
+      const [x, z] = place.at;
+      map.flatten({ rect: [x - 1, z - 1, x + 1, z + 1] });
+    }
+  }
+}
+
 // What stands in the way on `map`: every building's walls (inset from its footprint as they're built: the eaves can
 // be walked under), every fixture; added to `obstacles` (a new set, none given).
 export function obstaclesOf(map: WorldMap, obstacles = new Obstacles()): Obstacles {

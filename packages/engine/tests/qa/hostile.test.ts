@@ -7,9 +7,8 @@ import { Hostile, Player, Transform, hostile, hostileSystem, movementSystem } fr
 import { Obstacles, ObstaclesResource, TerrainResource, flatTerrain } from '../../src/world';
 
 describe('a hostile going home', () => {
-  // BUG (engine): gameplay/hostile.ts walks a returning hostile straight at its home; with a trunk square in the way it
-  // slides nowhere and stays in 'return' for good (it can't notice the player again from there). Filed.
-  it.skip('gets home round a trunk in its way, and hunts again', () => {
+  // (Was a bug: a returning hostile pressed against the trunk for good. Fixed by engine: no progress home, it settles.)
+  it('gets home round a trunk in its way, and hunts again', () => {
     const world = new World();
     world.setResource(TerrainResource, flatTerrain({ width: 100, depth: 100 }, 0));
     const obstacles = new Obstacles();

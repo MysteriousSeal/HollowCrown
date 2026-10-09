@@ -6,7 +6,7 @@
 
 import { VoxelModel } from '@voxel/engine/models';
 import { STRUCTURE_VOXEL } from '@voxel/engine/structures';
-import { colorAt, forEachVoxel, inGrid, nibble, setColor, type VoxelGrid } from '@voxel/engine/voxel';
+import { colorAt, inGrid, nibble, setColor, type VoxelGrid } from '@voxel/engine/voxel';
 import { BIRCH_BANDS, N, NATURE_LOOK, OAK_BANDS, PINE_BANDS } from './palette';
 import { birchStem, leaves, limb, marked, seeded, shadeMarked, treeGrid, trunk, type Volume } from './shaping';
 
@@ -124,13 +124,16 @@ function pine(variant: number): VoxelGrid {
   tiers.forEach(([base, height, radius], i) => {
     const lobes = 6 + Math.floor(rand() * 2);
     const phase = rand() * Math.PI * 2;
-    forEachVoxel(g, (x, y, z) => {
-      if (y < base || y >= base + height) return;
+    for (let y = base; y < Math.min(base + height, g.size[1]); y++) {
       const t = (y - base) / (height - 1);
       const r = radius * (1 - t) + 0.8 * t;
-      const [dx, dz] = [x + 0.5 - cx, z + 0.5 - cz];
-      if (Math.hypot(dx, dz) <= r * (1 + 0.14 * Math.sin(lobes * Math.atan2(dz, dx) + phase))) setColor(g, x, y, z, marked(i));
-    });
+      for (let x = Math.max(0, Math.floor(cx - r * 1.2)); x <= Math.min(g.size[0] - 1, cx + r * 1.2); x++) {
+        for (let z = Math.max(0, Math.floor(cz - r * 1.2)); z <= Math.min(g.size[2] - 1, cz + r * 1.2); z++) {
+          const [dx, dz] = [x + 0.5 - cx, z + 0.5 - cz];
+          if (Math.hypot(dx, dz) <= r * (1 + 0.14 * Math.sin(lobes * Math.atan2(dz, dx) + phase))) setColor(g, x, y, z, marked(i));
+        }
+      }
+    }
     for (let l = 0; l < lobes; l++) {
       const angle = (l / lobes) * Math.PI * 2 + (Math.PI / 2 - phase) / lobes;
       const [x, z] = [Math.floor(cx + Math.cos(angle) * radius), Math.floor(cz + Math.sin(angle) * radius)];
