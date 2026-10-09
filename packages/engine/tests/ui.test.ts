@@ -17,6 +17,13 @@ describe('Typewriter', () => {
 import { Dialogue } from '../src/ui/dialogue';
 import { MapView, cssColor } from '../src/ui/mapImage';
 import { ToastQueue } from '../src/ui/toasts';
+import { meterShare } from '../src/ui/meter';
+
+describe('meterShare', () => {
+  it('is the share full, kept between empty and full', () => {
+    expect([meterShare(25, 50), meterShare(-5, 50), meterShare(80, 50), meterShare(3, 0)]).toEqual([0.5, 0, 1, 0]);
+  });
+});
 import { fadeByDistance } from '../src/ui/worldLabels';
 
 describe('fadeByDistance', () => {

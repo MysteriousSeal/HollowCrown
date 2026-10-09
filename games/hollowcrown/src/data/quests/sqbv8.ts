@@ -20,13 +20,25 @@ export const SQ_BV8: Quest = {
     {
       id: 'elsa', title: 'Crying in the yard',
       objectives: [
-        { id: 'elsa', kind: 'talk', text: "Elsa wants to marry Hal Wicke. Her father wants a bride-price no chandler's son could pay.", at: 'ferrymans-rest', who: 'Elsa Fenn' },
+        {
+          id: 'elsa', kind: 'talk', text: "Elsa wants to marry Hal Wicke. Her father wants a bride-price no chandler's son could pay.", at: 'ferrymans-rest', who: 'Elsa Fenn',
+          lines: [
+            { who: 'Elsa Fenn', text: "Don't. I'm not crying, I'm peeling onions. In the yard. With no onions." },
+            { who: 'Elsa Fenn', text: "Hal asked Da for me. Da said twenty silver. Twenty. He might as well have said the moon, or a dead man's pardon." },
+          ],
+        },
       ],
     },
     {
       id: 'hal', title: "The chandler's son",
       objectives: [
-        { id: 'hal', kind: 'talk', text: 'Hear Hal out, in Tallow Green.', at: 'tallow-green' },
+        {
+          id: 'hal', kind: 'talk', text: 'Hear Hal out, in Tallow Green.', at: 'tallow-green',
+          lines: [
+            { who: 'Hal Wicke', text: "Twenty silver for a cook. He wants me gone, that's all it means." },
+            { who: 'Hal Wicke', text: "I make candles. I'd make her a hundred. I'd make her a house of them." },
+          ],
+        },
       ],
     },
     {
@@ -34,6 +46,10 @@ export const SQ_BV8: Quest = {
       objectives: [
         {
           id: 'garrick', kind: 'choose', text: 'Garrick, at the river with a bottle. Talk him round with what I know.', at: THE_RIVER, who: 'Garrick Fenn',
+          lines: [
+            { who: 'Garrick Fenn', text: "Come to plead for the chandler's boy? Sit. Not on the dry side, that's mine." },
+            { who: 'Garrick Fenn', text: "She's all I didn't drown. I'll not hand her to the first lad who smells of wax." },
+          ],
           options: [
             { id: 'bell', label: '[The bell rang] You gave this village its nerve back. Give your daughter hers.', sets: { sqbv8_push: 'bell' } },
             { id: 'rhosyn', label: "[What the lake showed] You're afraid a son-in-law will ask where the money came from. And who Rhosyn was.", sets: { sqbv8_push: 'rhosyn' } },
@@ -46,7 +62,12 @@ export const SQ_BV8: Quest = {
       id: 'the-end', title: 'A wedding, or an empty room',
       objectives: [
         { id: 'wedding', kind: 'go', text: "If he gave in: a wedding at the Ferryman's Rest, dancing in the square. Kit is after the cake.", at: 'brindleford-well', optional: true },
-        { id: 'elsa', kind: 'talk', text: 'See Elsa, or what she left.', at: 'ferrymans-rest', who: 'Elsa Fenn' },
+        {
+          id: 'elsa', kind: 'talk', text: 'See Elsa, or what she left.', at: 'ferrymans-rest', who: 'Elsa Fenn',
+          lines: [
+            { who: 'Elsa Fenn', text: "Whatever you said to him. Thank you. Or curse you. I'll know by morning." },
+          ],
+        },
       ],
     },
   ],

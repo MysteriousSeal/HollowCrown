@@ -18,7 +18,7 @@ import type { BodyLook } from '../body/look';
 import { BODIES, HUMAN_VOXEL_SIZE as V, buildBodyPart, type BodyPart, type BodyShape, type Joint } from '../body/bodyVoxels';
 import { bodyGeometry, hairGeometry } from '../body/bodyMeshes';
 import { createGrid, stamp, type Size, type VoxelGrid } from '../../voxel';
-import { MODEL_VOXEL, joint, litMaterial, RiggedModel, type PartLook } from '../../models';
+import { MODEL_VOXEL, joint, litMaterial, RiggedModel, type ModelAction, type PartLook } from '../../models';
 
 export interface Gait {
   speed: number; // walk cycles a second
@@ -115,7 +115,7 @@ export class FrameModel extends RiggedModel {
     this.part(group, grid, [pivot[0] + lo[0] + off[0], pivot[1] + lo[1], pivot[2] + lo[2] + off[2]], V);
   }
 
-  animate(time: number, walk: number): void {
+  animate(time: number, walk: number, action?: ModelAction): void {
     const g = this.gait;
     const phase = time * Math.PI * 2 * g.speed;
     const s = Math.sin(phase) * walk;
@@ -130,6 +130,25 @@ export class FrameModel extends RiggedModel {
     this.upper.rotation.z = Math.sin(time * 0.9) * g.sway;
     j.head.rotation.x = breath * 4 - g.lean * 0.8 + (g.headBow ?? 0); // (looking ahead, however low it's bent)
     j.head.rotation.z = -this.upper.rotation.z * 0.6 + (g.headTilt ?? 0);
+    this.body.position.z = 0;
+    if (action) this.act(action);
     for (const tick of this.ticks) tick(time, walk);
+  }
+
+  // A swing: the right arm raised, then brought down and through as the body lunges in. A flinch: thrown back.
+  private act({ name, phase }: ModelAction): void {
+    const j = this.joints;
+    if (name === 'attack') {
+      const raise = phase < 0.35 ? phase / 0.35 : 1 - (phase - 0.35) / 0.65; // (up, then down through the blow)
+      const strike = phase < 0.35 ? 0 : Math.sin(((phase - 0.35) / 0.65) * Math.PI);
+      j.rightArm.rotation.x = -0.4 - 2.2 * raise;
+      this.upper.rotation.x += 0.3 * strike - 0.1 * raise;
+      this.body.position.z = 0.06 * strike;
+    } else if (name === 'hurt') {
+      const flinch = 1 - phase;
+      this.upper.rotation.x -= 0.3 * flinch;
+      j.head.rotation.x -= 0.3 * flinch;
+      this.body.position.z = -0.04 * flinch;
+    }
   }
 }

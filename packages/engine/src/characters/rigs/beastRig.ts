@@ -1,10 +1,10 @@
 // A four-legged creature (a wolf, a boar, a bear, a hound...): voxel parts on joints.
 // Walking, its legs trot in diagonal pairs with a bob of the body and the head; standing, it breathes, its head
-// turns now and then, its tail wags low.
+// turns now and then, its tail wags low. Attacking, it lunges and snaps; hurt, it flinches back.
 
 import * as THREE from 'three';
 import type { Size, VoxelGrid } from '../../voxel';
-import { MODEL_VOXEL as V, joint, RiggedModel, type PartLook } from '../../models';
+import { MODEL_VOXEL as V, joint, RiggedModel, type ModelAction, type PartLook } from '../../models';
 
 export type BeastPart = { grid: () => VoxelGrid; size: Size };
 
@@ -49,7 +49,7 @@ export class BeastModel extends RiggedModel {
     }
     this.finish((legH + bodyH + spec.head.size[1] * V * 0.5) * this.scale, (bodyL / 0.36) * this.scale);
   }
-  animate(time: number, walk: number): void {
+  animate(time: number, walk: number, action?: ModelAction): void {
     const phase = time * Math.PI * 2 * (this.spec.stride ?? 1.6);
     const s = Math.sin(phase) * LEG_SWING * walk;
     this.legs[0].rotation.x = s; // (diagonal pairs together)
@@ -62,5 +62,16 @@ export class BeastModel extends RiggedModel {
     this.head.rotation.y = Math.sin(time * 0.6) * 0.25 * (1 - walk); // looking about
     this.tail.rotation.x = -(this.spec.tailDroop ?? 0.35) + 0.4 * walk;
     this.tail.rotation.y = Math.sin(time * 6) * 0.35 * (1 - walk);
+    this.body.position.z = 0;
+    if (action?.name === 'attack') {
+      // Nose up as it gathers, then a lunge forward and a snap down at the height of it.
+      const lunge = Math.sin(Math.min(1, action.phase) * Math.PI);
+      this.body.position.z = lunge * 0.09;
+      this.head.rotation.x = action.phase < 0.35 ? -0.35 * (action.phase / 0.35) : -0.35 + 0.75 * lunge;
+    } else if (action?.name === 'hurt') {
+      const flinch = 1 - action.phase;
+      this.body.position.z = -flinch * 0.05;
+      this.head.rotation.x = -0.4 * flinch;
+    }
   }
 }

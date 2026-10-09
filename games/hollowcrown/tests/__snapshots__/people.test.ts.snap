@@ -544,6 +544,23 @@ exports[`people > Tamsin Reede: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > The Stranger (the hero): builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.45,
+    0.092,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1812,
+}
+`;
+
 exports[`people > Tobin Harrow: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
