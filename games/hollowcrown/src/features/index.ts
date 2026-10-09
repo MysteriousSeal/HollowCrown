@@ -3,6 +3,7 @@
 import type { Feature } from './context';
 import { bot } from './bot';
 import { buildings } from './buildings';
+import { captives } from './captives';
 import { combat } from './combat';
 import { daylight } from './daylight';
 import { encounters } from './encounters';
@@ -26,6 +27,7 @@ export const FEATURES: Feature[] = [
   buildings,
   nature,
   villagers,
+  captives,
   sprint,
   combat,
   hud,

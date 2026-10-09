@@ -61,8 +61,8 @@ export function linesOf(objective: Objective, name: string, fallback: Line): Con
 }
 
 // What `name` says when talked to, and what it does for the quests: any quest they give, given first
-// (systems/questStarts.ts); each open 'talk' with them played and done as it closes, then each 'choose' with them
-// played and done by the reply picked. None asked of them: their first words.
+// (systems/questStarts.ts); each open 'talk' (or 'search' for them: Wat in the stock) with them played and done as
+// it closes, then each 'choose' with them played and done by the reply picked. None asked of them: their first words.
 export function talkWith(world: World, name: string): { lines: ConversationLine[]; onChoice: (line: number, choice: number) => void; onClose: () => void } {
   if (world.hasResource(Quests)) startReady(world.resource(Quests), QUESTS, name).forEach((stage) => begin(world, stage));
   const asked = world.hasResource(Quests) ? openObjectives(world.resource(Quests), QUESTS).filter(({ objective }) => objective.who === name) : [];
@@ -83,7 +83,7 @@ export function talkWith(world: World, name: string): { lines: ConversationLine[
       const option = asking?.objective.options?.[choice];
       if (asking && option) complete(world, asking.quest, asking.objective.id, option.sets);
     },
-    onClose: () => ordered.forEach(({ quest, objective }) => objective.kind === 'talk' && complete(world, quest, objective.id)),
+    onClose: () => ordered.forEach(({ quest, objective }) => ['talk', 'search'].includes(objective.kind) && complete(world, quest, objective.id)),
   };
 }
 
