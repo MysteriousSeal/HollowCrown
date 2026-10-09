@@ -33,7 +33,7 @@ export function tierRects(terrain: Terrain, area: Area): TierRect[] {
     for (let x = 0; x < w; x++) {
       const [tx, tz] = [area.x0 + x, area.z0 + z];
       const relief = (terrain.reliefAt?.(tx, tz) ?? 0) + RELIEF_OFFSET;
-      tiers[x + z * w] = (terrain.tierAt(tx, tz) * 16 + relief) * 256 + (terrain.surfaceAt?.(tx, tz) ?? 0);
+      tiers[x + z * w] = (terrain.tierAt(tx, tz) * 16 + relief) * 256 + drawnSurface(terrain, tx, tz);
     }
   }
   const taken = new Uint8Array(w * d);
@@ -60,9 +60,12 @@ export function tierRects(terrain: Terrain, area: Area): TierRect[] {
   return rects;
 }
 
+// The surface a tile's top is drawn as.
+const drawnSurface = (terrain: Terrain, x: number, z: number): number => terrain.drawnSurfaceAt?.(x, z) ?? terrain.surfaceAt?.(x, z) ?? 0;
+
 // Which sides of `r` meet ground of another tier or surface (EDGE_BITS), anywhere along them.
 export function seamsOf(terrain: Terrain, r: TierRect): number {
-  const key = (x: number, z: number) => terrain.tierAt(x, z) * 256 + (terrain.surfaceAt?.(x, z) ?? 0);
+  const key = (x: number, z: number) => terrain.tierAt(x, z) * 256 + drawnSurface(terrain, x, z);
   const own = r.tier * 256 + r.surface;
   const { width: W, depth: D } = terrain.size;
   const differs = (x: number, z: number) => x >= 0 && z >= 0 && x < W && z < D && key(x, z) !== own;

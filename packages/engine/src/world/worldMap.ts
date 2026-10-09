@@ -23,6 +23,9 @@ export interface LandPatch {
 export interface SurfaceKind {
   color: number;
   walkable?: boolean; // (none given: yes)
+  // Painted along a line, drawn as a way worn into the grass (roadLayer.ts) rather than as whole tiles: 'road', two
+  // wheel ruts and a grassy crown; 'path', a single trodden line. Painted by any other shape, it's tiles as usual.
+  worn?: 'road' | 'path';
 }
 
 // A surface painted on the land (`surface`: one of the map's surface kinds). Later entries win.
@@ -143,6 +146,7 @@ interface Chunk {
   tiers: Uint8Array;
   surfaces: Uint8Array;
   relief: Int8Array | null; // (null: flat)
+  worn: Uint8Array | null; // 1: under a worn way (its top drawn as the bare land), null: none in the chunk
 }
 
 export class WorldMap implements Terrain {
@@ -183,6 +187,24 @@ export class WorldMap implements Terrain {
     const [tx, tz] = [tileOf(x), tileOf(z)];
     if (!this.onMap(tx, tz)) return 0;
     return this.chunkOf(tx, tz).relief?.[this.cell(tx, tz)] ?? 0;
+  }
+
+  // The surface drawn on a tile's top: its own, or none (the bare land) under a worn way, drawn by the road layer.
+  drawnSurfaceAt(x: number, z: number): number {
+    const [tx, tz] = [tileOf(x), tileOf(z)];
+    if (!this.onMap(tx, tz)) return 0;
+    const chunk = this.chunkOf(tx, tz);
+    const c = this.cell(tx, tz);
+    return chunk.worn?.[c] ? 0 : chunk.surfaces[c];
+  }
+
+  // Every worn way on the map (a road, a footpath): its line, width, style and colour, in the order painted.
+  wornWays(): Array<{ points: Point[]; width: number; style: 'road' | 'path'; color: number; surface: string }> {
+    return this.data.surfaces.flatMap((p) => {
+      const kind = this.data.surfaceKinds[p.surface];
+      if (!('line' in p.shape) || !kind?.worn) return [];
+      return [{ points: p.shape.line, width: p.shape.width, style: kind.worn, color: kind.color, surface: p.surface }];
+    });
   }
 
   surfaceAt(x: number, z: number): number {
@@ -274,7 +296,7 @@ export class WorldMap implements Terrain {
     const key = this.chunkIndex(cx, cz);
     const cached = this.chunks.get(key);
     if (cached) return cached;
-    const chunk: Chunk = { tiers: new Uint8Array(CHUNK_SIZE * CHUNK_SIZE).fill(this.data.baseTier), surfaces: new Uint8Array(CHUNK_SIZE * CHUNK_SIZE), relief: null };
+    const chunk: Chunk = { tiers: new Uint8Array(CHUNK_SIZE * CHUNK_SIZE).fill(this.data.baseTier), surfaces: new Uint8Array(CHUNK_SIZE * CHUNK_SIZE), relief: null, worn: null };
     const [x0, z0] = [cx * CHUNK_SIZE, cz * CHUNK_SIZE];
     for (const i of this.landByChunk.get(key) ?? []) {
       const { shape, tier } = this.data.land[i];
@@ -283,7 +305,12 @@ export class WorldMap implements Terrain {
     for (const i of this.surfacesByChunk.get(key) ?? []) {
       const { shape, surface } = this.data.surfaces[i];
       const n = this.surfaceNames.indexOf(surface) + 1;
-      this.paint(shape, x0, z0, (c) => (chunk.surfaces[c] = n));
+      const worn = 'line' in shape && this.data.surfaceKinds[surface].worn !== undefined;
+      if (worn) chunk.worn ??= new Uint8Array(CHUNK_SIZE * CHUNK_SIZE);
+      this.paint(shape, x0, z0, (c) => {
+        chunk.surfaces[c] = n;
+        if (chunk.worn) chunk.worn[c] = worn ? 1 : 0;
+      });
     }
     if (this.data.relief ?? true) {
       const relief = (chunk.relief = new Int8Array(CHUNK_SIZE * CHUNK_SIZE));

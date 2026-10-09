@@ -13,4 +13,5 @@ export type { ChunkLayer } from './chunkLayer';
 export { ChunkStreamer, FRAME_BUILD_BUDGET } from './chunkStreamer';
 export { addVoxelGround } from './voxelGround';
 export { placesLayer } from './placesLayer';
+export { roadLayer, sectionsOf, type Section, type WornWay } from './roadLayer';
 export { Obstacles, ObstaclesResource, type Box } from './obstacles';
