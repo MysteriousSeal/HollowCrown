@@ -238,6 +238,23 @@ exports[`creatures > carrowPikeman: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > cow: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.413,
+  "max": [
+    0.1,
+    0.425,
+    0.3,
+  ],
+  "min": [
+    -0.1,
+    -0,
+    -0.268,
+  ],
+  "triangles": 406,
+}
+`;
+
 exports[`creatures > deadMule: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.175,
@@ -303,6 +320,23 @@ exports[`creatures > deerStag: builds, poses and keeps its shape 1`] = `
     -0.216,
   ],
   "triangles": 594,
+}
+`;
+
+exports[`creatures > dog: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.288,
+  "max": [
+    0.05,
+    0.325,
+    0.225,
+  ],
+  "min": [
+    -0.05,
+    -0,
+    -0.204,
+  ],
+  "triangles": 268,
 }
 `;
 
@@ -830,6 +864,23 @@ exports[`creatures > shade: builds, poses and keeps its shape 1`] = `
     -0.083,
   ],
   "triangles": 1988,
+}
+`;
+
+exports[`creatures > sheep: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.288,
+  "max": [
+    0.087,
+    0.25,
+    0.213,
+  ],
+  "min": [
+    -0.087,
+    -0,
+    -0.165,
+  ],
+  "triangles": 486,
 }
 `;
 
