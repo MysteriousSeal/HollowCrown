@@ -1,0 +1,52 @@
+// What a quest is, as data, for the quest system to run and the journal to show: its stages in order, each stage's
+// objectives (where, with whom, what), the choices in it and the story flags they set (docs/story/choices.md), and its
+// rewards.
+
+import type { Spot } from '../people/kinds';
+
+// What an objective asks: to get somewhere, speak to someone, pick something up, win a fight, choose, look round, or
+// wait for the hour.
+export type ObjectiveKind = 'go' | 'talk' | 'take' | 'fight' | 'choose' | 'search' | 'wait';
+
+// One way through a choice: what the hero picks (a tone or an action), and the flags it sets ({ flag: value }).
+export interface ChoiceOption {
+  id: string;
+  label: string; // a tone's line, or an action in brackets: "[Take the jerkin]"
+  tone?: 'kind' | 'hard' | 'sly' | 'blunt';
+  sets?: Record<string, string | boolean>;
+}
+
+export interface Objective {
+  id: string;
+  kind: ObjectiveKind;
+  text: string; // as the journal lists it, in the hero's voice
+  at?: Spot; // a place or area id, or a tile
+  who?: string; // a villager, by name (data/people)
+  what?: string; // an item or a foe kind
+  count?: number;
+  optional?: boolean;
+  options?: ChoiceOption[]; // (a choice's)
+}
+
+// A stage: its objectives, all done (but the optional ones) before the next stage starts.
+export interface QuestStage {
+  id: string;
+  title: string;
+  hour?: number; // the hour the stage happens at, if the story sets one (the game's clock moves to it)
+  objectives: Objective[];
+  sets?: Record<string, string | boolean>; // flags set as the stage ends
+}
+
+export interface Quest {
+  id: string; // 'MQ01'
+  name: string;
+  act: 'prologue' | 'act-1' | 'act-2' | 'act-3';
+  level: number;
+  minutes: number; // about how long it plays
+  starts: string; // what starts it
+  places: string[]; // every place or area it uses, by id
+  stages: QuestStage[];
+  rewards: { xp: number; copper?: number; items: string[]; other: string[] };
+  journal: string; // the entry when it ends
+  next: string[]; // the quests it opens
+}
