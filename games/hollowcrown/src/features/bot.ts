@@ -1,7 +1,7 @@
 // The bot (src/bot): in development, with ?bot in the address, it plays the game through the real controls while the
 // owner watches, at ?speed=N times the game's pace (10 by default); a badge on top says what it's doing.
 
-import { autopilotSystem } from '../bot/autopilot';
+import { autopilotSystem, riseSystem } from '../bot/autopilot';
 import { BotBadge } from '../bot/badge';
 import type { Feature } from './context';
 
@@ -18,9 +18,8 @@ export const bot: Feature = {
   install: ({ app, map, obstacles, hero }) => {
     if (!import.meta.env.DEV || !new URLSearchParams(location.search).has('bot')) return;
     const speed = speedOf(location.search);
-    const scaled = app as { setTimeScale?: (scale: number) => void };
-    scaled.setTimeScale?.(speed);
-    const badge = new BotBadge(scaled.setTimeScale ? speed : 1);
-    app.addSystems(autopilotSystem(map, obstacles, hero, badge));
+    app.setTimeScale(speed);
+    const badge = new BotBadge(speed);
+    app.addSystems(autopilotSystem(map, obstacles, hero, badge), riseSystem(hero));
   },
 };

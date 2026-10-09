@@ -2,7 +2,7 @@
 // game's content (the engine's boundary test keeps a short list of words, this one takes every name the game's map
 // draws); every feature file is installed from features/index.ts; no console.log is left in the source.
 
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { WORLD_MAP } from '../../src/data/world';
@@ -55,6 +55,20 @@ describe('codebase rules', () => {
       .map((f) => basename(f, '.ts'))
       .filter((name) => !new RegExp(`from '\\./${name}'`).test(index));
     expect(missing).toEqual([]);
+  });
+
+  it('lets the bot (src/bot) only look at the game and press keys, never change it', () => {
+    const BOT = join(GAME_SRC, 'bot');
+    if (!existsSync(BOT)) return;
+    // What changes the game's state: entities and components added, removed or spawned, resources set, events sent,
+    // a quest moved on, a screen worked by hand rather than by its keys.
+    const WRITES = /world\.(add|remove|spawn|despawn|setResource|emit)\(|\b(completeObjective|startQuest|endTalk)\(|\.(advance|choose|pick|close)\(\)/;
+    const writes = tsFiles(BOT).flatMap((f) =>
+      readFileSync(f, 'utf8')
+        .split('\n')
+        .flatMap((line, i) => (WRITES.test(line) && !/^\s*\/\//.test(line) ? [`${relative(ROOT, f)}:${i + 1}: ${line.trim()}`] : [])),
+    );
+    expect(writes).toEqual([]);
   });
 
   it('leaves no console.log in the source', () => {

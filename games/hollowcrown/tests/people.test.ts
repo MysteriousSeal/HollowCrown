@@ -6,6 +6,8 @@ import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
 import { PEOPLE, personId } from '../src/people';
 import { RUSTY_KNIFE, strangerModel } from '../src/people/stranger';
+import { GESTURES } from '../src/people/gestures';
+import type { FrameModel } from '@voxel/engine/characters';
 
 const round = (n: number) => Math.round(n * 1000) / 1000;
 
@@ -46,6 +48,22 @@ describe('people', () => {
       for (const phase of [0, 0.3, 0.7, 1]) model.animate(1, 0, { name: 'attack', phase }); // (and swinging)
       model.root.updateMatrixWorld(true);
       model.root.traverse((o) => expect(Number.isFinite(o.matrixWorld.elements[13])).toBe(true));
+    });
+  }
+
+  for (const [name, gesture] of Object.entries(GESTURES)) {
+    it(`gesture ${name}: starts and ends at rest, and never lifts a foot off the ground`, () => {
+      const m = PEOPLE['Garrick Fenn'].make() as FrameModel;
+      m.animate(1, 0);
+      const rest = m.joints.rightArm.rotation.x;
+      for (const phase of [0, 0.25, 0.5, 0.75, 1]) {
+        m.animate(1, 0);
+        gesture(m, phase);
+        expect(measure(m.root).min[1]).toBeGreaterThan(-0.06);
+      }
+      m.animate(1, 0);
+      gesture(m, 1);
+      expect(m.joints.rightArm.rotation.x).toBeCloseTo(rest, 5);
     });
   }
 });
