@@ -9,3 +9,4 @@
 # Ruflo runtime state
 ruvector.db
 .swarm/
+.claude/settings.local.json
