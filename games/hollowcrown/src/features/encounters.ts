@@ -35,8 +35,12 @@ export interface Band {
 
 // Foes keeping a place from the start.
 export const KEEPERS: Array<Band & { note: string }> = [
-  // The Red Hen camp (620, 3560): five of the band in the birch clearing, round the fire (Brannoc is MQ03's).
-  { creature: 'bandit', at: [[617, 3557], [623, 3557], [616, 3562], [624, 3563], [620, 3565]], roam: 2, note: 'the Red Hen camp' },
+  // The Red Hen camp (620, 3560): Brannoc's five in the birch clearing, round the fire. Brannoc himself (CREATURES'
+  // brannoc) is held back for MQ03.
+  {
+    creature: 'bandit', at: [[617, 3557], [623, 3557], [616, 3562], [624, 3563], [620, 3565]], roam: 2, note: 'the Red Hen camp',
+    models: ['redHenKnifeThrower', 'redHenBrute', 'redHenSpearman', 'redHenPoppyEater', 'redHenLookout'],
+  },
 ];
 
 // What a stage brings, by quest/stage.
