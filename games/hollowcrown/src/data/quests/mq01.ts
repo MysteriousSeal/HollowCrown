@@ -23,8 +23,7 @@ export const MQ01: Quest = {
         { id: 'feather', kind: 'search', text: 'A red-dyed hen feather in the mud. Someone left a calling card.', at: 'pilgrims-shrine', what: 'red hen feather' },
         { id: 'bowl', kind: 'take', text: 'A rusty knife and three copper in the offering bowl, left for the dead.', at: 'pilgrims-shrine', what: 'rusty knife' },
         {
-          id: 'first-words', kind: 'choose', text: 'Say something. Nobody\'s listening.', at: 'pilgrims-shrine',
-          options: [
+          id: 'first-words', kind: 'choose', text: 'Say something. Nobody\'s listening.', at: 'pilgrims-shrine',          options: [
             { id: 'kind', tone: 'kind', label: 'Thank you, whoever you were.' },
             { id: 'hard', tone: 'hard', label: 'Of course.' },
             { id: 'sly', tone: 'sly', label: 'Well. Lighter for the walk.' },
@@ -38,6 +37,7 @@ export const MQ01: Quest = {
       objectives: [
         {
           id: 'pilgrim', kind: 'choose', text: 'An old pilgrim woman in the ditch, throat cut. Her jerkin\'s still on her.', at: THE_DEAD_PILGRIM,
+          lines: [{ who: 'hero', text: 'Somebody\'s mother. Somebody\'s, once.' }],
           options: [
             { id: 'take', label: '[Take the jerkin] It\'s a cold night. She doesn\'t need it.', sets: { pilgrim_jerkin: 'taken' } },
             { id: 'cover', label: '[Cover her with it]', sets: { pilgrim_jerkin: 'covered' } },
@@ -50,15 +50,29 @@ export const MQ01: Quest = {
     {
       id: 'the-bell', title: 'The bell', hour: 21,
       objectives: [
-        { id: 'pell', kind: 'talk', text: 'A man in a nightcap with a sword wants to know why I\'m in my smalls.', at: 'brindleford-well', who: 'Odo Pell' },
+        {
+          id: 'pell', kind: 'talk', text: 'A man in a nightcap with a sword wants to know why I\'m in my smalls.', at: 'brindleford-well', who: 'Odo Pell',
+          lines: [
+            { who: 'Odo Pell', text: 'In the name of the Lord Regent — who are you, and why are you in your smalls?' },
+            { who: 'hero', text: 'Robbed. On your road.' },
+            { who: 'Odo Pell', text: 'It\'s the Regent\'s road. And the bell is ringing, so get off it.' },
+          ],
+        },
       ],
     },
     {
       id: 'the-inn', title: "The Ferryman's Rest",
       objectives: [
-        { id: 'garrick', kind: 'talk', text: 'The innkeeper will let me in. On account.', at: 'ferrymans-rest', who: 'Garrick Fenn' },
+        {
+          id: 'garrick', kind: 'talk', text: 'The innkeeper will let me in. On account.', at: 'ferrymans-rest', who: 'Garrick Fenn',
+          lines: [
+            { who: 'Garrick Fenn', text: "Wipe your feet. The floor's the only thing in here I've paid for." },
+            { who: 'Garrick Fenn', text: 'Bread. A bed. On account, and I keep accounts.' },
+          ],
+        },
         {
           id: 'why-here', kind: 'choose', text: 'Garrick asks why I came to the Vale.', at: 'ferrymans-rest', who: 'Garrick Fenn',
+          lines: [{ who: 'Garrick Fenn', text: 'Nobody comes to the Vale on purpose. So. Why?' }],
           options: [
             { id: 'road', tone: 'kind', label: 'Somebody told me it was beautiful. They were right, so far.', sets: { hero_reason: 'road' } },
             { id: 'work', tone: 'hard', label: "That's my business. The room's yours to sell; sell it.", sets: { hero_reason: 'work' } },
@@ -66,7 +80,13 @@ export const MQ01: Quest = {
             { id: 'forget', tone: 'blunt', label: 'Nowhere else would have me.', sets: { hero_reason: 'forget' } },
           ],
         },
-        { id: 'elsa', kind: 'talk', text: 'Soup, and an old shirt.', at: 'ferrymans-rest', who: 'Elsa Fenn', optional: true },
+        {
+          id: 'elsa', kind: 'talk', text: 'Soup, and an old shirt.', at: 'ferrymans-rest', who: 'Elsa Fenn', optional: true,
+          lines: [
+            { who: 'Elsa Fenn', text: "Soup's on. Sit before it walks off." },
+            { who: 'Elsa Fenn', text: "And this was Da's. It's seen worse than you." },
+          ],
+        },
         { id: 'midnight', kind: 'wait', text: 'The bell has stopped. The silence is worse.', at: 'ferrymans-rest' },
       ],
     },
@@ -81,8 +101,20 @@ export const MQ01: Quest = {
       id: 'dawn', title: 'Dawn', hour: 6,
       objectives: [
         { id: 'the-well', kind: 'go', text: 'The village has gathered at the well.', at: 'brindleford-well' },
-        { id: 'cuthwin', kind: 'talk', text: 'The priest knows where they came from.', at: 'brindleford-well', who: 'Father Cuthwin' },
-        { id: 'meg', kind: 'talk', text: 'Old Meg won\'t stop crying.', at: 'brindleford-well', who: 'Old Meg', optional: true },
+        {
+          id: 'cuthwin', kind: 'talk', text: 'The priest knows where they came from.', at: 'brindleford-well', who: 'Father Cuthwin',
+          lines: [
+            { who: 'Father Cuthwin', text: "The Bellwarden's Tomb. And the pit beside the chapel." },
+            { who: 'Odo Pell', text: '...' },
+            { who: 'Garrick Fenn', text: 'The stranger fought them. The stranger owes us for a bed.' },
+          ],
+        },
+        {
+          id: 'meg', kind: 'talk', text: 'Old Meg won\'t stop crying.', at: 'brindleford-well', who: 'Old Meg', optional: true,
+          lines: [
+            { who: 'Old Meg', text: 'Bet. That was Bet. She knew the door. She knew it was me holding it.' },
+          ],
+        },
       ],
     },
   ],
