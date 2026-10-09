@@ -6,16 +6,18 @@
 import { describe, expect, it } from 'vitest';
 import { CHUNK_SIZE, chunkTilesIn, loadWorldMap, terrainLayer, tierRects } from '@voxel/engine/world';
 import { obstaclesOf, placesOf } from '../../src/buildings';
-import { forestTrees } from '../../src/nature/forests';
-import { meadowGrowth } from '../../src/nature/meadows';
+import { forestChunks, forestLayer, treesIn } from '../../src/nature/forests';
+import { meadowChunks, meadowGrowthIn, meadowLayer } from '../../src/nature/meadows';
+import { Obstacles } from '@voxel/engine/world';
 import { PLACE_KINDS, WORLD_MAP } from '../../src/data/world';
 
 const BUDGET_MS = {
   workOutChunk: 3, // measured ~0.3 ms
   terrainChunk: 3, // measured ~0.2 ms
   placesChunk: 500, // measured ~100 ms
-  meadows: 150, // every meadow's tufts and flowers, at the start (measured ~170 ms with two: see the bug below)
-  forests: 150, // every forest's trees, at the start (measured ~300-600 ms with three forests: see the bug below)
+  natureStart: 100, // the forests' and meadows' layers made at the start, nothing grown yet
+  forestChunk: 40, // one forest chunk's trees worked out, its first time (measured ~20 ms on a busy machine)
+  meadowChunk: 40, // one meadow chunk's tufts and flowers worked out, its first time
 };
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
@@ -66,19 +68,25 @@ describe.runIf(process.env.PERF)('world-build performance', () => {
     expect(timed(() => placesOf(map).build(key), 3)).toBeLessThan(BUDGET_MS.placesChunk);
   });
 
-  // BUG (environment): nature/forests.ts:42 forestTrees scans every forest's cells at the start: each asks the map for
-  // five tiles' surfaces (working out ~1000 map chunks up front) and checks all the map's places one by one. Filed.
-  it.skip(`places every forest's trees in under ${BUDGET_MS.forests} ms`, () => {
+  // (Was a bug: every forest's trees and every meadow's growth worked out at the start, 0.5 s and more. Fixed by
+  // environment: grown a chunk at a time.)
+  // BUG (environment): nature/forests.ts:85 forestLayer builds all nine tree shapes' voxels and meshes up front:
+  // ~450 ms quiet, 1.5 s on a busy machine, at the start. Filed.
+  it.skip(`makes the forests' and meadows' layers in under ${BUDGET_MS.natureStart} ms`, () => {
     const fresh = loadWorldMap(WORLD_MAP, PLACE_KINDS);
     const obstacles = obstaclesOf(fresh);
-    expect(timed(() => forestTrees(fresh, obstacles), 1)).toBeLessThan(BUDGET_MS.forests);
+    expect(timed(() => (meadowLayer(fresh, obstacles), forestLayer(fresh, obstacles, new Obstacles())), 1)).toBeLessThan(BUDGET_MS.natureStart);
   });
 
-  // BUG (environment): nature/meadows.ts:57 meadowGrowth walks every meadow tile at the start, the same trap as the
-  // forests (~170 ms for two meadows). Filed.
-  it.skip(`grows every meadow's tufts and flowers in under ${BUDGET_MS.meadows} ms`, () => {
-    const fresh = loadWorldMap(WORLD_MAP, PLACE_KINDS);
-    const obstacles = obstaclesOf(fresh);
-    expect(timed(() => meadowGrowth(fresh, obstacles), 1)).toBeLessThan(BUDGET_MS.meadows);
+  it(`grows a forest chunk in under ${BUDGET_MS.forestChunk} ms and a meadow chunk in under ${BUDGET_MS.meadowChunk} ms`, () => {
+    // The slowest of a few chunks, each on a fresh map (its tiles not worked out yet).
+    const slowest = (keys: Set<string>, grow: (map: ReturnType<typeof loadWorldMap>, key: string) => void) =>
+      Math.max(...[...keys].slice(0, 40).filter((_, i) => i % 8 === 0).map((key) => {
+        const fresh = loadWorldMap(WORLD_MAP, PLACE_KINDS);
+        return timed(() => grow(fresh, key), 1);
+      }));
+    const keepOut = obstaclesOf(map);
+    expect(slowest(forestChunks(map), (m, key) => treesIn(m, key, keepOut))).toBeLessThan(BUDGET_MS.forestChunk);
+    expect(slowest(meadowChunks(map), (m, key) => meadowGrowthIn(m, key, keepOut))).toBeLessThan(BUDGET_MS.meadowChunk);
   });
 });
