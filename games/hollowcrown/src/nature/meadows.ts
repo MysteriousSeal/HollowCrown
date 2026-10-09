@@ -28,7 +28,7 @@ function tuft(variant: number): VoxelGrid {
   return g;
 }
 
-// A clump of flowers: two or three on stems of their own height, each head a cross of petals round its eye.
+// A clump of flowers: two (or three) on stems of their own height, each head a cross of petals round its eye.
 const FLOWERS: Array<{ petal: number; eye: number }> = [
   { petal: N.poppy, eye: N.grassDark },
   { petal: N.cornflower, eye: N.cornflower },
@@ -44,8 +44,6 @@ function flowers(kind: number): VoxelGrid {
     setColor(g, x, h, z, eye);
     for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) setColor(g, x + dx, h, z + dz, petal);
   }
-  setColor(g, 2, 0, 3, N.grass); // a leaf or two at the foot
-  setColor(g, 4, 0, 3, N.grass);
   return g;
 }
 

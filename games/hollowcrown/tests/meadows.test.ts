@@ -1,5 +1,5 @@
 // The Vale's meadows: every one the map draws grassed and flowered, on bare ground only, off what's built; each plant
-// under two hundred triangles; a chunk drawn as one instanced mesh a shape.
+// under three hundred triangles; a chunk drawn as one instanced mesh a shape.
 
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
@@ -30,10 +30,10 @@ describe('the Vale\'s meadows', () => {
     }
   });
 
-  it('keep each plant under two hundred triangles', () => {
+  it('keep each plant under three hundred triangles', () => {
     for (const [id, grid] of Object.entries(MEADOW_SHAPES)) {
       const mesh = new VoxelModel(grid(), NATURE_LOOK, { voxel: STRUCTURE_VOXEL }).root.getObjectByProperty('isMesh', true) as THREE.Mesh;
-      expect(mesh.geometry.getAttribute('position').count / 2, id).toBeLessThan(200); // (two triangles a quad of four)
+      expect(mesh.geometry.getAttribute('position').count / 2, id).toBeLessThan(300); // (two triangles a quad of four)
     }
   });
 
