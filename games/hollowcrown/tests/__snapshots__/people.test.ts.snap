@@ -238,6 +238,23 @@ exports[`people > Goody Thatch: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Hal Wicke: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.45,
+    0.092,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1062,
+}
+`;
+
 exports[`people > Hesper Rowe (chained): builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -422,6 +439,23 @@ exports[`people > Old Meg: builds, poses and keeps their shape 1`] = `
     -0.086,
   ],
   "triangles": 1552,
+}
+`;
+
+exports[`people > Osmund Wicke: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.45,
+    0.092,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1122,
 }
 `;
 
