@@ -3,8 +3,8 @@
 
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
-import { loadWorldMap } from '@voxel/engine/world';
-import { buildingModel, doorOf, placeModel, placesOf } from '../src/buildings';
+import { TILE_HEIGHT, loadWorldMap } from '@voxel/engine/world';
+import { buildingModel, doorOf, levelGround, placeModel, placesOf } from '../src/buildings';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
 import { BRINDLEFORD } from '../src/data/world/brindleford';
 import { footprint } from '../src/data/world/kinds';
@@ -73,6 +73,17 @@ describe('Brindleford\'s buildings', () => {
       const [x, z] = doorOf(p);
       const facing = p.facing ?? 0;
       expect((x - cx) * Math.cos(facing) - (z - cz) * Math.sin(facing), p.id).toBeCloseTo(along, 1);
+    }
+  });
+
+  it('stand on level ground, a tile round them too (levelGround)', () => {
+    const fresh = loadWorldMap(WORLD_MAP, PLACE_KINDS);
+    levelGround(fresh);
+    for (const p of drawn.filter((d) => d.kind === 'building')) {
+      const f = footprint(p);
+      const heights = new Set<number>();
+      for (let x = f.x0 - 1; x <= f.x1 + 1; x++) for (let z = f.z0 - 1; z <= f.z1 + 1; z++) heights.add(fresh.groundY(x, z) - fresh.tierAt(x, z) * TILE_HEIGHT);
+      expect([...heights], p.id).toEqual([0]);
     }
   });
 

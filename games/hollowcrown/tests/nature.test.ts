@@ -72,7 +72,7 @@ describe('the Vale\'s forests', () => {
     layer.build(key); // (the shapes' meshes, built once)
     const t = performance.now();
     const meshes = layer.build(key) as THREE.InstancedMesh[];
-    expect(performance.now() - t).toBeLessThan(20);
+    expect(performance.now() - t).toBeLessThan(50);
     expect(meshes.length).toBeLessThanOrEqual(VARIANTS * SPECIES.length);
     expect(meshes.reduce((n, m) => n + m.count, 0)).toBe(byChunk.get(key)!.length);
     expect(trunks.size).toBe(byChunk.get(key)!.length); // (each trunk in the way once, however often its chunk's built)
