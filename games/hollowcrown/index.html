@@ -150,6 +150,27 @@
       }
       .ui-float-hurt { color: #ff6a4a; }
 
+      /* What a villager says in passing: a small cream bubble over them, its tail pointing down at them. */
+      .ui-bubble {
+        position: absolute;
+        top: 0;
+        left: 0;
+        max-width: 220px;
+        width: max-content;
+        padding: 5px 10px 6px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.3;
+        text-align: center;
+        color: var(--ink);
+        background: var(--cream);
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        box-shadow: 3px 3px 0 rgba(46, 31, 20, 0.45);
+        will-change: transform, opacity;
+      }
+      .ui-bubble::after { content: ''; position: absolute; left: 50%; bottom: -8px; margin-left: -6px; border: 6px solid transparent; border-top-color: var(--ink); border-bottom: 0; }
+
       /* What E would do: a keycap, then the action, low in the middle. */
       .ui-prompt {
         position: absolute;
