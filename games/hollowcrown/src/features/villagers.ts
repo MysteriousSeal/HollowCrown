@@ -11,6 +11,7 @@ import type { PlaceData, WorldMap } from '@voxel/engine/world';
 import { doorOf } from '../buildings';
 import type { BuildingProps } from '../data/world/kinds';
 import { Resident, villagerDaySystem } from '../systems/villagerDay';
+import { PEOPLE_DATA } from '../data/people';
 import { PEOPLE } from '../people';
 import type { Feature } from './context';
 
@@ -61,12 +62,13 @@ export function lookOf(name: string): BodyLook {
   };
 }
 
-// Everyone living in a building on `map`, each at its door: a household spread along its front.
+// Everyone living in a building on `map` and at home (not away: src/data/people), each at its door: a household
+// spread along its front.
 export function villagersOf(map: WorldMap): Villager[] {
   const out: Villager[] = [];
   for (const place of map.places()) {
     if (place.kind !== 'building') continue;
-    const residents = (place.props as BuildingProps).residents;
+    const residents = (place.props as BuildingProps).residents.filter((name) => !PEOPLE_DATA[name]?.away); // (no quests yet: the away stay away)
     residents.forEach((name, i) => out.push(atDoor(place, name, (i - (residents.length - 1) / 2) * SPACING)));
   }
   return out;
