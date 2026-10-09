@@ -1,4 +1,4 @@
-// Labels floating over things in the world (a villager's name over their head): each frame, the ones to show and
+// Labels floating over things in the world (a villager's name over their head, a hurt beast's health): each frame, the ones to show and
 // where they are in the world, put on the screen through the camera, faded as given. A label's element is kept while
 // it's shown and dropped once it's not.
 
@@ -12,6 +12,7 @@ export interface WorldLabel {
   y: number;
   z: number;
   alpha: number; // 0 (gone) to 1
+  share?: number; // a bar's fill, 0 to 1 (as the CSS variable --share, for the game's CSS to draw)
 }
 
 // How clear a label is at `distance`: whole up to `near`, fading to nothing at `far`.
@@ -47,6 +48,7 @@ export class WorldLabels {
       }
       if (el.textContent !== label.text) el.textContent = label.text;
       el.style.opacity = label.alpha.toFixed(2);
+      if (label.share !== undefined) el.style.setProperty('--share', label.share.toFixed(3));
       el.style.transform = `translate(${((this.at.x + 1) / 2) * width}px, ${((1 - this.at.y) / 2) * height}px) translate(-50%, -100%)`;
     }
     for (const [key, el] of this.shown) {
