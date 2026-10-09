@@ -2,9 +2,9 @@
 // (Old Meg, the first, is with the named folk in brindleford.ts; the Holt house stands empty). Who uses it:
 // people/index.ts (PEOPLE).
 
-import { hood, type FrameSpec } from '@voxel/engine/characters';
+import { cloak, hood, type FrameSpec } from '@voxel/engine/characters';
 import { box } from '@voxel/engine/voxel';
-import { apron, body, cap, coif, cup, folk, K, longSkirtLeg, shoes, skirt, sleeves, staff, strawHat, W } from './kit';
+import { apron, body, cap, coif, cup, folk, K, longSkirtLeg, OLD, shawl, shoes, skirt, sleeves, staff, strawHat, W } from './kit';
 
 const linenCoif = (g: Parameters<typeof coif>[0], o: Parameters<typeof coif>[1]) => coif(g, o, (x, _y, z) => ((x + z) % 4 ? W.linen : W.linenShade), W.linenShade);
 
@@ -89,10 +89,79 @@ const WYNN = folk({ build: 'female', skin: 1, hair: 0, dye: 4, hairStyle: 'bun',
   },
 }, { held: { rightArm: cup } });
 
+// ---- Sibyl Hask's ----
+
+// Sibyl Hask, the weaver, 48: a linen coif, a madder bodice, and a skirt of her own weaving, banded madder, ochre and
+// woad.
+const weave = (_x: number, y: number) => [W.wine, W.ochre, W.wine, W.woad][((y % 4) + 4) % 4];
+const SIBYL_HASK = folk({ build: 'female', skin: 0, hair: 4, dye: 0, hairStyle: 'bun', beard: false, expression: 'calm' }, {
+  head: linenCoif,
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => (y >= 8 ? W.linen : (x + y) % 4 ? W.wine : W.wineDark));
+    skirt(g, o, f, 5, weave);
+  },
+  arm: (g, o) => sleeves(g, o, 2, (_x, y) => (y === 2 ? W.linenShade : W.linen)),
+  leg: (g, o) => {
+    longSkirtLeg(g, o, weave);
+    shoes(g, o, 0, () => K.leatherDark);
+  },
+});
+
+// ---- the Orrs' ----
+
+// Gammer Orr, 78: stooped over a stick, white hair under a coif, a faded russet dress, a dark shawl.
+const GAMMER_ORR = folk({ build: 'female', skin: 1, hair: 7, dye: 3, hairStyle: 'bun', beard: false, expression: 'stern' }, {
+  head: linenCoif,
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => ((x + y) % 4 ? W.russet : W.russetDark));
+    shawl(g, o, f, (x, y) => ((x + y) % 3 ? W.woolDark : W.wool));
+    skirt(g, o, f, 5, (x, y) => ((x + y) % 4 ? W.russet : W.russetDark));
+  },
+  arm: (g, o) => sleeves(g, o, 2, () => W.russetDark),
+  leg: (g, o) => {
+    longSkirtLeg(g, o, (x, y) => ((x + y) % 4 ? W.russet : W.russetDark));
+    shoes(g, o, 0, () => K.leatherDark);
+  },
+}, { held: { rightArm: staff(8, 'plain', 4) }, gait: OLD });
+
+// Simkin Orr, 80, nearly blind: bald, a long white beard, his eyes clouded, bent over a stick in an old brown coat.
+const SIMKIN_ORR = folk({ build: 'male', skin: 1, hair: 7, dye: 3, hairStyle: 'bald', beard: true, expression: 'wistful' }, {
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => (y === 3 ? K.leatherDark : (x + y) % 5 ? W.woolLight : W.wool));
+    skirt(g, o, f, 4, (x, y) => (y === -4 ? W.wool : (x + y) % 5 ? W.woolLight : W.wool));
+  },
+  arm: (g, o) => sleeves(g, o, 2, (_x, y) => (y === 2 ? W.wool : W.woolLight)),
+  leg: (g, o) => {
+    body(g, o, (_x, y) => (y >= 2 ? W.woolDark : 0));
+    shoes(g, o, 1, () => K.leatherDark);
+  },
+}, { held: { rightArm: staff(8, 'plain', 4) }, gait: { ...OLD, lean: 0.36, speed: 0.7 }, swaps: { eye: 0xa8a8a0 } });
+
+// ---- the old ferry cottage ----
+
+// Ned Tolley, the drover, 30: shaggy and unshaven, a leather jerkin, a short brown cloak, tall boots for the mud, the
+// long goad he drives the beasts with.
+const NED_TOLLEY = folk({ build: 'male', skin: 1, hair: 1, dye: 2, hairStyle: 'shaggy', beard: true, expression: 'sly' }, {
+  torso: (g, o, f) => {
+    body(g, o, (x, y) => (y === 3 ? K.leatherDark : (x + y) % 5 ? K.leather : K.leatherLight));
+    skirt(g, o, f, 2, () => K.leather);
+    cloak(g, o, 2, (x, y) => ((x + y) % 4 ? W.wool : W.woolDark));
+  },
+  arm: (g, o) => sleeves(g, o, 2, (_x, y) => (y === 2 ? W.linenDark : W.linenShade)),
+  leg: (g, o) => {
+    body(g, o, (_x, y) => (y >= 4 ? W.moss : 0));
+    shoes(g, o, 3, (_x, y) => (y === 3 ? K.leatherLight : K.leatherDark));
+  },
+}, { held: { rightArm: staff(15, 'plain', 5) } });
+
 export const HOUSEHOLDS: Record<string, FrameSpec> = {
   'Rolf Reede': ROLF_REEDE,
   'Tamsin': TAMSIN,
   'Joan Lusk': JOAN_LUSK,
   'Edric Tidy': EDRIC_TIDY,
   'Wynn': WYNN,
+  'Sibyl Hask': SIBYL_HASK,
+  'Gammer Orr': GAMMER_ORR,
+  'Simkin Orr': SIMKIN_ORR,
+  'Ned Tolley': NED_TOLLEY,
 };
