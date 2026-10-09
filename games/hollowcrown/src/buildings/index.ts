@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { hashUnit, oneOf } from '@voxel/engine/math';
 import { VoxelModel, glowMaterial, litMaterial, type Model } from '@voxel/engine/models';
 import { STRUCTURE_VOXEL, StructureModel, type StructureSpec } from '@voxel/engine/structures';
-import { Obstacles, placesLayer, type ChunkLayer, type PlaceData, type WorldMap } from '@voxel/engine/world';
+import { Obstacles, placesLayer, type ChunkLayer, type PlaceData, type Point, type WorldMap } from '@voxel/engine/world';
 import type { VoxelGrid } from '@voxel/engine/voxel';
 import { cardinal, footprint, type BuildingProps } from '../data/world/kinds';
 import { LOOK, structureColors, type Shutter } from './palette';
@@ -54,6 +54,21 @@ function baseSpec(b: BuildingProps, seed: number): StructureSpec {
   };
 }
 
+// How far a house's door is moved along its front from the middle (voxels, the building's +x).
+const doorOffset = (seed: number) => oneOf([0, -8, 8], hashUnit(seed, 4, 21));
+
+// Where a building's door lets out (world units): a tile out from the middle of its door, its door moved along the
+// front as far as it's drawn.
+export function doorOf(place: PlaceData): Point {
+  const b = place.props as BuildingProps;
+  const along = b.use === 'house' && place.id !== 'holt-house' ? doorOffset(seedOf(place)) / TILE : 0;
+  const out = (b.size[1] + 1) / 2; // (from the middle to the tile past its front)
+  const [cx, cz] = centreOf(place);
+  const facing = place.facing ?? 0;
+  const [cos, sin] = [Math.cos(facing), Math.sin(facing)];
+  return [cx + along * cos + out * sin, cz - along * sin + out * cos];
+}
+
 // Each use's own: its spec changed, and its props.
 type Make = (spec: StructureSpec, seed: number, place: PlaceData) => StructureModel;
 const plain: Make = (spec) => new StructureModel(spec, LOOK);
@@ -65,7 +80,7 @@ const BY_USE: Record<BuildingProps['use'], Make> = {
     const stool = place.id === 'megs-house';
     return new StructureModel({
       ...spec,
-      door: { width: 5, height: 10, offset: oneOf([0, -8, 8], hashUnit(seed, 4, 21)) },
+      door: { width: 5, height: 10, offset: doorOffset(seed) },
       paint: (g, layout) => {
         if (flowers) windowBoxes(g, layout, seed);
         if (stool) doorstepStool(g, layout);

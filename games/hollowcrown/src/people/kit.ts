@@ -127,9 +127,9 @@ export const bun = (g: VoxelGrid, o: Size) => box(g, o, 3, 5, -2, 7, 8, -1, (x, 
 export function braids(g: VoxelGrid, o: Size): void {
   for (const x of [-1, 11]) box(g, o, x, 0, 3, x, 6, 4, (_x, y) => (y === 0 ? W.string : y % 2 ? C.hair : C.hairLight));
 }
-// Flour or soot dusted over cloth and skin alike (`share`: how much of it), and never on the eyes.
+// Flour or soot dusted over cloth (`dust`) and skin and hair (`dark`), `share` of it, never on the eyes.
 export const dusted = (dust: number, dark: number, share: number, salt: number): Painter => (g, o) =>
-  over(g, o, (x, y, z, c) => (c === C.eye || c === C.glint ? 0 : noise3(x * 2, y * 2, z * 2, salt) < share ? (noise3(x, y, z, salt + 1) < 0.5 ? dust : dark) : 0));
+  over(g, o, (x, y, z, c) => (c === C.eye || c === C.glint ? 0 : noise3(x, y, z, salt) < share ? (c <= C.glint ? dark : dust) : 0));
 // No hand (the right taken off at the wrist), the stump bound in rag.
 export function stump(g: VoxelGrid, o: Size, f: Fit): void {
   erase(g, o, -1, -1, -1, f.arm, 1, f.arm);

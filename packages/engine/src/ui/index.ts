@@ -5,6 +5,6 @@ export { BANNER_SECONDS, Banner } from './banner';
 export { CornerLabel, type Corner } from './label';
 export { Prompt } from './prompt';
 export {
-  Conversation, Script, TALK_KEYS, placeholderPortrait, type ConversationLine, type Side, type Speaker,
+  Conversation, Script, TALK_KEYS, TYPE_SPEED, Typewriter, placeholderPortrait, type ConversationLine, type OnChoice, type Side, type Speaker,
 } from './conversation';
 export { ADVANCE_KEYS, Dialogue, DialogueBox, type DialogueData } from './dialogue';

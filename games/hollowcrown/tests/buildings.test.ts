@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
 import { loadWorldMap } from '@voxel/engine/world';
-import { placeModel, placesOf } from '../src/buildings';
+import { buildingModel, doorOf, placeModel, placesOf } from '../src/buildings';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
 import { BRINDLEFORD } from '../src/data/world/brindleford';
 import { footprint } from '../src/data/world/kinds';
@@ -60,6 +60,20 @@ describe('Brindleford\'s buildings', () => {
       return n + count;
     }, 0);
     expect(geometries.size).toBeLessThan(meshes * 0.8);
+  });
+
+  it('let out where their doors are drawn (doorOf)', () => {
+    for (const p of drawn.filter((d) => d.kind === 'building')) {
+      const m = buildingModel(p);
+      const { door, size } = m.layout;
+      if (!door) continue;
+      const along = ((door.x0 + door.x1 + 1) / 2 - size[0] / 2) / 16; // (the drawn door's middle, tiles off the model's)
+      const f = footprint(p);
+      const [cx, cz] = [(f.x0 + f.x1) / 2, (f.z0 + f.z1) / 2];
+      const [x, z] = doorOf(p);
+      const facing = p.facing ?? 0;
+      expect((x - cx) * Math.cos(facing) - (z - cz) * Math.sin(facing), p.id).toBeCloseTo(along, 1);
+    }
   });
 
   it('turn the mill\'s wheel', () => {
