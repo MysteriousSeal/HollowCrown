@@ -646,6 +646,57 @@ exports[`creatures > spiderling: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > towerRecruit: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.419,
+  "max": [
+    0.116,
+    0.734,
+    0.137,
+  ],
+  "min": [
+    -0.116,
+    -0,
+    -0.116,
+  ],
+  "triangles": 1280,
+}
+`;
+
+exports[`creatures > towerShieldman: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.258,
+    0.789,
+    0.148,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.125,
+  ],
+  "triangles": 2030,
+}
+`;
+
+exports[`creatures > towerVeteran: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.483,
+    0.23,
+  ],
+  "min": [
+    -0.225,
+    -0,
+    -0.125,
+  ],
+  "triangles": 2062,
+}
+`;
+
 exports[`creatures > wolf: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.4,
