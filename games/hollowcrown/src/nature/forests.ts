@@ -82,13 +82,13 @@ export function trunkOf(tree: Tree): Box {
 // The layer of the forests' trees (instanced.ts): a chunk's trees worked out as it first comes near (kept for when it
 // comes back), none on what `keepOut` holds, their trunks added to `obstacles` then.
 export function forestLayer(map: WorldMap, keepOut: Obstacles, obstacles: Obstacles): ChunkLayer {
-  const shapes = new Map(SPECIES.flatMap((s) => Array.from({ length: VARIANTS }, (_, v) => [`${s}${v}`, natureGeometry(treeVoxels(s, v))] as const)));
+  const meshOf = (shape: string) => natureGeometry(treeVoxels(shape.slice(0, -1) as Species, Number(shape.slice(-1))));
   const grow = (key: string): Tree[] => {
     const trees = treesIn(map, key, keepOut);
     for (const tree of trees) obstacles.add(trunkOf(tree));
     return trees;
   };
-  return instancedLayer(map, forestChunks(map), grow, shapes);
+  return instancedLayer(map, forestChunks(map), grow, meshOf);
 }
 
 // Every forest tree on `map` at once, by chunk (for tests and tools: the game works them out a chunk at a time).
