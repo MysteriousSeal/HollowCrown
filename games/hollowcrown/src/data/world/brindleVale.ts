@@ -13,6 +13,23 @@ const BRINDLE: Point[] = [[880, 2950], [870, 3100], [865, 3240], [870, 3350], [8
 const PILGRIM_ROAD: Point[] = [[480, 3380], [600, 3370], [870, 3350], [900, 3350], [910, 3348], [914, 3340], [1000, 3280], [1200, 3050], [1320, 3010], [1400, 3000], [1900, 3000]];
 const SOUTH_ROAD: Point[] = [[900, 3350], [902, 3366], [1000, 3420], [1000, 3480], [1200, 3460], [1450, 3450]];
 const CHAPEL_PATH: Point[] = [[1000, 3280], [1080, 3180]];
+// A rise drawn round (cx, cz): its radius every eighth of a turn, east first, then round through south (+z), so a hill
+// can lean and bulge where the bible needs it.
+const ring = (cx: number, cz: number, radii: number[]): { polygon: Point[] } => ({
+  polygon: radii.map((r, i) => [Math.round(cx + r * Math.cos((i * Math.PI) / 4)), Math.round(cz + r * Math.sin((i * Math.PI) / 4))] as Point),
+});
+
+// The meadows' and woods' low swells: one tier up, kept off every road and track.
+const SWELLS: Array<{ note: string; shape: { polygon: Point[] } }> = [
+  { note: 'a swell in the hay meadows, above Mill Lane', shape: ring(795, 3290, [24, 18, 14, 20, 26, 22, 16, 20]) },
+  { note: 'a swell in the hay meadows, by the Birchwood', shape: ring(800, 3452, [16, 14, 20, 24, 18, 12, 14, 18]) },
+  { note: 'a swell in the hay meadows, east of the village', shape: ring(1035, 3335, [12, 18, 22, 16, 14, 20, 24, 16]) },
+  { note: 'a swell in the clover meadow, under the hives', shape: ring(1262, 3098, [18, 12, 10, 14, 20, 16, 12, 14]) },
+  { note: 'a swell in Brindle Woods', shape: ring(1050, 3055, [20, 16, 22, 26, 18, 14, 18, 22]) },
+  { note: 'a swell in the Birchwood', shape: ring(565, 3505, [26, 22, 18, 20, 28, 24, 20, 24]) },
+  { note: 'a swell in the Birchwood, toward the Stepping Stones', shape: ring(700, 3650, [20, 16, 14, 22, 18, 14, 20, 24]) },
+];
+
 const SHEPHERDS_TRACK: Point[] = [[905, 3360], [1100, 3550], [1290, 3650]];
 
 export const BRINDLE_VALE: ValePart = {
@@ -21,14 +38,16 @@ export const BRINDLE_VALE: ValePart = {
     { note: 'the North Rise', shape: { rect: [400, 2900, 1450, 3000] }, tier: 2 },
     { note: 'the North Rise', shape: { rect: [400, 2900, 1450, 2960] }, tier: 3 },
     { note: 'the North Rise', shape: { rect: [400, 2900, 1450, 2925] }, tier: 4 },
-    // Chapel Hill: the chapel on its crown, the famine pit on its east shoulder.
-    { note: 'Chapel Hill', shape: { circle: [1080, 3180, 70] }, tier: 2 },
-    { note: 'Chapel Hill', shape: { circle: [1080, 3180, 40] }, tier: 3 },
-    // Mosshill: gorse and rock rising to the east, Mossjaw Cave in its west face.
-    { note: 'Mosshill', shape: { rect: [1150, 3500, 1450, 3800] }, tier: 2 },
-    { note: 'Mosshill', shape: { rect: [1190, 3540, 1450, 3770] }, tier: 3 },
-    { note: 'Mosshill', shape: { rect: [1310, 3570, 1450, 3740] }, tier: 4 },
-    { note: 'Mosshill', shape: { rect: [1360, 3600, 1450, 3710] }, tier: 5 },
+    ...SWELLS.map(({ note, shape }) => ({ note, shape, tier: 2 })),
+    // Chapel Hill: a broad foot and the crown, leaning east, the famine pit on its shoulder. The Pilgrim Road crests it
+    // beside the chapel.
+    { note: 'Chapel Hill, its foot', shape: ring(1082, 3182, [80, 72, 66, 62, 64, 66, 70, 76]), tier: 2 },
+    { note: 'Chapel Hill, its crown', shape: ring(1082, 3184, [40, 36, 30, 26, 28, 30, 32, 38]), tier: 3 },
+    // Mosshill: gorse and rock rising to the east in four rings, Mossjaw Cave in the face of the third.
+    { note: 'Mosshill', shape: { polygon: [[1150, 3540], [1210, 3505], [1330, 3492], [1451, 3490], [1451, 3800], [1190, 3800], [1150, 3700]] }, tier: 2 },
+    { note: 'Mosshill', shape: { polygon: [[1200, 3570], [1260, 3535], [1360, 3520], [1451, 3520], [1451, 3775], [1230, 3770], [1195, 3690]] }, tier: 3 },
+    { note: 'Mosshill', shape: { polygon: [[1305, 3600], [1330, 3565], [1400, 3550], [1451, 3555], [1451, 3750], [1340, 3745], [1305, 3690]] }, tier: 4 },
+    { note: 'Mosshill', shape: { polygon: [[1355, 3610], [1400, 3590], [1451, 3600], [1451, 3715], [1400, 3720], [1360, 3680]] }, tier: 5 },
     // The Brindle's bed, cut through it all.
     { note: 'the Brindle', shape: { line: BRINDLE, width: 5 }, tier: 0 },
     { note: 'the Southern Marsh', shape: { rect: [600, 3750, 1000, 3900] }, tier: 1 },
