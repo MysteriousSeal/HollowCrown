@@ -59,6 +59,23 @@
       .ui-bottom-left { bottom: 16px; left: 18px; }
       .ui-bottom-right { bottom: 16px; right: 18px; }
 
+      /* The quest followed, top right under the clock: its name in gold capitals, its stage small, what to do now. */
+      .ui-tracker {
+        position: absolute;
+        top: 62px;
+        right: 18px;
+        width: 270px;
+        box-sizing: border-box;
+        padding: 8px 12px 9px;
+        background: var(--panel);
+        border: 2px solid var(--sand);
+        box-shadow: 3px 3px 0 rgba(46, 31, 20, 0.5);
+      }
+      .ui-tracker-title { display: block; font-size: 14px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e8c27a; text-shadow: 0 1px 0 #1e140d; }
+      .ui-tracker-sub { display: block; margin-top: 1px; font-size: 12px; font-weight: 600; color: var(--muted); }
+      .ui-tracker-line { margin: 5px 0 0; font-size: 15px; font-weight: 500; line-height: 1.3; }
+      .ui-tracker-line::before { content: '◆'; margin-right: 6px; font-size: 10px; color: #e8903a; vertical-align: 2px; }
+
       /* What E would do: a keycap, then the action, low in the middle. */
       .ui-prompt {
         position: absolute;

@@ -4,6 +4,7 @@ export { createOverlay, element } from './overlay';
 export { BANNER_SECONDS, Banner } from './banner';
 export { CornerLabel, type Corner } from './label';
 export { Prompt } from './prompt';
+export { TrackerPanel, type TrackerText } from './tracker';
 export {
   Conversation, Script, TALK_KEYS, TYPE_SPEED, Typewriter, placeholderPortrait, type ConversationLine, type OnChoice, type Side, type Speaker,
 } from './conversation';
