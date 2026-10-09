@@ -53,9 +53,29 @@ village that has been hungry and is ashamed of what it did then.
 | **Shrine-house** | (892, 3343) | Father Cuthwin |
 | **Herbalist's cottage** | (918, 3346) | Nan Wicket |
 | **Notice board** | (901, 3351) | Contracts, rumours |
-| Houses (10) | east lane (920–940, 3340–3370), west bank (875–885, 3330–3370) | Villagers |
+| Houses (10) | the East Lane (918–940, 3346–3359), across the ford (857, 3338–3360) | See below |
 | **Brindle Mill** | (870, 3240) | Dunstan, Jory |
-| **Cobbe farm** | (950, 3420) | Hob and Ada Cobbe, Wenna; Kit sleeps in the barn |
+| **Cobbe farm** | (950, 3420), the barn (960, 3428) | Hob and Ada Cobbe, Wenna; Kit sleeps in the barn |
+
+**The layout.** The square (the well, the notice board) on the east bank, where the Pilgrim Road comes over the ford.
+North of it the inn and the shrine-house, south of it the smithy and the reeve's house. The Pilgrim Road leaves
+north-east between the inn and Nan Wicket's; the South Road leaves south past the smithy; the **East Lane** runs east
+from the square between seven cottages; **Mill Lane** runs north up the east bank to the mill. Across the ford, three
+poorer houses face the river. Every building is placed in the game's map (`src/data/world/brindleford.ts`).
+
+**The houses.** Thatch, timber frames, one room and a loft; a hungry village's houses, mended rather than built.
+| House | Tile | Who | What they carry |
+|---|---|---|---|
+| **Old Meg's** | (924, 3346) | **Old Meg**, widow, 70 | Her sister Bet went into the pit alive with fever, the winter the reeve's men came round; Meg held the door shut. She has sat on her doorstep every night since, watching the hill. |
+| **The Reedes'** | (930, 3346) | **Rolf Reede**, thatcher, 38; **Tamsin**, 35; three children | Rolf has thatched every roof in Brindleford but his own, which leaks. Tamsin wants to go to Kingsmere; Rolf won't leave the graves. |
+| **Joan Lusk's** | (936, 3346) | **Joan Lusk**, carter, 50 | Drives the wagon to Kingsmere every fortnight with hay. Under the hay, Greenhood poppy, for the Red Hen; she tells herself she doesn't know what's in the sacks. |
+| **The Tidys'** | (922, 3359) | **Edric Tidy**, hayward, 44; **Wynn**, 40 | Their two children are in the pit. Wynn leaves a cup of milk on the sill every night; after MQ01 it's drunk by morning. |
+| **Sibyl Hask's** | (928, 3359) | **Sibyl Hask**, weaver, 48 | The loom by her window never stops; she does the village's mending. Her son Aldric took the Regency's coin; his letters stopped a year ago. |
+| **The Orrs'** | (934, 3359) | **Gammer Orr**, 78; **Simkin Orr**, 80, nearly blind | They drew the lots in the Wet Years: who'd be fed and who wouldn't. Simkin wants to confess it to Cuthwin before he dies; Gammer won't let him. |
+| **The Holt house** | (940, 3359) | Empty | The Holts left in the night the spring after the Wet Years and never wrote. Shuttered; Kit gets in by the back and keeps his treasures under the hearth. Pell has it marked for the Regency. |
+| **The old ferry cottage** | (857, 3338) | **Ned Tolley**, drover, 30 | Garrick's cottage when he ran the ferry, let to Ned. Drinks what he earns; knows every path in the vale, and sells them. |
+| **The Fletchers'** | (857, 3344) | **Alys Fletcher**, fletcher, 33; **Cob**, 36 | Alys is the vale's best shot and sells arrows (a shop, after SQ-BV7). Cob came back from the Regency's levy without his right hand; he won't say what he did to lose it. |
+| **The Hollins'** | (857, 3360) | **Bran Hollin**, eel-trapper, 25; **Gert**, his mother, 60 | Bran sets his traps under the ford. After MQ01 they come up with finger bones in them; he's told no one but his mother, who told everyone. |
 
 | Name | Who they are | Where / routine | First words | Quests |
 |---|---|---|---|---|
