@@ -9,7 +9,7 @@ import { placeModel } from './buildings';
 import { BRINDLEFORD } from './data/world/brindleford';
 import { SPECIES, VARIANTS, treeModel } from './nature/trees';
 import { MEADOW_SHAPES } from './nature/meadows';
-import { PROP_SHAPES } from './props';
+import { LANDMARK_SHAPES, PROP_SHAPES } from './props';
 import { PROPS } from './props/palette';
 import { NATURE_LOOK } from './nature/palette';
 import { VoxelModel } from '@voxel/engine/models';
@@ -26,5 +26,6 @@ startModelViewer(
     ...SPECIES.flatMap((s) => Array.from({ length: VARIANTS }, (_, v) => ({ id: `${s}${v}`, name: `${s} ${v + 1}`, group: 'Trees', make: () => treeModel(s, v) }))),
     ...Object.entries(MEADOW_SHAPES).map(([id, grid]) => ({ id, name: id, group: 'Meadows', make: () => new VoxelModel(grid(), NATURE_LOOK, { voxel: STRUCTURE_VOXEL }) })),
     ...Object.entries(PROP_SHAPES).map(([id, grid]) => ({ id, name: id, group: 'Props', make: () => new VoxelModel(grid(), { palette: PROPS.colors }, { voxel: STRUCTURE_VOXEL }) })),
+    ...Object.entries(LANDMARK_SHAPES).map(([id, grid]) => ({ id, name: id, group: 'Landmarks', make: () => new VoxelModel(grid(), NATURE_LOOK, { voxel: STRUCTURE_VOXEL }) })),
   ].filter(({ id }) => !only || only.includes(id)),
 );

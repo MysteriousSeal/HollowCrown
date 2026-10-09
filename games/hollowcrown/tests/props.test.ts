@@ -9,7 +9,8 @@ import { VoxelModel } from '@voxel/engine/models';
 import { Obstacles, loadWorldMap } from '@voxel/engine/world';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
 import { DRESSING, type Dressing } from '../src/data/world/dressing';
-import { PROP_SHAPES, dressingLayer, dressingObstacles, piecesOf } from '../src/props';
+import { LANDMARK_SHAPES, PROP_SHAPES, dressingLayer, dressingObstacles, piecesOf } from '../src/props';
+import { NATURE } from '../src/nature/palette';
 import { PROPS } from '../src/props/palette';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
@@ -18,10 +19,18 @@ describe('the Vale\'s props', () => {
   it('paint only from their palette, within a budget', () => {
     for (const [id, make] of Object.entries(PROP_SHAPES)) {
       const grid = make();
-      expect(Math.max(...grid.cells), id).toBeLessThanOrEqual(PROPS.colors.length);
+      expect(grid.cells.reduce((m, c) => Math.max(m, c), 0), id).toBeLessThanOrEqual(PROPS.colors.length);
       const mesh = new VoxelModel(grid, { palette: PROPS.colors }, { voxel: STRUCTURE_VOXEL }).root.getObjectByProperty('isMesh', true) as THREE.Mesh;
-      expect(mesh.geometry.getAttribute('position').count / 2, id).toBeLessThan(6000);
+      expect(mesh.geometry.getAttribute('position').count / 2, id).toBeLessThan(id === 'barrow' ? 16000 : 6000); // (the barrow: one of it, big)
     }
+  });
+
+  it('stand the Hanging Oak where the South Road bends, the barrow among the Nine Sisters', () => {
+    const pieces = piecesOf(DRESSING);
+    expect(pieces.some((p) => p.shape === 'hanging-oak')).toBe(true);
+    const oak = LANDMARK_SHAPES['hanging-oak']();
+    expect(oak.cells.reduce((m, c) => Math.max(m, c), 0)).toBeLessThanOrEqual(NATURE.colors.length);
+    expect(oak.cells.filter((c) => c === NATURE.C.rope).length).toBeGreaterThan(4); // (the rope still on its bough)
   });
 
   it('lay a fence run\'s posts end to end, its rails between them', () => {

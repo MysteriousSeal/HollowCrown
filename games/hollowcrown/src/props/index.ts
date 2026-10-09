@@ -1,5 +1,5 @@
 // What stands about the Vale where the designers placed it (data/world/dressing.ts): its pieces (a fence run's rails
-// and posts, a hay rick, the gibbet, a standing stone, a vegetable bed), drawn chunk by chunk as the hero comes near,
+// and posts, a hay rick, the gibbet, a standing stone, a vegetable bed, the barrow, the Hanging Oak), drawn chunk by chunk as the hero comes near,
 // one instanced mesh a shape (nature/instanced.ts); and the room they take, for walkers to keep out of.
 
 import { hashUnit } from '@voxel/engine/math';
@@ -8,7 +8,9 @@ import { CHUNK_SIZE, type Box, type ChunkLayer, type Obstacles, type WorldMap } 
 import type { Dressing } from '../data/world/dressing';
 import { cardinal } from '../data/world/kinds';
 import { instancedLayer, natureGeometry, type Growth } from '../nature/instanced';
-import { fencePost, fenceRails, gardenBed, gibbet, hayRick, standingStone } from './models';
+import { hangingOak } from '../nature/landmarks';
+import { NATURE } from '../nature/palette';
+import { barrow, fencePost, fenceRails, gardenBed, gibbet, hayRick, standingStone } from './models';
 import { PROPS } from './palette';
 
 // Each shape's grid, by its key (the model viewer too).
@@ -21,11 +23,15 @@ export const PROP_SHAPES: Record<string, () => VoxelGrid> = {
   stone1: () => standingStone(1),
   stone2: () => standingStone(2),
   'garden-bed': gardenBed,
+  barrow,
 };
+
+// The landmarks among them, painted from nature's palette (the model viewer too).
+export const LANDMARK_SHAPES: Record<string, () => VoxelGrid> = { 'hanging-oak': hangingOak };
 
 // What a piece standing on its own takes (half its size, tiles, x and z before it's turned); a kind not here is
 // walked over or through.
-const ROOM: Record<string, [number, number]> = { 'hay-rick': [0.8, 0.6], gibbet: [0.2, 0.2], 'standing-stone': [0.35, 0.25] };
+const ROOM: Record<string, [number, number]> = { 'hay-rick': [0.8, 0.6], gibbet: [0.2, 0.2], 'standing-stone': [0.35, 0.25], 'hanging-oak': [0.35, 0.35] };
 const FENCE_HALF = 0.06; // a fence's half thickness, tiles
 
 // A piece's shape: its kind's, a standing stone one of its three by where it stands.
@@ -34,7 +40,7 @@ const shapeOf = (d: Dressing & { at: [number, number] }) => (d.kind === 'standin
 // A piece's quarter turns: the way it faces, or (facing nowhere in particular) a way of its own.
 const turnOf = (d: Dressing, [x, z]: [number, number]) => cardinal(d.facing) ?? Math.floor(hashUnit(x, z, 94) * 4);
 
-// The pieces of `dressing` (those drawn here: a landmark is its own), each where it stands.
+// The pieces of `dressing`, each where it stands.
 export function piecesOf(dressing: readonly Dressing[]): Growth[] {
   const out: Growth[] = [];
   for (const d of dressing) {
@@ -49,7 +55,7 @@ export function piecesOf(dressing: readonly Dressing[]): Growth[] {
           out.push({ x: ax + ((bx - ax) * (k + 0.5)) / n, z: az + ((bz - az) * (k + 0.5)) / n, shape: 'rails', turn, tint: hashUnit(k, i, 93), stretch: length / n });
         }
       }
-    } else if (d.at && PROP_SHAPES[shapeOf({ ...d, at: d.at })]) {
+    } else if (d.at && (PROP_SHAPES[shapeOf({ ...d, at: d.at })] || LANDMARK_SHAPES[d.kind])) {
       out.push({ x: d.at[0], z: d.at[1], shape: shapeOf({ ...d, at: d.at }), turn: turnOf(d, d.at), tint: hashUnit(d.at[0], d.at[1], 95) });
     }
   }
@@ -63,8 +69,8 @@ export function dressingLayer(map: WorldMap, dressing: readonly Dressing[]): Chu
     const key = `${Math.floor(Math.round(piece.x) / CHUNK_SIZE)},${Math.floor(Math.round(piece.z) / CHUNK_SIZE)}`;
     byChunk.set(key, [...(byChunk.get(key) ?? []), piece]);
   }
-  const shapes = new Map(Object.entries(PROP_SHAPES).map(([key, make]) => [key, natureGeometry(make(), PROPS.colors)]));
-  return instancedLayer(map, byChunk.keys(), (key) => byChunk.get(key) ?? [], shapes, 0.06);
+  const meshOf = (shape: string) => (LANDMARK_SHAPES[shape] ? natureGeometry(LANDMARK_SHAPES[shape](), NATURE.colors) : natureGeometry(PROP_SHAPES[shape](), PROPS.colors));
+  return instancedLayer(map, byChunk.keys(), (key) => byChunk.get(key) ?? [], meshOf, 0.06);
 }
 
 // The room `dressing` takes: each fence run a thin box along it, each piece that's in the way its box; added to
