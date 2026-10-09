@@ -12,12 +12,12 @@ import { hud } from './hud';
 import { land } from './land';
 import { nature } from './nature';
 import { quests } from './quests';
+import { roaming } from './roaming';
 import { saving } from './saving';
 import { sound } from './sound';
 import { sprint } from './sprint';
 import { talk } from './talk';
 import { villagers } from './villagers';
-import { wildlife } from './wildlife';
 
 export const FEATURES: Feature[] = [
   daylight,
@@ -26,7 +26,6 @@ export const FEATURES: Feature[] = [
   buildings,
   nature,
   villagers,
-  wildlife,
   sprint,
   combat,
   hud,
@@ -34,6 +33,7 @@ export const FEATURES: Feature[] = [
   quests,
   bot,
   encounters,
+  roaming,
   sound,
   saving,
   devStart,
