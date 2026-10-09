@@ -6,10 +6,12 @@
 
 import type { Entity, System } from '@voxel/engine/ecs';
 import { Attack, Faction, Health, Hit, Hostile, MoveSpeed, Transform, Wander, attack, health, hostile, wander } from '@voxel/engine/gameplay';
+import { Persistent } from '@voxel/engine/save';
 import type { Point, WorldMap } from '@voxel/engine/world';
 import { CREATURES } from '../creatures';
 import { Creature } from '../systems/kills';
 import { Quests } from '../systems/quests';
+import { lastingName } from '../systems/save';
 import type { Feature } from './context';
 
 // How a kind of foe fights: its hit points, its blow, its pace, and whether it attacks on sight or only once struck.
@@ -104,7 +106,9 @@ export const encounters: Feature = {
       if (!entry) throw new Error(`encounters: no body '${model}'`);
       app.show(app.world.spawn([Transform, { x, y: map.groundY(x, z), z, facing }]), entry.make());
     }
-    KEEPERS.forEach(spawnBand);
+    for (const { creature, at, roam, models, note } of KEEPERS) {
+      at.forEach((spot, i) => app.world.add(spawnFoe(app, map, creature, models?.[i] ?? creature, spot, roam), Persistent, lastingName.keeper(note, i)));
+    }
     const seen = new Set<string>(); // stages begun so far, by quest/stage
     const system: System = {
       name: 'encounters',
