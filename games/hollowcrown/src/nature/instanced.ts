@@ -11,19 +11,21 @@ import { NATURE } from './palette';
 
 const SINK = 0.02; // a little into the ground, no gap at the foot
 
-// One thing growing: where (world units), its shape (a key of the layer's shapes), quarter turns, and its tint
-// (0..1: darker to lighter).
+// One thing growing (or standing: a fence, a stone): where (world units), its shape (a key of the layer's shapes),
+// quarter turns, its tint (0..1: darker to lighter), and how far it's stretched along its own x (a fence's rails to
+// the length of their run; none: 1).
 export interface Growth {
   x: number;
   z: number;
   shape: string;
   turn: number;
   tint: number;
+  stretch?: number;
 }
 
-// A shape's mesh from its grid, its foot centred under its origin.
-export function natureGeometry(grid: VoxelGrid): THREE.BufferGeometry {
-  return meshPart(grid, NATURE.colors, STRUCTURE_VOXEL, [grid.size[0] / 2, 0, grid.size[2] / 2]);
+// A shape's mesh from its grid (painted from `palette`), its foot centred under its origin.
+export function natureGeometry(grid: VoxelGrid, palette = NATURE.colors): THREE.BufferGeometry {
+  return meshPart(grid, palette, STRUCTURE_VOXEL, [grid.size[0] / 2, 0, grid.size[2] / 2]);
 }
 
 // The layer of what grows in chunks `keys`: `grow` works out a chunk's growth the first time it comes near (kept for
@@ -34,6 +36,7 @@ export function instancedLayer(
 ): ChunkLayer {
   const material = litMaterial();
   const matrix = new THREE.Matrix4();
+  const stretch = new THREE.Matrix4();
   const color = new THREE.Color();
   const grown = new Map<string, Map<string, Growth[]>>(); // chunk -> shape -> its growth
   const byShape = (key: string) => {
@@ -55,7 +58,7 @@ export function instancedLayer(
       [...byShape(key)].map(([shape, all]) => {
         const mesh = new THREE.InstancedMesh(shapes.get(shape)!, material, all.length);
         all.forEach((g, i) => {
-          matrix.makeRotationY((g.turn * Math.PI) / 2).setPosition(g.x, map.groundY(g.x, g.z) - SINK, g.z);
+          matrix.makeRotationY((g.turn * Math.PI) / 2).multiply(stretch.makeScale(g.stretch ?? 1, 1, 1)).setPosition(g.x, map.groundY(g.x, g.z) - SINK, g.z);
           mesh.setMatrixAt(i, matrix);
           mesh.setColorAt(i, color.setScalar(1 + (g.tint * 2 - 1) * tint));
         });
