@@ -10,7 +10,8 @@ export class World {
   private readonly alive = new Set<Entity>();
   private readonly stores = new Map<number, Map<Entity, unknown>>();
   private readonly resources = new Map<number, unknown>();
-  private readonly events = new Map<number, unknown[]>();
+  private events = new Map<number, unknown[]>(); // this step's (the presentation: the whole frame's)
+  private frameEvents = new Map<number, unknown[]>(); // the frame's earlier steps', for the presentation
 
   // A new entity, with the components given.
   spawn(...components: Array<readonly [ComponentType<unknown>, unknown]>): Entity {
@@ -105,9 +106,27 @@ export class World {
     return (this.events.get(type.id) as T[] | undefined) ?? [];
   }
 
+  // A step of a frame over (a fast game steps several times a frame): its events kept for the presentation only,
+  // so every step's systems read each event once.
+  endStep(): void {
+    for (const [id, list] of this.events) {
+      const kept = this.frameEvents.get(id);
+      if (kept) kept.push(...list);
+      else this.frameEvents.set(id, list);
+    }
+    this.events = new Map();
+  }
+
+  // The presentation's turn: every event of the frame's steps to read, and whatever it emits itself.
+  beginPresent(): void {
+    this.endStep();
+    [this.events, this.frameEvents] = [this.frameEvents, new Map()];
+  }
+
   // The frame's events let go (the schedule does this at the end of each frame).
   clearEvents(): void {
     this.events.clear();
+    this.frameEvents.clear();
   }
 
   private store<T>(type: ComponentType<T>): Map<Entity, unknown> {
