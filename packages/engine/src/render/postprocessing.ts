@@ -31,6 +31,7 @@ const LightShaftShader = {
     uBeamDir: { value: new THREE.Vector2(0, -1) }, // sunlight direction on screen
     uTime: { value: 0 },
     uColor: { value: new THREE.Color(SHAFT_COLOR) },
+    uStrength: { value: SHAFT_STRENGTH },
   },
   vertexShader: /* glsl */ `
     varying vec2 vUv;
@@ -58,7 +59,7 @@ const LightShaftShader = {
       float wave = sin(across * 6.2832 + uTime * ${SHAFT_DRIFT.toFixed(3)}) * 0.6 + sin(across * 2.63 + 1.7 - uTime * ${(SHAFT_DRIFT * 0.7).toFixed(3)}) * 0.4;
       float beam = smoothstep(0.15, 0.85, wave);
       float segment = smoothstep(-0.5, 0.6, sin(along * 0.18 + across * 0.9));
-      color.rgb += uColor * beam * segment * ${SHAFT_STRENGTH.toFixed(3)};
+      color.rgb += uColor * beam * segment * uStrength;
       gl_FragColor = color;
     }`,
 };
@@ -97,6 +98,11 @@ export class PostProcessing {
     this.composer.setPixelRatio(pixelRatio);
     this.composer.setSize(width, height);
     this.shafts.uniforms.uViewSize.value.set(this.camera.right - this.camera.left, this.camera.top - this.camera.bottom);
+  }
+
+  // How strong the light shafts are, 0..1 of their full strength (the day and night fade them out after dusk).
+  setShaftLight(level: number): void {
+    this.shafts.uniforms.uStrength.value = SHAFT_STRENGTH * level;
   }
 
   render(elapsedSeconds: number): void {

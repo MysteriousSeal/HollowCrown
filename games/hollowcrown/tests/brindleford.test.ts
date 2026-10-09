@@ -58,6 +58,17 @@ describe('Brindleford', () => {
     for (const b of buildings) expect(seen.has(footprint(b).door.join(',')), `${b.id}'s door`).toBe(true);
   });
 
+  it('has its ground dressed: footpaths, kitchen gardens, the Cobbes\' ploughed strips, and a duck pond', () => {
+    const surface = (x: number, z: number) => map.surfaceNames[map.surfaceAt(x, z) - 1];
+    for (const kind of ['path', 'garden', 'field'] as const) expect((BRINDLEFORD.surfaces ?? []).some((s) => s.surface === kind), kind).toBe(true);
+    expect(surface(918, 3342)).toBe('garden'); // behind Nan Wicket's
+    expect(surface(932, 3450)).toBe('field');
+    expect(surface(936, 3450)).toBeUndefined(); // a grass balk between strips
+    expect(surface(952, 3354)).toBe('water');
+    expect(map.walkable(952, 3354)).toBe(false);
+    expect(surface(924, 3349)).toBe('path'); // Old Meg's door to the lane
+  });
+
   it('houses only people the region\'s bible names', () => {
     const bible = readFileSync(resolve(__dirname, '../docs/story/regions/brindle-vale.md'), 'utf8');
     for (const b of buildings) {

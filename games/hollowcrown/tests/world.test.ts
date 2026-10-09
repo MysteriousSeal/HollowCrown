@@ -53,9 +53,28 @@ describe('the Vale map', () => {
     for (const [x, z] of [[2000, 50], [4050, 2000], [2000, 4050], [100, 3500]] as Point[]) expect(map.walkable(x, z)).toBe(false);
   });
 
+  it('keeps the meadows\' and woods\' swells off every road and track, and no road climbs more than a tier a step', () => {
+    const ways = WORLD_MAP.surfaces.filter((s) => (s.surface === 'road' || s.surface === 'track') && 'line' in s.shape);
+    const swells = WORLD_MAP.land.filter((l) => l.note?.startsWith('a swell'));
+    expect(swells.length).toBeGreaterThan(4);
+    for (const way of ways) {
+      let last: number | undefined;
+      for (const [x, z] of along((way.shape as { line: Point[] }).line)) {
+        const [tx, tz] = [Math.round(x), Math.round(z)];
+        for (const swell of swells) expect(covers(swell.shape, tx, tz), `${swell.note} on ${way.note} at (${tx}, ${tz})`).toBe(false);
+        const tier = map.tierAt(tx, tz);
+        if (last !== undefined) expect(Math.abs(tier - last), `${way.note} at (${tx}, ${tz})`).toBeLessThanOrEqual(1);
+        last = tier;
+      }
+    }
+  });
+
   it('draws the hills at the heights the region bible gives', () => {
     expect(map.tierAt(1080, 3180)).toBe(3); // Chapel Hill's crown
     expect(map.tierAt(1400, 3650)).toBe(5); // Mosshill's top
+    expect([1180, 1250, 1320].map((x) => map.tierAt(x, 3650))).toEqual([2, 3, 4]); // its rings, west to east
+    expect(map.tierAt(1300, 3650)).toBe(3); // Mossjaw Cave, at the foot of the fourth tier's face
+    expect(map.tierAt(1080, 3240)).toBe(2); // Chapel Hill's foot
     expect(map.tierAt(700, 2910)).toBe(4); // the North Rise's rim
     expect(map.tierAt(480, 3380)).toBe(1); // the shrine, in the valley
   });
