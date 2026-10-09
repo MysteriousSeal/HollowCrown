@@ -22,6 +22,7 @@ describe('quests', () => {
     expect(completeObjective(book, QUESTS, 'MQ01', 'feather')).toBeUndefined(); // (done already)
     expect(completeObjective(book, QUESTS, 'MQ01', 'pilgrim')).toBeUndefined(); // (not this stage's)
     completeObjective(book, QUESTS, 'MQ01', 'bowl');
+    expect(book.items).toEqual(['rusty knife']); // (taken from the bowl)
     expect(completeObjective(book, QUESTS, 'MQ01', 'first-words')?.id).toBe('road-east');
     expect(book.quests[0]).toEqual({ quest: 'MQ01', stage: 'road-east', done: [] });
   });

@@ -17,15 +17,17 @@ export interface QuestProgress {
   finished?: boolean;
 }
 
-// Every quest started, the one followed (null: none), and the flags the story has set.
+// Every quest started, the one followed (null: none), the flags the story has set, and what the hero has taken
+// (a 'take' objective's `what`: the rusty knife).
 export interface QuestBook {
   quests: QuestProgress[];
   tracked: string | null;
   flags: Record<string, string | boolean>;
+  items: string[];
 }
 export const Quests = defineResource<QuestBook>('Quests');
 
-export const newBook = (): QuestBook => ({ quests: [], tracked: null, flags: {} });
+export const newBook = (): QuestBook => ({ quests: [], tracked: null, flags: {}, items: [] });
 
 const stageOf = (quest: Quest, id: string): QuestStage | undefined => quest.stages.find((s) => s.id === id);
 
@@ -50,7 +52,7 @@ export function openObjectives(book: QuestBook, quests: Record<string, Quest>): 
   return open;
 }
 
-// Objective `objectiveId` of quest `questId` done (with the flags its choice sets). If that ends its stage (every
+// Objective `objectiveId` of quest `questId` done (with the flags its choice sets; a 'take', its thing taken). If that ends its stage (every
 // objective done but the optional and the unplayable), the stage's flags are set and the next stage begins (or the
 // quest finishes); a stage with nothing in it to play yet is passed through, its flags set.
 // Returns the stage begun, if one did.
@@ -64,6 +66,8 @@ export function completeObjective(
   if (!stage?.objectives.some((o) => o.id === objectiveId) || progress.done.includes(objectiveId)) return undefined;
   progress.done.push(objectiveId);
   Object.assign(book.flags, sets);
+  const objective = stage.objectives.find((o) => o.id === objectiveId)!;
+  if (objective.kind === 'take' && objective.what) book.items.push(objective.what);
   let begun: QuestStage | undefined;
   while (stage && neededIn(stage, progress.done).length === 0) {
     Object.assign(book.flags, stage.sets ?? {});
