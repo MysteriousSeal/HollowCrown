@@ -697,6 +697,23 @@ exports[`creatures > rook: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > rookFlock: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.391,
+  "max": [
+    0.434,
+    0.356,
+    0.372,
+  ],
+  "min": [
+    -0.483,
+    0,
+    -0.244,
+  ],
+  "triangles": 3950,
+}
+`;
+
 exports[`creatures > rookLeader: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.391,

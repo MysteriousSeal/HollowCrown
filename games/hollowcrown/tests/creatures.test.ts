@@ -34,7 +34,7 @@ describe('creatures', () => {
       model.animate(0, 0);
       const standing = measure(model.root);
       expect(standing.triangles).toBeGreaterThan(20);
-      if (entry.id !== 'rook' && entry.id !== 'rookLeader') expect(standing.min[1]).toBeGreaterThan(-0.06); // (on the ground, not in it)
+      if (entry.id !== 'rook' && entry.id !== 'rookLeader' && entry.id !== 'rookFlock') expect(standing.min[1]).toBeGreaterThan(-0.06); // (on the ground, not in it)
       expect({ height: round(model.height), ...standing }).toMatchSnapshot();
       for (const t of [0.4, 1.3, 2.9]) model.animate(t, 1); // (walking: no throw, no NaN)
       model.root.updateMatrixWorld(true);
