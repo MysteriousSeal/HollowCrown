@@ -1,6 +1,6 @@
 // The Vale's buildings as models: each placed building (data/world: its size, floors, roof, walls, use) built by the
 // engine's structure kit in the village palette, with what makes it itself (the inn's sign, the forge, the mill's
-// wheel, the reeve's heron, Old Meg's stool); the fixtures (a well, a notice board); the layer that puts them all in
+// wheel, the reeve's heron, Old Meg's stool, the chandlery's sign, vats and candles); the fixtures (a well, a notice board); the layer that puts them all in
 // the world as the hero comes near; and the room they take, for walkers to keep out of.
 
 import * as THREE from 'three';
@@ -12,8 +12,8 @@ import type { VoxelGrid } from '@voxel/engine/voxel';
 import { cardinal, footprint, type BuildingProps } from '../data/world/kinds';
 import { LOOK, structureColors, type Shutter } from './palette';
 import {
-  anvil, bellCote, doorstepStool, dryingHerbs, forgeHearth, heronPlaque, holedRoof, innSign, lantern, millWheel, noticeBoard, trough,
-  well, windowBoxes,
+  anvil, bellCote, chandlerSign, doorstepStool, dryingCandles, dryingHerbs, forgeHearth, heronPlaque, holedRoof, innSign,
+  lantern, millWheel, noticeBoard, trough, waxVat, well, windowBoxes,
 } from './props';
 
 const TILE = 16; // voxels a tile
@@ -73,7 +73,8 @@ export function doorOf(place: PlaceData): Point {
 type Make = (spec: StructureSpec, seed: number, place: PlaceData) => StructureModel;
 const plain: Make = (spec) => new StructureModel(spec, LOOK);
 
-const BY_USE: Record<BuildingProps['use'], Make> = {
+// (keyed by any use: one the map names before it's built here is drawn as a house)
+const BY_USE: Record<string, Make> = {
   house: (spec, seed, place) => {
     if (place.id === 'holt-house') return new StructureModel({ ...spec, shut: true, chimney: undefined, paint: holedRoof }, LOOK);
     const flowers = hashUnit(seed, 3, 21) < 0.6;
@@ -87,6 +88,12 @@ const BY_USE: Record<BuildingProps['use'], Make> = {
       },
     }, LOOK);
   },
+  chandler: (spec) => new StructureModel({ ...spec, jetty: true, door: { width: 6, height: 11 }, paint: dryingCandles }, LOOK, (m) => {
+    const { door, z1 } = m.layout;
+    m.prop(chandlerSign(), [1, 10, 0], [door!.x1 + 6, 23, z1 + 2]);
+    m.prop(waxVat(), [3, 0, 3], [door!.x0 - 6, 0, z1 + 5]);
+    m.prop(waxVat(), [3, 0, 3], [door!.x0 - 13, 0, z1 + 4]);
+  }),
   herbalist: (spec, seed) => new StructureModel({ ...spec, paint: (g, layout) => (windowBoxes(g, layout, seed), dryingHerbs(g, layout)) }, LOOK),
   inn: (spec) => new StructureModel({ ...spec, jetty: true, door: { width: 7, height: 11 }, windows: { width: 5, height: 5, sill: 4, every: 12 }, chimney: 1 }, LOOK, (m) => {
     const { door, z1 } = m.layout;
@@ -120,7 +127,7 @@ const BY_USE: Record<BuildingProps['use'], Make> = {
 export function buildingModel(place: PlaceData): StructureModel {
   const b = place.props as BuildingProps;
   const seed = seedOf(place);
-  return BY_USE[b.use](baseSpec(b, seed), seed, place);
+  return (BY_USE[b.use] ?? BY_USE.house)(baseSpec(b, seed), seed, place);
 }
 
 // The fixtures, by the end of their ids: each one's grid, and the room it takes (half its size, world units, x and z).

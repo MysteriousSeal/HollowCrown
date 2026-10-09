@@ -101,6 +101,13 @@ describe('Brindleford\'s buildings', () => {
     }
   });
 
+  it('build a chandlery with its sign and vats, and a use not built here yet as a house', () => {
+    const at = (use: string): PlaceData => ({ id: 'test-chandlery', kind: 'building', at: [100, 100], facing: 0, props: { size: [5, 3], floors: 2, roof: 'shingle', walls: 'timber', use, residents: [] } });
+    const props = (use: string) => buildingModel(at(use)).root.children[0].children.length;
+    expect(props('chandler')).toBe(props('house') + 3);
+    expect(() => buildingModel(at('not-yet'))).not.toThrow();
+  });
+
   it('stand on level ground, a tile round them too (levelGround)', () => {
     const fresh = loadWorldMap(WORLD_MAP, PLACE_KINDS);
     levelGround(fresh);
