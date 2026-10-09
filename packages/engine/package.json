@@ -15,7 +15,8 @@
     "./gameplay": "./src/gameplay/index.ts",
     "./input": "./src/input/index.ts",
     "./app": "./src/app/index.ts",
-    "./tools": "./src/tools/index.ts"
+    "./tools": "./src/tools/index.ts",
+    "./ui": "./src/ui/index.ts"
   },
   "dependencies": {
     "three": "^0.169.0"
