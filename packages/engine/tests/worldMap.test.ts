@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { World } from '../src/ecs';
 import { MoveIntent, MoveSpeed, Transform, movementSystem } from '../src/gameplay';
 import {
-  CHUNK_SIZE, TerrainResource, WorldDataError, boundsOf, checkWorldMap, composeWorldMap, covers, loadWorldMap, tierRects,
+  CHUNK_SIZE, RELIEF_MAX, RELIEF_MIN, RELIEF_STEP, TILE_HEIGHT, TerrainResource, WorldDataError, boundsOf, checkWorldMap, composeWorldMap, covers, loadWorldMap, tierRects,
   type Shape, type WorldMapData,
 } from '../src/world';
 
@@ -89,6 +89,23 @@ describe('the world map', () => {
     const area = rects.reduce((n, r) => n + r.width * r.depth, 0);
     expect(area).toBe(256);
     expect(rects.some((r) => r.surface === 1 && r.tier === 0)).toBe(true);
+  });
+
+  it('makes bare land a little uneven, in small steps, the ground walked on following it', () => {
+    const levels = new Set<number>();
+    for (let x = 12; x < 40; x++) for (let z = 12; z < 40; z++) {
+      const relief = map.reliefAt(x, z);
+      expect(relief).toBeGreaterThanOrEqual(RELIEF_MIN);
+      expect(relief).toBeLessThanOrEqual(RELIEF_MAX);
+      levels.add(relief);
+      expect(map.groundY(x, z)).toBeCloseTo(map.tierAt(x, z) * TILE_HEIGHT + relief * RELIEF_STEP);
+    }
+    expect(levels.size).toBeGreaterThan(1);
+    expect(RELIEF_STEP * Math.max(-RELIEF_MIN, RELIEF_MAX)).toBeLessThan(TILE_HEIGHT); // (still read as its tier)
+    for (let z = 0; z <= 4; z++) expect(map.reliefAt(30, z)).toBe(0); // (water and roads stay flat)
+    const flat = loadWorldMap({ ...MAP, relief: false }, { house: () => [], well: () => [] });
+    expect(flat.reliefAt(20, 20)).toBe(0);
+    expect(flat.groundY(20, 20)).toBeCloseTo(flat.tierAt(20, 20) * TILE_HEIGHT);
   });
 
   it('lists every problem in bad data at once, and refuses to load it', () => {

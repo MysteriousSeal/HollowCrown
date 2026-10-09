@@ -1,6 +1,7 @@
 // The world: its size and land (terrain), drawn in chunks streamed in round the camera.
 export { wholeMap, type Area, type MapSize } from './grid';
 export { TILE_HEIGHT, TerrainResource, flatTerrain, tileOf, type Terrain } from './terrain';
+export { RELIEF_MAX, RELIEF_MIN, RELIEF_STEP, reliefAt } from './relief';
 export { boundsOf, covers, type Point, type Shape } from './shapes';
 export {
   WorldDataError, WorldMap, checkWorldMap, composeWorldMap, loadWorldMap,
