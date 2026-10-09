@@ -1,5 +1,5 @@
 // Walking: every entity with somewhere to go moves that way at its speed, turns to face it, keeps to the map (a
-// margin from its edge) and stands on the ground.
+// margin from its edge) and to what can be walked on (not into water), and stands on the ground.
 
 import type { System } from '../ecs';
 import { TerrainResource } from '../world/terrain';
@@ -19,8 +19,11 @@ export const movementSystem: System = {
       const length = Math.hypot(dx, dz);
       if (length > 1e-6) {
         const step = (world.read(entity, MoveSpeed) * dt) / length;
-        at.x = Math.min(width - 1 - EDGE_MARGIN, Math.max(EDGE_MARGIN, at.x + dx * step));
-        at.z = Math.min(depth - 1 - EDGE_MARGIN, Math.max(EDGE_MARGIN, at.z + dz * step));
+        const x = Math.min(width - 1 - EDGE_MARGIN, Math.max(EDGE_MARGIN, at.x + dx * step));
+        const z = Math.min(depth - 1 - EDGE_MARGIN, Math.max(EDGE_MARGIN, at.z + dz * step));
+        // Each axis on its own, so it slides along what can't be walked on (a shore) rather than stopping dead.
+        if (terrain.walkable?.(x, at.z) ?? true) at.x = x;
+        if (terrain.walkable?.(at.x, z) ?? true) at.z = z;
         at.facing = Math.atan2(dx, dz);
       }
       at.y = terrain.groundY(at.x, at.z);
