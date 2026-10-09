@@ -134,9 +134,8 @@ export function placesOf(map: WorldMap): ChunkLayer {
 }
 
 // What stands in the way on `map`: every building's walls (inset from its footprint as they're built: the eaves can
-// be walked under), every fixture.
-export function obstaclesOf(map: WorldMap): Obstacles {
-  const obstacles = new Obstacles();
+// be walked under), every fixture; added to `obstacles` (a new set, none given).
+export function obstaclesOf(map: WorldMap, obstacles = new Obstacles()): Obstacles {
   for (const place of map.places()) {
     let half: [number, number] | undefined;
     let [cx, cz] = place.at;
