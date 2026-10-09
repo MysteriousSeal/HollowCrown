@@ -1,6 +1,7 @@
 // A menu over the dimmed scene (a pause menu): a framed panel, its title, and its choices one under another, picked
 // with a click, or the arrows and Enter. A choice may open a page of its own in the panel (the controls: each key and
-// what it does), with a way back.
+// what it does; or any elements: a slider, a list of saves), with a way back. Each pick is told to `onPick` (a click's
+// sound).
 
 import { element } from './overlay';
 
@@ -9,7 +10,22 @@ export interface MenuItem {
   pick: () => void;
 }
 
+// A slider for a page: its label, its value (0 to 1) and what's told as it moves.
+export function slider(label: string, value: number, onInput: (value: number) => void): HTMLElement {
+  const row = element('label', 'ui-menu-slider');
+  const input = element('input', 'ui-slider');
+  Object.assign(input, { type: 'range', min: '0', max: '100', step: '1', value: String(Math.round(value * 100)) });
+  const shown = element('span', 'ui-slider-value', `${Math.round(value * 100)}`);
+  input.addEventListener('input', () => {
+    shown.textContent = input.value;
+    onInput(Number(input.value) / 100);
+  });
+  row.append(element('span', 'ui-menu-slider-label', label), input, shown);
+  return row;
+}
+
 export class Menu {
+  onPick: (() => void) | undefined;
   readonly el = element('div', 'ui-menu');
   private readonly panel = element('div', 'ui-menu-panel');
   private readonly title = element('b', 'ui-menu-title');
@@ -50,11 +66,16 @@ export class Menu {
 
   // A page of its own: `rows` of a key and what it does, and Back to the choices.
   page(title: string, rows: Array<[string, string]>): void {
-    this.title.textContent = title;
     const list = element('dl', 'ui-menu-rows');
     for (const [key, text] of rows) list.append(element('dt', 'ui-key', key), element('dd', 'ui-menu-row-text', text));
-    this.body.replaceChildren(list);
-    this.setButtons([{ label: 'Back', pick: () => this.showItems() }]);
+    this.pageOf(title, [list]);
+  }
+
+  // A page of its own: `content`, then `items` (choices of its own), and Back to the choices.
+  pageOf(title: string, content: HTMLElement[], items: MenuItem[] = []): void {
+    this.title.textContent = title;
+    this.body.replaceChildren(...content);
+    this.setButtons([...items, { label: 'Back', pick: () => this.showItems() }]);
   }
 
   private showItems(): void {
@@ -66,7 +87,10 @@ export class Menu {
   private setButtons(items: MenuItem[]): void {
     this.buttons = items.map(({ label, pick }, i) => {
       const button = element('button', 'ui-menu-item', label);
-      button.addEventListener('click', pick);
+      button.addEventListener('click', () => {
+        this.onPick?.();
+        pick();
+      });
       button.addEventListener('mouseenter', () => this.move(i - this.focus));
       return button;
     });
