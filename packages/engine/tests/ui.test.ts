@@ -17,6 +17,13 @@ describe('Typewriter', () => {
 import { Dialogue } from '../src/ui/dialogue';
 import { MapView, cssColor } from '../src/ui/mapImage';
 import { ToastQueue } from '../src/ui/toasts';
+import { fadeByDistance } from '../src/ui/worldLabels';
+
+describe('fadeByDistance', () => {
+  it('is whole when near, gone when far, between in between', () => {
+    expect([fadeByDistance(1, 4, 8), fadeByDistance(6, 4, 8), fadeByDistance(9, 4, 8)]).toEqual([1, 0.5, 0]);
+  });
+});
 
 describe('ToastQueue', () => {
   it('puts up a few at a time, the rest as those go', () => {

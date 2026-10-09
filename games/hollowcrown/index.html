@@ -93,6 +93,18 @@
       .ui-toast-title { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #e8c27a; }
       .ui-toast-text { display: block; margin-top: 2px; font-size: 15px; font-weight: 500; line-height: 1.3; }
 
+      /* Villagers' names over their heads: cream on an ink outline, no panel, faded by distance. */
+      .ui-world-label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 15px;
+        font-weight: 600;
+        white-space: nowrap;
+        text-shadow: 1px 1px 0 var(--ink), -1px -1px 0 var(--ink), 1px -1px 0 var(--ink), -1px 1px 0 var(--ink), 0 2px 3px rgba(20, 13, 9, 0.6);
+        will-change: transform, opacity;
+      }
+
       /* What E would do: a keycap, then the action, low in the middle. */
       .ui-prompt {
         position: absolute;

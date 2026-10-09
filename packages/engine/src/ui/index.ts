@@ -7,6 +7,7 @@ export { JournalScreen, type JournalEntry, type JournalItem } from './journal';
 export { Menu, type MenuItem } from './menu';
 export { Prompt } from './prompt';
 export { TOASTS_AT_ONCE, TOAST_SECONDS, ToastQueue, Toasts, type Toast } from './toasts';
+export { WorldLabels, fadeByDistance, type WorldLabel } from './worldLabels';
 export { TrackerPanel, type TrackerText } from './tracker';
 export {
   Conversation, Script, TALK_KEYS, TYPE_SPEED, Typewriter, placeholderPortrait, type ConversationLine, type OnChoice, type Side, type Speaker,
