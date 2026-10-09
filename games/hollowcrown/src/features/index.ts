@@ -7,10 +7,12 @@ import { combat } from './combat';
 import { daylight } from './daylight';
 import { encounters } from './encounters';
 import { debug } from './debug';
+import { devStart } from './devStart';
 import { hud } from './hud';
 import { land } from './land';
 import { nature } from './nature';
 import { quests } from './quests';
+import { sound } from './sound';
 import { sprint } from './sprint';
 import { talk } from './talk';
 import { villagers } from './villagers';
@@ -31,6 +33,8 @@ export const FEATURES: Feature[] = [
   quests,
   bot,
   encounters,
+  sound,
+  devStart,
 ];
 
 export type { Feature, GameContext } from './context';

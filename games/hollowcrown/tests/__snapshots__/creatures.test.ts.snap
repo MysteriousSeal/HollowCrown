@@ -272,6 +272,40 @@ exports[`creatures > deadPilgrim: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > deerDoe: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.538,
+  "max": [
+    0.063,
+    0.625,
+    0.287,
+  ],
+  "min": [
+    -0.063,
+    0,
+    -0.193,
+  ],
+  "triangles": 432,
+}
+`;
+
+exports[`creatures > deerStag: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.672,
+  "max": [
+    0.112,
+    0.84,
+    0.322,
+  ],
+  "min": [
+    -0.112,
+    0,
+    -0.216,
+  ],
+  "triangles": 594,
+}
+`;
+
 exports[`creatures > draugr: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.72,
@@ -303,6 +337,23 @@ exports[`creatures > drowned: builds, poses and keeps its shape 1`] = `
     -0.058,
   ],
   "triangles": 2408,
+}
+`;
+
+exports[`creatures > fox: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.275,
+  "max": [
+    0.05,
+    0.325,
+    0.238,
+  ],
+  "min": [
+    -0.05,
+    -0,
+    -0.316,
+  ],
+  "triangles": 384,
 }
 `;
 
@@ -592,6 +643,23 @@ exports[`creatures > pitRisenWoman: builds, poses and keeps its shape 1`] = `
     -0.05,
   ],
   "triangles": 1526,
+}
+`;
+
+exports[`creatures > rabbit: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.25,
+  "max": [
+    0.05,
+    0.325,
+    0.15,
+  ],
+  "min": [
+    -0.05,
+    -0,
+    -0.106,
+  ],
+  "triangles": 258,
 }
 `;
 
