@@ -9,7 +9,8 @@ import { obstaclesOf } from '../src/buildings';
 import { CREATURES } from '../src/creatures';
 import { QUESTS } from '../src/data/quests';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
-import { BODIES, ENCOUNTERS, KEEPERS, provokeSystem } from '../src/features/encounters';
+import { BODIES, ENCOUNTERS, KEEPERS } from '../src/features/encounters';
+import { provokeSystem } from '../src/systems/foes';
 import { Creature } from '../src/systems/kills';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
