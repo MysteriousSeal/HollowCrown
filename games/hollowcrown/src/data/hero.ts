@@ -12,6 +12,7 @@ export const HERO: {
   sprint: { speed: number; cadence: number };
   hp: number;
   blow: { damage: number; reach: number; arc: number; cooldown: number };
+  weapons: Record<string, { damage: number }>;
 } = {
   look: STRANGER_LOOK, // (robbed at the shrine: people/stranger.ts dresses it)
   speed: 3.2, // tiles a second
@@ -22,4 +23,7 @@ export const HERO: {
   },
   hp: 30,
   blow: { damage: 4, reach: 0.7, arc: 1, cooldown: 0.6 }, // (a wolf, 12 hit points, falls to three)
+  weapons: {
+    'rusty knife': { damage: 6 }, // MQ01's offering bowl (a wolf falls to two)
+  },
 };
