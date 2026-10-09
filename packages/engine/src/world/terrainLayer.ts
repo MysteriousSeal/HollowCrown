@@ -9,7 +9,7 @@ import { wholeMap, type Area } from './grid';
 import { RELIEF_STEP } from './relief';
 import { TILE_HEIGHT, type Terrain } from './terrain';
 import { TERRAIN_COLORS } from '../render/constants';
-import { addVoxelGround } from './voxelGround';
+import { EDGE_BITS, addVoxelGround } from './voxelGround';
 
 const BOX_TOP_FACE = 2; // BoxGeometry material groups: +x, -x, +y, -y, +z, -z
 
@@ -60,12 +60,30 @@ export function tierRects(terrain: Terrain, area: Area): TierRect[] {
   return rects;
 }
 
+// Which sides of `r` meet ground of another tier or surface (EDGE_BITS), anywhere along them.
+export function seamsOf(terrain: Terrain, r: TierRect): number {
+  const key = (x: number, z: number) => terrain.tierAt(x, z) * 256 + (terrain.surfaceAt?.(x, z) ?? 0);
+  const own = r.tier * 256 + r.surface;
+  const { width: W, depth: D } = terrain.size;
+  const differs = (x: number, z: number) => x >= 0 && z >= 0 && x < W && z < D && key(x, z) !== own;
+  let bits = 0;
+  for (let z = r.z; z < r.z + r.depth; z++) {
+    if (differs(r.x - 1, z)) bits |= EDGE_BITS.west;
+    if (differs(r.x + r.width, z)) bits |= EDGE_BITS.east;
+  }
+  for (let x = r.x; x < r.x + r.width; x++) {
+    if (differs(x, r.z - 1)) bits |= EDGE_BITS.north;
+    if (differs(x, r.z + r.depth)) bits |= EDGE_BITS.south;
+  }
+  return bits;
+}
+
 // A tile's column: its top voxel-shaded (grass, or a surface's color), its sides plain.
 function tileMaterial(tier: number, surface?: number): THREE.Material[] {
   const color = new THREE.Color(surface ?? TERRAIN_COLORS[tier % TERRAIN_COLORS.length]);
   const side = new THREE.MeshStandardMaterial({ color: TERRAIN_COLORS[tier % TERRAIN_COLORS.length] });
   const top = new THREE.MeshStandardMaterial({ color });
-  addVoxelGround(top);
+  addVoxelGround(top, surface === undefined ? undefined : new THREE.Color(TERRAIN_COLORS[tier % TERRAIN_COLORS.length]));
   const materials: THREE.Material[] = Array(6).fill(side);
   materials[BOX_TOP_FACE] = top;
   return materials;
@@ -101,7 +119,12 @@ export function terrainLayer(terrain: Terrain, tiers: readonly number[], surface
         if (!kind) return [];
         const tier = Math.floor(key / 256);
         const height = (tier + 1) * TILE_HEIGHT;
-        const mesh = new THREE.InstancedMesh(kind.geometry, kind.material, rects.length);
+        // The tier's column (a box: 24 vertices, copied), with this chunk's rectangles' seams (which sides meet other
+        // ground) on it; freed with the chunk.
+        const geometry = kind.geometry.clone();
+        geometry.setAttribute('aEdges', new THREE.InstancedBufferAttribute(new Float32Array(rects.map((r) => seamsOf(terrain, r))), 1));
+        const mesh = new THREE.InstancedMesh(geometry, kind.material, rects.length);
+        mesh.addEventListener('dispose', () => geometry.dispose());
         rects.forEach((r, i) => {
           // The column stretched from its foot (a tier below the ground) to its top, raised or lowered by its relief.
           const reach = height + r.relief * RELIEF_STEP;

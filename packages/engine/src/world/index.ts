@@ -7,7 +7,7 @@ export {
   WorldDataError, WorldMap, checkWorldMap, composeWorldMap, loadWorldMap,
   type AreaData, type LandPatch, type PlaceData, type PlaceRules, type SurfaceKind, type SurfacePatch, type WorldMapData, type WorldMapPart,
 } from './worldMap';
-export { terrainLayer, tierRects, type TierRect } from './terrainLayer';
+export { seamsOf, terrainLayer, tierRects, type TierRect } from './terrainLayer';
 export { CHUNK_SIZE, chunkKeysIn, chunkTilesIn } from './chunks';
 export type { ChunkLayer } from './chunkLayer';
 export { ChunkStreamer, FRAME_BUILD_BUDGET } from './chunkStreamer';
