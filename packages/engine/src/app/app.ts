@@ -10,6 +10,7 @@ import { Keyboard, KeyboardResource, ScreenAxes, playerInputSystem } from '../in
 import type { Model } from '../models';
 import { dayNightSystem, type DayNightOptions } from './dayNight';
 import { DebugOverlay } from './debugOverlay';
+import { AudioEngine, AudioResource, audioSystem, footstepSystem, type StepSurface } from '../audio';
 import { CameraTarget, VisualComponent, visualOf, visualSystem } from './visuals';
 
 const MAX_FRAME_DT = 0.1; // seconds: no huge jump after the tab was in the background
@@ -65,6 +66,16 @@ export class App {
     if (!(dayMinutes > 0)) throw new Error(`enableDayNight: dayMinutes must be above 0, not ${dayMinutes}`);
     this.world.setResource(TimeOfDay, { hours: ((startHour % 24) + 24) % 24, rate: hoursPerSecond(dayMinutes) });
     this.schedule.add(timeOfDaySystem, dayNightSystem(this.lights, this.scene, () => this.post));
+  }
+
+  // Sound: effects (world.emit(PlaySound, ...), and the engine's own: swings, blows, footsteps of whatever has
+  // Footsteps), the ambience by the hour and the place, the volume, mute on `muteKey`. It starts on the player's first
+  // key or click (browsers allow no sound before). Returns the audio, also kept as the AudioResource.
+  enableAudio({ muteKey = 'KeyN', stepSurface }: { muteKey?: string | null; stepSurface?: StepSurface } = {}): AudioEngine {
+    if (this.world.hasResource(AudioResource)) return this.world.resource(AudioResource);
+    const audio = this.world.setResource(AudioResource, new AudioEngine(muteKey));
+    this.schedule.add(footstepSystem(stepSurface), audioSystem(audio));
+    return audio;
   }
 
   // A debug overlay in the bottom-left corner (for development): frame rate and time, draws and triangles, chunks,

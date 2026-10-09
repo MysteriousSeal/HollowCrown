@@ -17,7 +17,8 @@
     "./app": "./src/app/index.ts",
     "./tools": "./src/tools/index.ts",
     "./ui": "./src/ui/index.ts",
-    "./save": "./src/save/index.ts"
+    "./save": "./src/save/index.ts",
+    "./audio": "./src/audio/index.ts"
   },
   "dependencies": {
     "three": "^0.169.0"

@@ -2,7 +2,7 @@
 // hostile's AI) and is ready (its cooldown run out) lands a Hit on everyone alive within its reach and arc but its
 // own side, and acts it out (Acting, for its model's lunge). What a blow does is the health system's (health.ts).
 
-import { defineComponent, type Entity, type System, type World } from '../ecs';
+import { defineComponent, defineEvent, type Entity, type System, type World } from '../ecs';
 import { BODY_RADIUS, BodyRadius, Transform } from './components';
 import { Faction, Health, Hit, isAlive } from './health';
 
@@ -26,6 +26,9 @@ export function attack(damage: number, { reach = 0.6, arc = 1, cooldown = 0.7 }:
   if (!(reach > 0) || !(arc > 0) || !(cooldown >= 0)) throw new Error('attack: reach and arc must be above 0, cooldown 0 or more');
   return { damage, reach, arc, cooldown, wait: 0 };
 }
+
+// A swing made (hit or miss), for its sound.
+export const Swing = defineEvent<{ by: Entity }>('Swing');
 
 // It means to swing this frame (taken by the attack system, whether it could or not).
 export const AttackIntent = defineComponent<true>('AttackIntent');
@@ -77,6 +80,7 @@ export const attackSystem: System = {
       if (a.wait > 0 || !world.has(entity, Transform) || (world.has(entity, Health) && !isAlive(world, entity))) continue;
       a.wait = a.cooldown;
       world.add(entity, Acting, { action: 'attack', time: 0, duration: ACTION_TIME.attack });
+      world.emit(Swing, { by: entity });
       for (const target of targetsOf(world, entity)) world.emit(Hit, { target, by: entity, damage: a.damage });
     }
   },
