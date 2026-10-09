@@ -171,6 +171,15 @@ Ten villages and the two towns each keep a standing: **-3 Burned** (by story onl
        +--------------------------------------------------------------+
 ```
 
+### The lie of the land
+The land is never billiard-table flat. Everywhere outside what people have levelled, it has a gentle, irregular
+unevenness: a hand's height up or down from tile to tile, never a step anyone has to climb. Lying over that are the
+shapes drawn by hand: low swells in the meadows and woods, then hills in rings of tiers (Chapel Hill, Mosshill), then
+the rises and mountains. **Roads, tracks, footpaths, the village squares and every floor stay level enough to walk**:
+worn flat by feet and wheels, or dug and laid flat by hand. The unevenness fades out at their edges rather than
+stopping in a step. Water lies flat. The map data draws the tiers and the surfaces; the terrain renders the unevenness
+over them, and it is lighter wherever a surface is walked.
+
 ### Regions
 | Region | Tiles (x, z) | Towns and villages | Dungeons | Camps | Levels |
 |---|---|---|---|---|---|
