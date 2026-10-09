@@ -35,7 +35,8 @@ export interface DungeonFeature {
   props?: Record<string, unknown>;
 }
 
-// What waits: `count` of a foe kind at a tile, at a level; `when` a story flag says so (else always, the first time).
+// What waits: `count` of a creature (src/creatures' ids) at a tile, at a level; `when` a story flag says so (else
+// always, the first time).
 export interface DungeonSpawn {
   foe: string;
   at: Point;

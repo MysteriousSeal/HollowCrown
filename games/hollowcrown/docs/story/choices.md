@@ -14,6 +14,7 @@ noted. The first value listed is the default if the quest is never done.
 | `pilgrim_jerkin` | `taken` / `covered` | MQ01 | Hesper knows her mother's jerkin on sight (MQ03) |
 | `mq01_dead_walked` | true | MQ01 | The Vale's barks about the night the dead came home |
 | `hero_unsworn_seen` | true | MQ02 | Cuthwin's letter (MQ04) |
+| `pell_answer` | `kind` / `hard` | MQ02 | Pell warms to the hero, or fears them |
 | `famine_pit` | `untouched` / `blessed` | MQ02 | Famine ghosts stop returning |
 | `hamund` | `rested` / `destroyed` | MQ02 | Crypt quiet or not; Lantern +5 |
 | `bv_red_hen` | `hanged` / `killed` / `hesper_judged` / `to_wren` / `spared` | MQ03 | Wren's greeting; SQ-GW7; titles |

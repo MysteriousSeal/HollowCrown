@@ -42,10 +42,12 @@ export const BELLWARDENS_TOMB: Dungeon = {
     { id: 'wardens-altar', kind: 'altar', at: [31, 60], facing: NORTH },
   ],
   spawns: [
-    { foe: 'skeleton', at: [26, 18], count: 2, level: 2 },
-    { foe: 'bell-ringer ghost', at: [24, 41], count: 2, level: 2 },
-    { foe: 'bell-ringer ghost', at: [40, 31], count: 1, level: 3 },
-    { foe: 'Sir Hamund', at: [31, 54], count: 1, level: 3, boss: true },
+    { foe: 'ossuaryGuard', at: [26, 18], count: 2, level: 2 },
+    { foe: 'ossuaryBrother', at: [38, 20], count: 1, level: 2 },
+    { foe: 'ghost', at: [24, 41], count: 2, level: 2 }, // the bell-ringers
+    { foe: 'ghost', at: [40, 31], count: 1, level: 3 },
+    { foe: 'ossuarySquire', at: [27, 52], count: 1, level: 3 },
+    { foe: 'hamund', at: [31, 54], count: 1, level: 3, boss: true },
     { foe: 'skeleton', at: [31, 18], count: 3, level: 3, when: 'hamund:destroyed' }, // every three days, after MQ02
   ],
 };
