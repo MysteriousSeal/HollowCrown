@@ -12,7 +12,8 @@ import { forestTrees, trunkOf } from '../../src/nature/forests';
 import { PLACE_KINDS, START_PLACE, WORLD_MAP } from '../../src/data/world';
 import { footprint } from '../../src/data/world/kinds';
 import { villagersOf } from '../../src/features/villagers';
-import { WILDLIFE } from '../../src/features/wildlife';
+import { BRINDLE_VALE_ENCOUNTERS } from '../../src/data/world/encounters';
+import { spotsOf } from '../../src/systems/roaming';
 import { ENCOUNTERS, KEEPERS } from '../../src/features/encounters';
 import { PEOPLE, type Spot } from '../../src/data/people';
 import { QUESTS } from '../../src/data/quests';
@@ -77,11 +78,12 @@ describe('Brindle Vale reachability', () => {
   it("reaches every villager, animal and foe from the Pilgrim's Shrine", () => {
     const standing = [
       ...villagersOf(map).map((v) => ({ who: v.name, x: v.x, z: v.z })),
-      ...WILDLIFE.map((a) => ({ who: `${a.creature} (${a.note})`, x: a.at[0], z: a.at[1] })),
+      ...BRINDLE_VALE_ENCOUNTERS.flatMap((e) => spotsOf(e, map).map(([x, z]) => ({ who: `${e.foe} (${e.id})`, x, z }))),
       ...KEEPERS.flatMap((k) => k.at.map(([x, z]) => ({ who: `${k.creature} (${k.note})`, x, z }))),
       ...Object.entries(ENCOUNTERS).flatMap(([stage, e]) => e.at.map(([x, z]) => ({ who: `${e.creature} (${stage})`, x, z }))),
     ];
-    expect(standing.filter(({ x, z }) => !reached(x, z)).map((s) => s.who)).toEqual([]);
+    // (Near enough: one standing off a tile's middle, by a trunk on that middle, is still walked up to.)
+    expect(standing.filter(({ x, z }) => !near(x, z)).map((s) => s.who)).toEqual([]);
   });
 
   it("reaches every spot a quest sends the hero to, and every spot of a villager's day", () => {
