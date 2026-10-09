@@ -1,21 +1,24 @@
-// Sprinting: hold Shift to run (systems/sprint.ts). The hero's stride turns over quicker as they speed up: their
-// model is animated on a clock of its own that runs faster with the pace, so the step never jumps.
+// Sprinting: hold sprint (Shift, the engine's keyboard) to run (systems/sprint.ts). The hero's stride turns over
+// quicker as they speed up: their model is animated on a clock of its own that runs faster with the pace, so the
+// step never jumps.
 
 import { VisualComponent } from '@voxel/engine/app';
+import type { System } from '@voxel/engine/ecs';
+import { KeyboardResource } from '@voxel/engine/input';
 import { HERO } from '../data/hero';
 import { sprintSystem, type Sprint } from '../systems/sprint';
 import type { Feature } from './context';
-
-const SHIFT = new Set(['ShiftLeft', 'ShiftRight']);
 
 export const sprint: Feature = {
   name: 'sprint',
   install: ({ app, hero }) => {
     const state: Sprint = { held: false, pace: 0 };
-    window.addEventListener('keydown', (e) => SHIFT.has(e.code) && (state.held = true));
-    window.addEventListener('keyup', (e) => SHIFT.has(e.code) && (state.held = false));
-    window.addEventListener('blur', () => (state.held = false)); // (no keyup if focus leaves mid-press)
-    app.addSystems(sprintSystem(state, HERO.speed, HERO.sprint.speed));
+    const keys: System = {
+      name: 'sprintKey',
+      stage: 'input',
+      update: (world) => void (state.held = world.resource(KeyboardResource).isHeld('sprint')),
+    };
+    app.addSystems(keys, sprintSystem(state, HERO.speed, HERO.sprint.speed));
 
     const model = app.world.get(hero, VisualComponent)?.model;
     if (!model) return;
