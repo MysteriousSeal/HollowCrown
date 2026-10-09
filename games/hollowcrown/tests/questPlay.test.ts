@@ -98,6 +98,7 @@ describe('quest play', () => {
     world.resource(TimeOfDay).hours = 14;
     const hero = world.spawn([Transform, { x: 906, y: 0, z: 3346, facing: 0 }], [Health, { hp: 5, max: 30 }]);
     const talk = withRest(world, hero, 'Garrick Fenn', talkWith(world, 'Garrick Fenn'));
+    expect(talk.lines.at(-1)).toEqual({ side: 'right', text: PEOPLE_DATA['Garrick Fenn'].bed!.line, choices: [PEOPLE_DATA['Garrick Fenn'].bed!.yes, PEOPLE_DATA['Garrick Fenn'].bed!.no] });
     talk.onChoice(talk.lines.findIndex((l) => l.choices), 0);
     talk.onClose();
     expect(world.resource(TimeOfDay).hours).toBe(6);
