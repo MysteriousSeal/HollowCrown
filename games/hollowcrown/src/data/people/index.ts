@@ -2,8 +2,9 @@
 // talking to them (gameplay), their routines and their models.
 
 import { BRINDLEFORD_PEOPLE } from './brindleford';
+import { TALLOW_GREEN_PEOPLE } from './tallowGreen';
 import type { Villager } from './kinds';
 
-export const PEOPLE: Villager[] = [...BRINDLEFORD_PEOPLE];
+export const PEOPLE: Villager[] = [...BRINDLEFORD_PEOPLE, ...TALLOW_GREEN_PEOPLE];
 export const PEOPLE_DATA: Record<string, Villager> = Object.fromEntries(PEOPLE.map((p) => [p.name, p]));
 export { barkLine, type Bark, type Doing, type RoutineStep, type Spot, type Villager } from './kinds';

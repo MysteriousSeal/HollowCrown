@@ -9,19 +9,22 @@ import { SKELETON, SKELETON_ARCHER } from './skeletonVoxels';
 import { ShadeModel } from './ghostVoxels';
 import { BOG_DRAUGR, DRAUGR } from './draugrVoxels';
 import { GHOST } from './spectralVoxels';
-import { HUNGRY, HUNGRY_MOTHER } from './hungryVoxels';
+import { HUNGRY, HUNGRY_MOTHER, PIT_RISEN, PIT_RISEN_CHILD, PIT_RISEN_WOMAN } from './hungryVoxels';
 import { DROWNED, HOLLOWED, PIT_EATER, SEWN } from './fleshVoxels';
 import { ASHEN, ASHEN_SMALL, BLOOMER } from './bloomVoxels';
 import { ROOK, ROOK_LEADER } from './rookVoxels';
 import { BARROW_GIANT } from './giantVoxels';
 import { BANDIT, CARROW_ARBALESTER, CARROW_PIKEMAN, GREENHOOD, HERON_CROSSBOWMAN, HERON_SPEARMAN, LANTERN_KNIGHT } from './peopleVoxels';
 import { RED_HEN_BAND } from '../people/redHen';
+import { DEAD_PILGRIM, sprawl } from '../people/pilgrim';
+import { MULE } from './muleVoxels';
+import { Lying } from './lying';
 import { HOBS_TOWER_GUARD } from '../people/hobsTower';
 
 export interface CreatureEntry {
   id: string;
   name: string;
-  family: 'beast' | 'dead' | 'horror' | 'people';
+  family: 'beast' | 'dead' | 'horror' | 'people' | 'remains'; // (remains: bodies lying where they fell)
   make(): Model;
 }
 
@@ -30,6 +33,7 @@ export const CREATURES: CreatureEntry[] = [
   { id: 'alphaWolf', name: 'Alpha wolf', family: 'beast', make: () => new BeastModel(ALPHA_WOLF) },
   { id: 'boar', name: 'Boar', family: 'beast', make: () => new BeastModel(BOAR) },
   { id: 'bear', name: 'Brown bear', family: 'beast', make: () => new BeastModel(BEAR) },
+  { id: 'mule', name: 'Mule', family: 'beast', make: () => new BeastModel(MULE) },
   { id: 'spider', name: 'Giant spider', family: 'beast', make: () => new SpiderModel(CAVE_SPIDER) },
   { id: 'spiderling', name: 'Spiderling', family: 'beast', make: () => new SpiderModel(HATCHLING) },
   { id: 'broodMother', name: 'Brood mother', family: 'beast', make: () => new SpiderModel(BROOD_MOTHER) },
@@ -52,6 +56,9 @@ export const CREATURES: CreatureEntry[] = [
   { id: 'barrowGiant', name: 'Barrow-giant', family: 'dead', make: () => new FrameModel(BARROW_GIANT) },
   { id: 'hungry', name: 'The Hungry', family: 'horror', make: () => new FrameModel(HUNGRY) },
   { id: 'hungryMother', name: 'The Hungry (mother)', family: 'horror', make: () => new FrameModel(HUNGRY_MOTHER) },
+  { id: 'pitRisen', name: 'The Hungry, risen from the pit', family: 'horror', make: () => new FrameModel(PIT_RISEN) },
+  { id: 'pitRisenWoman', name: 'The Hungry, risen from the pit (Bet)', family: 'horror', make: () => new FrameModel(PIT_RISEN_WOMAN) },
+  { id: 'pitRisenChild', name: 'The Hungry, risen from the pit (child)', family: 'horror', make: () => new FrameModel(PIT_RISEN_CHILD) },
   { id: 'drowned', name: 'The Drowned', family: 'horror', make: () => new FrameModel(DROWNED) },
   { id: 'bloomer', name: 'Bloomer', family: 'horror', make: () => new FrameModel(BLOOMER) },
   { id: 'hollowed', name: 'The Hollowed', family: 'horror', make: () => new FrameModel(HOLLOWED) },
@@ -61,4 +68,6 @@ export const CREATURES: CreatureEntry[] = [
   { id: 'pitEater', name: 'Pit-eater', family: 'horror', make: () => new FrameModel(PIT_EATER) },
   { id: 'rook', name: 'Carrion rook', family: 'horror', make: () => new BirdModel(ROOK) },
   { id: 'rookLeader', name: 'Carrion rook (leader)', family: 'horror', make: () => new BirdModel(ROOK_LEADER) },
+  { id: 'deadPilgrim', name: 'Dead pilgrim woman (MQ01, the ditch)', family: 'remains', make: () => new Lying(new FrameModel(DEAD_PILGRIM), 'back', (m) => sprawl(m as FrameModel)) },
+  { id: 'deadMule', name: 'Dead mule (MQ01, the Birchwood)', family: 'remains', make: () => new Lying(new BeastModel(MULE), 'side') },
 ];

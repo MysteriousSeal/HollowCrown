@@ -1,18 +1,17 @@
-// Brindleford's people are the ones its buildings house: each lives where the map says, spends every hour somewhere
+// The Vale's villagers (Brindleford's, Tallow Green's) are the ones its buildings house: each lives where the map says, spends every hour somewhere
 // the map has (and can be walked to), and has something to say.
 
 import { describe, expect, it } from 'vitest';
 import { loadWorldMap } from '@voxel/engine/world';
 import { PEOPLE, PEOPLE_DATA, barkLine } from '../src/data/people';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
-import { BRINDLEFORD } from '../src/data/world/brindleford';
 import type { BuildingProps } from '../src/data/world/kinds';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
-const buildings = (BRINDLEFORD.places ?? []).filter((p) => p.kind === 'building');
+const buildings = WORLD_MAP.places.filter((p) => p.kind === 'building');
 const known = new Set([...WORLD_MAP.places.map((p) => p.id), ...WORLD_MAP.areas.map((a) => a.id)]);
 
-describe("Brindleford's people", () => {
+describe("the Vale's villagers", () => {
   it('names everyone its buildings house, once, each at home where the map has them', () => {
     const residents = buildings.flatMap((b) => (b.props as BuildingProps).residents.map((who) => [who, b.id]));
     expect(PEOPLE.map((p) => p.name).sort()).toEqual(residents.map(([who]) => who).sort());

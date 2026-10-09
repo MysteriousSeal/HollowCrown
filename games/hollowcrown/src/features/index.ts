@@ -3,7 +3,9 @@
 import type { Feature } from './context';
 import { bot } from './bot';
 import { buildings } from './buildings';
+import { combat } from './combat';
 import { daylight } from './daylight';
+import { encounters } from './encounters';
 import { debug } from './debug';
 import { hud } from './hud';
 import { land } from './land';
@@ -23,10 +25,12 @@ export const FEATURES: Feature[] = [
   villagers,
   wildlife,
   sprint,
+  combat,
   hud,
   talk,
   quests,
   bot,
+  encounters,
 ];
 
 export type { Feature, GameContext } from './context';

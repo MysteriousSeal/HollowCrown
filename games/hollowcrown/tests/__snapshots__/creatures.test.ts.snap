@@ -238,6 +238,40 @@ exports[`creatures > carrowPikeman: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > deadMule: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.175,
+  "max": [
+    0.275,
+    0.175,
+    0.359,
+  ],
+  "min": [
+    -0.275,
+    0,
+    -0.359,
+  ],
+  "triangles": 730,
+}
+`;
+
+exports[`creatures > deadPilgrim: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.217,
+  "max": [
+    0.186,
+    0.217,
+    0.235,
+  ],
+  "min": [
+    -0.186,
+    0,
+    -0.235,
+  ],
+  "triangles": 1618,
+}
+`;
+
 exports[`creatures > draugr: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.72,
@@ -408,6 +442,23 @@ exports[`creatures > lanternKnight: builds, poses and keeps its shape 1`] = `
 }
 `;
 
+exports[`creatures > mule: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.463,
+  "max": [
+    0.087,
+    0.55,
+    0.375,
+  ],
+  "min": [
+    -0.087,
+    0,
+    -0.344,
+  ],
+  "triangles": 730,
+}
+`;
+
 exports[`creatures > pitEater: builds, poses and keeps its shape 1`] = `
 {
   "height": 0.414,
@@ -422,6 +473,57 @@ exports[`creatures > pitEater: builds, poses and keeps its shape 1`] = `
     -0.057,
   ],
   "triangles": 2078,
+}
+`;
+
+exports[`creatures > pitRisen: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.47,
+    0.129,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.05,
+  ],
+  "triangles": 1492,
+}
+`;
+
+exports[`creatures > pitRisenChild: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.27,
+  "max": [
+    0.075,
+    0.282,
+    0.078,
+  ],
+  "min": [
+    -0.075,
+    -0,
+    -0.03,
+  ],
+  "triangles": 1492,
+}
+`;
+
+exports[`creatures > pitRisenWoman: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.45,
+    0.125,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.05,
+  ],
+  "triangles": 1526,
 }
 `;
 

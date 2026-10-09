@@ -6,7 +6,7 @@
 import type { Point } from '@voxel/engine/world';
 import { EAST, NORTH, SOUTH } from './kinds';
 
-export type DressingKind = 'fence' | 'hay-rick' | 'gibbet' | 'standing-stone' | 'hanging-oak' | 'garden-bed' | 'barrow';
+export type DressingKind = 'fence' | 'hay-rick' | 'gibbet' | 'standing-stone' | 'hanging-oak' | 'garden-bed' | 'barrow' | 'old-oak' | 'hive';
 
 export interface Dressing {
   kind: DressingKind;
@@ -72,6 +72,9 @@ export const DRESSING: Dressing[] = [
   ...SISTERS.map((at): Dressing => ({ kind: 'standing-stone', note: 'one of the Nine Sisters', at })),
   // The mound inside the ring, dug into on its south side, toward the gap (SQ-BV3).
   { kind: 'barrow', note: "the Nine Sisters' barrow", at: [750, 3050], radius: 3, facing: SOUTH },
+  // Tallow Green (tallowGreen.ts): the old oak on its green, and Agna Bee's skeps in a row on their clearing's edge.
+  { kind: 'old-oak', note: 'the old oak on Tallow Green', at: [1200, 3046], facing: SOUTH },
+  ...[1176, 1178, 1180, 1182, 1184].map((x): Dressing => ({ kind: 'hive', note: "one of Agna Bee's skeps", at: [x, 2999], facing: SOUTH })),
   // The Hanging Oak, where the South Road bends: its hollow (MQ03's note), Jory's Wednesdays. A step off the road.
   { kind: 'hanging-oak', note: 'the Hanging Oak', at: [997, 3485], facing: EAST },
 ];

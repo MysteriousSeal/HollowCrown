@@ -561,6 +561,23 @@ exports[`people > The Stranger (the hero): builds, poses and keeps their shape 1
 }
 `;
 
+exports[`people > The Stranger, with the rusty knife: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.45,
+    0.212,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1884,
+}
+`;
+
 exports[`people > Tobin Harrow: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,

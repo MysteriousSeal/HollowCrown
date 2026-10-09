@@ -68,6 +68,11 @@ export class BeastModel extends RiggedModel {
       const lunge = Math.sin(Math.min(1, action.phase) * Math.PI);
       this.body.position.z = lunge * 0.09;
       this.head.rotation.x = action.phase < 0.35 ? -0.35 * (action.phase / 0.35) : -0.35 + 0.75 * lunge;
+    } else if (action?.name === 'dead') {
+      // (the visuals topple it onto its side) Legs stiff, head down.
+      for (const leg of this.legs) leg.rotation.x = 0.15 * action.phase;
+      this.head.rotation.x = 0.3 * action.phase;
+      this.tail.rotation.y = 0;
     } else if (action?.name === 'hurt') {
       const flinch = 1 - action.phase;
       this.body.position.z = -flinch * 0.05;

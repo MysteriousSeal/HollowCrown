@@ -30,5 +30,7 @@ describe('wildlife', () => {
     expect(wolves).toHaveLength(2);
     for (const { at: [x, z] } of wolves) expect(Math.hypot(x - 650, z - 3420)).toBeLessThan(4);
     expect(WILDLIFE.filter((a) => a.creature === 'boar')).toHaveLength(3);
+    expect(wolves.every((w) => w.fights && w.fights.sight <= w.fights.run * 3)).toBe(true); // (they attack on sight)
+    expect(WILDLIFE.filter((a) => a.creature === 'boar').some((b) => b.fights)).toBe(false); // (boars don't)
   });
 });

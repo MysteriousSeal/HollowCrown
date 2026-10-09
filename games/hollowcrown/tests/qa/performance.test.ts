@@ -70,9 +70,8 @@ describe.runIf(process.env.PERF)('world-build performance', () => {
 
   // (Was a bug: every forest's trees and every meadow's growth worked out at the start, 0.5 s and more. Fixed by
   // environment: grown a chunk at a time.)
-  // BUG (environment): nature/forests.ts:85 forestLayer builds all nine tree shapes' voxels and meshes up front:
-  // ~450 ms quiet, 1.5 s on a busy machine, at the start. Filed.
-  it.skip(`makes the forests' and meadows' layers in under ${BUDGET_MS.natureStart} ms`, () => {
+  // (Was a bug: all nine tree shapes meshed up front, 0.5-1.5 s. Fixed by environment: each meshed when first needed.)
+  it(`makes the forests' and meadows' layers in under ${BUDGET_MS.natureStart} ms`, () => {
     const fresh = loadWorldMap(WORLD_MAP, PLACE_KINDS);
     const obstacles = obstaclesOf(fresh);
     expect(timed(() => (meadowLayer(fresh, obstacles), forestLayer(fresh, obstacles, new Obstacles())), 1)).toBeLessThan(BUDGET_MS.natureStart);

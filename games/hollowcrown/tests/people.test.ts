@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
 import { PEOPLE, personId } from '../src/people';
-import { strangerModel } from '../src/people/stranger';
+import { RUSTY_KNIFE, strangerModel } from '../src/people/stranger';
 
 const round = (n: number) => Math.round(n * 1000) / 1000;
 
@@ -31,6 +31,7 @@ describe('people', () => {
 
   const models = Object.values(PEOPLE).flatMap((p) => [{ name: p.name, make: p.make }, ...Object.entries(p.variants ?? {}).map(([v, make]) => ({ name: `${p.name} (${v})`, make }))]);
   models.push({ name: 'The Stranger (the hero)', make: () => strangerModel() });
+  models.push({ name: 'The Stranger, with the rusty knife', make: () => strangerModel(undefined, undefined, { rightArm: RUSTY_KNIFE }) });
   for (const person of models) {
     it(`${person.name}: builds, poses and keeps their shape`, () => {
       const model = person.make();
@@ -42,6 +43,7 @@ describe('people', () => {
       expect(standing.min[1]).toBeGreaterThan(-0.06); // (on the ground, not in it)
       expect({ height: round(model.height), ...standing }).toMatchSnapshot();
       for (const t of [0.4, 1.3, 2.9]) model.animate(t, 1); // (walking: no throw, no NaN)
+      for (const phase of [0, 0.3, 0.7, 1]) model.animate(1, 0, { name: 'attack', phase }); // (and swinging)
       model.root.updateMatrixWorld(true);
       model.root.traverse((o) => expect(Number.isFinite(o.matrixWorld.elements[13])).toBe(true));
     });

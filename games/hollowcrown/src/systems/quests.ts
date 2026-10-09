@@ -6,8 +6,8 @@
 import { defineResource } from '@voxel/engine/ecs';
 import type { Objective, Quest, QuestStage } from '../data/quests';
 
-// Objectives the game can't play yet (no fights, no waiting for the hour): they don't hold their stage back.
-export const UNPLAYABLE = new Set<Objective['kind']>(['fight', 'wait']);
+// Objectives the game can't play yet (no waiting for the hour): they don't hold their stage back.
+export const UNPLAYABLE = new Set<Objective['kind']>(['wait']);
 
 // A quest started: its stage, the objectives done in it (ids), whether it's over.
 export interface QuestProgress {
@@ -52,7 +52,7 @@ export function openObjectives(book: QuestBook, quests: Record<string, Quest>): 
 
 // Objective `objectiveId` of quest `questId` done (with the flags its choice sets). If that ends its stage (every
 // objective done but the optional and the unplayable), the stage's flags are set and the next stage begins (or the
-// quest finishes); a stage with nothing in it to play yet (midnight's fight) is passed through, its flags set.
+// quest finishes); a stage with nothing in it to play yet is passed through, its flags set.
 // Returns the stage begun, if one did.
 export function completeObjective(
   book: QuestBook, quests: Record<string, Quest>, questId: string, objectiveId: string, sets: Record<string, string | boolean> = {},

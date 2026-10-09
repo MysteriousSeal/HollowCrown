@@ -1,12 +1,8 @@
 // SQ-BV3, Honey and Wax (docs/story/regions/brindle-vale.md): Tallow Green's bees are dying at the Nine Sisters. A
 // barrow there has been dug into and its ward thrown down, and the girl buried in it wants her necklace back. The
-// digger was a chandler's son after a bride-price. (Tallow Green's people aren't Brindleford's: the objectives name
-// them in their text.) Used by the quest system and the journal.
+// digger was a chandler's son after a bride-price. Used by the quest system and the journal.
 
-import type { Point } from '@voxel/engine/world';
 import type { Quest } from './kinds';
-
-const THE_HIVES: Point = [1180, 3000]; // Agna's, above the clover meadow
 
 export const SQ_BV3: Quest = {
   id: 'SQ-BV3',
@@ -15,13 +11,13 @@ export const SQ_BV3: Quest = {
   level: 3,
   minutes: 30,
   starts: 'after MQ02: Agna Bee, at her hives',
-  places: ['tallow-green', 'clover-meadow', 'nine-sisters'],
+  places: ['tallow-green', 'agnas-hives', 'clover-meadow', 'nine-sisters'],
   stages: [
     {
       id: 'the-bees', title: 'Bees in the grass',
       objectives: [
         {
-          id: 'agna', kind: 'talk', text: "Agna Bee's hives are emptying. The bees are dying out in the meadow.", at: THE_HIVES,
+          id: 'agna', kind: 'talk', text: "Agna Bee's hives are emptying. The bees are dying out in the meadow.", at: 'agnas-hives', who: 'Agna Bee',
           lines: [
             { who: 'Agna Bee', text: 'Listen. Hear that? No. Neither do I.' },
             { who: 'Agna Bee', text: "Twelve hives. Four left humming. They fly off west in the morning and they don't come home. I find them in the grass, curled up like they're sleeping." },
@@ -30,7 +26,7 @@ export const SQ_BV3: Quest = {
           ],
         },
         {
-          id: 'brede', kind: 'talk', text: "Little Brede says they go to the cold stones and fall asleep.", at: 'tallow-green', optional: true,
+          id: 'brede', kind: 'talk', text: "Little Brede says they go to the cold stones and fall asleep.", at: 'tallow-green', who: 'Little Brede', optional: true,
           lines: [
             { who: 'Little Brede', text: 'They go to the cold stones and fall asleep. I tried to wake one. It was cold too.' },
           ],
@@ -62,7 +58,7 @@ export const SQ_BV3: Quest = {
       id: 'the-digger', title: 'Wax',
       objectives: [
         {
-          id: 'hal', kind: 'talk', text: "The wax is a chandler's. Hal Wicke has a bronze necklace and a bride-price to find.", at: 'tallow-green',
+          id: 'hal', kind: 'talk', text: "The wax is a chandler's. Hal Wicke has a bronze necklace and a bride-price to find.", at: 'tallow-green', who: 'Hal Wicke',
           lines: [
             { who: 'Hal Wicke', text: "It's only bronze. I thought it'd be gold. They always say gold." },
             { who: 'hero', text: "There's frost on those stones in August, Hal." },
@@ -71,7 +67,7 @@ export const SQ_BV3: Quest = {
           ],
         },
         {
-          id: 'hal-secret', kind: 'choose', text: 'He dug up a dead girl to marry a living one. Whether Tallow Green knows is up to me.', at: 'tallow-green',
+          id: 'hal-secret', kind: 'choose', text: 'He dug up a dead girl to marry a living one. Whether Tallow Green knows is up to me.', at: 'tallow-green', who: 'Hal Wicke',
           lines: [
             { who: 'Hal Wicke', text: "If Goody Thatch hears, I'm done here. If Garrick hears, I'm done everywhere." },
           ],

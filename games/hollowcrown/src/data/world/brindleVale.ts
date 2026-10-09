@@ -10,7 +10,8 @@ import { NORTH, SOUTH, WEST, type ValePart } from './kinds';
 // Road crosses it) and the Stepping Stones; its bed at tier 0, a gorge where it falls from the North Rise.
 const BRINDLE: Point[] = [[880, 2950], [870, 3100], [865, 3240], [870, 3350], [840, 3600], [800, 3800]];
 
-const PILGRIM_ROAD: Point[] = [[480, 3380], [600, 3370], [870, 3350], [900, 3350], [910, 3348], [914, 3340], [1000, 3280], [1200, 3050], [1320, 3010], [1400, 3000], [1900, 3000]];
+// (Through Tallow Green it runs up the green's east side: tallowGreen.ts.)
+const PILGRIM_ROAD: Point[] = [[480, 3380], [600, 3370], [870, 3350], [900, 3350], [910, 3348], [914, 3340], [1000, 3280], [1199, 3066], [1215, 3039], [1320, 3010], [1400, 3000], [1900, 3000]];
 const SOUTH_ROAD: Point[] = [[900, 3350], [902, 3366], [1000, 3420], [1000, 3480], [1200, 3460], [1450, 3450]];
 const CHAPEL_PATH: Point[] = [[1000, 3280], [1080, 3180]];
 // A rise drawn round (cx, cz): its radius every eighth of a turn, east first, then round through south (+z), so a hill
@@ -68,7 +69,7 @@ export const BRINDLE_VALE: ValePart = {
   ],
   areas: [
     { id: 'birchwood', kind: 'forest', name: 'The Birchwood', shape: { polygon: [[450, 3450], [760, 3430], [800, 3700], [520, 3760]] }, props: { trees: ['birch', 'oak'] } },
-    { id: 'brindle-woods', kind: 'forest', name: 'Brindle Woods', shape: { polygon: [[950, 2950], [1350, 2960], [1300, 3100], [1000, 3120]] }, props: { trees: ['oak', 'birch'] } },
+    { id: 'brindle-woods', kind: 'forest', name: 'Brindle Woods', shape: { polygon: [[950, 2950], [1350, 2960], [1300, 3010], [1235, 3022], [1192, 3020], [1192, 2992], [1168, 2992], [1166, 3018], [1100, 3060], [1000, 3120]] }, props: { trees: ['oak', 'birch'] } }, // (north of Tallow Green, a clearing for its hives)
     { id: 'mosshill-pines', kind: 'forest', name: 'Mosshill pines', shape: { polygon: [[1150, 3520], [1450, 3500], [1450, 3800], [1200, 3800]] }, props: { trees: ['pine'] } },
     { id: 'hay-meadows', kind: 'meadow', name: 'The hay meadows', shape: { rect: [750, 3250, 1050, 3500] } },
     { id: 'clover-meadow', kind: 'meadow', name: 'The clover meadow', shape: { rect: [1100, 2980, 1300, 3120] } },

@@ -128,3 +128,37 @@ export function gardenBed(): VoxelGrid {
   fillBox(g, 0, 0, 0, 45, 0, 29, P.furrow); // (the dug earth between the ridges)
   return g;
 }
+
+// The Nine Sisters' barrow: a low grassed mound three tiles out from its middle, waist high at its crown, turf paler
+// on top; dug into on its south side (+z): a trench cut to its heart, raw earth in its walls, a heap of spoil beside.
+export function barrow(): VoxelGrid {
+  const R = 48;
+  const S = 2 * R + 8;
+  const g = createGrid([S, 12, S]);
+  const c = S / 2;
+  for (let x = 0; x < S; x++) {
+    for (let z = 0; z < S; z++) {
+      const r = Math.hypot((x & ~1) + 1 - c, (z & ~1) + 1 - c) / R; // (in columns of two: fewer steps to draw)
+      if (r > 1) continue;
+      const h = Math.max(1, Math.round(10 * (1 - r * r)));
+      for (let y = 0; y < h; y++) setColor(g, x, y, z, h > 7 ? P.turfLight : h > 2 ? P.turf : P.turfDark);
+    }
+  }
+  // the trench: from the south edge to the heart, down to the ground, raw earth in its walls
+  const cut = (x: number, z: number) => Math.abs(x + 0.5 - c) < 5 && z + 0.5 > c - 6;
+  for (let x = 0; x < S; x++) for (let z = 0; z < S; z++) if (cut(x, z)) fillBox(g, x, 1, z, x, 11, z, 0);
+  for (let x = 0; x < S; x++) {
+    for (let z = 0; z < S; z++) {
+      if (cut(x, z) && colorAt(g, x, 0, z)) setColor(g, x, 0, z, P.earthDark);
+      else if (!cut(x, z) && (cut(x - 1, z) || cut(x + 1, z) || cut(x, z - 1))) for (let y = 0; y < 11; y++) if (colorAt(g, x, y, z)) setColor(g, x, y, z, P.earth);
+    }
+  }
+  // the spoil, heaped to the trench's east
+  for (let x = c + 8; x < c + 18; x++) {
+    for (let z = c + R - 16; z < c + R; z++) {
+      const h = Math.round(4 - Math.hypot((x - c - 13) / 5, (z - c - R + 8) / 8) * 4);
+      for (let y = 0; y < h; y++) setColor(g, x, y, z, y === h - 1 ? P.earth : P.earthDark);
+    }
+  }
+  return g;
+}

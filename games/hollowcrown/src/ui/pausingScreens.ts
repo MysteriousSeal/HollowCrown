@@ -1,9 +1,9 @@
 // The HUD's screens that pause the game behind them (made by features/hud.ts), one up at a time, by their keys: the
 // map (M, drawn the first time it's opened), the journal (J) and the pause menu (Esc; Esc also closes the others).
-// None opens during a conversation.
+// None opens while the game's `busy` (in a conversation, dead).
 
 import type { App } from '@voxel/engine/app';
-import { JournalScreen, MAP_TILES_PER_PIXEL, MapScreen, Menu, drawMapImage, type Conversation } from '@voxel/engine/ui';
+import { JournalScreen, MAP_TILES_PER_PIXEL, MapScreen, Menu, drawMapImage } from '@voxel/engine/ui';
 import type { WorldMap } from '@voxel/engine/world';
 import { CONTROLS } from './controls';
 import { MAP_GROUND, mapLabels, mapMarks } from './mapContent';
@@ -15,7 +15,7 @@ interface Screen {
 }
 
 // Installs the screens' keys; the map (once made), for the HUD to keep the hero on it.
-export function pausingScreens(app: App, root: HTMLElement, map: WorldMap, conversation: Conversation, log: () => QuestLogData): () => MapScreen | null {
+export function pausingScreens(app: App, root: HTMLElement, map: WorldMap, busy: () => boolean, log: () => QuestLogData): () => MapScreen | null {
   let mapScreen: MapScreen | null = null;
   const theMap = (): MapScreen => {
     if (mapScreen) return mapScreen;
@@ -41,7 +41,7 @@ export function pausingScreens(app: App, root: HTMLElement, map: WorldMap, conve
   const toggle = (screen: Screen, show: () => void): void => (up === screen ? close() : open(screen, show));
 
   window.addEventListener('keydown', (event) => {
-    if (event.repeat || conversation.isOpen) return;
+    if (event.repeat || busy()) return;
     if (event.code === 'Escape') {
       if (up) close();
       else open(menu, () => menu.open([
