@@ -217,6 +217,45 @@
       .ui-map-title { min-height: 1.2em; text-align: center; font-size: 15px; font-weight: 700; letter-spacing: 0.18em; color: #e8c27a; text-shadow: 0 1px 0 #1e140d; }
       .ui-map-canvas { flex: 1; min-height: 0; width: 100%; display: block; border: 2px solid #1e140d; box-shadow: 0 0 0 1px rgba(232, 194, 122, 0.35); cursor: zoom-in; }
       .ui-map-hint { text-align: right; font-size: 13px; font-weight: 600; color: var(--muted); white-space: pre; }
+      /* The pause menu (Esc): the scene dimmed, a narrow gilded panel, its title between fading rules, its choices
+         lit under the pointer or the arrows; the Controls page each key on its cap and what it does. */
+      .ui-menu {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: rgba(20, 13, 9, 0.55);
+        pointer-events: auto;
+        animation: ui-fade-in 0.2s ease-out;
+      }
+      .ui-menu-panel {
+        width: 300px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 18px 20px 20px;
+        background: linear-gradient(180deg, rgba(48, 32, 22, 0.96), rgba(28, 19, 13, 0.97));
+        border: 2px solid #b98a46;
+        border-radius: 4px;
+        box-shadow: inset 0 0 0 3px #1e140d, inset 0 0 0 4px rgba(232, 194, 122, 0.35), 0 12px 32px rgba(10, 6, 4, 0.55);
+      }
+      .ui-menu-title { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #e8c27a; text-shadow: 0 1px 0 #1e140d; }
+      .ui-menu-title::before, .ui-menu-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(232, 194, 122, 0.7)); }
+      .ui-menu-title::after { background: linear-gradient(90deg, rgba(232, 194, 122, 0.7), transparent); }
+      .ui-menu-body { display: flex; flex-direction: column; gap: 6px; }
+      .ui-menu-item {
+        padding: 8px 12px;
+        font: 600 17px 'Fredoka', system-ui, sans-serif;
+        color: var(--sand);
+        background: rgba(20, 13, 9, 0.5);
+        border: 2px solid rgba(232, 194, 122, 0.25);
+        cursor: pointer;
+      }
+      .ui-menu-item.lit { color: var(--ink); background: #ffd98a; border-color: var(--ink); box-shadow: inset 0 -3px 0 #e8903a; }
+      .ui-menu-rows { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 8px 12px; margin: 2px 0 8px; }
+      .ui-menu-rows .ui-key { justify-self: start; }
+      .ui-menu-row-text { margin: 0; font-size: 16px; font-weight: 500; }
       .ui-talk-hint { text-align: right; font-size: 13px; font-weight: 600; color: var(--muted); }
     </style>
   </head>
