@@ -6,7 +6,7 @@ import { Obstacles, loadWorldMap, type Point } from '@voxel/engine/world';
 import { obstaclesOf } from '../src/buildings';
 import { clearLine, findRoute } from '../src/bot/pathfind';
 import { keysToward } from '../src/bot/keys';
-import { nextObjective, pointOf, walkingTo } from '../src/bot/plan';
+import { nameOf, nextObjective, pointOf, walkingTo } from '../src/bot/plan';
 import { chooseReply } from '../src/bot/policy';
 import { Walker } from '../src/bot/walker';
 import { freeOn } from '../src/bot/autopilot';
@@ -90,6 +90,7 @@ describe('the bot', () => {
   it('knows where every MQ01 objective is, and says where it\'s going', () => {
     for (const stage of QUESTS.MQ01.stages) for (const o of stage.objectives) if (o.at) expect(pointOf(map, o.at)).not.toBeNull();
     expect(walkingTo(map, QUESTS.MQ01.stages[3].objectives[0])).toBe("Walking to The Ferryman's Rest — talk to Garrick Fenn");
+    expect(nameOf(map, [560, 3374])).not.toBe('the road'); // (a tile: named by its area, or the place nearest it)
   });
 
   it('holds the keys that walk most nearly the way it wants', () => {
