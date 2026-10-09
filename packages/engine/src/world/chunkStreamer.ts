@@ -30,6 +30,7 @@ export class ChunkStreamer {
 
   private lastKey = '';
   private pending = true; // chunks near the camera still to build
+  private waiting = 0; // how many chunks near the camera are still to build, as of the last update
 
   constructor(
     private readonly scene: THREE.Scene,
@@ -75,8 +76,14 @@ export class ChunkStreamer {
       }
       if (this.building.steps.length === 0) this.building = null;
     }
-    this.pending = this.building !== null || (wanted ?? chunksWithin(x, z, LOAD_RADIUS).filter((key) => !this.loaded.has(key))).length > 0;
+    this.waiting = (this.building ? 1 : 0) + (wanted ?? chunksWithin(x, z, LOAD_RADIUS).filter((key) => !this.loaded.has(key))).length;
+    this.pending = this.waiting > 0;
     return ran;
+  }
+
+  // How many chunks are built (or being built), and how many near the camera are still to build.
+  stats(): { loaded: number; pending: number } {
+    return { loaded: this.loaded.size, pending: this.pending ? this.waiting : 0 };
   }
 
   // Loads every chunk near (x, z) at once (startup).

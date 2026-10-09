@@ -13,6 +13,7 @@ export interface Terrain {
   groundY(x: number, z: number): number; // the ground's height under (x, z), in world units
   surfaceAt?(x: number, z: number): number; // what covers a tile: 0 the bare land, else a surface's number (1..)
   walkable?(x: number, z: number): boolean; // whether anyone can stand there (none given: everywhere)
+  readonly surfaceNames?: readonly string[]; // surface number n's name is surfaceNames[n - 1] (for debugging)
 }
 
 export const TerrainResource = defineResource<Terrain>('Terrain');

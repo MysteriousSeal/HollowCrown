@@ -4,11 +4,12 @@
 import * as THREE from 'three';
 import { Schedule, World, type Entity, type System } from '../ecs';
 import { CAMERA_OFFSET, PostProcessing, type Lights, addLights, computeMovementAxes, createCamera, resizeCamera, stylize, type Stylizer } from '../render';
-import { ChunkStreamer, type ChunkLayer } from '../world';
+import { ChunkStreamer, TerrainResource, tileOf, type ChunkLayer } from '../world';
 import { TimeOfDay, Transform, facingSystem, hoursPerSecond, interactionSystem, movementSystem, timeOfDaySystem, wanderSystem } from '../gameplay';
 import { Keyboard, KeyboardResource, ScreenAxes, playerInputSystem } from '../input';
 import type { Model } from '../models';
 import { dayNightSystem, type DayNightOptions } from './dayNight';
+import { DebugOverlay } from './debugOverlay';
 import { CameraTarget, VisualComponent, visualOf, visualSystem } from './visuals';
 
 const PRESENT_ONLY = ['present'] as const; // (while paused: drawn, nothing moving on)
@@ -31,6 +32,7 @@ export class App {
   private post: PostProcessing | null = null;
   private elapsed = 0;
   private pausedNow = false;
+  private debug: DebugOverlay | null = null;
   private last = 0;
 
   constructor(canvas: HTMLCanvasElement, { pixelRatio = 1 }: AppOptions = {}) {
@@ -62,6 +64,33 @@ export class App {
     if (!(dayMinutes > 0)) throw new Error(`enableDayNight: dayMinutes must be above 0, not ${dayMinutes}`);
     this.world.setResource(TimeOfDay, { hours: ((startHour % 24) + 24) % 24, rate: hoursPerSecond(dayMinutes) });
     this.schedule.add(timeOfDaySystem, dayNightSystem(this.lights, this.scene, () => this.post));
+  }
+
+  // A debug overlay in the bottom-left corner (for development): frame rate and time, draws and triangles, chunks,
+  // entities, the camera target's tile, and the time of day.
+  enableDebugOverlay(): void {
+    if (this.debug) return;
+    this.renderer.info.autoReset = false; // (the post-processing renders several passes a frame: counted together)
+    this.debug = new DebugOverlay(() => {
+      const chunks = this.streamer.stats();
+      const target = this.targetTransform();
+      const terrain = this.world.hasResource(TerrainResource) ? this.world.resource(TerrainResource) : null;
+      let at = null;
+      if (target && terrain) {
+        const [x, z] = [tileOf(target.x), tileOf(target.z)];
+        const surface = terrain.surfaceAt?.(x, z) ?? 0;
+        at = { x, z, tier: terrain.tierAt(x, z), surface: surface === 0 ? 'land' : (terrain.surfaceNames?.[surface - 1] ?? `surface ${surface}`) };
+      }
+      return {
+        drawCalls: this.renderer.info.render.calls,
+        triangles: this.renderer.info.render.triangles,
+        chunksLoaded: chunks.loaded,
+        chunksPending: chunks.pending,
+        entities: this.world.entityCount,
+        at,
+        hours: this.world.hasResource(TimeOfDay) ? this.world.resource(TimeOfDay).hours : null,
+      };
+    });
   }
 
   // Paused (a menu open): the input and simulation stop, the time of day with them, while the world stays drawn.
@@ -105,8 +134,11 @@ export class App {
     const dt = Math.min(MAX_FRAME_DT, (now - this.last) / 1000);
     this.last = now;
     this.elapsed += dt;
+    const workStart = performance.now();
+    if (this.debug) this.renderer.info.reset();
     this.schedule.run(this.world, dt, this.pausedNow ? PRESENT_ONLY : undefined);
     this.post?.render(this.elapsed);
+    this.debug?.frame(performance.now() - workStart);
     requestAnimationFrame(this.frame);
   };
 

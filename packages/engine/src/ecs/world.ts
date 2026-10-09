@@ -26,6 +26,11 @@ export class World {
     for (const store of this.stores.values()) store.delete(entity);
   }
 
+  // How many entities there are.
+  get entityCount(): number {
+    return this.alive.size;
+  }
+
   isAlive(entity: Entity): boolean {
     return this.alive.has(entity);
   }

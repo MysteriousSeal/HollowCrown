@@ -26,23 +26,33 @@ export function natureGeometry(grid: VoxelGrid): THREE.BufferGeometry {
   return meshPart(grid, NATURE.colors, STRUCTURE_VOXEL, [grid.size[0] / 2, 0, grid.size[2] / 2]);
 }
 
-// The layer of everything in `byChunk`; `shapes`: each shape's mesh, by its key; `tint`: how far a tint reaches
-// either side of the shape's own colors.
-export function instancedLayer(map: WorldMap, byChunk: Map<string, Growth[]>, shapes: Map<string, THREE.BufferGeometry>, tint = 0.08): ChunkLayer {
+// The layer of what grows in chunks `keys`: `grow` works out a chunk's growth the first time it comes near (kept for
+// when it comes back); `shapes`: each shape's mesh, by its key; `tint`: how far a tint reaches either side of the
+// shape's own colors.
+export function instancedLayer(
+  map: WorldMap, keys: Iterable<string>, grow: (key: string) => Growth[], shapes: Map<string, THREE.BufferGeometry>, tint = 0.08,
+): ChunkLayer {
   const material = litMaterial();
   const matrix = new THREE.Matrix4();
   const color = new THREE.Color();
+  const grown = new Map<string, Map<string, Growth[]>>(); // chunk -> shape -> its growth
+  const byShape = (key: string) => {
+    if (!grown.has(key)) {
+      const shaped = new Map<string, Growth[]>();
+      for (const g of grow(key)) {
+        const list = shaped.get(g.shape);
+        if (list) list.push(g);
+        else shaped.set(g.shape, [g]);
+      }
+      grown.set(key, shaped);
+    }
+    return grown.get(key)!;
+  };
   return {
     materials: [material],
-    chunkKeys: () => byChunk.keys(),
-    build: (key) => {
-      const byShape = new Map<string, Growth[]>();
-      for (const g of byChunk.get(key) ?? []) {
-        const list = byShape.get(g.shape);
-        if (list) list.push(g);
-        else byShape.set(g.shape, [g]);
-      }
-      return [...byShape].map(([shape, all]) => {
+    chunkKeys: () => keys,
+    build: (key) =>
+      [...byShape(key)].map(([shape, all]) => {
         const mesh = new THREE.InstancedMesh(shapes.get(shape)!, material, all.length);
         all.forEach((g, i) => {
           matrix.makeRotationY((g.turn * Math.PI) / 2).setPosition(g.x, map.groundY(g.x, g.z) - SINK, g.z);
@@ -51,15 +61,6 @@ export function instancedLayer(map: WorldMap, byChunk: Map<string, Growth[]>, sh
         });
         mesh.computeBoundingSphere();
         return mesh;
-      });
-    },
+      }),
   };
-}
-
-// Adds `g` to its chunk's list in `byChunk`.
-export function plant<T extends { x: number; z: number }>(byChunk: Map<string, T[]>, g: T, chunk: number): void {
-  const key = `${Math.floor(Math.round(g.x) / chunk)},${Math.floor(Math.round(g.z) / chunk)}`;
-  const list = byChunk.get(key);
-  if (list) list.push(g);
-  else byChunk.set(key, [g]);
 }

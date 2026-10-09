@@ -14,9 +14,8 @@ const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
 const residents = new Set(map.places('building').flatMap((p) => (p.props as BuildingProps).residents));
 
 describe("the people's models", () => {
-  // BUG (characters): people/households.ts:94 and :97 key 'Tamsin' and 'Wynn', but the map's residents are 'Tamsin
-  // Reede' and 'Wynn Tidy': their models are never shown. Filed.
-  it.skip('are each kept under the name of someone living on the map', () => {
+  // (Was a bug: four models keyed by first name only, never shown. Fixed by characters.)
+  it('are each kept under the name of someone living on the map', () => {
     expect(Object.keys(PEOPLE).filter((name) => !residents.has(name))).toEqual([]);
   });
 
