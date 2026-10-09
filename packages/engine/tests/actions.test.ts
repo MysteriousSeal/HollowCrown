@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { VisualComponent, visualOf, visualSystem } from '../src/app/visuals';
 import { humanModel } from '../src/characters';
 import { World } from '../src/ecs';
-import { Acting, Dead, Transform } from '../src/gameplay';
+import { Acting, Dead, Hit, Transform } from '../src/gameplay';
 import type { Model, ModelAction } from '../src/models';
 
 describe('acting out', () => {
@@ -20,6 +20,33 @@ describe('acting out', () => {
     expect(person.upper.rotation.x).toBeLessThan(upper);
     person.animate(1, 0);
     expect(person.joints.rightArm.rotation.x).toBeCloseTo(rest);
+  });
+
+  it('flashes a model red a moment when it\'s hit, its own materials put back after, and no other model\'s touched', () => {
+    const own = new THREE.MeshStandardMaterial();
+    const makeModel = (): Model => {
+      const root = new THREE.Group();
+      root.add(new THREE.Mesh(new THREE.BoxGeometry(), own));
+      return { root, height: 1, animate: () => {} };
+    };
+    const [hit, other] = [makeModel(), makeModel()];
+    const world = new World();
+    const spawnWith = (model: Model) => {
+      const e = world.spawn([Transform, { x: 0, y: 0, z: 0, facing: 0 }]);
+      world.add(e, VisualComponent, visualOf(model));
+      return e;
+    };
+    const target = spawnWith(hit);
+    spawnWith(other);
+    const visuals = visualSystem(() => 0);
+    const material = (m: Model) => (m.root.children[0] as THREE.Mesh).material;
+    world.emit(Hit, { target, by: target, damage: 1 });
+    visuals.update(world, 1 / 60);
+    world.clearEvents();
+    expect(material(hit)).not.toBe(own);
+    expect(material(other)).toBe(own);
+    for (let i = 0; i < 12; i++) visuals.update(world, 1 / 60);
+    expect(material(hit)).toBe(own);
   });
 
   it('hands models what their entity is acting out, and topples the dead', () => {
