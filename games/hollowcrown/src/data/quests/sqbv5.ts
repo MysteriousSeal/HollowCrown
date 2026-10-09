@@ -17,7 +17,14 @@ export const SQ_BV5: Quest = {
     {
       id: 'the-auditor', title: 'An auditor on the road',
       objectives: [
-        { id: 'pell', kind: 'talk', text: "A clerk from Kingsmere is coming to count Pell's taxes. Pell wants him delayed a day.", at: 'reeves-house', who: 'Odo Pell' },
+        {
+          id: 'pell', kind: 'talk', text: "A clerk from Kingsmere is coming to count Pell's taxes. Pell wants him delayed a day.", at: 'reeves-house', who: 'Odo Pell',
+          lines: [
+            { who: 'Odo Pell', text: 'A clerk is coming from Kingsmere. An auditor. To count.' },
+            { who: 'hero', text: "And the count's wrong." },
+            { who: 'Odo Pell', text: "The count is arithmetic. Arithmetic doesn't eat. Delay him a day. A lame horse, a wrong turning. I'll see you right." },
+          ],
+        },
       ],
     },
     {
@@ -30,9 +37,20 @@ export const SQ_BV5: Quest = {
     {
       id: 'pike', title: 'Clerk Ansel Pike',
       objectives: [
-        { id: 'pike', kind: 'talk', text: "Clerk Ansel Pike: thin, polite, and a box of hanged men's fingers he says is a joke.", at: 'brindleford-well' },
+        {
+          id: 'pike', kind: 'talk', text: "Clerk Ansel Pike: thin, polite, and a box of hanged men's fingers he says is a joke.", at: 'brindleford-well',
+          lines: [
+            { who: 'Clerk Ansel Pike', text: "Ansel Pike, for the Lord Regent's exchequer. You'll be the stranger. Everyone writes about you." },
+            { who: 'Clerk Ansel Pike', text: 'Would you like to see my collection? Everyone laughs. Fingers. From the hanged. One per audit.' },
+            { who: 'hero', text: 'Whose is the newest?' },
+            { who: 'Clerk Ansel Pike', text: "A reeve's. In Saltcombe. He kept two ledgers." },
+          ],
+        },
         {
           id: 'ledger', kind: 'choose', text: 'Pike will have his numbers. Which ones is up to me.', at: 'brindleford-well',
+          lines: [
+            { who: 'Clerk Ansel Pike', text: "Now. Somebody in this village is going to show me the real numbers. I don't much mind who." },
+          ],
           options: [
             { id: 'hidden', label: '[Delay Pike, and say nothing]', sets: { pell_ledger: 'hidden' } },
             { id: 'reported', label: '[Give Pike the true ledger]', sets: { pell_ledger: 'reported' } },
@@ -45,8 +63,19 @@ export const SQ_BV5: Quest = {
     {
       id: 'after', title: 'What the village knows',
       objectives: [
-        { id: 'pell', kind: 'talk', text: 'Go back to Pell.', at: 'reeves-house', who: 'Odo Pell' },
-        { id: 'inn', kind: 'wait', text: "If he told them, the village is sitting in silence at the inn. Old Meg has something for him.", at: 'ferrymans-rest', optional: true },
+        {
+          id: 'pell', kind: 'talk', text: 'Go back to Pell.', at: 'reeves-house', who: 'Odo Pell',
+          lines: [
+            { who: 'Odo Pell', text: "So. That's done. Whatever it is." },
+            { who: 'Odo Pell', text: "Six names in that book. I wrote 'pit' myself. My hand, my ink. I've a good hand. Everyone says so." },
+          ],
+        },
+        {
+          id: 'inn', kind: 'wait', text: "If he told them, the village is sitting in silence at the inn. Old Meg has something for him.", at: 'ferrymans-rest', optional: true,
+          lines: [
+            { who: 'Old Meg', text: 'Bet was the fourth name. You wrote her down while she was still breathing.' },
+          ],
+        },
       ],
     },
   ],
