@@ -1,6 +1,6 @@
 // A conversation, as a visual novel draws one: the scene dimmed behind, two people facing each other in large
 // portraits (left and right), each with a name plate under it, and the lines between them in a panel in the middle,
-// the next on a key (E, Space or Enter by default) or a click. Its reading (which line, who speaks) is a Script, kept
+// the next on a key (E or Enter by default) or a click. Its reading (which line, who speaks) is a Script, kept
 // apart from the page.
 
 import { element } from './overlay';
@@ -85,7 +85,7 @@ export class Typewriter {
   }
 }
 
-export const TALK_KEYS = ['KeyE', 'Space', 'Enter'];
+export const TALK_KEYS = ['KeyE', 'Enter']; // (not Space: a game's attack, often)
 
 // One side's portrait and name plate.
 class Portrait {

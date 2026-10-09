@@ -1,13 +1,14 @@
 // The HUD over the scene (styled in index.html): the region's name fading in large as the hero comes into it (and
 // at the start); villagers' names over their heads as the hero nears them; the named place the hero is near, small
 // in the top-left corner, and notices sliding in under it (a quest started, an objective done, a new place); the time
-// of day in the top-right, the quest followed under it; the hero's health, bottom left, and a hurt foe's over its head; what E would do, low in the middle; the conversation screen (ConversationScreen, for gameplay to open); and the screens
+// of day in the top-right, the quest followed under it; the hero's health, bottom left, and a hurt foe's over its head; the damage
+// of every blow, floating up from where it landed; what E would do, low in the middle; the conversation screen (ConversationScreen, for gameplay to open); and the screens
 // that pause the game (ui/pausingScreens.ts: the map, the journal, the pause menu).
 
 import { VisualComponent } from '@voxel/engine/app';
 import type { Entity, System } from '@voxel/engine/ecs';
-import { Dead, Health, InReach, TimeOfDay, Transform } from '@voxel/engine/gameplay';
-import { Banner, Conversation, CornerLabel, Meter, Prompt, Toasts, TrackerPanel, WorldLabels, createOverlay, fadeByDistance, meterShare, type WorldLabel } from '@voxel/engine/ui';
+import { Dead, Health, Hit, InReach, TimeOfDay, Transform } from '@voxel/engine/gameplay';
+import { Banner, Conversation, CornerLabel, FloatingText, Meter, Prompt, Toasts, TrackerPanel, WorldLabels, createOverlay, fadeByDistance, meterShare, type WorldLabel } from '@voxel/engine/ui';
 import { Resident } from '../systems/villagerDay';
 import { clockText, nearPlaceName, regionBanner, regionOf } from '../ui/hudText';
 import { pausingScreens } from '../ui/pausingScreens';
@@ -31,6 +32,7 @@ export const hud: Feature = {
     const root = createOverlay();
     const tags = new WorldLabels(root, app.camera);
     const bars = new WorldLabels(root, app.camera, 'ui-world-bar');
+    const damage = new FloatingText(root, app.camera);
     const banner = new Banner(root);
     const place = new CornerLabel(root, 'top-left', 'ui-place');
     const clock = new CornerLabel(root, 'top-right', 'ui-clock');
@@ -83,6 +85,11 @@ export const hud: Feature = {
         const reach = world.hasResource(InReach) ? world.resource(InReach) : null;
         prompt.set(reach?.entity != null && !conversation.isOpen ? 'E' : null, reach?.label);
 
+        for (const { target, damage: points } of world.eventsOf(Hit)) {
+          const at = world.get(target, Transform);
+          if (at) damage.add(String(Math.round(points)), at.x, overHead(target, at.y), at.z, target === hero ? 'ui-float-hurt' : '');
+        }
+        damage.update();
         const life = world.get(hero, Health);
         heroHealth.el.hidden = !life;
         if (life) heroHealth.set(life.hp, life.max);

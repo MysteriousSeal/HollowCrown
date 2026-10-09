@@ -1,4 +1,4 @@
-// A dialogue box low on the screen: who speaks, and their lines one at a time, the next on a key (Space, E or Enter by
+// A dialogue box low on the screen: who speaks, and their lines one at a time, the next on a key (E or Enter by
 // default). Past the last line it closes and says so. Its reading (which line, over or not) is a Dialogue, kept apart
 // from the page.
 
@@ -37,7 +37,7 @@ export class Dialogue {
   }
 }
 
-export const ADVANCE_KEYS = ['Space', 'KeyE', 'Enter'];
+export const ADVANCE_KEYS = ['KeyE', 'Enter']; // (not Space: a game's attack, often)
 
 export class DialogueBox {
   readonly el = element('div', 'ui-dialogue');
@@ -92,6 +92,6 @@ export class DialogueBox {
   private draw(): void {
     const reading = this.reading!;
     this.line.textContent = reading.line;
-    this.hint.textContent = reading.last ? 'Space · close' : 'Space · next';
+    this.hint.textContent = reading.last ? 'E · close' : 'E · next';
   }
 }
