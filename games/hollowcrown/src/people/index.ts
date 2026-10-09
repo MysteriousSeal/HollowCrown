@@ -6,6 +6,7 @@
 import type { Model } from '@voxel/engine/models';
 import { FrameModel, type FrameSpec } from '@voxel/engine/characters';
 import { FOLK } from './brindleford';
+import { HOBS_TOWER_FOLK } from './hobsTower';
 import { HOUSEHOLDS } from './households';
 import { RED_HEN_FOLK } from './redHen';
 import { TALLOW_GREEN } from './tallowGreen';
@@ -34,6 +35,7 @@ export const PEOPLE: Record<string, Person> = Object.fromEntries([
   ...people('Brindleford', HOUSEHOLDS),
   ...people('Tallow Green', TALLOW_GREEN),
   ...people('Red Hen camp', RED_HEN_FOLK),
+  ...people("Hob's Tower", HOBS_TOWER_FOLK),
 ]);
 
 // A person's id for a URL or a save: their name in lower case, hyphened ('Garrick Fenn' is garrick-fenn).

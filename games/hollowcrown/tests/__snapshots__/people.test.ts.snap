@@ -374,6 +374,23 @@ exports[`people > Little Brede: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Matthias Crow: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.789,
+    0.148,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.125,
+  ],
+  "triangles": 2016,
+}
+`;
+
 exports[`people > Nan Wicket: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
