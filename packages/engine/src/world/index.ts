@@ -11,3 +11,4 @@ export { CHUNK_SIZE, chunkKeysIn, chunkTilesIn } from './chunks';
 export type { ChunkLayer } from './chunkLayer';
 export { ChunkStreamer } from './chunkStreamer';
 export { addVoxelGround } from './voxelGround';
+export { placesLayer } from './placesLayer';

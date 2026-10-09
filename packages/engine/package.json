@@ -9,6 +9,7 @@
     "./voxel": "./src/voxel/index.ts",
     "./models": "./src/models/index.ts",
     "./characters": "./src/characters/index.ts",
+    "./structures": "./src/structures/index.ts",
     "./world": "./src/world/index.ts",
     "./render": "./src/render/index.ts",
     "./gameplay": "./src/gameplay/index.ts",
