@@ -65,16 +65,21 @@ describe('the Vale\'s forests', () => {
     expect(treesIn(map, key, built)).toEqual(byChunk.get(key));
   });
 
-  it('draw a chunk as one instanced mesh a tree shape, quickly, its trunks in the way', () => {
+  it('draw a chunk as one instanced mesh a tree shape, near and far, quickly, its trunks in the way', () => {
     const trunks = new Obstacles();
     const layer = forestLayer(map, built, trunks);
     const [key] = [...byChunk.entries()].sort((a, b) => b[1].length - a[1].length)[0];
     layer.build(key); // (the shapes' meshes, built once)
     const t = performance.now();
-    const meshes = layer.build(key) as THREE.InstancedMesh[];
+    const [lod] = layer.build(key) as THREE.LOD[];
     expect(performance.now() - t).toBeLessThan(50);
-    expect(meshes.length).toBeLessThanOrEqual(VARIANTS * SPECIES.length);
-    expect(meshes.reduce((n, m) => n + m.count, 0)).toBe(byChunk.get(key)!.length);
+    const [near, far] = lod.levels.map((l) => l.object.children as THREE.InstancedMesh[]);
+    expect(near.length).toBeLessThanOrEqual(VARIANTS * SPECIES.length);
+    for (const meshes of [near, far]) expect(meshes.reduce((n, m) => n + m.count, 0)).toBe(byChunk.get(key)!.length);
+    // the far stand-ins: the same trees in the same places, at a fraction of the triangles
+    const tris = (meshes: THREE.InstancedMesh[]) => meshes.reduce((n, m) => n + (m.geometry.getAttribute('position').count / 2) * m.count, 0);
+    expect(tris(far)).toBeLessThan(tris(near) * 0.4);
+    expect(lod.levels[1].distance).toBeGreaterThan(30); // (past the camera's own distance off the hero, and well beyond)
     expect(trunks.size).toBe(byChunk.get(key)!.length); // (each trunk in the way once, however often its chunk's built)
   });
 });

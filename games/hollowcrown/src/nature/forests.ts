@@ -6,7 +6,9 @@
 
 import { hashUnit } from '@voxel/engine/math';
 import { CHUNK_SIZE, boundsOf, chunkKeysIn, chunkTilesIn, covers, type Box, type ChunkLayer, type Obstacles, type Shape, type WorldMap } from '@voxel/engine/world';
-import { instancedLayer, natureGeometry, type Growth } from './instanced';
+import { STRUCTURE_VOXEL } from '@voxel/engine/structures';
+import { coarse, instancedLayer, natureGeometry, type Growth } from './instanced';
+import { NATURE } from './palette';
 import { SPECIES, VARIANTS, treeVoxels, type Species } from './trees';
 
 const CELL = 2; // tiles a side of a forest's cells: a tree at most in each
@@ -79,16 +81,18 @@ export function trunkOf(tree: Tree): Box {
   return { x0: tree.x - h, z0: tree.z - h, x1: tree.x + h, z1: tree.z + h };
 }
 
-// The layer of the forests' trees (instanced.ts): a chunk's trees worked out as it first comes near (kept for when it
+// The layer of the forests' trees (instanced.ts), each drawn by its far stand-in in chunks well off from the hero: a chunk's trees worked out as it first comes near (kept for when it
 // comes back), none on what `keepOut` holds, their trunks added to `obstacles` then.
 export function forestLayer(map: WorldMap, keepOut: Obstacles, obstacles: Obstacles): ChunkLayer {
-  const meshOf = (shape: string) => natureGeometry(treeVoxels(shape.slice(0, -1) as Species, Number(shape.slice(-1))));
+  const gridOf = (shape: string) => treeVoxels(shape.slice(0, -1) as Species, Number(shape.slice(-1)));
+  const meshOf = (shape: string) => natureGeometry(gridOf(shape));
+  const farOf = (shape: string) => natureGeometry(coarse(gridOf(shape)), NATURE.colors, 2 * STRUCTURE_VOXEL);
   const grow = (key: string): Tree[] => {
     const trees = treesIn(map, key, keepOut);
     for (const tree of trees) obstacles.add(trunkOf(tree));
     return trees;
   };
-  return instancedLayer(map, forestChunks(map), grow, meshOf);
+  return instancedLayer(map, forestChunks(map), grow, meshOf, { farOf });
 }
 
 // Every forest tree on `map` at once, by chunk (for tests and tools: the game works them out a chunk at a time).

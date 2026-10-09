@@ -70,7 +70,7 @@ export function dressingLayer(map: WorldMap, dressing: readonly Dressing[]): Chu
     byChunk.set(key, [...(byChunk.get(key) ?? []), piece]);
   }
   const meshOf = (shape: string) => (LANDMARK_SHAPES[shape] ? natureGeometry(LANDMARK_SHAPES[shape](), NATURE.colors) : natureGeometry(PROP_SHAPES[shape](), PROPS.colors));
-  return instancedLayer(map, byChunk.keys(), (key) => byChunk.get(key) ?? [], meshOf, 0.06);
+  return instancedLayer(map, byChunk.keys(), (key) => byChunk.get(key) ?? [], meshOf, { tint: 0.06 });
 }
 
 // The room `dressing` takes: each fence run a thin box along it, each piece that's in the way its box; added to
