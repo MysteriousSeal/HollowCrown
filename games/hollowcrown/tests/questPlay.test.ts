@@ -3,12 +3,13 @@
 
 import { describe, expect, it } from 'vitest';
 import { World } from '@voxel/engine/ecs';
-import { TimeOfDay } from '@voxel/engine/gameplay';
+import { Died, TimeOfDay, Transform } from '@voxel/engine/gameplay';
 import { loadWorldMap } from '@voxel/engine/world';
 import { PEOPLE_DATA } from '../src/data/people';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
 import { QUESTS } from '../src/data/quests';
-import { complete, isAt, talkWith } from '../src/features/quests';
+import { complete, isAt, questSystem, talkWith } from '../src/features/quests';
+import { Creature } from '../src/systems/kills';
 import { Quests, newBook, startQuest } from '../src/systems/quests';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
@@ -65,6 +66,21 @@ describe('quest play', () => {
   it('names anyone else speaking in a talk (Garrick, at the well with Cuthwin)', () => {
     const { world } = atStage('dawn');
     expect(talkWith(world, 'Father Cuthwin').lines.at(-1)!.who).toBe('Garrick Fenn');
+  });
+
+  it('wins the wolves once both have died, each death counted once however often told', () => {
+    const { world, book } = atStage('road-east');
+    const hero = world.spawn([Transform, { x: 0, y: 0, z: 0, facing: 0 }]);
+    const wolves = [0, 1].map(() => world.spawn([Transform, { x: 650, y: 0, z: 3420, facing: 0 }], [Creature, { id: 'wolf', name: 'Wolf' }]));
+    const system = questSystem(map, hero);
+    world.emit(Died, { entity: wolves[0], by: hero });
+    system.update(world, 1 / 60);
+    system.update(world, 1 / 60); // (the same frame's events, told again)
+    expect(book.quests[0].done).not.toContain('wolves');
+    world.clearEvents();
+    world.emit(Died, { entity: wolves[1], by: hero });
+    system.update(world, 1 / 60);
+    expect(book.quests[0].done).toContain('wolves');
   });
 
   it('has only first words for someone the quests ask nothing of', () => {

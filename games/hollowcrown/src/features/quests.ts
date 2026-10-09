@@ -4,7 +4,7 @@
 // killed wins a fight. A stage with an hour moves the clock to it. The HUD's quest log (its tracker, journal,
 // notices) is the book itself.
 
-import type { System, World } from '@voxel/engine/ecs';
+import type { Entity, System, World } from '@voxel/engine/ecs';
 import { TimeOfDay, Transform } from '@voxel/engine/gameplay';
 import type { ConversationLine } from '@voxel/engine/ui';
 import type { Point, WorldMap } from '@voxel/engine/world';
@@ -79,8 +79,8 @@ export function talkWith(world: World, name: string): { lines: ConversationLine[
 
 // Each frame: whatever the hero has reached done, a choice that's nobody's asked where it's found, and each death
 // counted toward the fight it's part of (done once enough have fallen).
-function questSystem(map: WorldMap, hero: number): System {
-  const kills = new Map<string, number>(); // by quest/objective
+export function questSystem(map: WorldMap, hero: number): System {
+  const kills = new Map<string, Set<Entity>>(); // the fallen, by quest/objective (each counted once, however often told)
   return {
     name: 'quests',
     stage: 'simulate',
@@ -91,9 +91,9 @@ function questSystem(map: WorldMap, hero: number): System {
       for (const { quest, objective } of openObjectives(world.resource(Quests), QUESTS)) {
         if (objective.kind === 'fight' && objective.what) {
           const key = `${quest}/${objective.id}`;
-          const fallen = (kills.get(key) ?? 0) + deaths.filter((d) => isWhat(objective.what!, d)).length;
-          kills.set(key, fallen);
-          if (fallen >= needed(objective)) complete(world, quest, objective.id);
+          const fallen = kills.get(key) ?? kills.set(key, new Set()).get(key)!;
+          for (const d of deaths) if (isWhat(objective.what, d)) fallen.add(d.entity);
+          if (fallen.size >= needed(objective)) complete(world, quest, objective.id);
           continue;
         }
         if (!objective.at || objective.who || !isAt(map, objective.at, at.x, at.z)) continue;
