@@ -9,7 +9,7 @@ export {
 export { terrainLayer, tierRects, type TierRect } from './terrainLayer';
 export { CHUNK_SIZE, chunkKeysIn, chunkTilesIn } from './chunks';
 export type { ChunkLayer } from './chunkLayer';
-export { ChunkStreamer } from './chunkStreamer';
+export { ChunkStreamer, FRAME_BUILD_BUDGET } from './chunkStreamer';
 export { addVoxelGround } from './voxelGround';
 export { placesLayer } from './placesLayer';
 export { Obstacles, ObstaclesResource, type Box } from './obstacles';

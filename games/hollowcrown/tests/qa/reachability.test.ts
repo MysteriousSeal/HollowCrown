@@ -8,6 +8,7 @@ import { describe, expect, it } from 'vitest';
 import { BODY_RADIUS } from '@voxel/engine/gameplay';
 import { covers, loadWorldMap, type PlaceData } from '@voxel/engine/world';
 import { obstaclesOf } from '../../src/buildings';
+import { forestTrees, trunkOf } from '../../src/nature/forests';
 import { PLACE_KINDS, START_PLACE, WORLD_MAP } from '../../src/data/world';
 import { footprint } from '../../src/data/world/kinds';
 import { villagersOf } from '../../src/features/villagers';
@@ -16,7 +17,10 @@ import { PEOPLE, type Spot } from '../../src/data/people';
 import { QUESTS } from '../../src/data/quests';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
+// What's in the way, as the game installs it: the buildings and fixtures, then the forests' trunks.
 const obstacles = obstaclesOf(map);
+const trees = forestTrees(map, obstacles);
+for (const chunk of trees.values()) for (const tree of chunk) obstacles.add(trunkOf(tree));
 const region = WORLD_MAP.areas.find((a) => a.id === 'brindle-vale')!;
 const [x0, z0, x1, z1] = (region.shape as { rect: [number, number, number, number] }).rect;
 const W = x1 - x0 + 1;
