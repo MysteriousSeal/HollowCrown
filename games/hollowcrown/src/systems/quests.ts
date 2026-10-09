@@ -19,13 +19,13 @@ export interface QuestProgress {
 
 // Every quest started, the one followed (null: none), and the flags the story has set.
 export interface QuestBook {
-  log: QuestProgress[];
+  quests: QuestProgress[];
   tracked: string | null;
   flags: Record<string, string | boolean>;
 }
 export const Quests = defineResource<QuestBook>('Quests');
 
-export const newBook = (): QuestBook => ({ log: [], tracked: null, flags: {} });
+export const newBook = (): QuestBook => ({ quests: [], tracked: null, flags: {} });
 
 const stageOf = (quest: Quest, id: string): QuestStage | undefined => quest.stages.find((s) => s.id === id);
 
@@ -33,8 +33,8 @@ const stageOf = (quest: Quest, id: string): QuestStage | undefined => quest.stag
 export function startQuest(book: QuestBook, quests: Record<string, Quest>, id: string): QuestStage | undefined {
   const quest = quests[id];
   if (!quest) throw new Error(`startQuest: no quest '${id}'`);
-  if (book.log.some((p) => p.quest === id)) return undefined;
-  book.log.push({ quest: id, stage: quest.stages[0].id, done: [] });
+  if (book.quests.some((p) => p.quest === id)) return undefined;
+  book.quests.push({ quest: id, stage: quest.stages[0].id, done: [] });
   book.tracked = id;
   return quest.stages[0];
 }
@@ -42,7 +42,7 @@ export function startQuest(book: QuestBook, quests: Record<string, Quest>, id: s
 // The objectives still open in every quest going on, with their quest.
 export function openObjectives(book: QuestBook, quests: Record<string, Quest>): Array<{ quest: string; objective: Objective }> {
   const open: Array<{ quest: string; objective: Objective }> = [];
-  for (const progress of book.log) {
+  for (const progress of book.quests) {
     if (progress.finished) continue;
     const stage = stageOf(quests[progress.quest], progress.stage);
     for (const objective of stage?.objectives ?? []) if (!progress.done.includes(objective.id)) open.push({ quest: progress.quest, objective });
@@ -56,7 +56,7 @@ export function openObjectives(book: QuestBook, quests: Record<string, Quest>): 
 export function completeObjective(
   book: QuestBook, quests: Record<string, Quest>, questId: string, objectiveId: string, sets: Record<string, string | boolean> = {},
 ): QuestStage | undefined {
-  const progress = book.log.find((p) => p.quest === questId && !p.finished);
+  const progress = book.quests.find((p) => p.quest === questId && !p.finished);
   if (!progress) return undefined;
   const quest = quests[questId];
   const stage = stageOf(quest, progress.stage);

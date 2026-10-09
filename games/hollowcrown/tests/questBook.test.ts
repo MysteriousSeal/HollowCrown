@@ -10,7 +10,7 @@ describe('quests', () => {
     const book = newBook();
     expect(startQuest(book, QUESTS, 'MQ01')?.id).toBe('waking');
     expect(startQuest(book, QUESTS, 'MQ01')).toBeUndefined();
-    expect(book.log).toEqual([{ quest: 'MQ01', stage: 'waking', done: [] }]);
+    expect(book.quests).toEqual([{ quest: 'MQ01', stage: 'waking', done: [] }]);
     expect(book.tracked).toBe('MQ01');
     expect(openObjectives(book, QUESTS).map((o) => o.objective.id)).toEqual(['feather', 'bowl', 'first-words']);
   });
@@ -23,7 +23,7 @@ describe('quests', () => {
     expect(completeObjective(book, QUESTS, 'MQ01', 'pilgrim')).toBeUndefined(); // (not this stage's)
     completeObjective(book, QUESTS, 'MQ01', 'bowl');
     expect(completeObjective(book, QUESTS, 'MQ01', 'first-words')?.id).toBe('road-east');
-    expect(book.log[0]).toEqual({ quest: 'MQ01', stage: 'road-east', done: [] });
+    expect(book.quests[0]).toEqual({ quest: 'MQ01', stage: 'road-east', done: [] });
   });
 
   it("sets a choice's flags, and lets the unplayable (the wolves) not hold the road back", () => {
@@ -40,7 +40,7 @@ describe('quests', () => {
     startQuest(book, QUESTS, 'MQ01');
     for (const stage of QUESTS.MQ01.stages) for (const o of stage.objectives) completeObjective(book, QUESTS, 'MQ01', o.id);
     expect(book.flags.mq01_dead_walked).toBe(true);
-    expect(book.log[0].finished).toBe(true);
+    expect(book.quests[0].finished).toBe(true);
     expect(openObjectives(book, QUESTS)).toEqual([]);
   });
 });
