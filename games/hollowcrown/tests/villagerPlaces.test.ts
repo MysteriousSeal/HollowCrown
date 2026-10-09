@@ -15,8 +15,8 @@ const people = villagersOf(map);
 const who = (name: string) => people.find((v) => v.name === name)!;
 
 describe('villagers', () => {
-  it('stands every resident of every building', () => {
-    const residents = map.places('building').flatMap((p) => (p.props as BuildingProps).residents);
+  it('stands every resident of every building who is home, and not Wat (away till SQ-BV7)', () => {
+    const residents = map.places('building').flatMap((p) => (p.props as BuildingProps).residents).filter((n) => n !== 'Wat');
     expect(people.map((v) => v.name).sort()).toEqual([...residents].sort());
   });
 

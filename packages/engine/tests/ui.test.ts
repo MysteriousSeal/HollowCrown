@@ -15,6 +15,26 @@ describe('Typewriter', () => {
   });
 });
 import { Dialogue } from '../src/ui/dialogue';
+import { MapView, cssColor } from '../src/ui/mapImage';
+
+describe('MapView', () => {
+  it('puts its centre mid-screen and others by its zoom', () => {
+    const view = new MapView(100, 200, 2);
+    expect(view.toScreen(100, 200, 800, 600)).toEqual([400, 300]);
+    expect(view.toScreen(110, 195, 800, 600)).toEqual([420, 290]);
+  });
+
+  it('keeps its zoom within bounds', () => {
+    const view = new MapView(0, 0, 10, 0.25, 4);
+    expect(view.zoom).toBe(4);
+    expect(view.zoomBy(0.001)).toBe(0.25);
+  });
+
+  it('writes colors as CSS', () => {
+    expect(cssColor(0x3b6a86)).toBe('#3b6a86');
+    expect(cssColor(0x00000f)).toBe('#00000f');
+  });
+});
 
 describe('Script', () => {
   it('reads its lines and who says each, then is done', () => {

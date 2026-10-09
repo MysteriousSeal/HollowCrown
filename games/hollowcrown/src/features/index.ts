@@ -7,6 +7,7 @@ import { hud } from './hud';
 import { land } from './land';
 import { nature } from './nature';
 import { sprint } from './sprint';
+import { talk } from './talk';
 import { villagers } from './villagers';
 import { wildlife } from './wildlife';
 
@@ -19,6 +20,7 @@ export const FEATURES: Feature[] = [
   wildlife,
   sprint,
   hud,
+  talk,
 ];
 
 export type { Feature, GameContext } from './context';

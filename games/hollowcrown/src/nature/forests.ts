@@ -1,29 +1,21 @@
 // The Vale's forests: trees in every forest the map draws (an area of kind 'forest', its props.trees naming the
 // species, the first the most of them), on a grid of two-tile cells, most cells a tree somewhere in them, each tree's
 // species, shape, turn and tint from its cell's hash (the same every time). None on a road, in water or on any drawn
-// surface, none on a building or by a place. Drawn chunk by chunk: each tree shape's mesh built once, instanced.
+// surface, none on a building or by a place. Drawn chunk by chunk, instanced (instanced.ts).
 
-import * as THREE from 'three';
 import { hashUnit } from '@voxel/engine/math';
-import { litMaterial, meshPart } from '@voxel/engine/models';
-import { STRUCTURE_VOXEL } from '@voxel/engine/structures';
 import { CHUNK_SIZE, boundsOf, covers, type Box, type ChunkLayer, type Obstacles, type WorldMap } from '@voxel/engine/world';
-import { NATURE } from './palette';
+import { instancedLayer, natureGeometry, plant, type Growth } from './instanced';
 import { SPECIES, VARIANTS, treeVoxels, type Species } from './trees';
 
 const CELL = 2; // tiles a side of a forest's cells: a tree at most in each
 const STANDING = 0.7; // the share of cells with a tree
 const PLACE_ROOM = 2.5; // tiles kept clear round a place (a shrine, a cave's mouth)
 const TRUNK: Record<Species, number> = { oak: 0.2, birch: 0.12, pine: 0.2 }; // half a trunk's width, world units
-const SINK = 0.02; // roots a little into the ground, no gap at the foot
 
-export interface Tree {
-  x: number;
-  z: number;
+export interface Tree extends Growth {
   species: Species;
   variant: number;
-  turn: number; // quarter turns
-  tint: number; // 0..1: darker to lighter
 }
 
 // The forests' areas' props.
@@ -48,17 +40,9 @@ export function forestTrees(map: WorldMap, keepOut: Obstacles): Map<string, Tree
         if (!covers(area.shape, tx, tz) || !bare(map, tx, tz) || keepOut.blocks(x, z, 1.2)) continue;
         if (places.some(([px, pz]) => Math.abs(px - x) < PLACE_ROOM && Math.abs(pz - z) < PLACE_ROOM)) continue;
         const pick = hashUnit(cx, cz, 404);
-        const tree: Tree = {
-          x, z,
-          species: species.length === 1 || pick < 0.65 ? species[0] : species[1 + Math.floor(((pick - 0.65) / 0.35) * (species.length - 1))],
-          variant: Math.floor(hashUnit(cx, cz, 405) * VARIANTS),
-          turn: Math.floor(hashUnit(cx, cz, 406) * 4),
-          tint: hashUnit(cx, cz, 407),
-        };
-        const key = `${Math.floor(tx / CHUNK_SIZE)},${Math.floor(tz / CHUNK_SIZE)}`;
-        const list = byChunk.get(key);
-        if (list) list.push(tree);
-        else byChunk.set(key, [tree]);
+        const kind = species.length === 1 || pick < 0.65 ? species[0] : species[1 + Math.floor(((pick - 0.65) / 0.35) * (species.length - 1))];
+        const variant = Math.floor(hashUnit(cx, cz, 405) * VARIANTS);
+        plant(byChunk, { x, z, species: kind, variant, shape: `${kind}${variant}`, turn: Math.floor(hashUnit(cx, cz, 406) * 4), tint: hashUnit(cx, cz, 407) }, CHUNK_SIZE);
       }
     }
   }
@@ -75,44 +59,8 @@ export function trunkOf(tree: Tree): Box {
   return { x0: tree.x - h, z0: tree.z - h, x1: tree.x + h, z1: tree.z + h };
 }
 
-// Each tree shape's mesh, built once.
-const geometries = new Map<string, THREE.BufferGeometry>();
-function treeGeometry(species: Species, variant: number): THREE.BufferGeometry {
-  const key = `${species}${variant}`;
-  if (!geometries.has(key)) {
-    const grid = treeVoxels(species, variant);
-    geometries.set(key, meshPart(grid, NATURE.colors, STRUCTURE_VOXEL, [grid.size[0] / 2, 0, grid.size[2] / 2]));
-  }
-  return geometries.get(key)!;
-}
-
-// The layer of the forests' trees: a chunk's trees as one instanced mesh a shape, each tree stood on the ground,
-// turned, tinted a little lighter or darker than the next. Every shape's mesh is built here, up front, so the first
-// forest the hero nears doesn't stall.
+// The layer of the forests' trees (instanced.ts).
 export function forestLayer(map: WorldMap, byChunk: Map<string, Tree[]>): ChunkLayer {
-  for (const species of SPECIES) for (let v = 0; v < VARIANTS; v++) treeGeometry(species, v);
-  const material = litMaterial();
-  const turn = new THREE.Matrix4();
-  const color = new THREE.Color();
-  return {
-    materials: [material],
-    chunkKeys: () => byChunk.keys(),
-    build: (key) => {
-      const byShape = new Map<string, Tree[]>();
-      for (const tree of byChunk.get(key) ?? []) {
-        const shape = `${tree.species}${tree.variant}`;
-        byShape.set(shape, [...(byShape.get(shape) ?? []), tree]);
-      }
-      return [...byShape.values()].map((trees) => {
-        const mesh = new THREE.InstancedMesh(treeGeometry(trees[0].species, trees[0].variant), material, trees.length);
-        trees.forEach((tree, i) => {
-          turn.makeRotationY((tree.turn * Math.PI) / 2).setPosition(tree.x, map.groundY(tree.x, tree.z) - SINK, tree.z);
-          mesh.setMatrixAt(i, turn);
-          mesh.setColorAt(i, color.setScalar(0.92 + tree.tint * 0.16));
-        });
-        mesh.computeBoundingSphere();
-        return mesh;
-      });
-    },
-  };
+  const shapes = new Map(SPECIES.flatMap((s) => Array.from({ length: VARIANTS }, (_, v) => [`${s}${v}`, natureGeometry(treeVoxels(s, v))] as const)));
+  return instancedLayer(map, byChunk, shapes);
 }

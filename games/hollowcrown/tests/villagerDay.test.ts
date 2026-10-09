@@ -9,7 +9,7 @@ import { Resident, isDay, villagerDaySystem } from '../src/systems/villagerDay';
 const setup = (hours: number, seated = false) => {
   const world = new World();
   world.setResource(TimeOfDay, { hours, rate: 0 });
-  const person = world.spawn([Transform, { x: 2, y: 0, z: 0, facing: 1 }], [Resident, { home: { x: 0, z: 0 }, facing: 0, seated }]);
+  const person = world.spawn([Transform, { x: 2, y: 0, z: 0, facing: 1 }], [Resident, { name: 'Odo Pell', home: { x: 0, z: 0 }, facing: 0, seated }]);
   return { world, person };
 };
 
