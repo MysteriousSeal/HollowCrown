@@ -34,7 +34,7 @@ export const TALLOW_GREEN: ValePart = {
     { note: "Tallow Green's west lane", shape: { line: WEST_LANE, width: 2 }, surface: 'track' },
   ],
   areas: [
-    { id: 'tallow-green-green', kind: 'green', name: 'The green', shape: { polygon: GREEN } },
+    { id: 'tallow-green-green', kind: 'green', name: "Tallow Green's green", shape: { polygon: GREEN } },
   ],
   places: [
     // The green. The old oak: Goody Thatch holds the village's moots under it.
@@ -44,11 +44,11 @@ export const TALLOW_GREEN: ValePart = {
 
     // North of the green (doors on the north lane). Goody Thatch runs the village from her porch (SQ-BV3).
     building('bee-house', "Agna Bee's house", [1190, 3034], SOUTH, cottage(['Agna Bee', 'Little Brede'])),
-    building('thatch-house', "Goody Thatch's house", [1198, 3034], SOUTH, { ...cottage(['Goody Thatch']), size: [4, 3] }),
+    building('thatch-house', "Goody Thatch's house", [1198, 3034], SOUTH, { ...cottage(['Goody Thatch']), size: [5, 3] }),
     building('tg-house-north', 'A house on the green', [1205, 3034], SOUTH, cottage([])),
     // Osmund's and Hal's: candles, wax, tallow; a shop. Hal dug the barrow for a bride-price (SQ-BV3, SQ-BV8).
     building('chandlery', 'The chandlery', [1212, 3034], SOUTH, {
-      size: [4, 3], floors: 2, roof: 'shingle', walls: 'timber', use: 'house', residents: ['Osmund Wicke', 'Hal Wicke'],
+      size: [5, 3], floors: 2, roof: 'shingle', walls: 'timber', use: 'house', residents: ['Osmund Wicke', 'Hal Wicke'],
     }),
 
     // West of the green (doors to the west lane).
