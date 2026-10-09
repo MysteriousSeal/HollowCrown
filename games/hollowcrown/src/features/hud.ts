@@ -1,15 +1,14 @@
 // The HUD over the scene (styled in index.html): the region's name fading in large as the hero comes into it (and
-// at the start), the named place the hero is near, small in the top-left corner, and the time of day in the top-right, the quest followed under it; notices sliding in on the
-// left (a quest started, an objective done, a new place);
-// what E would do, low in the middle; the conversation screen (ConversationScreen, for gameplay to open); the map
-// (M), drawn the first time it's opened; and the pause menu (Esc). The game pauses behind the map and the menu.
+// at the start); the named place the hero is near, small in the top-left corner, and notices sliding in under it (a
+// quest started, an objective done, a new place); the time of day in the top-right, the quest followed under it; what
+// E would do, low in the middle; the conversation screen (ConversationScreen, for gameplay to open); and the screens
+// that pause the game (ui/pausingScreens.ts: the map, the journal, the pause menu).
 
 import type { System } from '@voxel/engine/ecs';
 import { InReach, TimeOfDay, Transform } from '@voxel/engine/gameplay';
-import { Banner, Conversation, CornerLabel, MAP_TILES_PER_PIXEL, MapScreen, Menu, Prompt, Toasts, TrackerPanel, createOverlay, drawMapImage } from '@voxel/engine/ui';
-import { CONTROLS } from '../ui/controls';
+import { Banner, Conversation, CornerLabel, Prompt, Toasts, TrackerPanel, createOverlay } from '@voxel/engine/ui';
 import { clockText, nearPlaceName, regionBanner, regionOf } from '../ui/hudText';
-import { MAP_GROUND, mapLabels, mapMarks } from '../ui/mapContent';
+import { pausingScreens } from '../ui/pausingScreens';
 import { questNews, snapshot, startLog, trackedOf } from '../ui/questLog';
 import { trackerText } from '../ui/questText';
 import { ConversationScreen, QuestLog } from '../ui/screens';
@@ -18,6 +17,7 @@ import type { Feature } from './context';
 export const hud: Feature = {
   name: 'hud',
   install: ({ app, map, hero }) => {
+    const { world } = app;
     const root = createOverlay();
     const banner = new Banner(root);
     const place = new CornerLabel(root, 'top-left', 'ui-place');
@@ -25,63 +25,27 @@ export const hud: Feature = {
     const tracker = new TrackerPanel(root);
     const toasts = new Toasts(root);
     const prompt = new Prompt(root);
+    const conversation = world.setResource(ConversationScreen, new Conversation(root));
     const placeholderLog = startLog();
+    const logOf = () => (world.hasResource(QuestLog) ? world.resource(QuestLog) : placeholderLog);
+    const theMap = pausingScreens(app, root, map, conversation, logOf);
     let questsWere: ReturnType<typeof snapshot> = [];
     const placesSeen = new Set<string>();
-    const conversation = app.world.setResource(ConversationScreen, new Conversation(root));
     let region: string | undefined;
-
-    let mapScreen: MapScreen | null = null;
-    const theMap = (): MapScreen => {
-      if (mapScreen) return mapScreen;
-      mapScreen = new MapScreen(root, drawMapImage(map.data, MAP_GROUND), MAP_TILES_PER_PIXEL);
-      mapScreen.setContent(mapLabels(map.data), mapMarks(map.data));
-      return mapScreen;
-    };
-    const menu = new Menu(root, 'Paused');
-    // The game paused while a screen is up, and on again once none is.
-    const pauseFor = (screenUp: boolean): void => (screenUp ? app.pause() : app.resume());
-    const closeMenu = (): void => {
-      menu.close();
-      pauseFor(false);
-    };
-    const openMenu = (): void => {
-      menu.open([
-        { label: 'Resume', pick: closeMenu },
-        { label: 'Controls', pick: () => menu.page('Controls', CONTROLS) },
-      ]);
-      pauseFor(true);
-    };
-    window.addEventListener('keydown', (event) => {
-      if (event.repeat || conversation.isOpen) return;
-      if (event.code === 'Escape' && mapScreen?.isOpen) {
-        mapScreen.close();
-        pauseFor(false);
-      } else if (event.code === 'Escape') {
-        if (menu.isOpen) closeMenu();
-        else openMenu();
-      } else if (menu.isOpen) return;
-      else if (event.code === 'KeyM') {
-        theMap().toggle();
-        pauseFor(theMap().isOpen);
-      } else if (mapScreen?.isOpen && (event.code === 'Equal' || event.code === 'Minus')) mapScreen.zoomBy(event.code === 'Equal' ? 1.25 : 0.8);
-      else return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    });
 
     const system: System = {
       name: 'hud',
       stage: 'present',
-      update(world) {
+      update() {
         if (world.hasResource(TimeOfDay)) clock.set(clockText(world.resource(TimeOfDay).hours));
-        const log = world.hasResource(QuestLog) ? world.resource(QuestLog) : placeholderLog;
+        const log = logOf();
         const tracked = trackedOf(log);
         tracker.set(tracked && trackerText(tracked));
         for (const { title, text } of questNews(questsWere, log.quests)) toasts.push(title, text);
         questsWere = snapshot(log);
         const reach = world.hasResource(InReach) ? world.resource(InReach) : null;
         prompt.set(reach?.entity != null && !conversation.isOpen ? 'E' : null, reach?.label);
+
         const at = world.get(hero, Transform);
         if (!at) return;
         const here = regionOf(map.areasAt(at.x, at.z));
@@ -96,6 +60,7 @@ export const hud: Feature = {
           placesSeen.add(near);
           toasts.push('New place', near);
         }
+        const mapScreen = theMap();
         if (mapScreen?.isOpen) {
           mapScreen.setTitle(here ? regionBanner(here).title : '');
           mapScreen.setHero(at.x, at.z, at.facing);

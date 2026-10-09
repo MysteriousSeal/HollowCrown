@@ -273,6 +273,41 @@
       .ui-menu-rows { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 8px 12px; margin: 2px 0 8px; }
       .ui-menu-rows .ui-key { justify-self: start; }
       .ui-menu-row-text { margin: 0; font-size: 16px; font-weight: 500; }
+      /* The journal (J): a gilded book, the quests down the left (the open one lit), its page on the right: the title
+         in gold, the stage, the objectives (done ones struck through and faded), the passage once it's over. */
+      .ui-journal { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(20, 13, 9, 0.6); pointer-events: auto; animation: ui-fade-in 0.25s ease-out; }
+      .ui-journal-book {
+        width: min(92vw, 860px);
+        height: min(80vh, 600px);
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 16px 20px 12px;
+        background: linear-gradient(180deg, rgba(48, 32, 22, 0.96), rgba(28, 19, 13, 0.97));
+        border: 2px solid #b98a46;
+        border-radius: 4px;
+        box-shadow: inset 0 0 0 3px #1e140d, inset 0 0 0 4px rgba(232, 194, 122, 0.35), 0 12px 32px rgba(10, 6, 4, 0.55);
+      }
+      .ui-journal-head { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #e8c27a; }
+      .ui-journal-head::before, .ui-journal-head::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(232, 194, 122, 0.7)); }
+      .ui-journal-head::after { background: linear-gradient(90deg, rgba(232, 194, 122, 0.7), transparent); }
+      .ui-journal-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(160px, 1fr) 2fr; gap: 18px; }
+      .ui-journal-list { margin: 0; padding: 0 12px 0 0; list-style: none; overflow-y: auto; border-right: 1px solid rgba(232, 194, 122, 0.3); }
+      .ui-journal-entry { padding: 6px 10px; font-size: 16px; font-weight: 600; color: var(--sand); border: 2px solid transparent; cursor: pointer; }
+      .ui-journal-entry.finished { color: var(--muted); }
+      .ui-journal-entry.lit { color: var(--ink); background: #ffd98a; border-color: var(--ink); box-shadow: inset 0 -3px 0 #e8903a; }
+      .ui-journal-page { overflow-y: auto; padding-right: 6px; }
+      .ui-journal-title { display: block; font-size: 22px; font-weight: 700; color: #e8c27a; text-shadow: 0 1px 0 #1e140d; }
+      .ui-journal-sub { display: block; margin-top: 2px; font-size: 14px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+      .ui-journal-items { margin: 12px 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
+      .ui-journal-item { position: relative; padding-left: 18px; font-size: 16px; font-weight: 500; line-height: 1.35; }
+      .ui-journal-item::before { content: '◆'; position: absolute; left: 0; top: 4px; font-size: 10px; color: #e8903a; }
+      .ui-journal-item.optional { font-style: italic; }
+      .ui-journal-item.done { color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(201, 184, 160, 0.7); }
+      .ui-journal-item.done::before { color: var(--muted); }
+      .ui-journal-text { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid rgba(232, 194, 122, 0.3); font-size: 16px; line-height: 1.45; font-style: italic; color: var(--cream); }
+      .ui-journal-hint { text-align: right; font-size: 13px; font-weight: 600; color: var(--muted); }
       .ui-talk-hint { text-align: right; font-size: 13px; font-weight: 600; color: var(--muted); }
     </style>
   </head>

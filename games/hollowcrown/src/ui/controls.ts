@@ -6,5 +6,6 @@ export const CONTROLS: Array<[string, string]> = [
   ['Shift', 'Sprint (held)'],
   ['E', 'Talk, use'],
   ['M', 'Map'],
+  ['J', 'Journal'],
   ['Esc', 'Pause, close'],
 ];

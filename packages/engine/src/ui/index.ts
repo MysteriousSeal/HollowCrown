@@ -3,6 +3,7 @@
 export { createOverlay, element } from './overlay';
 export { BANNER_SECONDS, Banner } from './banner';
 export { CornerLabel, type Corner } from './label';
+export { JournalScreen, type JournalEntry, type JournalItem } from './journal';
 export { Menu, type MenuItem } from './menu';
 export { Prompt } from './prompt';
 export { TOASTS_AT_ONCE, TOAST_SECONDS, ToastQueue, Toasts, type Toast } from './toasts';
