@@ -109,14 +109,15 @@ export function questSystem(map: WorldMap, hero: number): System {
         }
         if (!objective.at || objective.who || !isAt(map, objective.at, at.x, at.z)) continue;
         if (BY_BEING_THERE.has(objective.kind)) complete(world, quest, objective.id);
-        else if (objective.kind === 'choose') ask(world, quest, objective);
+        else if (objective.kind === 'choose' || objective.kind === 'talk') ask(world, quest, objective);
       }
     },
   };
 }
 
-// A choice that's nobody's, asked on the conversation screen (once it's free): the hero's portrait, and facing them
-// what the choice is over if it's one of the dead lying out (the pilgrim in the ditch), else nobody.
+// A choice or a talk that's nobody's in the village (the pilgrim in the ditch, Hesper chained in the camp), played on
+// the conversation screen once it's free: the hero's portrait, and facing them what it's over if it's one of the dead
+// lying out, else nobody; a talk done as it closes.
 function ask(world: World, quest: string, objective: Objective): void {
   if (!world.hasResource(ConversationScreen)) return;
   const screen = world.resource(ConversationScreen);
@@ -129,7 +130,8 @@ function ask(world: World, quest: string, objective: Objective): void {
     releasePortrait(you);
     if (it) releasePortrait(it);
   };
-  screen.open({ name: 'You', portrait: you }, { name: '', portrait: it }, lines, close, (_, choice) => complete(world, quest, objective.id, objective.options![choice]?.sets));
+  const done = () => (close(), objective.kind === 'talk' && complete(world, quest, objective.id));
+  screen.open({ name: 'You', portrait: you }, { name: '', portrait: it }, lines, done, (_, choice) => complete(world, quest, objective.id, objective.options![choice]?.sets));
 }
 
 // The body lying at `spot` (a tile: within a tile of it), as its creature.
