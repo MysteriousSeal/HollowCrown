@@ -15,8 +15,10 @@ const residents = new Set(map.places('building').flatMap((p) => (p.props as Buil
 
 describe("the people's models", () => {
   // (Was a bug: four models keyed by first name only, never shown. Fixed by characters.)
-  it('are each kept under the name of someone living on the map', () => {
-    expect(Object.keys(PEOPLE).filter((name) => !residents.has(name))).toEqual([]);
+  it("are each, if Brindleford's, kept under the name of someone living there", () => {
+    // (Only Brindleford's folk live in the map's buildings so far; a person with no home given is one of them.)
+    const brindleford = Object.entries(PEOPLE).filter(([, p]) => ((p as { home?: string }).home ?? 'Brindleford') === 'Brindleford');
+    expect(brindleford.map(([name]) => name).filter((name) => !residents.has(name))).toEqual([]);
   });
 
   it('can sit whoever sits', () => {

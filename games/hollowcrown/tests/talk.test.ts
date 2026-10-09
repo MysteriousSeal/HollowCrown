@@ -6,8 +6,6 @@ import { World } from '@voxel/engine/ecs';
 import { FaceToward, Interact, MoveIntent, TimeOfDay, Transform, Wander, wander } from '@voxel/engine/gameplay';
 import { Talking, endTalk, talkSystem, type Talk } from '../src/systems/talk';
 import { Resident, villagerDaySystem } from '../src/systems/villagerDay';
-import { PEOPLE_DATA } from '../src/data/people';
-import { linesOf } from '../src/features/talk';
 
 const setup = () => {
   const world = new World();
@@ -62,12 +60,5 @@ describe('talk', () => {
     villagerDaySystem.update(world, 1 / 60);
     expect(world.has(npc, FaceToward) || world.has(hero, FaceToward) || world.has(npc, Talking)).toBe(false);
     expect(world.has(npc, Wander)).toBe(true);
-  });
-});
-
-describe('talk lines', () => {
-  it("are each villager's first words, said from the right", () => {
-    expect(linesOf('Old Meg')).toEqual([{ side: 'right', text: PEOPLE_DATA['Old Meg'].firstWords }]);
-    expect(linesOf('Old Meg')[0].text.length).toBeGreaterThan(0);
   });
 });

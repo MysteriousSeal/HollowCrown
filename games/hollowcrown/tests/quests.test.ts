@@ -30,6 +30,7 @@ describe('the quests', () => {
           if (typeof o.at === 'string') expect(q.places.includes(o.at), `${s.id}/${o.id}: ${o.at} not in its places`).toBe(true);
           else if (o.at) expect(map.walkable(...o.at), `${s.id}/${o.id}`).toBe(true);
           if (o.who) expect(PEOPLE_DATA[o.who], `${s.id}/${o.id}: ${o.who}`).toBeDefined();
+          for (const l of o.lines ?? []) expect(l.who.length > 0 && l.text.length > 0, `${s.id}/${o.id}: a line`).toBe(true);
           if (o.kind === 'choose') expect((o.options ?? []).length, `${s.id}/${o.id}`).toBeGreaterThan(1);
         }
       }

@@ -7,7 +7,7 @@
 import { CHUNK_SIZE } from './chunks';
 import type { Area, MapSize } from './grid';
 import { boundsOf, covers, type Point, type Shape } from './shapes';
-import { RELIEF_STEP, reliefAt } from './relief';
+import { RELIEF_MAX, RELIEF_MIN, RELIEF_STEP, reliefAt } from './relief';
 import { TILE_HEIGHT, tileOf, type Terrain } from './terrain';
 
 // ---- the data ----
@@ -151,6 +151,8 @@ export class WorldMap implements Terrain {
   private readonly walkableSurface: boolean[]; // by surface number (0: the bare land)
   private readonly landByChunk = new Map<number, number[]>(); // chunk index -> land patches over it, in order
   private readonly surfacesByChunk = new Map<number, number[]>();
+  private readonly flats: Array<{ shape: Shape; level: number }> = []; // ground kept level (flatten)
+  private readonly flatsByChunk = new Map<number, number[]>();
   private readonly chunks = new Map<number, Chunk>();
   private readonly across: number; // chunks across z
   private readonly placesById: Map<string, PlaceData>;
@@ -186,6 +188,21 @@ export class WorldMap implements Terrain {
   surfaceAt(x: number, z: number): number {
     const [tx, tz] = [tileOf(x), tileOf(z)];
     return this.onMap(tx, tz) ? this.chunkOf(tx, tz).surfaces[this.cell(tx, tz)] : 0;
+  }
+
+  // The relief under `shape` set to `level` steps (0: the tier's own height), for something standing there that needs
+  // level ground (a building's footprint). Later calls win; tiles already worked out are worked out again.
+  flatten(shape: Shape, level = 0): void {
+    if (!Number.isInteger(level) || level < RELIEF_MIN || level > RELIEF_MAX) throw new Error(`flatten: level ${level} is outside ${RELIEF_MIN}..${RELIEF_MAX}`);
+    const index = this.flats.push({ shape, level }) - 1;
+    const touched = new Map<number, number[]>();
+    this.bucket(touched, shape, index);
+    for (const key of touched.keys()) {
+      this.chunks.delete(key);
+      const list = this.flatsByChunk.get(key);
+      if (list) list.push(index);
+      else this.flatsByChunk.set(key, [index]);
+    }
   }
 
   walkable(x: number, z: number): boolean {
@@ -273,6 +290,10 @@ export class WorldMap implements Terrain {
       for (let z = 0; z < CHUNK_SIZE; z++) for (let x = 0; x < CHUNK_SIZE; x++) {
         const c = x + z * CHUNK_SIZE;
         if (chunk.surfaces[c] === 0) relief[c] = reliefAt(x0 + x, z0 + z);
+      }
+      for (const i of this.flatsByChunk.get(key) ?? []) {
+        const { shape, level } = this.flats[i];
+        this.paint(shape, x0, z0, (c) => (relief[c] = level));
       }
     }
     this.chunks.set(key, chunk);

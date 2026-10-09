@@ -5,6 +5,7 @@
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
 import { PEOPLE, personId } from '../src/people';
+import { strangerModel } from '../src/people/stranger';
 
 const round = (n: number) => Math.round(n * 1000) / 1000;
 
@@ -28,7 +29,9 @@ describe('people', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  for (const person of Object.values(PEOPLE)) {
+  const models = Object.values(PEOPLE).flatMap((p) => [{ name: p.name, make: p.make }, ...Object.entries(p.variants ?? {}).map(([v, make]) => ({ name: `${p.name} (${v})`, make }))]);
+  models.push({ name: 'The Stranger (the hero)', make: () => strangerModel() });
+  for (const person of models) {
     it(`${person.name}: builds, poses and keeps their shape`, () => {
       const model = person.make();
       expect(model.height).toBeGreaterThan(0.25);
