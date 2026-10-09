@@ -4,10 +4,10 @@
 
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
-import { covers, loadWorldMap, type Shape } from '@voxel/engine/world';
+import { Obstacles, covers, loadWorldMap, type Shape } from '@voxel/engine/world';
 import { obstaclesOf } from '../src/buildings';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
-import { forestLayer, forestTrees, type Tree } from '../src/nature/forests';
+import { forestChunks, forestLayer, treesIn, type Tree } from '../src/nature/forests';
 import { NATURE } from '../src/nature/palette';
 import { SPECIES, VARIANTS, treeModel, treeVoxels } from '../src/nature/trees';
 
@@ -41,7 +41,7 @@ describe('the Vale\'s trees', () => {
 describe('the Vale\'s forests', () => {
   const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
   const built = obstaclesOf(map);
-  const byChunk = forestTrees(map, built);
+  const byChunk = new Map([...forestChunks(map)].map((k) => [k, treesIn(map, k, built)]));
   const all = [...byChunk.values()].flat();
   const forests = map.data.areas.filter((a) => a.kind === 'forest');
   const inside = (shape: Shape, t: Tree) => covers(shape, Math.round(t.x), Math.round(t.z));
@@ -62,11 +62,12 @@ describe('the Vale\'s forests', () => {
 
   it('come out the same every time', () => {
     const [key] = byChunk.keys();
-    expect(forestTrees(map, built).get(key)).toEqual(byChunk.get(key));
+    expect(treesIn(map, key, built)).toEqual(byChunk.get(key));
   });
 
-  it('draw a chunk as one instanced mesh a tree shape, quickly', () => {
-    const layer = forestLayer(map, byChunk);
+  it('draw a chunk as one instanced mesh a tree shape, quickly, its trunks in the way', () => {
+    const trunks = new Obstacles();
+    const layer = forestLayer(map, built, trunks);
     const [key] = [...byChunk.entries()].sort((a, b) => b[1].length - a[1].length)[0];
     layer.build(key); // (the shapes' meshes, built once)
     const t = performance.now();
@@ -74,5 +75,6 @@ describe('the Vale\'s forests', () => {
     expect(performance.now() - t).toBeLessThan(20);
     expect(meshes.length).toBeLessThanOrEqual(VARIANTS * SPECIES.length);
     expect(meshes.reduce((n, m) => n + m.count, 0)).toBe(byChunk.get(key)!.length);
+    expect(trunks.size).toBe(byChunk.get(key)!.length); // (each trunk in the way once, however often its chunk's built)
   });
 });

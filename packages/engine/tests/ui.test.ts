@@ -16,6 +16,19 @@ describe('Typewriter', () => {
 });
 import { Dialogue } from '../src/ui/dialogue';
 import { MapView, cssColor } from '../src/ui/mapImage';
+import { ToastQueue } from '../src/ui/toasts';
+
+describe('ToastQueue', () => {
+  it('puts up a few at a time, the rest as those go', () => {
+    const q = new ToastQueue(4, 2);
+    for (const title of ['a', 'b', 'c']) q.push({ title });
+    expect(q.update(0).shown.map((t) => t.title)).toEqual(['a', 'b']);
+    expect(q.update(3)).toEqual({ gone: [], shown: [] });
+    const { gone, shown } = q.update(4);
+    expect([gone.map((t) => t.title), shown.map((t) => t.title)]).toEqual([['a', 'b'], ['c']]);
+    expect(q.update(8).gone.map((t) => t.title)).toEqual(['c']);
+  });
+});
 
 describe('MapView', () => {
   it('puts its centre mid-screen and others by its zoom', () => {
