@@ -9,9 +9,9 @@ export const SURFACES = {
   ford: { color: 0x7a9488 }, // shallows and stepping stones: wadeable
   sand: { color: 0xc9b688 },
   marsh: { color: 0x5f6c3e }, // reeds and wet ground
-  road: { color: 0x9a8461 },
-  track: { color: 0x8c8a5c }, // faint, half grassed over
-  path: { color: 0xa8956c }, // a footpath trodden bare: door to lane, yard to barn
+  road: { color: 0x9a8461, worn: 'road' }, // (drawn as a worn way: ruts, a grassy crown)
+  track: { color: 0x8c8a5c, worn: 'path' }, // faint, half grassed over
+  path: { color: 0xa8956c, worn: 'path' }, // a footpath trodden bare: door to lane, yard to barn
   garden: { color: 0x6a5434 }, // dug soil in rows: kitchen gardens behind the cottages
   field: { color: 0x87683f }, // ploughed strips, after the harvest
   rock: { color: 0x6c6862, walkable: false }, // the mountains' crags
