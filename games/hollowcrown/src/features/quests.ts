@@ -40,12 +40,13 @@ export function complete(world: World, quest: string, id: string, sets?: Record<
 }
 
 // The lines an objective plays, talking with `name` (the hero on the left, everyone else on the right, named if it
-// isn't `name` speaking); a choice's replies offered on its last. None written: `fallback`.
+// isn't `name` speaking: a third voice); a choice's replies offered on its last. None written: `fallback`.
 export function linesOf(objective: Objective, name: string, fallback: Line): ConversationLine[] {
   const said = objective.lines?.length ? objective.lines : [fallback];
   const lines: ConversationLine[] = said.map(({ who, text }) => ({
     side: who === 'hero' ? 'left' : 'right',
-    text: who === 'hero' || who === name ? text : `${who}: ${text}`,
+    text,
+    ...(who === 'hero' || who === name ? {} : { who }),
   }));
   if (objective.kind === 'choose') lines[lines.length - 1].choices = objective.options!.map((o) => o.label);
   return lines;
