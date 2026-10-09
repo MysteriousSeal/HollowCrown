@@ -16,13 +16,29 @@ export const SQ_BV4: Quest = {
     {
       id: 'the-living', title: 'Rung by the living',
       objectives: [
-        { id: 'cuthwin', kind: 'talk', text: 'Cuthwin wants the bell rung once by the living. Not the dead.', at: 'shrine-house', who: 'Father Cuthwin' },
+        {
+          id: 'cuthwin', kind: 'talk', text: 'Cuthwin wants the bell rung once by the living. Not the dead.', at: 'shrine-house', who: 'Father Cuthwin',
+          lines: [
+            { who: 'Father Cuthwin', text: 'The tongue. You brought it out of there.' },
+            { who: 'Father Cuthwin', text: 'That bell has rung for the dead twice now. Once when they were buried and once when they got up. I want it rung once for the living.' },
+            { who: 'hero', text: 'Why me?' },
+            { who: 'Father Cuthwin', text: "Because I can't climb, and nobody else will go up that hill." },
+          ],
+        },
       ],
     },
     {
       id: 'the-pin', title: 'A yoke-pin',
       objectives: [
-        { id: 'tobin', kind: 'talk', text: 'Tobin can forge a new yoke-pin, for two iron bars or thirty copper.', at: 'smithy', who: 'Tobin Harrow' },
+        {
+          id: 'tobin', kind: 'talk', text: 'Tobin can forge a new yoke-pin, for two iron bars or thirty copper.', at: 'smithy', who: 'Tobin Harrow',
+          lines: [
+            { who: 'Tobin Harrow', text: 'Mm.' },
+            { who: 'hero', text: 'A yoke-pin. For the bell.' },
+            { who: 'Tobin Harrow', text: 'Two bars. Or thirty.' },
+            { who: 'Tobin Harrow', text: '...Good.' },
+          ],
+        },
         { id: 'pin', kind: 'take', text: 'Take the pin.', at: 'smithy', what: 'yoke-pin' },
       ],
     },
@@ -44,8 +60,22 @@ export const SQ_BV4: Quest = {
     {
       id: 'the-step', title: 'The chapel step',
       objectives: [
-        { id: 'story', kind: 'talk', text: "Sit with Cuthwin on the step. He has something he's never told anyone.", at: 'quiet-bell-chapel', who: 'Father Cuthwin' },
-        { id: 'rite', kind: 'talk', text: 'He can teach me the Rite of Rest.', at: 'quiet-bell-chapel', who: 'Father Cuthwin' },
+        {
+          id: 'story', kind: 'talk', text: "Sit with Cuthwin on the step. He has something he's never told anyone.", at: 'quiet-bell-chapel', who: 'Father Cuthwin',
+          lines: [
+            { who: 'Father Cuthwin', text: 'You never asked why I left the Lantern. Everyone else did, once. Then they stopped.' },
+            { who: 'Father Cuthwin', text: 'The Lector chose a girl of fourteen for a vigil. He asked me to hold her head while Brother Hode sewed her eyes.' },
+            { who: 'Father Cuthwin', text: "I held it. For one stitch. Then I let go and ran, and I've been running for twelve years, and I never told anyone, and I never went back for her." },
+            { who: 'hero', text: '...' },
+            { who: 'Father Cuthwin', text: "Don't. Whatever you were going to say. Just sit." },
+          ],
+        },
+        {
+          id: 'rite', kind: 'talk', text: 'He can teach me the Rite of Rest.', at: 'quiet-bell-chapel', who: 'Father Cuthwin',
+          lines: [
+            { who: 'Father Cuthwin', text: "The Rite of Rest. It isn't magic. It's manners. You tell the dead their names, and that they can stop." },
+          ],
+        },
       ],
       sets: { cuthwin_story: true, rite_of_rest: true },
     },

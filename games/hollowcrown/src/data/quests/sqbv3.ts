@@ -20,8 +20,21 @@ export const SQ_BV3: Quest = {
     {
       id: 'the-bees', title: 'Bees in the grass',
       objectives: [
-        { id: 'agna', kind: 'talk', text: "Agna Bee's hives are emptying. The bees are dying out in the meadow.", at: THE_HIVES },
-        { id: 'brede', kind: 'talk', text: "Little Brede says they go to the cold stones and fall asleep.", at: 'tallow-green', optional: true },
+        {
+          id: 'agna', kind: 'talk', text: "Agna Bee's hives are emptying. The bees are dying out in the meadow.", at: THE_HIVES,
+          lines: [
+            { who: 'Agna Bee', text: 'Listen. Hear that? No. Neither do I.' },
+            { who: 'Agna Bee', text: "Twelve hives. Four left humming. They fly off west in the morning and they don't come home. I find them in the grass, curled up like they're sleeping." },
+            { who: 'hero', text: 'Poison?' },
+            { who: 'Agna Bee', text: "Poison I'd smell. This is something else." },
+          ],
+        },
+        {
+          id: 'brede', kind: 'talk', text: "Little Brede says they go to the cold stones and fall asleep.", at: 'tallow-green', optional: true,
+          lines: [
+            { who: 'Little Brede', text: 'They go to the cold stones and fall asleep. I tried to wake one. It was cold too.' },
+          ],
+        },
       ],
     },
     {
@@ -36,16 +49,32 @@ export const SQ_BV3: Quest = {
       id: 'the-maiden', title: 'The Barrow-Maiden', hour: 23,
       objectives: [
         { id: 'ghosts', kind: 'fight', text: 'Ghosts at the stones, and a girl four hundred years dead. She wants her necklace.', at: 'nine-sisters', what: 'ghost', count: 3 },
-        { id: 'maiden', kind: 'fight', text: 'The Barrow-Maiden.', at: 'nine-sisters', what: 'Barrow-Maiden' },
+        {
+          id: 'maiden', kind: 'fight', text: 'The Barrow-Maiden.', at: 'nine-sisters', what: 'Barrow-Maiden',
+          lines: [
+            { who: 'the Barrow-Maiden', text: 'Mine. Mother put it round my neck. Mother put me in the dark. Give it back.' },
+          ],
+        },
         { id: 'set-ward', kind: 'go', text: 'Set the ward back on the mound. Nobody else can carry it.', at: 'nine-sisters' },
       ],
     },
     {
       id: 'the-digger', title: 'Wax',
       objectives: [
-        { id: 'hal', kind: 'talk', text: "The wax is a chandler's. Hal Wicke has a bronze necklace and a bride-price to find.", at: 'tallow-green' },
+        {
+          id: 'hal', kind: 'talk', text: "The wax is a chandler's. Hal Wicke has a bronze necklace and a bride-price to find.", at: 'tallow-green',
+          lines: [
+            { who: 'Hal Wicke', text: "It's only bronze. I thought it'd be gold. They always say gold." },
+            { who: 'hero', text: "There's frost on those stones in August, Hal." },
+            { who: 'Hal Wicke', text: "Garrick wants twenty silver for her. Twenty. My da's never seen twenty silver. I'd dig up the whole hill for Elsa." },
+            { who: 'hero', text: 'Something down there would let you.' },
+          ],
+        },
         {
           id: 'hal-secret', kind: 'choose', text: 'He dug up a dead girl to marry a living one. Whether Tallow Green knows is up to me.', at: 'tallow-green',
+          lines: [
+            { who: 'Hal Wicke', text: "If Goody Thatch hears, I'm done here. If Garrick hears, I'm done everywhere." },
+          ],
           options: [
             { id: 'told', label: '[Tell Agna and Goody Thatch]', sets: { hal_secret: 'told' } },
             { id: 'kept', label: "[Keep it] You'll give it back to her yourself. Tonight. At the stones.", sets: { hal_secret: 'kept' } },

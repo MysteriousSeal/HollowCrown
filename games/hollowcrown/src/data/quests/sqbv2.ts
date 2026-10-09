@@ -17,7 +17,15 @@ export const SQ_BV2: Quest = {
     {
       id: 'the-heron', title: 'A wooden heron',
       objectives: [
-        { id: 'kit', kind: 'talk', text: 'Kit wants his father found. All he has of him is a whittled heron.', at: 'cobbe-barn', who: 'Kit' },
+        {
+          id: 'kit', kind: 'talk', text: 'Kit wants his father found. All he has of him is a whittled heron.', at: 'cobbe-barn', who: 'Kit',
+          lines: [
+            { who: 'Kit', text: "My da made this. It's a heron. You can tell by the legs." },
+            { who: 'Kit', text: "He went to Kingsmere for work. Four winters. Kingsmere's big, but you're from the mountains, you can find anything." },
+            { who: 'hero', text: "What's his name?" },
+            { who: 'Kit', text: 'Pip Tanner. He laughs like a goose. Ask anyone.' },
+          ],
+        },
       ],
     },
     {
@@ -29,9 +37,20 @@ export const SQ_BV2: Quest = {
     {
       id: 'pip', title: 'Pip Tanner',
       objectives: [
-        { id: 'find-pip', kind: 'talk', text: "Find Pip Tanner among Wren's people, and show him the heron.", at: 'hollow-oak' },
+        {
+          id: 'find-pip', kind: 'talk', text: "Find Pip Tanner among Wren's people, and show him the heron.", at: 'hollow-oak',
+          lines: [
+            { who: 'Pip Tanner', text: 'Whoever told you my name, they owe me for it.' },
+            { who: 'hero', text: 'Kit told me. He sent this.' },
+            { who: 'Pip Tanner', text: '...' },
+            { who: 'Pip Tanner', text: "I made that the night before the levy came. They don't pay you to go home, the Regent's men. They hang you for it." },
+          ],
+        },
         {
           id: 'kit', kind: 'choose', text: "He couldn't go home a deserter. Kit is waiting in a barn for an answer.", at: 'hollow-oak',
+          lines: [
+            { who: 'Pip Tanner', text: 'Does he still laugh at everything? He used to laugh at everything.' },
+          ],
           options: [
             { id: 'with-pip', label: '[Bring Kit to the Hollow Oak]', sets: { kit: 'kit_with_pip' } },
             { id: 'home', label: '[Bring Pip home] (Greenhood 20, or a pardon)', sets: { kit: 'pip_home' } },
@@ -44,7 +63,12 @@ export const SQ_BV2: Quest = {
     {
       id: 'kit-again', title: 'Back to the barn',
       objectives: [
-        { id: 'kit', kind: 'talk', text: 'Tell Kit.', at: 'cobbe-barn', who: 'Kit' },
+        {
+          id: 'kit', kind: 'talk', text: 'Tell Kit.', at: 'cobbe-barn', who: 'Kit',
+          lines: [
+            { who: 'Kit', text: 'Well? Did he laugh like a goose?' },
+          ],
+        },
       ],
     },
   ],

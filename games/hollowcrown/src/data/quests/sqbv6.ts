@@ -16,8 +16,21 @@ export const SQ_BV6: Quest = {
     {
       id: 'missing', title: 'Two days gone',
       objectives: [
-        { id: 'ada', kind: 'talk', text: "Wenna went after a lost ewe two days ago. Ada's frantic. Hob won't look at anyone.", at: 'cobbe-farmhouse', who: 'Ada Cobbe' },
-        { id: 'hob', kind: 'talk', text: "Hob says she'll turn up.", at: 'cobbe-farmhouse', who: 'Hob Cobbe', optional: true },
+        {
+          id: 'ada', kind: 'talk', text: "Wenna went after a lost ewe two days ago. Ada's frantic. Hob won't look at anyone.", at: 'cobbe-farmhouse', who: 'Ada Cobbe',
+          lines: [
+            { who: 'Ada Cobbe', text: "Two days. She went after a ewe. Two days, and him at the inn like it's a feast." },
+            { who: 'Ada Cobbe', text: "Scrap's been howling at the east fence since morning. Take the dog. Please." },
+          ],
+        },
+        {
+          id: 'hob', kind: 'talk', text: "Hob says she'll turn up.", at: 'cobbe-farmhouse', who: 'Hob Cobbe', optional: true,
+          lines: [
+            { who: 'Hob Cobbe', text: "She'll turn up. Girls do." },
+            { who: 'hero', text: "You haven't looked." },
+            { who: 'Hob Cobbe', text: "Hay's in. Mind your business." },
+          ],
+        },
       ],
     },
     {
@@ -30,10 +43,23 @@ export const SQ_BV6: Quest = {
     {
       id: 'mossjaw', title: 'Mossjaw',
       objectives: [
-        { id: 'aldo', kind: 'search', text: "The ewe, what's left of it, and the man who ate it: old Aldo, gone since the Wet Years. He runs from my torch.", at: 'mossjaw-cave', what: 'pit-eater' },
+        {
+          id: 'aldo', kind: 'search', text: "The ewe, what's left of it, and the man who ate it: old Aldo, gone since the Wet Years. He runs from my torch.", at: 'mossjaw-cave', what: 'pit-eater',
+          lines: [
+            { who: 'old Aldo', text: "No light. No light. She gave me bread. I didn't touch her. I didn't." },
+          ],
+        },
         { id: 'spiders', kind: 'fight', text: 'Spiders in the second chamber.', at: 'mossjaw-cave', what: 'spider', count: 4 },
         { id: 'brood-mother', kind: 'fight', text: 'The brood mother, in the deep tunnel.', at: 'mossjaw-cave', what: 'brood mother' },
-        { id: 'wenna', kind: 'talk', text: "Behind her, in a crack too narrow for her: Wenna. Starving, bruised, alive, holding a knife.", at: 'mossjaw-cave', who: 'Wenna' },
+        {
+          id: 'wenna', kind: 'talk', text: "Behind her, in a crack too narrow for her: Wenna. Starving, bruised, alive, holding a knife.", at: 'mossjaw-cave', who: 'Wenna',
+          lines: [
+            { who: 'Wenna', text: "Stay back. I'll cut you. I cut one of them." },
+            { who: 'hero', text: 'Ada sent me. And the dog.' },
+            { who: 'Wenna', text: 'Scrap?' },
+            { who: 'Wenna', text: "...I'm not going back. You can carry me and I'll still not be going back." },
+          ],
+        },
       ],
     },
     {
@@ -41,6 +67,10 @@ export const SQ_BV6: Quest = {
       objectives: [
         {
           id: 'wenna', kind: 'choose', text: "Hob sold a year of her to the Red Hen for his poppy debt, and beats her when he's sick for it. She'd rather the spiders.", at: 'mossjaw-cave', who: 'Wenna',
+          lines: [
+            { who: 'Wenna', text: 'Uncle Hob owes the Red Hen for the white. He sold them a year of me. Water, gutting, mending what they steal off the dead.' },
+            { who: 'Wenna', text: "He told Aunt Ada I'm going into service in Tallow Green. He hits me when he's sick for it. The spiders don't hit." },
+          ],
           options: [
             { id: 'home', label: '[Take her home]', sets: { wenna: 'home' } },
             { id: 'ada', tone: 'blunt', label: "[Tell Ada] Look at her arms, Ada. Then ask him where she's been 'in service'.", sets: { wenna: 'ada_told' } },
