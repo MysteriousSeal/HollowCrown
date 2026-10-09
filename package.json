@@ -1,16 +1,16 @@
 {
-  "name": "hollowcrown",
+  "name": "hollowcrown-workspace",
   "private": true,
-  "version": "0.1.0",
   "type": "module",
+  "workspaces": [
+    "packages/*",
+    "games/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview",
+    "dev": "npm run dev -w hollowcrown",
+    "build": "tsc --noEmit && npm run build -w hollowcrown",
+    "preview": "npm run preview -w hollowcrown",
     "test": "vitest run"
-  },
-  "dependencies": {
-    "three": "^0.169.0"
   },
   "devDependencies": {
     "@types/three": "^0.169.0",

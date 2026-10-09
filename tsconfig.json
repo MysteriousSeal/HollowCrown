@@ -13,5 +13,5 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["src"]
+  "include": ["packages/*/src", "packages/*/tests", "games/*/src", "games/*/vite.config.ts"]
 }
