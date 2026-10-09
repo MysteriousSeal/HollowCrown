@@ -1,0 +1,2 @@
+# Features add one line each to the list: merging two branches keeps both lines.
+games/hollowcrown/src/features/index.ts merge=union
