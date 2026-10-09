@@ -4,7 +4,8 @@
 // in the top-left corner, and notices sliding in under it (a quest started, an objective done, a new place); the time
 // of day in the top-right, the quest followed under it; the hero's health, bottom left, and a hurt foe's over its head; the damage
 // of every blow, floating up from where it landed; what E would do, low in the middle; the conversation screen (ConversationScreen, for gameplay to open); and the screens
-// that pause the game (ui/pausingScreens.ts: the map, the journal, the pause menu).
+// that pause the game (ui/pausingScreens.ts: the map, the journal, the pause menu), and the
+// death screen (ui/deathScreen.ts).
 
 import { VisualComponent } from '@voxel/engine/app';
 import { KeyboardResource } from '@voxel/engine/input';
@@ -13,6 +14,7 @@ import { Dead, Health, Hit, InReach, TimeOfDay, Transform } from '@voxel/engine/
 import { Banner, Conversation, CornerLabel, FloatingText, Meter, Prompt, Toasts, TrackerPanel, WorldLabels, createOverlay, fadeByDistance, meterShare, type WorldLabel } from '@voxel/engine/ui';
 import { Barked } from '../systems/barks';
 import { Resident } from '../systems/villagerDay';
+import { deathScreen } from '../ui/deathScreen';
 import { clockText, nearPlaceName, regionBanner, regionOf } from '../ui/hudText';
 import { pausingScreens } from '../ui/pausingScreens';
 import { questNews, snapshot, startLog, trackedOf } from '../ui/questLog';
@@ -49,7 +51,7 @@ export const hud: Feature = {
     const conversation = world.setResource(ConversationScreen, new Conversation(root));
     const placeholderLog = startLog();
     const logOf = () => (world.hasResource(QuestLog) ? world.resource(QuestLog) : placeholderLog);
-    const theMap = pausingScreens(app, root, map, conversation, logOf);
+    const theMap = pausingScreens(app, root, map, () => conversation.isOpen || world.has(hero, Dead), logOf);
     // A key a conversation took (to go on, to close it) isn't the hero's too: no swing, no talk again.
     let talking = false;
     window.addEventListener('keydown', () => (talking = conversation.isOpen), { capture: true });
@@ -141,6 +143,6 @@ export const hud: Feature = {
         }
       },
     };
-    app.addSystems(system);
+    app.addSystems(system, deathScreen(app, root, hero));
   },
 };
