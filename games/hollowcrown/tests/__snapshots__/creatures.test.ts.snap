@@ -1,0 +1,562 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`creatures > alphaWolf: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.5,
+  "max": [
+    0.109,
+    0.531,
+    0.469,
+  ],
+  "min": [
+    -0.109,
+    -0,
+    -0.44,
+  ],
+  "triangles": 458,
+}
+`;
+
+exports[`creatures > ashen: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.172,
+    0.596,
+    0.101,
+  ],
+  "min": [
+    -0.136,
+    -0,
+    -0.131,
+  ],
+  "triangles": 1708,
+}
+`;
+
+exports[`creatures > ashenSmall: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.279,
+  "max": [
+    0.107,
+    0.37,
+    0.063,
+  ],
+  "min": [
+    -0.084,
+    -0,
+    -0.081,
+  ],
+  "triangles": 1712,
+}
+`;
+
+exports[`creatures > bandit: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.518,
+    0.287,
+  ],
+  "min": [
+    -0.142,
+    -0,
+    -0.116,
+  ],
+  "triangles": 1870,
+}
+`;
+
+exports[`creatures > barrowGiant: builds, poses and keeps its shape 1`] = `
+{
+  "height": 1.52,
+  "max": [
+    0.5,
+    1.519,
+    0.262,
+  ],
+  "min": [
+    -0.5,
+    -0,
+    -0.159,
+  ],
+  "triangles": 3280,
+}
+`;
+
+exports[`creatures > barrowHound: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.4,
+  "max": [
+    0.087,
+    0.425,
+    0.375,
+  ],
+  "min": [
+    -0.087,
+    -0,
+    -0.344,
+  ],
+  "triangles": 1214,
+}
+`;
+
+exports[`creatures > bear: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.613,
+  "max": [
+    0.162,
+    0.55,
+    0.475,
+  ],
+  "min": [
+    -0.162,
+    -0,
+    -0.305,
+  ],
+  "triangles": 1178,
+}
+`;
+
+exports[`creatures > bloomer: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.192,
+    0.518,
+    0.158,
+  ],
+  "min": [
+    -0.158,
+    -0,
+    -0.108,
+  ],
+  "triangles": 2752,
+}
+`;
+
+exports[`creatures > boar: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.388,
+  "max": [
+    0.1,
+    0.35,
+    0.338,
+  ],
+  "min": [
+    -0.1,
+    -0,
+    -0.261,
+  ],
+  "triangles": 668,
+}
+`;
+
+exports[`creatures > bogDraugr: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.585,
+  "max": [
+    0.184,
+    0.776,
+    0.694,
+  ],
+  "min": [
+    -0.244,
+    -0,
+    -0.131,
+  ],
+  "triangles": 1120,
+}
+`;
+
+exports[`creatures > broodMother: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.665,
+  "max": [
+    0.55,
+    0.593,
+    0.465,
+  ],
+  "min": [
+    -0.55,
+    -0,
+    -0.648,
+  ],
+  "triangles": 3654,
+}
+`;
+
+exports[`creatures > carrowArbalester: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.142,
+    0.517,
+    0.23,
+  ],
+  "min": [
+    -0.25,
+    -0,
+    -0.125,
+  ],
+  "triangles": 1194,
+}
+`;
+
+exports[`creatures > carrowPikeman: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.142,
+    1.131,
+    0.224,
+  ],
+  "min": [
+    -0.142,
+    -0,
+    -0.125,
+  ],
+  "triangles": 1092,
+}
+`;
+
+exports[`creatures > draugr: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.72,
+  "max": [
+    0.227,
+    1.29,
+    0.741,
+  ],
+  "min": [
+    -0.227,
+    -0,
+    -0.262,
+  ],
+  "triangles": 1632,
+}
+`;
+
+exports[`creatures > drowned: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.133,
+    0.434,
+    0.11,
+  ],
+  "min": [
+    -0.133,
+    -0,
+    -0.058,
+  ],
+  "triangles": 2408,
+}
+`;
+
+exports[`creatures > ghost: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.113,
+    0.521,
+    0.103,
+  ],
+  "min": [
+    -0.113,
+    0.103,
+    -0.083,
+  ],
+  "triangles": 1892,
+}
+`;
+
+exports[`creatures > greenhood: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.142,
+    0.468,
+    0.124,
+  ],
+  "min": [
+    -0.125,
+    -0.004,
+    -0.113,
+  ],
+  "triangles": 1934,
+}
+`;
+
+exports[`creatures > heronCrossbowman: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.483,
+    0.23,
+  ],
+  "min": [
+    -0.225,
+    -0,
+    -0.125,
+  ],
+  "triangles": 1572,
+}
+`;
+
+exports[`creatures > heronSpearman: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.258,
+    0.838,
+    0.159,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.125,
+  ],
+  "triangles": 2164,
+}
+`;
+
+exports[`creatures > hollowed: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.117,
+    0.454,
+    0.193,
+  ],
+  "min": [
+    -0.117,
+    -0,
+    -0.051,
+  ],
+  "triangles": 1132,
+}
+`;
+
+exports[`creatures > hungry: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.463,
+    0.121,
+  ],
+  "min": [
+    -0.138,
+    0.03,
+    -0.049,
+  ],
+  "triangles": 1462,
+}
+`;
+
+exports[`creatures > hungryMother: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.15,
+    0.464,
+    0.105,
+  ],
+  "min": [
+    -0.125,
+    0.03,
+    -0.049,
+  ],
+  "triangles": 1500,
+}
+`;
+
+exports[`creatures > lanternKnight: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.142,
+    0.746,
+    0.161,
+  ],
+  "min": [
+    -0.142,
+    -0.002,
+    -0.108,
+  ],
+  "triangles": 1844,
+}
+`;
+
+exports[`creatures > pitEater: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.414,
+  "max": [
+    0.115,
+    0.352,
+    0.158,
+  ],
+  "min": [
+    -0.115,
+    -0,
+    -0.057,
+  ],
+  "triangles": 2078,
+}
+`;
+
+exports[`creatures > rook: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.313,
+  "max": [
+    0.125,
+    0.313,
+    0.3,
+  ],
+  "min": [
+    -0.125,
+    0,
+    -0.15,
+  ],
+  "triangles": 790,
+}
+`;
+
+exports[`creatures > rookLeader: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.391,
+  "max": [
+    0.156,
+    0.391,
+    0.375,
+  ],
+  "min": [
+    -0.156,
+    0,
+    -0.188,
+  ],
+  "triangles": 790,
+}
+`;
+
+exports[`creatures > sewn: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.465,
+    0.122,
+  ],
+  "min": [
+    -0.129,
+    -0,
+    -0.069,
+  ],
+  "triangles": 508,
+}
+`;
+
+exports[`creatures > shade: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.667,
+  "max": [
+    0.202,
+    0.667,
+    0.1,
+  ],
+  "min": [
+    -0.21,
+    0.095,
+    -0.083,
+  ],
+  "triangles": 1988,
+}
+`;
+
+exports[`creatures > skeleton: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.517,
+    0.349,
+  ],
+  "min": [
+    -0.162,
+    -0,
+    -0.067,
+  ],
+  "triangles": 1348,
+}
+`;
+
+exports[`creatures > skeletonArcher: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.213,
+    0.451,
+    0.084,
+  ],
+  "min": [
+    -0.125,
+    -0.03,
+    -0.175,
+  ],
+  "triangles": 1410,
+}
+`;
+
+exports[`creatures > spider: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.423,
+  "max": [
+    0.42,
+    0.378,
+    0.305,
+  ],
+  "min": [
+    -0.42,
+    -0,
+    -0.405,
+  ],
+  "triangles": 1990,
+}
+`;
+
+exports[`creatures > spiderling: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.195,
+  "max": [
+    0.194,
+    0.175,
+    0.141,
+  ],
+  "min": [
+    -0.194,
+    -0,
+    -0.187,
+  ],
+  "triangles": 1990,
+}
+`;
+
+exports[`creatures > wolf: builds, poses and keeps its shape 1`] = `
+{
+  "height": 0.4,
+  "max": [
+    0.087,
+    0.425,
+    0.375,
+  ],
+  "min": [
+    -0.087,
+    -0,
+    -0.352,
+  ],
+  "triangles": 458,
+}
+`;
