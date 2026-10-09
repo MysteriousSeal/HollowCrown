@@ -4,7 +4,7 @@
 // same face, every time.
 
 import { FrameModel, MARCH, bodyPalette, type BodyLook, type Build } from '@voxel/engine/characters';
-import { MoveSpeed, Transform } from '@voxel/engine/gameplay';
+import { Interactable, MoveSpeed, Transform, interactable } from '@voxel/engine/gameplay';
 import { hashUnit } from '@voxel/engine/math';
 import type { Model } from '@voxel/engine/models';
 import type { PlaceData, WorldMap } from '@voxel/engine/world';
@@ -114,7 +114,8 @@ export const villagers: Feature = {
       const person = app.world.spawn(
         [Transform, { x: v.x, y: map.groundY(v.x, v.z), z: v.z, facing: v.facing }],
         [MoveSpeed, 1.2],
-        [Resident, { home: { x: v.x, z: v.z }, facing: v.facing, seated: v.seated }],
+        [Interactable, interactable(`Talk to ${v.name}`)],
+        [Resident, { name: v.name, home: { x: v.x, z: v.z }, facing: v.facing, seated: v.seated }],
       );
       app.show(person, figureOf(v));
     }
