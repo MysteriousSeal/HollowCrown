@@ -174,6 +174,32 @@
       .ui-talk-choice { padding: 3px 8px; font-size: 17px; font-weight: 600; color: var(--sand); border: 1px solid transparent; }
       .ui-talk-choice::marker { color: #e8c27a; font-weight: 700; }
       .ui-talk-choice:hover { color: var(--cream); background: rgba(232, 194, 122, 0.12); border-color: rgba(232, 194, 122, 0.45); }
+      /* The map (M): the scene dimmed, a gilded frame round the Vale drawn small, the region's name over it. */
+      .ui-map {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: rgba(20, 13, 9, 0.6);
+        pointer-events: auto;
+        animation: ui-fade-in 0.25s ease-out;
+      }
+      .ui-map-panel {
+        width: min(92vw, 1100px);
+        height: min(86vh, 820px);
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 16px 10px;
+        background: linear-gradient(180deg, rgba(48, 32, 22, 0.96), rgba(28, 19, 13, 0.97));
+        border: 2px solid #b98a46;
+        border-radius: 4px;
+        box-shadow: inset 0 0 0 3px #1e140d, inset 0 0 0 4px rgba(232, 194, 122, 0.35), 0 12px 32px rgba(10, 6, 4, 0.55);
+      }
+      .ui-map-title { min-height: 1.2em; text-align: center; font-size: 15px; font-weight: 700; letter-spacing: 0.18em; color: #e8c27a; text-shadow: 0 1px 0 #1e140d; }
+      .ui-map-canvas { flex: 1; min-height: 0; width: 100%; display: block; border: 2px solid #1e140d; box-shadow: 0 0 0 1px rgba(232, 194, 122, 0.35); cursor: zoom-in; }
+      .ui-map-hint { text-align: right; font-size: 13px; font-weight: 600; color: var(--muted); white-space: pre; }
       .ui-talk-hint { text-align: right; font-size: 13px; font-weight: 600; color: var(--muted); }
     </style>
   </head>
