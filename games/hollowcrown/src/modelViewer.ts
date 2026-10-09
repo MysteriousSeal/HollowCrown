@@ -5,7 +5,7 @@
 import { startModelViewer } from '@voxel/engine/tools';
 import { CREATURES } from './creatures';
 import { PEOPLE, personId } from './people';
-import { strangerModel } from './people/stranger';
+import { RUSTY_KNIFE, strangerModel } from './people/stranger';
 import { placeModel } from './buildings';
 import { BRINDLEFORD } from './data/world/brindleford';
 import { SPECIES, VARIANTS, treeModel } from './nature/trees';
@@ -27,6 +27,7 @@ startModelViewer(
       ...Object.entries(variants ?? {}).map(([v, made]) => ({ id: `${personId(name)}-${v}`, name: `${name} (${v})`, group: `${home} folk`, make: made })),
     ]),
     { id: 'stranger', name: 'The Stranger (the hero)', group: 'Hero', make: () => strangerModel() },
+    { id: 'strangerKnife', name: 'The Stranger, with the rusty knife', group: 'Hero', make: () => strangerModel(undefined, undefined, { rightArm: RUSTY_KNIFE }) },
     ...(BRINDLEFORD.places ?? []).filter((p) => p.kind === 'building' || p.kind === 'fixture').map((p) => ({ id: p.id, name: p.name ?? p.id, group: 'Brindleford', make: () => placeModel(p)! })),
     ...SPECIES.flatMap((s) => Array.from({ length: VARIANTS }, (_, v) => ({ id: `${s}${v}`, name: `${s} ${v + 1}`, group: 'Trees', make: () => treeModel(s, v) }))),
     ...Object.entries(MEADOW_SHAPES).map(([id, grid]) => ({ id, name: id, group: 'Meadows', make: () => new VoxelModel(grid(), NATURE_LOOK, { voxel: STRUCTURE_VOXEL }) })),
