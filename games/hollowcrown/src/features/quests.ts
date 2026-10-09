@@ -1,7 +1,7 @@
 // The quests: MQ01 starts with the game, at the Pilgrim's Shrine, and the quest book (systems/quests.ts) is kept as
 // the hero plays. Being somewhere does a 'go', a 'search' or a 'take' there; reaching a choice that's nobody's (a
 // body in a ditch) asks it there; talking to someone does what's asked of them (features/talk.ts). A stage with an
-// hour moves the clock to it. The HUD's tracker follows the quest followed.
+// hour moves the clock to it. The HUD's quest log (its tracker, journal, notices) is the book itself.
 
 import type { System, World } from '@voxel/engine/ecs';
 import { TimeOfDay, Transform } from '@voxel/engine/gameplay';
@@ -11,7 +11,7 @@ import { PEOPLE_DATA } from '../data/people';
 import type { Spot } from '../data/people/kinds';
 import { QUESTS, type Objective, type QuestStage } from '../data/quests';
 import { Quests, completeObjective, newBook, openObjectives, startQuest } from '../systems/quests';
-import { ConversationScreen, TrackedQuest } from '../ui/screens';
+import { ConversationScreen, QuestLog } from '../ui/screens';
 import type { Feature } from './context';
 
 // How near the hero must come to a spot to be there (tiles), by what it is.
@@ -87,7 +87,7 @@ export const quests: Feature = {
   install: ({ app, map, hero }) => {
     const book = app.world.setResource(Quests, newBook());
     begin(app.world, startQuest(book, QUESTS, 'MQ01'));
-    app.world.setResource(TrackedQuest, book.quests[0]);
+    app.world.setResource(QuestLog, book); // (the book is the HUD's quest log: its tracker, journal and notices follow it)
     app.addSystems(questSystem(map, hero));
   },
 };
