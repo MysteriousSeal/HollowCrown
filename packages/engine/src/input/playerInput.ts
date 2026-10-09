@@ -17,8 +17,11 @@ export const playerInputSystem: System = {
     const { forward, right } = world.resource(ScreenAxes);
     const held = (action: Parameters<typeof keys.isHeld>[0]) => Number(keys.isHeld(action));
     const [ahead, across] = [held('up') - held('down'), held('right') - held('left')];
+    const [x, z] = [forward.x * ahead + right.x * across, forward.z * ahead + right.z * across];
     for (const entity of world.query(Player)) {
-      world.add(entity, MoveIntent, { x: forward.x * ahead + right.x * across, z: forward.z * ahead + right.z * across });
+      const intent = world.get(entity, MoveIntent);
+      if (intent) [intent.x, intent.z] = [x, z];
+      else world.add(entity, MoveIntent, { x, z });
     }
   },
 };

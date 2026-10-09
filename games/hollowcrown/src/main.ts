@@ -1,11 +1,9 @@
 // Hollowcrown: the engine's app, the Vale's land, and the hero walking it.
 
-import { App } from '@voxel/engine/app/app';
-import { CameraTarget, rigVisual } from '@voxel/engine/app/visuals';
-import { HumanRig } from '@voxel/engine/characters/human/humanRig';
-import { MoveSpeed, Player, Transform } from '@voxel/engine/gameplay/components';
-import { TerrainResource, flatTerrain } from '@voxel/engine/world/terrain';
-import { terrainLayer } from '@voxel/engine/world/terrainMesh';
+import { App, CameraTarget } from '@voxel/engine/app';
+import { humanModel } from '@voxel/engine/characters';
+import { MoveSpeed, Player, Transform } from '@voxel/engine/gameplay';
+import { TerrainResource, flatTerrain, terrainLayer } from '@voxel/engine/world';
 import { HERO } from './data/hero';
 import { WORLD } from './data/world';
 
@@ -20,5 +18,5 @@ const hero = app.world.spawn(
   [Player, true],
   [CameraTarget, true],
 );
-app.show(hero, rigVisual(new HumanRig(HERO.look)));
+app.show(hero, humanModel(HERO.look, HERO.gait));
 app.start();
