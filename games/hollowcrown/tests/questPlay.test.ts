@@ -3,13 +3,15 @@
 
 import { describe, expect, it } from 'vitest';
 import { World } from '@voxel/engine/ecs';
-import { Died, TimeOfDay, Transform } from '@voxel/engine/gameplay';
+import { Died, Health, TimeOfDay, Transform } from '@voxel/engine/gameplay';
 import { loadWorldMap } from '@voxel/engine/world';
 import { PEOPLE_DATA } from '../src/data/people';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
 import { QUESTS } from '../src/data/quests';
 import { complete, isAt, questSystem, talkWith } from '../src/features/quests';
+import { withRest } from '../src/features/rest';
 import { Creature } from '../src/systems/kills';
+import { LastRest } from '../src/systems/respawn';
 import { Quests, newBook, startQuest } from '../src/systems/quests';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
@@ -50,7 +52,7 @@ describe('quest play', () => {
     expect(book.quests[0].stage).toBe('the-inn');
   });
 
-  it("asks Garrick's choice at the inn, its reply setting the flag, and on to midnight (the wait isn't played: it doesn't hold the inn)", () => {
+  it("asks Garrick's choice at the inn, its reply setting the flag, then the bed, slept in, brings midnight", () => {
     const { world, book } = atStage('the-inn');
     const talk = talkWith(world, 'Garrick Fenn');
     const asked = talk.lines.findIndex((l) => l.choices);
@@ -59,8 +61,16 @@ describe('quest play', () => {
     talk.onChoice(asked, 1);
     talk.onClose();
     expect(book.flags.hero_reason).toBe('work');
+    expect(book.quests[0].stage).toBe('the-inn'); // (waiting for midnight)
+    const hero = world.spawn([Transform, { x: 906, y: 0, z: 3346, facing: 0 }], [Health, { hp: 5, max: 30 }]);
+    const again = withRest(world, hero, 'Garrick Fenn', talkWith(world, 'Garrick Fenn'));
+    const offer = again.lines.findIndex((l) => l.choices);
+    again.onChoice(offer, 0);
+    again.onClose();
     expect(book.quests[0].stage).toBe('midnight');
     expect(world.resource(TimeOfDay).hours).toBe(0);
+    expect(world.read(hero, Health).hp).toBe(30);
+    expect(world.resource(LastRest)).toEqual({ x: 906, z: 3346 });
   });
 
   it('names anyone else speaking in a talk (Garrick, at the well with Cuthwin)', () => {
@@ -81,6 +91,18 @@ describe('quest play', () => {
     world.emit(Died, { entity: wolves[1], by: hero });
     system.update(world, 1 / 60);
     expect(book.quests[0].done).toContain('wolves');
+  });
+
+  it('sleeps to morning at the inn when no wait is on, and offers no bed while the quests ask things of Garrick', () => {
+    const { world } = atStage('dawn');
+    world.resource(TimeOfDay).hours = 14;
+    const hero = world.spawn([Transform, { x: 906, y: 0, z: 3346, facing: 0 }], [Health, { hp: 5, max: 30 }]);
+    const talk = withRest(world, hero, 'Garrick Fenn', talkWith(world, 'Garrick Fenn'));
+    talk.onChoice(talk.lines.findIndex((l) => l.choices), 0);
+    talk.onClose();
+    expect(world.resource(TimeOfDay).hours).toBe(6);
+    const { world: busy } = atStage('the-inn');
+    expect(withRest(busy, hero, 'Garrick Fenn', talkWith(busy, 'Garrick Fenn')).lines.at(-1)!.choices).toHaveLength(4);
   });
 
   it('has only first words for someone the quests ask nothing of', () => {

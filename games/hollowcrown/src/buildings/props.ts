@@ -1,6 +1,6 @@
 // What hangs on the Vale's buildings and stands round them, as voxel grids (at the buildings' voxel: 16 a tile), and
-// what's painted onto them: an inn's sign, lanterns, an anvil, a mill wheel, a bell-cote, window boxes, drying herbs;
-// a well and a notice board, standing on their own.
+// what's painted onto them: an inn's sign, lanterns, an anvil, a mill wheel, a bell-cote, window boxes, drying herbs,
+// a chandler's sign, wax vats and drying candles; a well and a notice board, standing on their own.
 
 import { hashUnit } from '@voxel/engine/math';
 import type { StructureLayout } from '@voxel/engine/structures';
@@ -195,4 +195,41 @@ export function forgeHearth(g: VoxelGrid, layout: StructureLayout): void {
   fillBox(g, x0, 0, back, x1, 3, back + 1, C.stoneDark);
   for (let x = x0 + 1; x < x1; x++) setColor(g, x, 4, back + 1, hashUnit(x, 4, 13) < 0.6 ? C.ember : C.emberDim);
   fillBox(g, x0 + 1, 6, back, x1 - 1, layout.door.height - 1, back, C.stoneDark); // the hood
+}
+
+// The chandlery's sign: an iron arm out from the wall (+z), a board hung from it, a lit candle painted on it.
+// (Its pivot: the arm's root, at the wall.)
+export function chandlerSign(): VoxelGrid {
+  const g = createGrid([2, 11, 10]);
+  fillBox(g, 0, 10, 0, 1, 10, 9, C.iron); // the arm
+  fillBox(g, 0, 9, 0, 1, 9, 1, C.iron); // its brace
+  fillBox(g, 0, 8, 2, 1, 9, 2, C.iron); // the chains
+  fillBox(g, 0, 8, 8, 1, 9, 8, C.iron);
+  fillBox(g, 0, 0, 2, 1, 7, 8, C.blue); // the board
+  fillBox(g, 0, 1, 4, 1, 4, 6, C.wax); // the candle
+  setColor(g, 0, 5, 5, C.ember); // its flame
+  setColor(g, 1, 5, 5, C.ember);
+  setColor(g, 0, 6, 5, C.window);
+  setColor(g, 1, 6, 5, C.window);
+  return g;
+}
+
+// A wax vat: a squat tub of staves bound in iron, full to the brim with pale wax. (Its pivot: the middle of its foot.)
+export function waxVat(): VoxelGrid {
+  const g = createGrid([6, 5, 6]);
+  fillBox(g, 0, 0, 1, 5, 4, 4, C.timber);
+  fillBox(g, 1, 0, 0, 4, 4, 5, C.timber);
+  fillBox(g, 0, 1, 1, 5, 1, 4, C.iron); // its hoop
+  fillBox(g, 1, 1, 0, 4, 1, 5, C.iron);
+  fillBox(g, 1, 4, 1, 4, 4, 4, C.wax);
+  return g;
+}
+
+// Candles hung to dry under the eaves along the front: pairs on their wicks from a rail, between the windows.
+export function dryingCandles(g: VoxelGrid, layout: StructureLayout): void {
+  for (let x = layout.x0 + 2; x <= layout.x1 - 2; x += 3) {
+    if (layout.door && x >= layout.door.x0 - 1 && x <= layout.door.x1 + 1) continue;
+    setColor(g, x, layout.eaves - 1, layout.z1 + 1, C.rope);
+    for (let y = layout.eaves - 4; y < layout.eaves - 1; y++) setColor(g, x, y, layout.z1 + 1, C.wax);
+  }
 }

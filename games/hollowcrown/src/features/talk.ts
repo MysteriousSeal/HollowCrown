@@ -14,6 +14,7 @@ import { Resident } from '../systems/villagerDay';
 import { ConversationScreen } from '../ui/screens';
 import type { Feature } from './context';
 import { talkWith } from './quests';
+import { withRest } from './rest';
 import { lookOf } from './villagers';
 
 const HERO_NAME = 'You'; // (until the hero forge names them)
@@ -27,7 +28,7 @@ export const talk: Feature = {
       const { name } = world.read(npc, Resident);
       const you = renderPortrait(strangerModel(HERO.look, HERO.gait), { facing: 'right', animate: true });
       const them = renderPortrait(PEOPLE[name]?.make() ?? humanModel(lookOf(name)), { facing: 'left', animate: true });
-      const { lines, onChoice, onClose } = talkWith(world, name);
+      const { lines, onChoice, onClose } = withRest(world, hero, name, talkWith(world, name));
       world.resource(ConversationScreen).open({ name: HERO_NAME, portrait: you }, { name, portrait: them }, lines, () => {
         releasePortrait(you);
         releasePortrait(them);

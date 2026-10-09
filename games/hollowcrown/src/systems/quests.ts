@@ -6,8 +6,8 @@
 import { defineResource } from '@voxel/engine/ecs';
 import type { Objective, Quest, QuestStage } from '../data/quests';
 
-// Objectives the game can't play yet (no waiting for the hour): they don't hold their stage back.
-export const UNPLAYABLE = new Set<Objective['kind']>(['wait']);
+// Objectives the game can't play yet: they don't hold their stage back (none now: a wait is slept through, at a rest).
+export const UNPLAYABLE = new Set<Objective['kind']>([]);
 
 // A quest started: its stage, the objectives done in it (ids), whether it's over.
 export interface QuestProgress {

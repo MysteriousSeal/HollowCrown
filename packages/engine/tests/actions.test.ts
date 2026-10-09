@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
 import { VisualComponent, visualOf, visualSystem } from '../src/app/visuals';
-import { humanModel } from '../src/characters';
+import { FrameModel, humanModel } from '../src/characters';
 import { World } from '../src/ecs';
 import { Acting, Dead, Hit, Transform } from '../src/gameplay';
 import type { Model, ModelAction } from '../src/models';
@@ -65,6 +65,16 @@ describe('acting out', () => {
     expect(seen.at(-1)).toMatchObject({ name: 'dead' });
     expect(seen.at(-1)!.phase).toBeGreaterThan(0.95);
     expect(model.root.rotation.z).toBeGreaterThan(1.5); // (a model that doesn't lie down: toppled for it)
+  });
+
+  it('acts out a frame\'s own gestures by name, on top of its pose', () => {
+    const calls: number[] = [];
+    const person = new FrameModel({ ...humanModel().spec, gestures: { scratch: (m, phase) => (calls.push(phase), (m.joints.rightArm.rotation.x = -2)) } });
+    person.animate(1, 0, { name: 'scratch', phase: 0.5 });
+    expect(calls).toEqual([0.5]);
+    expect(person.joints.rightArm.rotation.x).toBe(-2);
+    person.animate(1, 0, { name: 'unknown', phase: 0.5 }); // (a gesture it hasn't: nothing)
+    expect(calls).toHaveLength(1);
   });
 
   it('lays a dead person on their back, a model that does so itself left untoppled', () => {

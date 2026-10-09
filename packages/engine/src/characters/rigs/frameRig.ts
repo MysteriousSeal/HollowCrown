@@ -62,6 +62,9 @@ export interface FrameSpec extends PartLook {
   gait?: Gait;
   held?: Partial<Record<'leftArm' | 'rightArm', Held>>;
   extra?: (model: FrameModel) => void; // anything more it carries (a tail, a lantern)
+  // Its gestures by name (a scratch, a stretch): each poses the joints on top of its own pose, `phase` 0 .. 1 through
+  // it, when it acts one out (Acting with that name).
+  gestures?: Readonly<Record<string, (model: FrameModel, phase: number) => void>>;
 }
 
 const JOINTS: Joint[] = ['torso', 'head', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'];
@@ -163,7 +166,9 @@ export class FrameModel extends RiggedModel {
       j.rightArm.rotation.z = -1.2 * phase;
       j.leftArm.rotation.set(-0.25 * phase, 0, 0.35 * phase);
       j.leftLeg.rotation.x = -0.25 * phase;
-    } else if (name === 'hurt') {
+    } else if (name !== 'hurt') {
+      this.spec.gestures?.[name]?.(this, phase);
+    } else {
       const flinch = 1 - phase;
       this.upper.rotation.x -= 0.3 * flinch;
       j.head.rotation.x -= 0.3 * flinch;

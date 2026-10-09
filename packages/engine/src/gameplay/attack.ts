@@ -2,7 +2,7 @@
 // hostile's AI) and is ready (its cooldown run out) lands a Hit on everyone alive within its reach and arc but its
 // own side, and acts it out (Acting, for its model's lunge). What a blow does is the health system's (health.ts).
 
-import { defineComponent, type Entity, type System, type World } from '../ecs';
+import { defineComponent, defineEvent, type Entity, type System, type World } from '../ecs';
 import { BODY_RADIUS, BodyRadius, Transform } from './components';
 import { Faction, Health, Hit, isAlive } from './health';
 
@@ -27,18 +27,22 @@ export function attack(damage: number, { reach = 0.6, arc = 1, cooldown = 0.7 }:
   return { damage, reach, arc, cooldown, wait: 0 };
 }
 
+// A swing made (hit or miss), for its sound.
+export const Swing = defineEvent<{ by: Entity }>('Swing');
+
 // It means to swing this frame (taken by the attack system, whether it could or not).
 export const AttackIntent = defineComponent<true>('AttackIntent');
 
-// What an entity is acting out (a swing, a flinch): for its model to animate. `time`: seconds into it.
-export type ActionName = 'attack' | 'hurt';
+// What an entity is acting out (a swing, a flinch, or a game's own gesture by name, a scratch, a yawn): for its model
+// to animate. `time`: seconds into it.
+export type ActionName = 'attack' | 'hurt' | (string & {});
 export interface ActingData {
   action: ActionName;
   time: number;
   duration: number;
 }
 export const Acting = defineComponent<ActingData>('Acting');
-export const ACTION_TIME: Readonly<Record<ActionName, number>> = { attack: 0.35, hurt: 0.25 };
+export const ACTION_TIME = { attack: 0.35, hurt: 0.25 } as const;
 
 // Whether `at` (facing, reaching `reach` and `arc`) reaches `target` of body `radius`.
 export function inReach(at: { x: number; z: number; facing: number }, target: { x: number; z: number }, reach: number, arc: number, radius: number): boolean {
@@ -77,6 +81,7 @@ export const attackSystem: System = {
       if (a.wait > 0 || !world.has(entity, Transform) || (world.has(entity, Health) && !isAlive(world, entity))) continue;
       a.wait = a.cooldown;
       world.add(entity, Acting, { action: 'attack', time: 0, duration: ACTION_TIME.attack });
+      world.emit(Swing, { by: entity });
       for (const target of targetsOf(world, entity)) world.emit(Hit, { target, by: entity, damage: a.damage });
     }
   },
