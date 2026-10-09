@@ -14,7 +14,7 @@ import { Resident } from '../systems/villagerDay';
 import { ConversationScreen } from '../ui/screens';
 import type { BotBadge } from './badge';
 import { BotKeys, keysToward, type Code } from './keys';
-import { keyOf, nextObjective, pointOf, waitingFor, walkingTo, type Next } from './plan';
+import { keyOf, nextObjective, pointOf, theOf, waitingFor, walkingTo, type Next } from './plan';
 import { POLICY, chooseReply } from './policy';
 import { Walker } from './walker';
 
@@ -62,7 +62,8 @@ export function autopilotSystem(map: WorldMap, obstacles: Obstacles, hero: Entit
     const screen = world.resource(ConversationScreen);
     reading += dt;
     if (!screen.asking) {
-      badge.set(`Talking`);
+      const name = document.querySelector('.ui-talk-right .ui-talk-plate')?.textContent;
+      badge.set(name ? `Talking with ${name}` : 'Thinking aloud');
       if (reading >= POLICY.readLine) [reading] = [0, keys.tap('KeyE')];
       return;
     }
@@ -121,7 +122,7 @@ export function autopilotSystem(map: WorldMap, obstacles: Obstacles, hero: Entit
     if (foe !== null) {
       const { x, z } = world.read(foe, Transform);
       const far = Math.hypot(x - at[0], z - at[1]);
-      badge.set(far > POLICY.fightRange ? walkingTo(map, objective) : `Fighting — ${objective.text}`);
+      badge.set(far > POLICY.fightRange ? walkingTo(map, objective) : `Fighting ${theOf(world.get(foe, Creature)?.name ?? objective.what!)}`);
       return fight(world, foe, at, dt);
     }
     if (objective.who) {
@@ -156,7 +157,7 @@ export function autopilotSystem(map: WorldMap, obstacles: Obstacles, hero: Entit
       if (world.has(hero, Dead)) return keys.releaseAll();
       const foe = attacker(world, at);
       if (foe !== null) {
-        badge.set(`Fighting the ${world.get(foe, Creature)?.name ?? 'foe'}`);
+        badge.set(`Fighting ${theOf(world.get(foe, Creature)?.name ?? 'foe')}`);
         return fight(world, foe, at, dt);
       }
       const book = world.resource(Quests);
