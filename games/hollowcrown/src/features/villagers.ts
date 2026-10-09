@@ -5,10 +5,11 @@
 
 import { FrameModel, MARCH, bodyPalette, type BodyLook, type Build } from '@voxel/engine/characters';
 import { MoveSpeed, Transform } from '@voxel/engine/gameplay';
-import { hashUnit, oneOf } from '@voxel/engine/math';
+import { hashUnit } from '@voxel/engine/math';
 import type { Model } from '@voxel/engine/models';
 import type { PlaceData, WorldMap } from '@voxel/engine/world';
-import { footprint, type BuildingProps } from '../data/world/kinds';
+import { doorOf } from '../buildings';
+import type { BuildingProps } from '../data/world/kinds';
 import { Resident, villagerDaySystem } from '../systems/villagerDay';
 import { PEOPLE } from '../people';
 import type { Feature } from './context';
@@ -71,20 +72,13 @@ export function villagersOf(map: WorldMap): Villager[] {
   return out;
 }
 
-// How far a house's door is moved along its front (tiles, the building's +x): as buildings/index.ts draws it.
-function doorShift(place: PlaceData): number {
-  if ((place.props as BuildingProps).use !== 'house') return 0;
-  const seed = [...place.id].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7) % 10007;
-  return oneOf([0, -8, 8], hashUnit(seed, 4, 21)) / 16;
-}
-
 // `name` stood a tile out from `place`'s door, `along` tiles along its front (the building's +x).
 function atDoor(place: PlaceData, name: string, along: number): Villager {
   const facing = place.facing ?? 0;
-  const [dx, dz] = footprint(place).door;
+  const [dx, dz] = doorOf(place);
   const seated = SEATED.has(name);
   // (seated: on the stool, just past the door's right jamb and against the wall)
-  const [side, out] = seated ? [doorShift(place) + 0.4, -0.5] : [doorShift(place) + along, 0];
+  const [side, out] = seated ? [0.4, -0.5] : [along, 0];
   const [cos, sin] = [Math.cos(facing), Math.sin(facing)];
   return {
     name,

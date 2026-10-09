@@ -1,8 +1,10 @@
 // A villager's day: from morning to evening they stroll round their door (the engine's Wander), and at dusk they
-// walk back to it and stand there, facing out, through the night. Old Meg stays on her stool whatever the hour.
+// walk back to it and stand there, facing out, through the night. Old Meg stays on her stool whatever the hour;
+// anyone in a talk (systems/talk.ts) stays where they are till it's over.
 
 import { defineComponent, type System } from '@voxel/engine/ecs';
 import { MoveIntent, MoveSpeed, TimeOfDay, Transform, Wander, wander } from '@voxel/engine/gameplay';
+import { Talking } from './talk';
 
 export const DAY = [7, 20] as const; // hours they're out and about: from 7 in the morning to 8 in the evening
 export const STROLL = { radius: 2.5, speed: 1.1, pause: [3, 8] as const }; // round their door, at an easy pace
@@ -27,7 +29,7 @@ export const villagerDaySystem: System = {
     const day = world.hasResource(TimeOfDay) ? isDay(world.resource(TimeOfDay).hours) : true;
     for (const entity of world.query(Resident, Transform)) {
       const { home, facing, seated } = world.read(entity, Resident);
-      if (seated) continue;
+      if (seated || world.has(entity, Talking)) continue;
       if (day) {
         if (!world.has(entity, Wander)) world.add(entity, Wander, wander(home, STROLL));
         continue;
