@@ -16,6 +16,10 @@ export const NATURE = namedPalette({
   // pine needles, shade to light, their fresh tips and cones (trees.ts)
   pine0: 0x173f3a, pine1: 0x1f5446, pine2: 0x286a50, pine3: 0x33805a, pine4: 0x459865, pine5: 0x62b170, pine6: 0x8fcb7f,
   pineTip: 0x74bd72, cone: 0x7a4e2c,
+  // meadow grass, a shade either side of the ground's, gone to seed (meadows.ts)
+  grassDark: 0x4a8239, grass: 0x62a44a, grassLight: 0x8cbf5c, seedHead: 0xc8b46a,
+  // wildflowers: poppy, cornflower, oxeye daisy and its eye, buttercup, their stems (meadows.ts)
+  poppy: 0xc0392f, cornflower: 0x5a72b8, daisy: 0xeee8d6, daisyEye: 0xe1b94c, buttercup: 0xf0c843, stem: 0x4f7f34,
 });
 
 export const N = NATURE.C;

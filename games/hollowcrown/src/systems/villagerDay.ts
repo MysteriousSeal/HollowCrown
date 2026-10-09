@@ -10,8 +10,10 @@ export const DAY = [7, 20] as const; // hours they're out and about: from 7 in t
 export const STROLL = { radius: 2.5, speed: 1.1, pause: [3, 8] as const }; // round their door, at an easy pace
 const ARRIVED = 0.1; // world units: this close to their door, they're home
 
-// A villager's home spot (just outside their door), the way they face there, and whether they sit (never strolling).
+// A villager: their name (as the bible writes it), their home spot (just outside their door), the way they face
+// there, and whether they sit (never strolling).
 export interface ResidentData {
+  name: string;
   home: { x: number; z: number };
   facing: number;
   seated: boolean;
