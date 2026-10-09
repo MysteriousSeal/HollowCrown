@@ -17,5 +17,9 @@ export const MoveIntent = defineComponent<{ x: number; z: number }>('MoveIntent'
 // How fast it walks, in tiles a second.
 export const MoveSpeed = defineComponent<number>('MoveSpeed');
 
+// How far round an entity it takes up room, world units (none given: a person's, BODY_RADIUS).
+export const BodyRadius = defineComponent<number>('BodyRadius');
+export const BODY_RADIUS = 0.15;
+
 // The entity the player controls.
 export const Player = defineComponent<true>('Player');

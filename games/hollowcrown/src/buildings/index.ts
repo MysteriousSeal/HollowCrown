@@ -1,14 +1,15 @@
 // The Vale's buildings as models: each placed building (data/world: its size, floors, roof, walls, use) built by the
 // engine's structure kit in the village palette, with what makes it itself (the inn's sign, the forge, the mill's
-// wheel, the reeve's heron, Old Meg's stool); the fixtures (a well, a notice board); and the layer that puts them all
-// in the world as the hero comes near.
+// wheel, the reeve's heron, Old Meg's stool); the fixtures (a well, a notice board); the layer that puts them all in
+// the world as the hero comes near; and the room they take, for walkers to keep out of.
 
 import * as THREE from 'three';
 import { hashUnit, oneOf } from '@voxel/engine/math';
 import { VoxelModel, glowMaterial, litMaterial, type Model } from '@voxel/engine/models';
 import { STRUCTURE_VOXEL, StructureModel, type StructureSpec } from '@voxel/engine/structures';
-import { placesLayer, type ChunkLayer, type PlaceData, type WorldMap } from '@voxel/engine/world';
-import { footprint, type BuildingProps } from '../data/world/kinds';
+import { Obstacles, placesLayer, type ChunkLayer, type PlaceData, type WorldMap } from '@voxel/engine/world';
+import type { VoxelGrid } from '@voxel/engine/voxel';
+import { cardinal, footprint, type BuildingProps } from '../data/world/kinds';
 import { LOOK, structureColors, type Shutter } from './palette';
 import {
   anvil, bellCote, doorstepStool, dryingHerbs, forgeHearth, heronPlaque, holedRoof, innSign, lantern, millWheel, noticeBoard, trough,
@@ -94,10 +95,17 @@ export function buildingModel(place: PlaceData): StructureModel {
   return BY_USE[b.use](baseSpec(b, seed), seed, place);
 }
 
+// The fixtures, by the end of their ids: each one's grid, and the room it takes (half its size, world units, x and z).
+const FIXTURES: Array<{ suffix: string; grid: () => VoxelGrid; half: [number, number] }> = [
+  { suffix: '-well', grid: well, half: [0.45, 0.45] },
+  { suffix: '-notices', grid: noticeBoard, half: [0.5, 0.12] },
+];
+const fixtureOf = (place: PlaceData) => FIXTURES.find((f) => place.id.endsWith(f.suffix));
+
 // A fixture's model (a well, a notice board), or null if it has none.
 export function fixtureModel(place: PlaceData): Model | null {
-  const grid = place.id.endsWith('-well') ? well() : place.id.endsWith('-notices') ? noticeBoard() : null;
-  return grid && new VoxelModel(grid, LOOK, { voxel: STRUCTURE_VOXEL });
+  const fixture = fixtureOf(place);
+  return fixture ? new VoxelModel(fixture.grid(), LOOK, { voxel: STRUCTURE_VOXEL }) : null;
 }
 
 // A place's model, if it's drawn as one.
@@ -123,6 +131,24 @@ export function placesOf(map: WorldMap): ChunkLayer {
     return built.get(place.id)!;
   };
   return placesLayer(map.places().filter((p) => p.kind === 'building' || p.kind === 'fixture'), make, [litMaterial(), glowMaterial()]);
+}
+
+// What stands in the way on `map`: every building's walls (inset from its footprint as they're built: the eaves can
+// be walked under), every fixture.
+export function obstaclesOf(map: WorldMap): Obstacles {
+  const obstacles = new Obstacles();
+  for (const place of map.places()) {
+    let half: [number, number] | undefined;
+    let [cx, cz] = place.at;
+    if (place.kind === 'building') {
+      const [across, deep] = (place.props as BuildingProps).size;
+      const [w, d] = [(across * TILE - 6) / TILE / 2, (deep * TILE - 6) / TILE / 2];
+      half = cardinal(place.facing)! % 2 === 0 ? [w, d] : [d, w];
+      [cx, cz] = centreOf(place);
+    } else if (place.kind === 'fixture') half = fixtureOf(place)?.half;
+    if (half) obstacles.add({ x0: cx - half[0], z0: cz - half[1], x1: cx + half[0], z1: cz + half[1] });
+  }
+  return obstacles;
 }
 
 function centreOf(place: PlaceData): [number, number] {

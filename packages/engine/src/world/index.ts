@@ -12,3 +12,4 @@ export type { ChunkLayer } from './chunkLayer';
 export { ChunkStreamer } from './chunkStreamer';
 export { addVoxelGround } from './voxelGround';
 export { placesLayer } from './placesLayer';
+export { Obstacles, ObstaclesResource, type Box } from './obstacles';
