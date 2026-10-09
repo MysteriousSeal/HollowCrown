@@ -8,9 +8,9 @@ import { CHUNK_SIZE, type Box, type ChunkLayer, type Obstacles, type WorldMap } 
 import type { Dressing } from '../data/world/dressing';
 import { cardinal } from '../data/world/kinds';
 import { instancedLayer, natureGeometry, type Growth } from '../nature/instanced';
-import { hangingOak } from '../nature/landmarks';
+import { greenOak, hangingOak } from '../nature/landmarks';
 import { NATURE } from '../nature/palette';
-import { barrow, fencePost, fenceRails, gardenBed, gibbet, hayRick, standingStone } from './models';
+import { barrow, fencePost, fenceRails, gardenBed, gibbet, hayRick, skep, standingStone } from './models';
 import { PROPS } from './palette';
 
 // Each shape's grid, by its key (the model viewer too).
@@ -24,14 +24,15 @@ export const PROP_SHAPES: Record<string, () => VoxelGrid> = {
   stone2: () => standingStone(2),
   'garden-bed': gardenBed,
   barrow,
+  hive: skep,
 };
 
 // The landmarks among them, painted from nature's palette (the model viewer too).
-export const LANDMARK_SHAPES: Record<string, () => VoxelGrid> = { 'hanging-oak': hangingOak };
+export const LANDMARK_SHAPES: Record<string, () => VoxelGrid> = { 'hanging-oak': hangingOak, 'old-oak': greenOak };
 
 // What a piece standing on its own takes (half its size, tiles, x and z before it's turned); a kind not here is
 // walked over or through.
-const ROOM: Record<string, [number, number]> = { 'hay-rick': [0.8, 0.6], gibbet: [0.2, 0.2], 'standing-stone': [0.35, 0.25], 'hanging-oak': [0.35, 0.35] };
+const ROOM: Record<string, [number, number]> = { 'hay-rick': [0.8, 0.6], gibbet: [0.2, 0.2], 'standing-stone': [0.35, 0.25], 'hanging-oak': [0.35, 0.35], 'old-oak': [0.45, 0.45], hive: [0.3, 0.3] };
 const FENCE_HALF = 0.06; // a fence's half thickness, tiles
 
 // A piece's shape: its kind's, a standing stone one of its three by where it stands.

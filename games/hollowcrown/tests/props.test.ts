@@ -25,9 +25,9 @@ describe('the Vale\'s props', () => {
     }
   });
 
-  it('stand the Hanging Oak where the South Road bends, the barrow among the Nine Sisters', () => {
+  it('stand the Hanging Oak, Tallow Green\'s oak and Agna\'s skeps, the barrow, the garden beds where they\'re placed', () => {
     const pieces = piecesOf(DRESSING);
-    expect(pieces.some((p) => p.shape === 'hanging-oak')).toBe(true);
+    for (const shape of ['hanging-oak', 'old-oak', 'hive', 'barrow', 'garden-bed']) expect(pieces.some((p) => p.shape === shape), shape).toBe(true);
     const oak = LANDMARK_SHAPES['hanging-oak']();
     expect(oak.cells.reduce((m, c) => Math.max(m, c), 0)).toBeLessThanOrEqual(NATURE.colors.length);
     expect(oak.cells.filter((c) => c === NATURE.C.rope).length).toBeGreaterThan(4); // (the rope still on its bough)
