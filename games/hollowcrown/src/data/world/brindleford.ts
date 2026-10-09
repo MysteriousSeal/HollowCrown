@@ -10,6 +10,31 @@ const MILL_LANE: Point[] = [[900, 3350], [882, 3300], [873, 3240]];
 const EAST_LANE: Point[] = [[911, 3351], [944, 3354]];
 const FARM_TRACK: Point[] = [[950, 3392], [950, 3417]];
 
+// Footpaths, door to lane (the inn's and the mill's open straight onto theirs): each stops short of the road it meets.
+const FOOTPATHS: Array<{ note: string; line: Point[] }> = [
+  { note: "the shrine-house's path", line: [[892, 3345], [893, 3347]] },
+  { note: "the smithy's path", line: [[894, 3357], [896, 3354]] },
+  { note: "the reeve's path", line: [[912, 3355], [911, 3353]] },
+  ...[918, 924, 930, 936].map((x) => ({ note: 'an East Lane path, north side', line: [[x, 3348], [x, 3350]] as Point[] })),
+  ...[922, 928, 934, 940].map((x) => ({ note: 'an East Lane path, south side', line: [[x, 3357], [x, (3351 + ((x - 911) * 3) / 33 + 2) | 0]] as Point[] })),
+  { note: "the ferry cottage's path", line: [[859, 3338], [862, 3341], [863, 3348]] },
+  { note: "the Fletchers' path", line: [[859, 3344], [862, 3347]] },
+  { note: "the Hollins' path", line: [[859, 3360], [862, 3356], [863, 3353]] },
+  { note: "the Cobbes' path to the barn door", line: [[955, 3426], [957, 3428]] },
+];
+
+// Kitchen gardens behind the cottages (the Holt house's gone back to grass): [x0, z0, x1, z1].
+const GARDENS: Array<[number, number, number, number]> = [
+  [917, 3340, 920, 3343], [923, 3339, 926, 3343], [929, 3339, 932, 3343], [935, 3339, 938, 3343], // the East Lane, north side
+  [921, 3361, 924, 3366], [927, 3361, 930, 3366], [933, 3361, 936, 3366], // the East Lane, south side
+  [850, 3335, 854, 3339], [850, 3342, 854, 3346], [850, 3358, 854, 3362], // across the ford
+  [942, 3419, 946, 3425], // the Cobbes'
+];
+
+// The Cobbes' fields: seven ploughed strips, six wide, grass balks between; the east end left fallow, the shepherds'
+// track crossing it.
+const STRIPS = Array.from({ length: 7 }, (_, i): [number, number, number, number] => [930 + i * 7, 3434, 935 + i * 7, 3470]);
+
 type Building = PlaceData & { kind: 'building' };
 const building = (id: string, name: string, at: Point, facing: number, props: BuildingProps): Building => ({ id, kind: 'building', name, at, facing, props });
 
@@ -18,6 +43,13 @@ const cottage = (residents: string[]): BuildingProps => ({ size: [3, 3], floors:
 
 export const BRINDLEFORD: ValePart = {
   surfaces: [
+    ...FOOTPATHS.map(({ note, line }) => ({ note, shape: { line, width: 1.5 }, surface: 'path' as const })),
+    ...GARDENS.map((rect) => ({ note: 'a kitchen garden', shape: { rect }, surface: 'garden' as const })),
+    ...STRIPS.map((rect) => ({ note: "a strip of the Cobbes' field", shape: { rect }, surface: 'field' as const })),
+    { note: "the Cobbes' yard", shape: { circle: [954, 3424, 3] }, surface: 'path' },
+    // The duck pond, past the East Lane's end: a muddy, reedy rim round still water.
+    { note: 'the duck pond, its rim', shape: { circle: [952, 3354, 5] }, surface: 'marsh' },
+    { note: 'the duck pond', shape: { circle: [952, 3354, 3.5] }, surface: 'water' },
     { note: 'the square', shape: { circle: [905, 3350, 5] }, surface: 'road' },
     { note: 'Mill Lane', shape: { line: MILL_LANE, width: 2 }, surface: 'road' },
     { note: 'the East Lane', shape: { line: EAST_LANE, width: 2 }, surface: 'road' },

@@ -2,12 +2,16 @@
 
 import type { Feature } from './context';
 import { buildings } from './buildings';
+import { daylight } from './daylight';
 import { hud } from './hud';
 import { land } from './land';
+import { villagers } from './villagers';
 
 export const FEATURES: Feature[] = [
+  daylight,
   land,
   buildings,
+  villagers,
   hud,
 ];
 
