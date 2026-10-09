@@ -138,7 +138,6 @@ export function stump(g: VoxelGrid, o: Size, f: Fit): void {
 
 // ---- what they carry (each built along +Z from the grip; turned down at the side, or upright) ----
 
-const DOWN: [number, number, number] = [1.25, 0, 0]; // (hanging at the side, a little forward)
 const UPRIGHT: [number, number, number] = [-1.4, 0, 0];
 
 // A smith's hammer: an ash haft, an iron head across its end.
@@ -154,12 +153,12 @@ export const hammer: Held = {
 // A cook's ladle: a long handle, a round bowl.
 export const ladle: Held = {
   grid: () => {
-    const g = createGrid([3, 2, 10]);
-    fillBox(g, 1, 1, 0, 1, 1, 7, K.wood);
-    fillBox(g, 0, 0, 7, 2, 1, 9, (_x, y) => (y === 1 ? K.woodDark : K.wood));
+    const g = createGrid([3, 2, 8]);
+    fillBox(g, 1, 1, 0, 1, 1, 5, K.wood);
+    fillBox(g, 0, 0, 5, 2, 1, 7, (_x, y) => (y === 1 ? K.woodDark : K.wood));
     return g;
   },
-  grip: [1, 1, 1], turn: DOWN,
+  grip: [1, 1, 1], turn: [0.45, 0, 0],
 };
 // A ledger under the hand: leather boards, the pages' edge showing.
 export const ledger: Held = {
