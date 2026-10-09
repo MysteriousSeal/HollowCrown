@@ -9,7 +9,7 @@ import { obstaclesOf } from '../src/buildings';
 import { CREATURES } from '../src/creatures';
 import { QUESTS } from '../src/data/quests';
 import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
-import { ENCOUNTERS, KEEPERS, provokeSystem } from '../src/features/encounters';
+import { BODIES, ENCOUNTERS, KEEPERS, provokeSystem } from '../src/features/encounters';
 import { Creature } from '../src/systems/kills';
 
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
@@ -23,6 +23,14 @@ describe('encounters', () => {
       for (const model of models ?? [creature]) expect(CREATURES.some((c) => c.id === model), `${key} ${model}`).toBe(true);
       for (const [x, z] of at) expect(map.walkable(x, z) && !obstacles.blocks(x, z, 0.2), `${key} ${x},${z}`).toBe(true);
     }
+  });
+
+  it("lays MQ01's dead where the quest finds them: the pilgrim at its ditch, the mule at the wolves'", () => {
+    const pilgrim = QUESTS.MQ01.stages[1].objectives.find((o) => o.id === 'pilgrim')!.at as [number, number];
+    const mule = QUESTS.MQ01.stages[1].objectives.find((o) => o.id === 'wolves')!.at as [number, number];
+    const near = (m: string, [px, pz]: [number, number]) => BODIES.some((b) => b.model === m && Math.hypot(b.at[0] - px, b.at[1] - pz) < 1);
+    expect(near('deadPilgrim', pilgrim) && near('deadMule', mule)).toBe(true);
+    for (const b of BODIES) expect(CREATURES.some((c) => c.id === b.model), b.model).toBe(true);
   });
 
   it('keeps the Red Hen camp with five of the band, on open ground', () => {

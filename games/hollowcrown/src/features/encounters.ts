@@ -1,5 +1,6 @@
-// Encounters: foes that keep a place (the Red Hen's band at their camp), and foes a quest's stage brings when it
-// begins (MQ01's midnight: the famine dead come down into Brindleford). Each kind fights as the bestiary says
+// Encounters: the dead left lying where a quest finds them (MQ01's pilgrim in the ditch, the wolves' mule), foes that
+// keep a place (the Red Hen's band at their camp), and foes a quest's stage brings when it begins (MQ01's midnight:
+// the famine dead come down into Brindleford). Each kind fights as the bestiary says
 // (docs/story/bestiary.md): the band on sight; the Hungry don't attack first, they go to the houses, and struck, they
 // turn on whoever struck them.
 
@@ -32,6 +33,12 @@ export interface Band {
   roam: number;
   models?: string[];
 }
+
+// The dead lying out from the start: which body (CREATURES' id), where, which way it lies (radians).
+export const BODIES: Array<{ model: string; at: Point; facing: number; note: string }> = [
+  { model: 'deadPilgrim', at: [560, 3374], facing: 0.4, note: "MQ01: the old pilgrim woman in the Pilgrim Road's ditch" },
+  { model: 'deadMule', at: [650.5, 3420.5], facing: 2.1, note: "MQ01: the wolves' mule, at the Birchwood's edge" },
+];
 
 // Foes keeping a place from the start.
 export const KEEPERS: Array<Band & { note: string }> = [
@@ -92,6 +99,11 @@ export const encounters: Feature = {
   install: ({ app, map }) => {
     const spawnBand = ({ creature, at, roam, models }: Band) =>
       at.forEach((spot, i) => spawnFoe(app, map, creature, models?.[i] ?? creature, spot, roam));
+    for (const { model, at: [x, z], facing } of BODIES) {
+      const entry = CREATURES.find((c) => c.id === model);
+      if (!entry) throw new Error(`encounters: no body '${model}'`);
+      app.show(app.world.spawn([Transform, { x, y: map.groundY(x, z), z, facing }]), entry.make());
+    }
     KEEPERS.forEach(spawnBand);
     const seen = new Set<string>(); // stages begun so far, by quest/stage
     const system: System = {
