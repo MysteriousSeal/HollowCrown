@@ -62,6 +62,9 @@ export function nameOf(map: WorldMap, spot: Spot | undefined): string {
   return map.place(spot)?.name ?? map.data.areas.find((a) => a.id === spot)?.name ?? spot;
 }
 
+// A thing's name with 'the' before it, unless it has one ("the Hungry").
+export const theOf = (name: string): string => (/^the /i.test(name) ? name : `the ${name}`);
+
 // What an objective asks, as the badge says it ("talk to Garrick Fenn").
 export function deedOf(objective: Objective): string {
   switch (objective.kind) {
@@ -70,11 +73,11 @@ export function deedOf(objective: Objective): string {
     case 'choose':
       return objective.who ? `answer ${objective.who}` : 'decide';
     case 'take':
-      return `take the ${objective.what ?? 'thing'}`;
+      return `take ${theOf(objective.what ?? 'thing')}`;
     case 'search':
-      return `look for the ${objective.what ?? 'signs'}`;
+      return `look for ${theOf(objective.what ?? 'signs')}`;
     case 'fight':
-      return `fight the ${objective.what ?? 'foes'}`;
+      return `fight ${theOf(objective.what ?? 'foes')}`;
     default:
       return 'get there';
   }
