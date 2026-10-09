@@ -1,10 +1,10 @@
 // The HUD over the scene (styled in index.html): the region's name fading in large as the hero comes into it (and
-// at the start).
+// at the start), and the named place the hero is near, small in the top-left corner.
 
 import type { System } from '@voxel/engine/ecs';
 import { Transform } from '@voxel/engine/gameplay';
-import { Banner, createOverlay } from '@voxel/engine/ui';
-import { regionBanner, regionOf } from '../ui/hudText';
+import { Banner, CornerLabel, createOverlay } from '@voxel/engine/ui';
+import { nearPlaceName, regionBanner, regionOf } from '../ui/hudText';
 import type { Feature } from './context';
 
 export const hud: Feature = {
@@ -12,6 +12,7 @@ export const hud: Feature = {
   install: ({ app, map, hero }) => {
     const root = createOverlay();
     const banner = new Banner(root);
+    const place = new CornerLabel(root, 'top-left', 'ui-place');
     let region: string | undefined;
 
     const system: System = {
@@ -26,6 +27,7 @@ export const hud: Feature = {
           banner.show(title, sub);
         }
         region = here?.id;
+        place.set(nearPlaceName(map.places(), at.x, at.z));
       },
     };
     app.addSystems(system);
