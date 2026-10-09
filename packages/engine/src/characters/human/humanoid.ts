@@ -1,4 +1,4 @@
-// Humanoids (the hero) have a naked body of one of two
+// Humanoids have a naked body of one of two
 // builds, male or female (hers slimmer), and differ in its look: skin tone,
 // hair color and style, a beard (his only), an expression. The look is stored as indices;
 // the view owns the actual colors (view/meshes/human/bodyVoxels.ts).
@@ -22,4 +22,4 @@ export interface BodyLook {
   expression?: Expression; // their face (none: calm, as every look before it was chosen)
 }
 
-export const HERO_LOOK: Readonly<BodyLook> = { build: 'male', skin: 0, hair: 0, dye: 1, hairStyle: 'short', beard: false };
+export const DEFAULT_LOOK: Readonly<BodyLook> = { build: 'male', skin: 0, hair: 0, dye: 1, hairStyle: 'short', beard: false };
