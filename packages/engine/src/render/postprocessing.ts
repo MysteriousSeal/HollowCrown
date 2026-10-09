@@ -21,7 +21,7 @@ import {
   SHAFT_SPACING,
   SHAFT_STRENGTH,
   SUN_DIRECTION,
-} from '../constants';
+} from './constants';
 
 const LightShaftShader = {
   uniforms: {

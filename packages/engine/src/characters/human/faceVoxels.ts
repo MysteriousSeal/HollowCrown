@@ -1,9 +1,9 @@
 // The face, painted on the head (bodyVoxels.ts buildHead) in the look's
 // expression (model/human/humanoid.ts EXPRESSIONS), in the body's colors.
 
-import type { Build, Expression } from '../../../model/human/humanoid';
-import type { VoxelGrid } from '../voxel/greedyMesh';
-import { fillBox, setColor } from '../voxel/voxelShapes';
+import type { Build, Expression } from './humanoid';
+import type { VoxelGrid } from '../../voxel/greedyMesh';
+import { fillBox, setColor } from '../../voxel/voxelShapes';
 import { C, PART_GRID } from './bodyVoxels';
 
 // The face, on the head's front (z = L), in its expression. At eleven

@@ -4,10 +4,10 @@
 // and made once for the page. And what they're drawn in, and the shade under their feet.
 
 import * as THREE from 'three';
-import type { BodyLook } from '../../../model/human/humanoid';
-import { greedyMesh, type VoxelGrid } from '../voxel/greedyMesh';
+import type { BodyLook } from './humanoid';
+import { greedyMesh, type VoxelGrid } from '../../voxel/greedyMesh';
 import { BODIES, HAIR_PIECE_PIVOT, HUMAN_VOXEL_SIZE, bodyPalette, buildBodyPart, buildHairPiece, type BodyPart } from './bodyVoxels';
-import { roundNormals } from '../voxel/roundedNormals';
+import { roundNormals } from '../../voxel/roundedNormals';
 
 const V = HUMAN_VOXEL_SIZE;
 

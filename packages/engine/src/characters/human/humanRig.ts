@@ -1,4 +1,4 @@
-// A humanoid on screen (the hero): the naked body (bodyVoxels.ts) on a simple rig of joints, so each part swings on
+// A humanoid on screen: the naked body (bodyVoxels.ts) on a simple rig of joints, so each part swings on
 // its own pivot.
 //
 //   root (at the feet, turned to face where they walk)
@@ -12,7 +12,7 @@
 // Its meshes are made in humanParts.ts.
 
 import * as THREE from 'three';
-import { HERO_LOOK, type BodyLook } from '../../../model/human/humanoid';
+import { DEFAULT_LOOK, type BodyLook } from './humanoid';
 import { BODIES, HUMAN_VOXEL_SIZE, JOINT_NAMES, type Joint } from './bodyVoxels';
 import { SHADE, bodyGeometry, hairGeometry, personMaterial } from './humanParts';
 
@@ -35,7 +35,7 @@ export class HumanRig {
   private time = 0;
 
   constructor(
-    readonly look: BodyLook = HERO_LOOK,
+    readonly look: BodyLook = DEFAULT_LOOK,
     readonly material: THREE.Material = personMaterial(),
   ) {
     const joints = {} as Record<Joint, THREE.Group>;

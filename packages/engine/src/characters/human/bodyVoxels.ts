@@ -1,4 +1,4 @@
-// The body humanoids have (the hero, bandits, villagers), in two builds:
+// The body humanoids have (a player, townsfolk, soldiers), in two builds:
 // male, and a slimmer female one (a narrow torso with a waist and a bust,
 // thin arms, slim legs; the same height and the same head, so what's worn
 // on the head fits both). Naked but for dyed braies (medieval underwear),
@@ -14,10 +14,10 @@
 // its own joint.
 
 import * as THREE from 'three';
-import type { VoxelGrid } from '../voxel/greedyMesh';
-import { createGrid, fillBox, setColor } from '../voxel/voxelShapes';
+import type { VoxelGrid } from '../../voxel/greedyMesh';
+import { createGrid, fillBox, setColor } from '../../voxel/voxelShapes';
 import { paintFace } from './faceVoxels';
-import { DYE_COUNT, HAIR_COLOR_COUNT, SKIN_TONE_COUNT, type BodyLook, type Build } from '../../../model/human/humanoid';
+import { DYE_COUNT, HAIR_COLOR_COUNT, SKIN_TONE_COUNT, type BodyLook, type Build } from './humanoid';
 
 export const HUMAN_VOXEL_SIZE = 1 / 60;
 export const BODY_HEIGHT = 27; // voxels, feet to crown (0.45 world units)
@@ -112,7 +112,7 @@ const HAIR_COLORS: Array<[hair: number, light: number]> = [
   [0xe2ded6, 0xf6f3ee],
 ];
 // Dyes for the braies (and her breast band), each with its shading: madder
-// red, woad blue, weld green, walnut brown, charcoal, EvenHold's turquoise; then (added after, so saves keep
+// red, woad blue, weld green, walnut brown, charcoal, turquoise; then (added after, so saves keep
 // theirs) saffron yellow and orchil purple.
 // Strong against the sandstone and grass, so people stand out from the ground.
 const DYES: Array<[dye: number, shade: number]> = [
