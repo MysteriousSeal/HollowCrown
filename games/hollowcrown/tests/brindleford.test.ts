@@ -81,7 +81,7 @@ describe('Brindleford\'s walls', () => {
   const obstacles = obstaclesOf(map);
 
   it('stand in the way of every building and fixture, and leave every door clear', () => {
-    expect(obstacles.size).toBe(buildings.length + 2);
+    expect(obstacles.size).toBe(WORLD_MAP.places.filter((p) => p.kind === 'building' || p.kind === 'fixture').length); // (the whole map's)
     for (const b of buildings) {
       expect(obstacles.blocks(...centre(b), BODY_RADIUS), `${b.id}'s middle`).toBe(true);
       expect(obstacles.blocks(...footprint(b).door, BODY_RADIUS), `${b.id}'s door`).toBe(false);
