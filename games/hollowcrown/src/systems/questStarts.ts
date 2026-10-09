@@ -2,8 +2,14 @@
 // (talked to, they give it; none: it starts by itself once the others are done). Who uses it: the quest feature, each
 // frame and at each talk.
 
+import type { Point } from '@voxel/engine/world';
 import type { Quest, QuestStage } from '../data/quests';
 import { startQuest, type QuestBook } from './quests';
+
+// How a quest is found in the wild (systems/discovery.ts): by coming within `radius` of a tile, or by examining
+// something there (`prop`: its model, a CREATURES id; `label`: what E does, "Examine the cart").
+export type Found = { at: Point; radius: number } | { examine: { at: Point; prop?: string; label: string } };
+export const foundOf = (quest: Quest): Found | undefined => (quest.start as { found?: Found }).found;
 
 const finished = (book: QuestBook, id: string) => book.quests.some((q) => q.quest === id && q.finished);
 const started = (book: QuestBook, id: string) => book.quests.some((q) => q.quest === id);
@@ -11,10 +17,10 @@ const started = (book: QuestBook, id: string) => book.quests.some((q) => q.quest
 // Whether `quest`'s turn has come: not started, every quest before it finished.
 export const isDue = (book: QuestBook, quest: Quest) => !started(book, quest.id) && quest.start.after.every((a) => finished(book, a));
 
-// The quests ready to start: due, and given by `giver` (none: those that start by themselves).
+// The quests ready to start: due, and given by `giver` (none: those that start by themselves; not those found).
 export function readyToStart(book: QuestBook, quests: Record<string, Quest>, giver?: string): string[] {
   return Object.values(quests)
-    .filter((q) => q.id !== 'MQ01' && isDue(book, q) && q.start.giver === giver)
+    .filter((q) => q.id !== 'MQ01' && isDue(book, q) && q.start.giver === giver && !foundOf(q))
     .map((q) => q.id);
 }
 

@@ -10,6 +10,7 @@ import { daylight } from './daylight';
 import { encounters } from './encounters';
 import { debug } from './debug';
 import { devStart } from './devStart';
+import { discovery } from './discovery';
 import { hud } from './hud';
 import { land } from './land';
 import { nature } from './nature';
@@ -34,6 +35,7 @@ export const FEATURES: Feature[] = [
   hud,
   talk,
   quests,
+  discovery,
   bot,
   encounters,
   roaming,
