@@ -13,6 +13,7 @@ import { PLACE_KINDS, START_PLACE, WORLD_MAP } from '../../src/data/world';
 import { footprint } from '../../src/data/world/kinds';
 import { villagersOf } from '../../src/features/villagers';
 import { WILDLIFE } from '../../src/features/wildlife';
+import { ENCOUNTERS, KEEPERS } from '../../src/features/encounters';
 import { PEOPLE, type Spot } from '../../src/data/people';
 import { QUESTS } from '../../src/data/quests';
 
@@ -73,8 +74,13 @@ describe('Brindle Vale reachability', () => {
     expect(unreached.map((p) => `${p.id} at (${target(p).join(', ')})`)).toEqual([]);
   });
 
-  it("reaches every villager and every animal from the Pilgrim's Shrine", () => {
-    const standing = [...villagersOf(map).map((v) => ({ who: v.name, x: v.x, z: v.z })), ...WILDLIFE.map((a) => ({ who: `${a.creature} (${a.note})`, x: a.at[0], z: a.at[1] }))];
+  it("reaches every villager, animal and foe from the Pilgrim's Shrine", () => {
+    const standing = [
+      ...villagersOf(map).map((v) => ({ who: v.name, x: v.x, z: v.z })),
+      ...WILDLIFE.map((a) => ({ who: `${a.creature} (${a.note})`, x: a.at[0], z: a.at[1] })),
+      ...KEEPERS.flatMap((k) => k.at.map(([x, z]) => ({ who: `${k.creature} (${k.note})`, x, z }))),
+      ...Object.entries(ENCOUNTERS).flatMap(([stage, e]) => e.at.map(([x, z]) => ({ who: `${e.creature} (${stage})`, x, z }))),
+    ];
     expect(standing.filter(({ x, z }) => !reached(x, z)).map((s) => s.who)).toEqual([]);
   });
 
