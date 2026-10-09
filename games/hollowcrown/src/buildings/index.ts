@@ -12,7 +12,7 @@ import type { VoxelGrid } from '@voxel/engine/voxel';
 import { cardinal, footprint, type BuildingProps } from '../data/world/kinds';
 import { LOOK, structureColors, type Shutter } from './palette';
 import {
-  anvil, bellCote, chandlerSign, doorstepStool, dryingCandles, dryingHerbs, forgeHearth, heronPlaque, holedRoof, innSign,
+  anvil, bellCote, chandlerSign, mossy, doorstepStool, dryingCandles, dryingHerbs, forgeHearth, heronPlaque, holedRoof, innSign,
   lantern, millWheel, noticeBoard, trough, waxVat, well, windowBoxes,
 } from './props';
 
@@ -71,56 +71,60 @@ export function doorOf(place: PlaceData): Point {
 
 // Each use's own: its spec changed, and its props.
 type Make = (spec: StructureSpec, seed: number, place: PlaceData) => StructureModel;
-const plain: Make = (spec) => new StructureModel(spec, LOOK);
+
+// A building from its spec in the village's look, weathered (moss up its roof from the eaves) under whatever it paints.
+const built = (spec: StructureSpec, extra?: (m: StructureModel) => void) =>
+  new StructureModel({ ...spec, paint: (g, layout) => (mossy(g, layout, spec), spec.paint?.(g, layout)) }, LOOK, extra);
+const plain: Make = (spec) => built(spec);
 
 // (keyed by any use: one the map names before it's built here is drawn as a house)
 const BY_USE: Record<string, Make> = {
   house: (spec, seed, place) => {
-    if (place.id === 'holt-house') return new StructureModel({ ...spec, shut: true, chimney: undefined, paint: holedRoof }, LOOK);
+    if (place.id === 'holt-house') return built({ ...spec, shut: true, chimney: undefined, paint: holedRoof });
     const flowers = hashUnit(seed, 3, 21) < 0.6;
     const stool = place.id === 'megs-house';
-    return new StructureModel({
+    return built({
       ...spec,
       door: { width: 5, height: 10, offset: doorOffset(seed) },
       paint: (g, layout) => {
         if (flowers) windowBoxes(g, layout, seed);
         if (stool) doorstepStool(g, layout);
       },
-    }, LOOK);
+    });
   },
-  chandler: (spec) => new StructureModel({ ...spec, jetty: true, door: { width: 6, height: 11 }, paint: dryingCandles }, LOOK, (m) => {
+  chandler: (spec) => built({ ...spec, jetty: true, door: { width: 6, height: 11 }, paint: dryingCandles }, (m) => {
     const { door, z1 } = m.layout;
     m.prop(chandlerSign(), [1, 10, 0], [door!.x1 + 6, 23, z1 + 2]);
     m.prop(waxVat(), [3, 0, 3], [door!.x0 - 6, 0, z1 + 5]);
     m.prop(waxVat(), [3, 0, 3], [door!.x0 - 13, 0, z1 + 4]);
   }),
-  herbalist: (spec, seed) => new StructureModel({ ...spec, paint: (g, layout) => (windowBoxes(g, layout, seed), dryingHerbs(g, layout)) }, LOOK),
-  inn: (spec) => new StructureModel({ ...spec, jetty: true, door: { width: 7, height: 11 }, windows: { width: 5, height: 5, sill: 4, every: 12 }, chimney: 1 }, LOOK, (m) => {
+  herbalist: (spec, seed) => built({ ...spec, paint: (g, layout) => (windowBoxes(g, layout, seed), dryingHerbs(g, layout)) }),
+  inn: (spec) => built({ ...spec, jetty: true, door: { width: 7, height: 11 }, windows: { width: 5, height: 5, sill: 4, every: 12 }, chimney: 1 }, (m) => {
     const { door, z1 } = m.layout;
     m.prop(innSign(), [1, 10, 0], [door!.x1 + 7, 23, z1 + 2]);
     m.prop(lantern(), [1, 5, 0], [door!.x0 - 3, 10, z1 + 1]);
     m.prop(lantern(), [1, 5, 0], [door!.x1 + 3, 10, z1 + 1]);
   }),
-  smithy: (spec) => new StructureModel({ ...spec, door: { width: 15, height: 11, open: true }, windows: undefined, chimney: 1, storeyHeight: 14, paint: forgeHearth }, LOOK, (m) => {
+  smithy: (spec) => built({ ...spec, door: { width: 15, height: 11, open: true }, windows: undefined, chimney: 1, storeyHeight: 14, paint: forgeHearth }, (m) => {
     const { door, z1 } = m.layout;
     m.prop(anvil(), [3.5, 0, 2], [door!.x0 + 3, 0, z1 + 5]);
     m.prop(trough(), [5, 0, 2], [door!.x1 + 6, 0, z1 + 4]);
   }),
-  shrine: (spec) => new StructureModel({ ...spec, storeyHeight: 15, door: { width: 6, height: 11 }, windows: { width: 2, height: 6, sill: 5, every: 12 } }, LOOK, (m) => {
+  shrine: (spec) => built({ ...spec, storeyHeight: 15, door: { width: 6, height: 11 }, windows: { width: 2, height: 6, sill: 5, every: 12 } }, (m) => {
     const { x1, z0, z1, ridge } = m.layout;
     m.prop(bellCote(), [4.5, 0, 2.5], [x1 - 6, ridge - 1, (z0 + z1) / 2 + 0.5]);
   }),
-  reeve: (spec) => new StructureModel({ ...spec, jetty: true, door: { width: 6, height: 11 }, windows: { width: 4, height: 5, sill: 4, every: 12 }, paint: heronPlaque }, LOOK, (m) => {
+  reeve: (spec) => built({ ...spec, jetty: true, door: { width: 6, height: 11 }, windows: { width: 4, height: 5, sill: 4, every: 12 }, paint: heronPlaque }, (m) => {
     const { door, z1 } = m.layout;
     m.prop(lantern(), [1, 5, 0], [door!.x1 + 3, 10, z1 + 1]);
   }),
-  mill: (spec) => new StructureModel({ ...spec, chimney: undefined }, LOOK, (m) => {
+  mill: (spec) => built({ ...spec, chimney: undefined }, (m) => {
     const { x0, x1, z0 } = m.layout;
     const wheel = m.prop(millWheel(), [16, 16, 3], [(x0 + x1 + 1) / 2, 13, z0 - 4]);
     m.ticks.push((t) => (wheel.rotation.z = -t * 0.9));
   }),
   farmhouse: plain,
-  barn: (spec) => new StructureModel({ ...spec, storeyHeight: 18, door: { width: 18, height: 15, open: true }, windows: undefined, chimney: undefined, pitch: 1 }, LOOK),
+  barn: (spec) => built({ ...spec, storeyHeight: 18, door: { width: 18, height: 15, open: true }, windows: undefined, chimney: undefined, pitch: 1 }),
 };
 
 // A placed building's model, its front toward +z, centred on its footprint.
