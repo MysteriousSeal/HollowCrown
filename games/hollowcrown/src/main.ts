@@ -2,12 +2,12 @@
 // (features/index.ts) installed over them.
 
 import { App, CameraTarget } from '@voxel/engine/app';
-import { humanModel } from '@voxel/engine/characters';
 import { MoveSpeed, Player, Transform } from '@voxel/engine/gameplay';
 import { Obstacles, ObstaclesResource, TerrainResource, loadWorldMap } from '@voxel/engine/world';
 import { HERO } from './data/hero';
 import { PLACE_KINDS, START_PLACE, WORLD_MAP } from './data/world';
 import { FEATURES } from './features';
+import { strangerModel } from './people/stranger';
 
 const app = new App(document.getElementById('app') as HTMLCanvasElement);
 const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
@@ -22,7 +22,7 @@ const hero = app.world.spawn(
   [Player, true],
   [CameraTarget, true],
 );
-app.show(hero, humanModel(HERO.look, HERO.gait));
+app.show(hero, strangerModel(HERO.look, HERO.gait));
 
 for (const feature of FEATURES) feature.install({ app, map, obstacles, hero });
 app.start();

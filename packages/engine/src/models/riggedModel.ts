@@ -4,7 +4,7 @@
 
 import * as THREE from 'three';
 import type { Size, VoxelGrid } from '../voxel';
-import type { Model } from './model';
+import type { Model, ModelAction } from './model';
 import { MODEL_VOXEL, addPart, type PartLook } from './parts';
 import { addShade } from './shade';
 
@@ -36,5 +36,5 @@ export abstract class RiggedModel implements Model {
     addShade(this.root, shade);
   }
 
-  abstract animate(time: number, motion: number): void;
+  abstract animate(time: number, motion: number, action?: ModelAction): void;
 }

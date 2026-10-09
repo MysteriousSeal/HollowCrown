@@ -24,10 +24,8 @@ describe('quests, followed', () => {
     expect(silent).toEqual([]);
   });
 
-  // BUG (gameplay): systems/quests.ts:56 completeObjective moves a quest on to its next stage even when that stage
-  // holds nothing the game can play (MQ01's 'midnight': one fight), and nothing ever moves it on from there: MQ01
-  // is stuck for good. Filed.
-  it.skip('can each be played to the end doing only what the game can play', () => {
+  // (Was a bug: MQ01 stuck for good at its fight-only stage. Fixed by gameplay: such a stage is passed through.)
+  it('can each be played to the end doing only what the game can play', () => {
     const stuck: string[] = [];
     for (const q of Object.values(QUESTS)) {
       const book = newBook();
