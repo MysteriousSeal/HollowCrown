@@ -14,7 +14,7 @@ import { Resident } from '../systems/villagerDay';
 import { ConversationScreen } from '../ui/screens';
 import type { BotBadge } from './badge';
 import { BotKeys, keysToward, type Code } from './keys';
-import { keyOf, nextObjective, pointOf, theOf, waitingFor, walkingTo, type Next } from './plan';
+import { keyOf, nextObjective, pointOf, theOf, walkingTo, whoFor, type Next } from './plan';
 import { POLICY, chooseReply } from './policy';
 import { Walker } from './walker';
 
@@ -125,14 +125,15 @@ export function autopilotSystem(map: WorldMap, obstacles: Obstacles, hero: Entit
       badge.set(far > POLICY.fightRange ? walkingTo(map, objective) : `Fighting ${theOf(world.get(foe, Creature)?.name ?? objective.what!)}`);
       return fight(world, foe, at, dt);
     }
-    if (objective.who) {
-      const them = residentNamed(world, objective.who);
-      if (them === null) return void (skip.add(keyOf(next)), badge.set(`No ${objective.who} to be found`));
+    const who = whoFor(objective);
+    if (who) {
+      const them = residentNamed(world, who);
+      if (them === null) return void (skip.add(keyOf(next)), badge.set(`No ${who} to be found`));
       const { x, z } = world.read(them, Transform);
       const inReach = world.hasResource(InReach) && world.resource(InReach).entity === them;
       if (inReach) {
         keys.hold([], world.resource(KeyboardResource));
-        badge.set(`Talking to ${objective.who}`);
+        badge.set(`Talking to ${who}`);
         return press('KeyE', dt);
       }
       badge.set(walkingTo(map, objective));
@@ -140,6 +141,10 @@ export function autopilotSystem(map: WorldMap, obstacles: Obstacles, hero: Entit
       return;
     }
     const spot = objective.at === undefined ? null : pointOf(map, objective.at);
+    if (objective.kind === 'wait' && (!spot || Math.hypot(spot[0] - at[0], spot[1] - at[1]) < 3)) {
+      keys.hold([], world.resource(KeyboardResource));
+      return badge.set(`Waiting — ${objective.text}`);
+    }
     if (!spot) return void skip.add(keyOf(next));
     badge.set(walkingTo(map, objective));
     walk(world, at, spot, dt, 0.5);
@@ -164,8 +169,7 @@ export function autopilotSystem(map: WorldMap, obstacles: Obstacles, hero: Entit
       const next = nextObjective(book, QUESTS, { canFight: true, skip });
       if (!next) {
         keys.hold([], world.resource(KeyboardResource));
-        const waiting = waitingFor(book, QUESTS);
-        badge.set(waiting ? `Waiting — ${waiting}` : 'Nothing left to play: the story so far is done');
+        badge.set('Nothing left to play: the story so far is done');
         return;
       }
       const key = keyOf(next);
