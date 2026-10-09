@@ -58,6 +58,11 @@ export class World {
 
   // Every entity having all the components given (walking the smallest store first).
   *query(...types: Array<ComponentType<unknown>>): Generator<Entity> {
+    if (types.length === 1) {
+      const store = this.stores.get(types[0].id);
+      if (store) yield* store.keys();
+      return;
+    }
     const stores = types.map((t) => this.stores.get(t.id));
     if (stores.some((s) => !s || s.size === 0)) return;
     const [smallest, ...rest] = (stores as Array<Map<Entity, unknown>>).sort((a, b) => a.size - b.size);
