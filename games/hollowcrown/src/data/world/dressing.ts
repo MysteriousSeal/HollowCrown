@@ -74,7 +74,8 @@ function hedge(note: string, a: Point, b: Point, off: number): Dressing {
 
 const HEDGES: Dressing[] = [
   // The Pilgrim Road, the shrine to the ford: hawthorn both sides, broken at the gibbet and the hay meadows' gate.
-  hedge('the Pilgrim Road, north side, past the shrine', [500, 3379], [680, 3364], 4),
+  hedge('the Pilgrim Road, north side, past the shrine', [500, 3379], [632, 3368], 4),
+  hedge("the Pilgrim Road, north side, past the Wyke farm's gate", [650, 3366], [680, 3364], 4),
   hedge('the Pilgrim Road, south side, past the shrine', [500, 3379], [680, 3364], -4),
   hedge('the Pilgrim Road, north side, to the ford', [720, 3361], [840, 3352], 4),
   hedge('the Pilgrim Road, south side, to the ford', [720, 3361], [850, 3351], -4),

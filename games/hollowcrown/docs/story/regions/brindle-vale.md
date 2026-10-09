@@ -136,6 +136,15 @@ soldiers); at night, howling (CT-BV1).
 | **The Marsh Cairn** | 760, 3830 | A skeleton warrior (level 4); a chest (40 copper, a **reed charm**) |
 | **The Old Boundary Stone** | 1440, 3450 | Osric's oak-and-crown arms; under the moss, a Barrowborn carving of a burning door (lore) |
 
+## The land between (in the game's map: `src/data/world/valeFarmland.ts`, `dressing.ts`)
+| What | Where | Notes |
+|---|---|---|
+| **Hedgerows** | along the Pilgrim Road and the South Road | Hawthorn, broken where a track or a gate comes through |
+| **Brindleford's west fields** | (815–855, 3375–3410) | Barley strips across the ford |
+| **Tallow Green's strips** | (1115–1155, 3068–3100) | Oats, below the green |
+| **The Wyke farm** | (640, 3290), its fields gone to seed | Empty since the Wet Years: four Wykes are among the six names marked *pit* in Pell's old ledger (SQ-BV5). Nobody has taken the land. Nobody will say why. |
+| **Shepherds' huts** | the North Rise (600, 2975), Mosshill (1160, 3572) | Summer grazing. Ned Tolley sleeps in either when he doesn't want the inn. The North Rise hut's sheep-walk runs down to the Nine Sisters. |
+
 ## Enemies (outside scripted fights)
 | Where | What | Level | Count |
 |---|---|---|---|
