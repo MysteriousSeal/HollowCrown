@@ -4,9 +4,22 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./*": "./src/*.ts"
+    "./ecs": "./src/ecs/index.ts",
+    "./math": "./src/math/index.ts",
+    "./voxel": "./src/voxel/index.ts",
+    "./models": "./src/models/index.ts",
+    "./characters": "./src/characters/index.ts",
+    "./world": "./src/world/index.ts",
+    "./render": "./src/render/index.ts",
+    "./gameplay": "./src/gameplay/index.ts",
+    "./input": "./src/input/index.ts",
+    "./app": "./src/app/index.ts",
+    "./tools": "./src/tools/index.ts"
   },
   "dependencies": {
     "three": "^0.169.0"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
   }
 }
