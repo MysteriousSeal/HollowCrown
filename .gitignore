@@ -10,3 +10,8 @@
 ruvector.db
 .swarm/
 .claude/settings.local.json
+
+# Node / build
+node_modules/
+dist/
+*.tsbuildinfo
