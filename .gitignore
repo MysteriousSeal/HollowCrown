@@ -5,6 +5,10 @@
 .claude-flow/data/
 .claude-flow/logs/
 .claude-flow/sessions/
+.claude-flow/policy/state.json
+.claude-flow/policy/ledger-anchors.json
+**/.claude-flow/
+!/.claude-flow/
 
 # Ruflo runtime state
 ruvector.db
