@@ -19,6 +19,8 @@ export interface BeastSpec extends PartLook {
   legsAt: Array<[number, number]>; // front right, front left, back right, back left (voxels; its right is -X)
   scale?: number; // drawn bigger (an alpha) or smaller
   stride?: number; // gait cycles a second at a walk
+  // Its gestures by name (graze, peck), posed on top of its own pose, `phase` 0 .. 1 through it (Acting with that name).
+  gestures?: Readonly<Record<string, (model: BeastModel, phase: number) => void>>;
 }
 
 // A part of a beast: its grid's builder and size.
@@ -27,10 +29,10 @@ export const beastPart = (grid: () => VoxelGrid, size: Size): BeastPart => ({ gr
 const LEG_SWING = 0.6;
 
 export class BeastModel extends RiggedModel {
-  private readonly body: THREE.Group;
-  private readonly head: THREE.Group;
-  private readonly tail: THREE.Group;
-  private readonly legs: THREE.Group[] = [];
+  readonly body: THREE.Group;
+  readonly head: THREE.Group;
+  readonly tail: THREE.Group;
+  readonly legs: THREE.Group[] = [];
 
   constructor(private readonly spec: BeastSpec) {
     super(spec, spec.scale ?? 1);
@@ -73,6 +75,8 @@ export class BeastModel extends RiggedModel {
       for (const leg of this.legs) leg.rotation.x = 0.15 * action.phase;
       this.head.rotation.x = 0.3 * action.phase;
       this.tail.rotation.y = 0;
+    } else if (action && action.name !== 'hurt' && action.name !== 'attack') {
+      this.spec.gestures?.[action.name]?.(this, action.phase);
     } else if (action?.name === 'hurt') {
       const flinch = 1 - action.phase;
       this.body.position.z = -flinch * 0.05;

@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
 import { VisualComponent, visualOf, visualSystem } from '../src/app/visuals';
-import { FrameModel, humanModel } from '../src/characters';
+import { BeastModel, BirdModel, FrameModel, humanModel } from '../src/characters';
+import { createGrid } from '../src/voxel';
 import { World } from '../src/ecs';
 import { Acting, Dead, Hit, Transform } from '../src/gameplay';
 import type { Model, ModelAction } from '../src/models';
@@ -75,6 +76,24 @@ describe('acting out', () => {
     expect(person.joints.rightArm.rotation.x).toBe(-2);
     person.animate(1, 0, { name: 'unknown', phase: 0.5 }); // (a gesture it hasn't: nothing)
     expect(calls).toHaveLength(1);
+  });
+
+  it('acts out beasts\' and birds\' gestures too', () => {
+    const part = (size: [number, number, number]) => ({ grid: () => { const g = createGrid(size); g.cells.fill(1); return g; }, size });
+    const seen: string[] = [];
+    const beast = new BeastModel({
+      palette: [0x806040], body: part([4, 3, 6]), head: part([3, 3, 3]), leg: part([1, 3, 1]), tail: part([1, 1, 3]), headDrop: 1,
+      legsAt: [[-1, 2], [1, 2], [-1, -2], [1, -2]], gestures: { graze: (m, p) => (seen.push(`graze ${p}`), (m.head.rotation.x = 1)) },
+    });
+    beast.animate(1, 0, { name: 'graze', phase: 0.5 });
+    expect(beast.head.rotation.x).toBe(1);
+    const bird = new BirdModel({
+      palette: [0x202020], body: { grid: part([2, 2, 3]).grid, pivot: [1, 0, 1] }, head: { grid: part([2, 2, 2]).grid, pivot: [1, 0, 0], at: [0, 2, 1] },
+      wing: { grid: part([1, 1, 2]).grid, pivot: [0, 0, 1], at: [1, 1, 0] }, leg: { grid: part([1, 2, 1]).grid, pivot: [0, 2, 0], at: [1, 0, 0], length: 2 }, height: 4,
+      gestures: { peck: () => seen.push('peck') },
+    });
+    bird.animate(1, 0, { name: 'peck', phase: 0.2 });
+    expect(seen).toEqual(['graze 0.5', 'peck']);
   });
 
   it('lays a dead person on their back, a model that does so itself left untoppled', () => {
