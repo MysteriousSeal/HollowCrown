@@ -91,6 +91,25 @@ describe('the world map', () => {
     expect(rects.some((r) => r.surface === 1 && r.tier === 0)).toBe(true);
   });
 
+  it('flattens the relief under a footprint, even after its tiles were worked out', () => {
+    const fresh = loadWorldMap(MAP, { house: () => [], well: () => [] });
+    const footprint = { rect: [14, 14, 22, 20] as [number, number, number, number] };
+    const uneven = () => {
+      let n = 0;
+      for (let x = 14; x <= 22; x++) for (let z = 14; z <= 20; z++) n += fresh.reliefAt(x, z) === 0 ? 0 : 1;
+      return n;
+    };
+    expect(uneven()).toBeGreaterThan(0); // (worked out, bumpy)
+    const outside = fresh.reliefAt(30, 30);
+    fresh.flatten(footprint);
+    expect(uneven()).toBe(0);
+    for (let x = 14; x <= 22; x++) expect(fresh.groundY(x, 17)).toBeCloseTo(fresh.tierAt(x, 17) * TILE_HEIGHT);
+    expect(fresh.reliefAt(30, 30)).toBe(outside); // (outside untouched)
+    fresh.flatten({ rect: [15, 15, 16, 16] }, 1);
+    expect(fresh.reliefAt(15, 15)).toBe(1);
+    expect(() => fresh.flatten(footprint, 9)).toThrow();
+  });
+
   it('makes bare land a little uneven, in small steps, the ground walked on following it', () => {
     const levels = new Set<number>();
     for (let x = 12; x < 40; x++) for (let z = 12; z < 40; z++) {

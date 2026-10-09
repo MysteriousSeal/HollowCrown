@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { QUESTS } from '../../src/data/quests';
-import { UNPLAYABLE, completeObjective, newBook, startQuest } from '../../src/systems/quests';
+import { UNPLAYABLE, completeObjective, newBook, openObjectives, startQuest } from '../../src/systems/quests';
 import { trackerText } from '../../src/ui/questText';
 
 describe('quests, followed', () => {
@@ -32,12 +32,13 @@ describe('quests, followed', () => {
     for (const q of Object.values(QUESTS)) {
       const book = newBook();
       startQuest(book, QUESTS, q.id);
-      const progress = book.log[0];
-      for (let guard = 0; !progress.finished && guard < 100; guard++) {
-        const stage = q.stages.find((s) => s.id === progress.stage)!;
-        const next = stage.objectives.find((o) => !o.optional && !UNPLAYABLE.has(o.kind) && !progress.done.includes(o.id));
+      // (Through the book's own API: what's still open in the quest, until nothing is: it's over.)
+      for (let guard = 0; guard < 100; guard++) {
+        const open = openObjectives(book, QUESTS).filter((o) => o.quest === q.id).map((o) => o.objective);
+        if (open.length === 0) break;
+        const next = open.find((o) => !o.optional && !UNPLAYABLE.has(o.kind));
         if (!next) {
-          stuck.push(`${q.id} stuck at ${stage.id}: ${stage.objectives.map((o) => `${o.id} (${o.kind}${o.optional ? ', optional' : ''})`).join(', ')}`);
+          stuck.push(`${q.id} stuck on ${open.map((o) => `${o.id} (${o.kind}${o.optional ? ', optional' : ''})`).join(', ')}`);
           break;
         }
         completeObjective(book, QUESTS, q.id, next.id, next.options?.[0]?.sets ?? {});

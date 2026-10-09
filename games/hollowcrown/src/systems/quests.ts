@@ -52,25 +52,31 @@ export function openObjectives(book: QuestBook, quests: Record<string, Quest>): 
 
 // Objective `objectiveId` of quest `questId` done (with the flags its choice sets). If that ends its stage (every
 // objective done but the optional and the unplayable), the stage's flags are set and the next stage begins (or the
-// quest finishes). Returns the stage begun, if one did.
+// quest finishes); a stage with nothing in it to play yet (midnight's fight) is passed through, its flags set.
+// Returns the stage begun, if one did.
 export function completeObjective(
   book: QuestBook, quests: Record<string, Quest>, questId: string, objectiveId: string, sets: Record<string, string | boolean> = {},
 ): QuestStage | undefined {
   const progress = book.quests.find((p) => p.quest === questId && !p.finished);
   if (!progress) return undefined;
   const quest = quests[questId];
-  const stage = stageOf(quest, progress.stage);
+  let stage = stageOf(quest, progress.stage);
   if (!stage?.objectives.some((o) => o.id === objectiveId) || progress.done.includes(objectiveId)) return undefined;
   progress.done.push(objectiveId);
   Object.assign(book.flags, sets);
-  const left = stage.objectives.filter((o) => !progress.done.includes(o.id) && !o.optional && !UNPLAYABLE.has(o.kind));
-  if (left.length > 0) return undefined;
-  Object.assign(book.flags, stage.sets ?? {});
-  const next = quest.stages[quest.stages.indexOf(stage) + 1];
-  if (!next) {
-    progress.finished = true;
-    return undefined;
+  let begun: QuestStage | undefined;
+  while (stage && neededIn(stage, progress.done).length === 0) {
+    Object.assign(book.flags, stage.sets ?? {});
+    const next: QuestStage | undefined = quest.stages[quest.stages.indexOf(stage) + 1];
+    if (!next) {
+      progress.finished = true;
+      return begun;
+    }
+    [progress.stage, progress.done, begun, stage] = [next.id, [], next, next];
   }
-  [progress.stage, progress.done] = [next.id, []];
-  return next;
+  return begun;
 }
+
+// What's still needed to end `stage`: its objectives not done, but the optional and the unplayable.
+const neededIn = (stage: QuestStage, done: string[]) =>
+  stage.objectives.filter((o) => !done.includes(o.id) && !o.optional && !UNPLAYABLE.has(o.kind));

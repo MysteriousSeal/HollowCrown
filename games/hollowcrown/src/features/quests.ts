@@ -9,7 +9,7 @@ import type { ConversationLine } from '@voxel/engine/ui';
 import type { Point, WorldMap } from '@voxel/engine/world';
 import { PEOPLE_DATA } from '../data/people';
 import type { Spot } from '../data/people/kinds';
-import { QUESTS, type Objective, type QuestStage } from '../data/quests';
+import { QUESTS, type Line, type Objective, type QuestStage } from '../data/quests';
 import { Quests, completeObjective, newBook, openObjectives, startQuest } from '../systems/quests';
 import { ConversationScreen, QuestLog } from '../ui/screens';
 import type { Feature } from './context';
@@ -37,22 +37,40 @@ export function complete(world: World, quest: string, id: string, sets?: Record<
   begin(world, completeObjective(world.resource(Quests), QUESTS, quest, id, sets));
 }
 
-// What `name` says when talked to, and what it does for the quests: each open 'talk' with them done as it closes,
-// each 'choose' with them asked (its options as the hero's replies). None asked of them: their first words.
+// The lines an objective plays, talking with `name` (the hero on the left, everyone else on the right, named if it
+// isn't `name` speaking); a choice's replies offered on its last. None written: `fallback`.
+export function linesOf(objective: Objective, name: string, fallback: Line): ConversationLine[] {
+  const said = objective.lines?.length ? objective.lines : [fallback];
+  const lines: ConversationLine[] = said.map(({ who, text }) => ({
+    side: who === 'hero' ? 'left' : 'right',
+    text: who === 'hero' || who === name ? text : `${who}: ${text}`,
+  }));
+  if (objective.kind === 'choose') lines[lines.length - 1].choices = objective.options!.map((o) => o.label);
+  return lines;
+}
+
+// What `name` says when talked to, and what it does for the quests: each open 'talk' with them played and done as
+// it closes, then each 'choose' with them played and done by the reply picked. None asked of them: their first words.
 export function talkWith(world: World, name: string): { lines: ConversationLine[]; onChoice: (line: number, choice: number) => void; onClose: () => void } {
   const asked = world.hasResource(Quests) ? openObjectives(world.resource(Quests), QUESTS).filter(({ objective }) => objective.who === name) : [];
-  const talks = asked.filter(({ objective }) => objective.kind === 'talk');
-  const choices = asked.filter(({ objective }) => objective.kind === 'choose');
-  const lines: ConversationLine[] = [{ side: 'right', text: PEOPLE_DATA[name]?.firstWords ?? '…' }];
-  for (const { objective } of choices) lines.push({ side: 'right', text: objective.text, choices: objective.options!.map((o) => o.label) });
+  const firstWords = PEOPLE_DATA[name]?.firstWords ?? '…';
+  if (asked.length === 0) return { lines: [{ side: 'right', text: firstWords }], onChoice: () => {}, onClose: () => {} };
+  const isChoice = ({ objective }: (typeof asked)[number]) => objective.kind === 'choose';
+  const ordered = [...asked.filter((a) => !isChoice(a)), ...asked.filter(isChoice)];
+  const lines: ConversationLine[] = [];
+  const choiceAt = new Map<number, (typeof asked)[number]>(); // (each choice, by the line it's asked on)
+  for (const entry of ordered) {
+    lines.push(...linesOf(entry.objective, name, { who: name, text: isChoice(entry) ? entry.objective.text : firstWords }));
+    if (isChoice(entry)) choiceAt.set(lines.length - 1, entry);
+  }
   return {
     lines,
     onChoice: (line, choice) => {
-      const asking = choices[line - 1];
+      const asking = choiceAt.get(line);
       const option = asking?.objective.options?.[choice];
-      if (option) complete(world, asking.quest, asking.objective.id, option.sets);
+      if (asking && option) complete(world, asking.quest, asking.objective.id, option.sets);
     },
-    onClose: () => talks.forEach(({ quest, objective }) => complete(world, quest, objective.id)),
+    onClose: () => ordered.forEach(({ quest, objective }) => objective.kind === 'talk' && complete(world, quest, objective.id)),
   };
 }
 
@@ -78,7 +96,7 @@ function ask(world: World, quest: string, objective: Objective): void {
   if (!world.hasResource(ConversationScreen)) return;
   const screen = world.resource(ConversationScreen);
   if (screen.isOpen) return;
-  const lines: ConversationLine[] = [{ side: 'left', text: objective.text, choices: objective.options!.map((o) => o.label) }];
+  const lines = linesOf(objective, 'hero', { who: 'hero', text: objective.text });
   screen.open({ name: 'You' }, { name: '' }, lines, undefined, (_, choice) => complete(world, quest, objective.id, objective.options![choice]?.sets));
 }
 

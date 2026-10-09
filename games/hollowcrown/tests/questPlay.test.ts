@@ -39,23 +39,32 @@ describe('quest play', () => {
     expect(world.resource(TimeOfDay).hours).toBe(21);
   });
 
-  it('talks to Pell at the bell: his talk done as it closes', () => {
+  it("talks to Pell at the bell: the quest's lines, the hero's on the left, done as it closes", () => {
     const { world, book } = atStage('the-bell');
     const talk = talkWith(world, 'Odo Pell');
-    expect(talk.lines[0].text).toBe(PEOPLE_DATA['Odo Pell'].firstWords);
+    expect(talk.lines.map((l) => l.side)).toEqual(['right', 'left', 'right']);
+    expect(talk.lines[1].text).toBe('Robbed. On your road.');
     talk.onClose();
     expect(book.quests[0].stage).toBe('the-inn');
   });
 
-  it("asks Garrick's choice at the inn, its reply setting the flag, and on to midnight", () => {
+  it("asks Garrick's choice at the inn, its reply setting the flag, and on through midnight to dawn", () => {
     const { world, book } = atStage('the-inn');
     const talk = talkWith(world, 'Garrick Fenn');
-    expect(talk.lines[1].choices).toHaveLength(4);
-    talk.onChoice(1, 1);
+    const asked = talk.lines.findIndex((l) => l.choices);
+    expect(talk.lines[asked].choices).toHaveLength(4);
+    expect(talk.lines[asked].text).toBe('Nobody comes to the Vale on purpose. So. Why?');
+    talk.onChoice(asked, 1);
     talk.onClose();
     expect(book.flags.hero_reason).toBe('work');
-    expect(book.quests[0].stage).toBe('midnight'); // (the wait for midnight isn't played yet)
-    expect(world.resource(TimeOfDay).hours).toBe(0);
+    expect(book.quests[0].stage).toBe('dawn'); // (midnight's fight isn't played yet: passed through)
+    expect(book.flags.mq01_dead_walked).toBe(true);
+    expect(world.resource(TimeOfDay).hours).toBe(6);
+  });
+
+  it('names anyone else speaking in a talk (Garrick, at the well with Cuthwin)', () => {
+    const { world } = atStage('dawn');
+    expect(talkWith(world, 'Father Cuthwin').lines.at(-1)!.text).toMatch(/^Garrick Fenn: /);
   });
 
   it('has only first words for someone the quests ask nothing of', () => {
