@@ -3,7 +3,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { World } from '@voxel/engine/ecs';
-import { FaceToward, Interact, MoveIntent, TimeOfDay, Transform, Wander, wander } from '@voxel/engine/gameplay';
+import { AttackIntent, FaceToward, Interact, MoveIntent, TimeOfDay, Transform, Wander, wander } from '@voxel/engine/gameplay';
 import { Talking, endTalk, talkSystem, type Talk } from '../src/systems/talk';
 import { Resident, villagerDaySystem } from '../src/systems/villagerDay';
 
@@ -51,6 +51,22 @@ describe('talk', () => {
     expect(opened).toHaveLength(1);
     press();
     expect(opened).toHaveLength(2);
+  });
+
+  it("holds the hero's swing while talking and on the press that ends it, not after", () => {
+    const { world, hero, talk, press } = setup();
+    press();
+    world.add(hero, AttackIntent, true);
+    press();
+    expect(world.has(hero, AttackIntent)).toBe(false);
+    endTalk(world, talk, hero);
+    world.add(hero, AttackIntent, true);
+    press();
+    expect(world.has(hero, AttackIntent)).toBe(false);
+    world.add(hero, AttackIntent, true);
+    world.clearEvents();
+    talkSystem(talk, hero, () => false, () => {}).update(world, 1 / 60);
+    expect(world.has(hero, AttackIntent)).toBe(true);
   });
 
   it('lets them go when it ends: the villager strolls again', () => {

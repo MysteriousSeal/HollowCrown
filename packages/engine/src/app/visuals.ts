@@ -1,18 +1,41 @@
 // What an entity looks like on screen (a Model), and the entity the camera follows. The visual system puts each
 // model where its entity stands, turns it the way it faces (smoothly, the short way round), and eases its motion
 // (0 still .. 1 moving) from how far it actually went, for the model to animate with what it's acting out (a swing, a
-// flinch); the dead topple onto their side.
+// flinch); a model hit flashes red a moment; the dead topple onto their side.
 
-import type * as THREE from 'three';
+import * as THREE from 'three';
 import { defineComponent, type System } from '../ecs';
 import { Transform } from '../gameplay/components';
 import { Acting } from '../gameplay/attack';
-import { Dead } from '../gameplay/health';
+import { Dead, Hit } from '../gameplay/health';
 import type { Model } from '../models';
 
 const TURN_RATE = 14; // how fast a model turns toward its facing (per second)
 const EASE = 12; // how fast its motion eases in and out (per second)
 const FALL = 6; // how fast the dead topple (per second)
+export const FLASH_SECONDS = 0.15; // how long a model flashes red when hit
+
+// A blow's flash: the model unlit and tinted red (its vertex colours kept under the tint), one material for all.
+let flashMaterial: THREE.MeshBasicMaterial | null = null;
+const flashOf = () => (flashMaterial ??= new THREE.MeshBasicMaterial({ vertexColors: true, color: 0xff6a5a, toneMapped: false }));
+
+// The model's meshes (not its shade) drawn in the flash, their own materials kept to put back.
+function startFlash(visual: Visual): void {
+  visual.flash = FLASH_SECONDS;
+  if (visual.flashed) return;
+  visual.flashed = new Map();
+  visual.model.root.traverse((o) => {
+    const mesh = o as THREE.Mesh;
+    if (!mesh.isMesh || o === visual.shade || o.parent === visual.shade) return;
+    visual.flashed!.set(mesh, mesh.material);
+    mesh.material = flashOf();
+  });
+}
+
+function endFlash(visual: Visual): void {
+  for (const [mesh, material] of visual.flashed ?? []) mesh.material = material;
+  [visual.flash, visual.flashed] = [0, null];
+}
 const STILL = 1e-4; // world units: moved less than this in a frame, it's standing
 
 export interface Visual {
@@ -21,12 +44,14 @@ export interface Visual {
   heading: number; // the way it's turned now
   motion: number; // 0 still .. 1 moving, eased
   fallen: number; // 0 standing .. 1 lying on its side (dead), eased
+  flash: number; // seconds left of the red flash of a blow taken
+  flashed: Map<THREE.Mesh, THREE.Material | THREE.Material[]> | null; // its meshes' own materials, while it flashes
   last: { x: number; z: number } | null; // where it stood last frame
 }
 export const VisualComponent = defineComponent<Visual>('Visual');
 
 // A model as an entity's visual.
-export const visualOf = (model: Model, facing = 0): Visual => ({ model, shade: model.root.getObjectByName('shade'), heading: facing, motion: 0, fallen: 0, last: null });
+export const visualOf = (model: Model, facing = 0): Visual => ({ model, shade: model.root.getObjectByName('shade'), heading: facing, motion: 0, fallen: 0, flash: 0, flashed: null, last: null });
 
 // The entity the camera follows (the first one found).
 export const CameraTarget = defineComponent<true>('CameraTarget');
@@ -38,6 +63,10 @@ export function visualSystem(clock: () => number): System {
     stage: 'present',
     update(world, dt) {
       const time = clock();
+      for (const { target } of world.eventsOf(Hit)) {
+        const visual = world.get(target, VisualComponent);
+        if (visual) startFlash(visual);
+      }
       for (const entity of world.query(VisualComponent, Transform)) {
         const visual = world.read(entity, VisualComponent);
         const { x, y, z, facing } = world.read(entity, Transform);
@@ -57,6 +86,7 @@ export function visualSystem(clock: () => number): System {
           root.rotation.z = visual.fallen * (Math.PI / 2);
           if (visual.shade) visual.shade.visible = visual.fallen < 0.5;
         }
+        if (visual.flashed && (visual.flash -= dt) <= 0) endFlash(visual);
         const acting = world.get(entity, Acting);
         visual.model.animate(time, visual.motion, acting && { name: acting.action, phase: Math.min(1, acting.time / acting.duration) });
       }

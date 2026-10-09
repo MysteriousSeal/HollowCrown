@@ -3,7 +3,7 @@ import { World } from '../src/ecs';
 import {
   Attack, Faction, Health, Hostile, MoveIntent, Player, Transform, attack, attackSystem, health, healthSystems, hostile, hostileSystem, movementSystem,
 } from '../src/gameplay';
-import { TerrainResource, flatTerrain } from '../src/world';
+import { Obstacles, ObstaclesResource, TerrainResource, flatTerrain } from '../src/world';
 
 function hunt() {
   const world = new World();
@@ -53,6 +53,22 @@ describe('hostiles', () => {
     expect(Math.hypot(wolfAt.x - 50, wolfAt.z - 58)).toBeLessThan(0.6);
     const intent = world.read(world.first(Hostile)!, MoveIntent);
     expect([intent.x, intent.z]).toEqual([0, 0]);
+  });
+
+  it('settle where they stand if something blocks the way home, and hunt again from there', () => {
+    const { world, state, heroAt, wolfAt, step } = hunt();
+    const trunk = new Obstacles();
+    trunk.add({ x0: 49.4, z0: 54.6, x1: 50.6, z1: 55.4 }); // square between the wolf and its home
+    world.setResource(ObstaclesResource, trunk);
+    heroAt.z = 53;
+    for (let i = 0; i < 20; i++) step(); // (it comes for the hero, round the trunk's side)
+    [wolfAt.x, wolfAt.z] = [50, 54]; // (and stands behind the trunk when the hero runs off)
+    heroAt.z = 20;
+    for (let i = 0; i < 30 * 4; i++) step();
+    expect(state.state).toBe('idle');
+    heroAt.z = 49;
+    step();
+    expect(state.state).toBe('chase');
   });
 
   it('rejects a leash shorter than its sight', () => {
