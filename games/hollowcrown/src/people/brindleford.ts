@@ -110,7 +110,7 @@ const WAT = folk({ build: 'male', skin: 0, hair: 2, dye: 3, hairStyle: 'shaggy',
 // Nan Wicket, the herbalist, 70: bent nearly double over her stick, white hair under a linen coif, a moss-green dress
 // to the ground, a madder shawl fringed round her shoulders, bunches of herbs hung at her belt.
 const NAN_WICKET = folk({ build: 'female', skin: 0, hair: 7, dye: 2, hairStyle: 'bun', beard: false, expression: 'sly' }, {
-  head: (g, o) => coif(g, o, (x, z) => ((x + z) % 4 ? W.linen : W.linenShade), W.linenShade),
+  head: (g, o) => coif(g, o, (x, _y, z) => ((x + z) % 4 ? W.linen : W.linenShade), W.linenShade),
   torso: (g, o, f) => {
     body(g, o, (x, y) => (y === 2 ? K.leatherDark : (x + y) % 4 ? W.moss : W.mossDark));
     shawl(g, o, f, (x, y) => ((x + y) % 3 ? W.shawl : W.shawlDark));
@@ -169,7 +169,7 @@ const KIT = folk({ build: 'male', skin: 0, hair: 3, dye: 3, hairStyle: 'shaggy',
 // Old Meg, the widow, 70: in faded mourning black to the ground, a linen coif, a dark shawl pinned close, a little
 // stooped from sitting every night on her doorstep.
 const OLD_MEG = folk({ build: 'female', skin: 0, hair: 7, dye: 4, hairStyle: 'bun', beard: false, expression: 'wistful' }, {
-  head: (g, o) => coif(g, o, (x, z) => ((x + z) % 4 ? W.linen : W.linenShade), W.linenShade),
+  head: (g, o) => coif(g, o, (x, _y, z) => ((x + z) % 4 ? W.linen : W.linenShade), W.linenShade),
   torso: (g, o, f) => {
     body(g, o, (x, y) => ((x + y) % 5 ? W.widow : W.widowLight));
     shawl(g, o, f, (x, y) => ((x + y) % 3 ? W.widowLight : W.widow), W.linenDark);
@@ -200,7 +200,7 @@ const HOB_COBBE = folk({ build: 'male', skin: 2, hair: 0, dye: 2, hairStyle: 'sh
 // Ada Cobbe, the farmer's wife, 40: a linen coif, a woad-blue dress to the ankle, her sleeves rolled, a work-stained
 // apron.
 const ADA_COBBE = folk({ build: 'female', skin: 2, hair: 0, dye: 1, hairStyle: 'bun', beard: false, expression: 'stern' }, {
-  head: (g, o) => coif(g, o, (x, z) => ((x + z) % 4 ? W.linen : W.linenShade), W.linenShade),
+  head: (g, o) => coif(g, o, (x, _y, z) => ((x + z) % 4 ? W.linen : W.linenShade), W.linenShade),
   torso: (g, o, f) => {
     body(g, o, (x, y) => (y >= 7 ? W.linen : (x + y) % 4 ? W.woad : W.woadDark));
     skirt(g, o, f, 5, (x, y) => ((x + y) % 4 ? W.woad : W.woadDark));
