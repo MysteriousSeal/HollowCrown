@@ -71,7 +71,7 @@ export function coverIn(map: WorldMap, key: string, keepOut: Obstacles): Growth[
         if (h(601 + t) >= density - t * 0.3) continue;
         const [gx, gz] = at(610 + t * 2);
         const tall = Math.max(2, Math.min(TALLEST, Math.round((height[0] + (height[1] - height[0]) * h(620 + t)) / VOXEL)));
-        out.push({ x: gx, z: gz, shape: `grass${tall}:${Math.floor(h(630 + t) * 2)}`, turn: Math.floor(h(640 + t) * 4), tint: h(650 + t), color });
+        out.push({ x: gx, z: gz, shape: `grass${tall}:${Math.floor(h(630 + t) * 2)}`, turn: Math.floor(h(640 + t) * 4), tint: h(650 + t), color: grassColor(color) });
       }
       // the rest (flowers, bushes, stones, a lone tree): one at most a tile, each as often as the cover says
       const clear = !keepOut.blocks(x, z, 0.6) && !places.some(([px, pz]) => Math.abs(px - x) <= ROOM && Math.abs(pz - z) <= ROOM);
@@ -135,4 +135,12 @@ export function coverLayer(map: WorldMap, keepOut: Obstacles, obstacles: Obstacl
 // Every chunk of `map`.
 function* allChunks(map: WorldMap): Generator<string> {
   for (let x = 0; x < map.size.width / CHUNK_SIZE; x++) for (let z = 0; z < map.size.depth / CHUNK_SIZE; z++) yield `${x},${z}`;
+}
+
+// Grass as it's drawn: the cover's color brought most of the way to the land's green, and lighter (the cover's own
+// end-of-summer khaki on its own reads as bare earth from the camera).
+const LAND = [0x6f, 0xb1, 0x4f];
+function grassColor(color: number): number {
+  const [r, g, b] = [(color >> 16) & 255, (color >> 8) & 255, color & 255].map((c, i) => Math.min(255, Math.round((c * 0.3 + LAND[i] * 0.7) * 1.2)));
+  return (r << 16) | (g << 8) | b;
 }

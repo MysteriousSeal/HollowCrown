@@ -14,7 +14,7 @@ export interface CoverShape {
 }
 
 // Grass: white to mid grey, multiplied by the grass's own color as it's drawn.
-const GRASS = [0xffffff, 0xd6d6d6, 0xaeaeae];
+const GRASS = [0xffffff, 0xe6e6e6, 0xcccccc];
 
 // A tuft of grass `tall` voxels high: a middle blade and a handful round it, shorter, each one shade (one color a blade
 // keeps it a few quads); `variant` moves the blades round.
