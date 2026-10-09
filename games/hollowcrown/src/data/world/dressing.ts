@@ -6,12 +6,13 @@
 import type { Point } from '@voxel/engine/world';
 import { EAST, NORTH, SOUTH } from './kinds';
 
-export type DressingKind = 'fence' | 'hay-rick' | 'gibbet' | 'standing-stone' | 'hanging-oak';
+export type DressingKind = 'fence' | 'hay-rick' | 'gibbet' | 'standing-stone' | 'hanging-oak' | 'garden-bed' | 'barrow';
 
 export interface Dressing {
   kind: DressingKind;
   note: string;
-  at?: Point; // a thing's tile
+  at?: Point; // a thing's tile (a garden bed's middle, which can fall between tiles)
+  radius?: number; // a barrow's, in tiles
   facing?: number; // radians, 0 toward +z
   line?: Point[]; // a fence's run, corner to corner, on tile edges (half tiles)
 }
@@ -35,13 +36,22 @@ function fenceRound(note: string, [x0, z0, x1, z1]: [number, number, number, num
   return runs.map((line) => ({ kind: 'fence' as const, note, line }));
 }
 
-// The kitchen gardens (as brindleford.ts draws them), each left open on its cottage's side.
-const GARDEN_FENCES: Dressing[] = [
-  ...([[917, 3340, 920, 3343], [923, 3339, 926, 3343], [929, 3339, 932, 3343], [935, 3339, 938, 3343]] as const).map((r) => fenceRound('a kitchen garden, East Lane north', [...r], 'south')),
-  ...([[921, 3361, 924, 3366], [927, 3361, 930, 3366], [933, 3361, 936, 3366]] as const).map((r) => fenceRound('a kitchen garden, East Lane south', [...r], 'north')),
-  ...([[850, 3335, 854, 3339], [850, 3342, 854, 3346], [850, 3358, 854, 3362]] as const).map((r) => fenceRound('a kitchen garden, across the ford', [...r], 'east')),
-  fenceRound("the Cobbes' kitchen garden", [942, 3419, 946, 3425], 'east', 2),
-].flat();
+// The kitchen gardens (as brindleford.ts draws them, [x0, z0, x1, z1]), each fenced but on its cottage's side.
+type Rect = [number, number, number, number];
+const GARDENS: Array<{ note: string; rect: Rect; open: Side; gate?: number }> = [
+  ...([[917, 3340, 920, 3343], [923, 3339, 926, 3343], [929, 3339, 932, 3343], [935, 3339, 938, 3343]] as Rect[]).map((rect) => ({ note: 'a kitchen garden, East Lane north', rect, open: 'south' as const })),
+  ...([[921, 3361, 924, 3366], [927, 3361, 930, 3366], [933, 3361, 936, 3366]] as Rect[]).map((rect) => ({ note: 'a kitchen garden, East Lane south', rect, open: 'north' as const })),
+  ...([[850, 3335, 854, 3339], [850, 3342, 854, 3346], [850, 3358, 854, 3362]] as Rect[]).map((rect) => ({ note: 'a kitchen garden, across the ford', rect, open: 'east' as const })),
+  { note: "the Cobbes' kitchen garden", rect: [942, 3419, 946, 3425], open: 'east', gate: 2 },
+];
+
+// A garden's beds: 3 tiles along their rows (east-west), 2 across, a tile's walk between, as many as it holds.
+function bedsOf([x0, z0, x1, z1]: Rect, note: string): Dressing[] {
+  const x = x0 + Math.floor((x1 - x0 + 1 - 3) / 2) + 1; // a 3-wide bed's middle column, centred
+  const beds: Dressing[] = [];
+  for (let z = z0; z + 1 <= z1; z += 3) beds.push({ kind: 'garden-bed', note: `a bed in ${note}`, at: [x, z + 0.5], facing: SOUTH });
+  return beds;
+}
 
 // Hay ricks: the hay's in (Hob Cobbe says), stacked out in the meadows round the village.
 const HAY_RICKS: Point[] = [[798, 3318], [810, 3326], [786, 3404], [1022, 3304], [1012, 3378], [962, 3300], [832, 3462], [1028, 3398]];
@@ -55,11 +65,13 @@ const SISTERS: Point[] = Array.from({ length: 9 }, (_, i) => {
 export const DRESSING: Dressing[] = [
   // The Cobbes' strips (brindleford.ts), open on the east to the fallow end and the shepherds' track.
   ...fenceRound("the Cobbes' fields", [929, 3434, 977, 3471], 'east'),
-  ...GARDEN_FENCES,
+  ...GARDENS.flatMap(({ note, rect, open, gate }) => [...fenceRound(note, rect, open, gate), ...bedsOf(rect, note)]),
   ...HAY_RICKS.map((at, i): Dressing => ({ kind: 'hay-rick', note: 'a hay rick, the hay meadows', at, facing: [SOUTH, EAST][i % 2] })),
   // The Pilgrim Road's gibbet: an empty cage, turning; the Red Hen's feathers tied to it.
   { kind: 'gibbet', note: "the Pilgrim Road's gibbet", at: [700, 3380], facing: NORTH },
   ...SISTERS.map((at): Dressing => ({ kind: 'standing-stone', note: 'one of the Nine Sisters', at })),
+  // The mound inside the ring, dug into on its south side, toward the gap (SQ-BV3).
+  { kind: 'barrow', note: "the Nine Sisters' barrow", at: [750, 3050], radius: 3, facing: SOUTH },
   // The Hanging Oak, where the South Road bends: its hollow (MQ03's note), Jory's Wednesdays. A step off the road.
   { kind: 'hanging-oak', note: 'the Hanging Oak', at: [997, 3485], facing: EAST },
 ];

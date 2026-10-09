@@ -19,7 +19,10 @@ startModelViewer(
   document.getElementById('label') as HTMLElement,
   [
     ...CREATURES.map(({ id, name, family, make }) => ({ id, name, group: family, make })),
-    ...Object.values(PEOPLE).map(({ name, make }) => ({ id: personId(name), name, group: 'Brindleford folk', make })),
+    ...Object.values(PEOPLE).flatMap(({ name, home, make, variants }) => [
+      { id: personId(name), name, group: `${home} folk`, make },
+      ...Object.entries(variants ?? {}).map(([v, made]) => ({ id: `${personId(name)}-${v}`, name: `${name} (${v})`, group: `${home} folk`, make: made })),
+    ]),
     ...(BRINDLEFORD.places ?? []).filter((p) => p.kind === 'building' || p.kind === 'fixture').map((p) => ({ id: p.id, name: p.name ?? p.id, group: 'Brindleford', make: () => placeModel(p)! })),
     ...SPECIES.flatMap((s) => Array.from({ length: VARIANTS }, (_, v) => ({ id: `${s}${v}`, name: `${s} ${v + 1}`, group: 'Trees', make: () => treeModel(s, v) }))),
     ...Object.entries(MEADOW_SHAPES).map(([id, grid]) => ({ id, name: id, group: 'Meadows', make: () => new VoxelModel(grid(), NATURE_LOOK, { voxel: STRUCTURE_VOXEL }) })),
