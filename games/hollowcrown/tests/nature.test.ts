@@ -1,8 +1,13 @@
 // The Vale's trees: each species and shape builds, stands on the floor of its grid, every voxel in the
-// palette, and keeps to a triangle budget (thousands stand in view).
+// palette, and keeps to a triangle budget (thousands stand in view). Its forests: every one the map draws filled, each
+// tree inside one, off roads, water and buildings, a chunk's trees one instanced mesh a shape.
 
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
+import { covers, loadWorldMap, type Shape } from '@voxel/engine/world';
+import { obstaclesOf } from '../src/buildings';
+import { PLACE_KINDS, WORLD_MAP } from '../src/data/world';
+import { forestLayer, forestTrees, type Tree } from '../src/nature/forests';
 import { NATURE } from '../src/nature/palette';
 import { SPECIES, VARIANTS, treeModel, treeVoxels } from '../src/nature/trees';
 
@@ -30,5 +35,44 @@ describe('the Vale\'s trees', () => {
   it('keep to a triangle budget', () => {
     const counts = Object.fromEntries(trees.map(([s, v]) => [`${s}${v}`, triangles(treeModel(s, v).root)]));
     for (const [id, n] of Object.entries(counts)) expect(n, id).toBeLessThan(5500);
+  });
+});
+
+describe('the Vale\'s forests', () => {
+  const map = loadWorldMap(WORLD_MAP, PLACE_KINDS);
+  const built = obstaclesOf(map);
+  const byChunk = forestTrees(map, built);
+  const all = [...byChunk.values()].flat();
+  const forests = map.data.areas.filter((a) => a.kind === 'forest');
+  const inside = (shape: Shape, t: Tree) => covers(shape, Math.round(t.x), Math.round(t.z));
+
+  it('fill every forest drawn, each tree inside one, on bare ground, off what\'s built', () => {
+    for (const f of forests) expect(all.some((t) => inside(f.shape, t)), f.id).toBe(true);
+    for (const t of all) {
+      expect(forests.some((f) => inside(f.shape, t))).toBe(true);
+      expect(map.surfaceAt(t.x, t.z)).toBe(0);
+      expect(built.blocks(t.x, t.z, 1)).toBe(false);
+    }
+  });
+
+  it('grow the species each forest names', () => {
+    const pines = forests.find((f) => f.id === 'mosshill-pines')!;
+    expect(all.filter((t) => inside(pines.shape, t)).every((t) => t.species === 'pine')).toBe(true);
+  });
+
+  it('come out the same every time', () => {
+    const [key] = byChunk.keys();
+    expect(forestTrees(map, built).get(key)).toEqual(byChunk.get(key));
+  });
+
+  it('draw a chunk as one instanced mesh a tree shape, quickly', () => {
+    const layer = forestLayer(map, byChunk);
+    const [key] = [...byChunk.entries()].sort((a, b) => b[1].length - a[1].length)[0];
+    layer.build(key); // (the shapes' meshes, built once)
+    const t = performance.now();
+    const meshes = layer.build(key) as THREE.InstancedMesh[];
+    expect(performance.now() - t).toBeLessThan(20);
+    expect(meshes.length).toBeLessThanOrEqual(VARIANTS * SPECIES.length);
+    expect(meshes.reduce((n, m) => n + m.count, 0)).toBe(byChunk.get(key)!.length);
   });
 });

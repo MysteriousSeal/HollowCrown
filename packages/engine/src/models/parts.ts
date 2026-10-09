@@ -1,7 +1,7 @@
 // A model's parts: voxel grids meshed round their joints (rounded shading), drawn lit or glowing, hung on joints.
 
 import * as THREE from 'three';
-import { greedyMesh, roundNormals, type Size, type VoxelGrid } from '../voxel';
+import { greedyMesh, greedyMeshSplit, roundNormals, type Size, type VoxelGrid } from '../voxel';
 import { glowMaterial, litMaterial } from './materials';
 
 // Most models' voxels: a little coarser than a human body's 1/60.
@@ -31,8 +31,13 @@ export function addPart(
   glows?: ReadonlySet<number>,
   material: THREE.Material = litMaterial(),
 ): THREE.Mesh[] {
-  const meshes = [new THREE.Mesh(meshPart(grid, palette, voxel, pivot, glows && ((c) => !glows.has(c))), material)];
-  if (glows) meshes.push(new THREE.Mesh(meshPart(grid, palette, voxel, pivot, (c) => glows.has(c)), glowMaterial()));
+  let meshes: THREE.Mesh[];
+  if (glows) {
+    // One meshing pass sorting the faces into lit and glowing (meshing is most of a model's build time).
+    const origin = new THREE.Vector3(-pivot[0] * voxel, -pivot[1] * voxel, -pivot[2] * voxel);
+    const [lit, glowing] = greedyMeshSplit(grid, palette, voxel, origin, (c) => glows.has(c));
+    meshes = [new THREE.Mesh(roundNormals(lit, grid, voxel, origin), material), new THREE.Mesh(roundNormals(glowing, grid, voxel, origin), glowMaterial())];
+  } else meshes = [new THREE.Mesh(meshPart(grid, palette, voxel, pivot), material)];
   parent.add(...meshes);
   return meshes;
 }
