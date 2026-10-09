@@ -8,6 +8,7 @@ import { FrameModel, type FrameSpec } from '@voxel/engine/characters';
 import { FOLK } from './brindleford';
 import { HOUSEHOLDS } from './households';
 import { RED_HEN_FOLK } from './redHen';
+import { TALLOW_GREEN } from './tallowGreen';
 
 export type Home = 'Brindleford' | 'Tallow Green' | 'Red Hen camp' | "Hob's Tower";
 
@@ -31,6 +32,7 @@ const people = (home: Home, specs: Specs): Array<[string, Person]> =>
 export const PEOPLE: Record<string, Person> = Object.fromEntries([
   ...people('Brindleford', FOLK),
   ...people('Brindleford', HOUSEHOLDS),
+  ...people('Tallow Green', TALLOW_GREEN),
   ...people('Red Hen camp', RED_HEN_FOLK),
 ]);
 

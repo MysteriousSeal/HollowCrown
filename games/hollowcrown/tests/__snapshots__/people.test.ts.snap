@@ -17,6 +17,23 @@ exports[`people > Ada Cobbe: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Agna Bee: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.154,
+    0.483,
+    0.133,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.125,
+  ],
+  "triangles": 2156,
+}
+`;
+
 exports[`people > Alys Fletcher: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -204,6 +221,23 @@ exports[`people > Gert Hollin: builds, poses and keeps their shape 1`] = `
 }
 `;
 
+exports[`people > Goody Thatch: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.108,
+    0.467,
+    0.108,
+  ],
+  "min": [
+    -0.108,
+    -0,
+    -0.108,
+  ],
+  "triangles": 1154,
+}
+`;
+
 exports[`people > Hesper Rowe (chained): builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -303,6 +337,23 @@ exports[`people > Kit: builds, poses and keeps their shape 1`] = `
     -0.064,
   ],
   "triangles": 1640,
+}
+`;
+
+exports[`people > Little Brede: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.279,
+  "max": [
+    0.067,
+    0.31,
+    0.057,
+  ],
+  "min": [
+    -0.067,
+    -0,
+    -0.057,
+  ],
+  "triangles": 1348,
 }
 `;
 
