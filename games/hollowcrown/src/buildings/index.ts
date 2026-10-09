@@ -90,7 +90,7 @@ const BY_USE: Record<string, Make> = {
         if (flowers) windowBoxes(g, layout, seed);
         if (stool) doorstepStool(g, layout);
       },
-    });
+    }, (m) => m.prop(lantern(), [1, 5, 0], [m.layout.door!.x0 - 3, 10, m.layout.z1 + 1])); // (a lantern by its door)
   },
   chandler: (spec) => built({ ...spec, jetty: true, door: { width: 6, height: 11 }, paint: dryingCandles }, (m) => {
     const { door, z1 } = m.layout;
