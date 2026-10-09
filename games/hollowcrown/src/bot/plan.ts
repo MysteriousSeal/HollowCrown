@@ -1,11 +1,12 @@
 // What the bot does next, from the quest book: the followed quest's open objectives first, in the order the stage
 // lists them (its optional ones before the required, so they're not passed by), leaving what can't be played (a
-// 'wait'; a 'fight' with no foe about) and what it's given up; and where an objective is on the map, and how to say it.
+// 'fight' with no foe about) and what it's given up; a 'wait' is slept through, in a bed if there's one there; and where an objective is on the map, and how to say it.
 
 import { boundsOf, type Point, type WorldMap } from '@voxel/engine/world';
 import type { Spot } from '../data/people/kinds';
 import type { Objective, Quest } from '../data/quests';
 import { openObjectives, type QuestBook } from '../systems/quests';
+import { BEDS } from '../systems/rest';
 import { POLICY } from './policy';
 
 export interface Next {
@@ -24,7 +25,6 @@ export const keyOf = ({ quest, objective }: Next): string => `${quest}/${objecti
 export function nextObjective(book: QuestBook, quests: Record<string, Quest>, { canFight = false, skip = new Set() }: PlanOptions = {}): Next | null {
   const open = openObjectives(book, quests).filter((n) => {
     if (skip.has(keyOf(n))) return false;
-    if (n.objective.kind === 'wait') return false;
     if (n.objective.kind === 'fight') return canFight;
     return POLICY.playOptional || !n.objective.optional;
   });
@@ -33,9 +33,12 @@ export function nextObjective(book: QuestBook, quests: Record<string, Quest>, { 
   return open.map((n, i) => ({ n, i })).sort((a, b) => rank(a.n) - rank(b.n) || a.i - b.i)[0].n;
 }
 
-// What the hero waits for, if nothing can be played but a 'wait' (its text), or null.
-export function waitingFor(book: QuestBook, quests: Record<string, Quest>): string | null {
-  return openObjectives(book, quests).find((n) => n.objective.kind === 'wait')?.objective.text ?? null;
+// Who the hero goes to for an objective: whoever it names; for a wait, whoever keeps a bed where it is (undefined:
+// no one).
+export function whoFor(objective: Objective): string | undefined {
+  if (objective.who) return objective.who;
+  if (objective.kind !== 'wait') return undefined;
+  return Object.keys(BEDS).find((keeper) => BEDS[keeper] === objective.at);
 }
 
 // Where `spot` is on the map: a tile, a place's spot, or an area's middle; null if the map has no such spot.
@@ -62,6 +65,9 @@ export function nameOf(map: WorldMap, spot: Spot | undefined): string {
   return map.place(spot)?.name ?? map.data.areas.find((a) => a.id === spot)?.name ?? spot;
 }
 
+// A thing's name with 'the' before it, unless it has one ("the Hungry").
+export const theOf = (name: string): string => (/^the /i.test(name) ? name : `the ${name}`);
+
 // What an objective asks, as the badge says it ("talk to Garrick Fenn").
 export function deedOf(objective: Objective): string {
   switch (objective.kind) {
@@ -70,11 +76,15 @@ export function deedOf(objective: Objective): string {
     case 'choose':
       return objective.who ? `answer ${objective.who}` : 'decide';
     case 'take':
-      return `take the ${objective.what ?? 'thing'}`;
+      return `take ${theOf(objective.what ?? 'thing')}`;
     case 'search':
-      return `look for the ${objective.what ?? 'signs'}`;
+      return `look for ${theOf(objective.what ?? 'signs')}`;
+    case 'wait': {
+      const keeper = whoFor(objective);
+      return keeper ? `ask ${keeper} for a bed` : 'wait for the hour';
+    }
     case 'fight':
-      return `fight the ${objective.what ?? 'foes'}`;
+      return `fight ${theOf(objective.what ?? 'foes')}`;
     default:
       return 'get there';
   }

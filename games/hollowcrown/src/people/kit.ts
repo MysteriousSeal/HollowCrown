@@ -10,6 +10,8 @@ import { noise3 } from '@voxel/engine/math';
 import { box, createGrid, erase, fillBox, over, wrap, type Paint, type Size, type VoxelGrid } from '@voxel/engine/voxel';
 import { BODY_COLOR_COUNT, C, GEAR_COLORS, GEAR_GLOW, K, MARCH, bodyColors, bodyPalette, cuff, type BodyLook, type FrameSpec, type Gait, type Held, type Joint } from '@voxel/engine/characters';
 
+import { GESTURES } from './gestures';
+
 export { C, K };
 
 // ---- the cloth palette (after the body's colors and the gear's) ----
@@ -72,6 +74,7 @@ export function folk(look: BodyLook, dress: Dress, more: Folk = {}): FrameSpec {
     gait: { ...MARCH, speed: 1.3, legSwing: 0.55, armSwing: 0.4, ...more.gait },
     scale: more.scale,
     held: more.held,
+    gestures: GESTURES, // (scratching, stretching, leaning about: gestures.ts)
   };
 }
 

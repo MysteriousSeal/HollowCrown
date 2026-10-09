@@ -26,7 +26,7 @@ const facing = (p: PlaceData) => [...named(p), ...(p.facing === undefined ? ['a 
 // A building: its footprint (tiles: `size` [across its front, deep], centred on its place), floors, roof and walls,
 // what it's for, and who lives or works there (by their names in the story's bible). Its door is in the middle of
 // its front, which faces one of the four ways.
-export type BuildingUse = 'house' | 'inn' | 'smithy' | 'shrine' | 'reeve' | 'herbalist' | 'mill' | 'farmhouse' | 'barn';
+export type BuildingUse = 'house' | 'inn' | 'smithy' | 'shrine' | 'reeve' | 'herbalist' | 'mill' | 'farmhouse' | 'barn' | 'chandler';
 export type BuildingProps = {
   size: [number, number];
   floors: number;

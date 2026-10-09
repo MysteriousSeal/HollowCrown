@@ -6,7 +6,7 @@ import { Obstacles, loadWorldMap, type Point } from '@voxel/engine/world';
 import { obstaclesOf } from '../src/buildings';
 import { clearLine, findRoute } from '../src/bot/pathfind';
 import { keysToward } from '../src/bot/keys';
-import { nameOf, nextObjective, pointOf, walkingTo } from '../src/bot/plan';
+import { nameOf, nextObjective, pointOf, walkingTo, whoFor } from '../src/bot/plan';
 import { chooseReply } from '../src/bot/policy';
 import { Walker } from '../src/bot/walker';
 import { freeOn } from '../src/bot/autopilot';
@@ -70,6 +70,15 @@ describe('the bot', () => {
     Object.assign(book.quests[0], { stage: 'the-inn', done: [] });
     expect(nextObjective(book, QUESTS)?.objective.id).toBe('elsa');
     expect(nextObjective(book, QUESTS, { skip: new Set(['MQ01/elsa']) })?.objective.id).toBe('garrick');
+  });
+
+  it('sleeps through a wait in the bed of whoever keeps one there', () => {
+    const book = mq01();
+    Object.assign(book.quests[0], { stage: 'the-inn', done: ['garrick', 'why-here', 'elsa'] });
+    const next = nextObjective(book, QUESTS)!;
+    expect(next.objective.id).toBe('midnight');
+    expect(whoFor(next.objective)).toBe('Garrick Fenn');
+    expect(walkingTo(map, next.objective)).toBe("Walking to The Ferryman's Rest — ask Garrick Fenn for a bed");
   });
 
   it('has nothing left once MQ01 is over', () => {

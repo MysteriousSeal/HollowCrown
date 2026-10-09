@@ -59,6 +59,28 @@ describe('structure grids', () => {
     expect(colorAt(g, x, 18, two.z0 - 1)).not.toBe(0);
   });
 
+  it('build in depth when asked: plaster a voxel back behind a proud frame, struts in the gables, iron-strapped doors, a light ridge', () => {
+    const iron = 99;
+    const { grid: g, layout: l } = structureGrid({ ...SPEC, roof: 'shingle', detail: true, colors: { ...C, iron } });
+    // Along the front, the face is frame or nothing (plaster gone back), the plaster one voxel in.
+    let back = 0;
+    for (let x = l.x0 + 1; x < l.x1; x++) for (let y = 3; y < l.eaves - 1; y++) {
+      const face = colorAt(g, x, y, l.z1);
+      expect(face).not.toBe(C.plaster);
+      if (face === 0 && [C.plaster, C.plasterShade].includes(colorAt(g, x, y, l.z1 - 1))) back++;
+    }
+    expect(back).toBeGreaterThan(60);
+    expect(count(g, iron)).toBeGreaterThan(0);
+    const zc = Math.round((l.z0 + l.z1) / 2);
+    expect(colorAt(g, l.x0 + 6, l.ridge, zc)).toBe(C.roofLight);
+    // The gable: struts rising either side of the king post, timber off its middle.
+    let struts = 0;
+    for (let z = l.z0 + 2; z <= l.z1 - 2; z++) for (let y = l.eaves + 1; y < l.ridge; y++) if (Math.abs(z - zc) > 1 && colorAt(g, l.x0, y, z) === C.timber) struts++;
+    expect(struts).toBeGreaterThan(4);
+    // And without it, exactly as before.
+    expect([...structureGrid({ ...SPEC, detail: false }).grid.cells]).toEqual([...grid.cells]);
+  });
+
   it('paint every wall style and roof covering in its own colors', () => {
     for (const walls of ['timber', 'stone', 'wattle'] as const) {
       for (const roof of ['thatch', 'slate', 'shingle'] as const) {
