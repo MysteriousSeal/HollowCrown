@@ -1,5 +1,39 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`people > Elsa Fenn: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.108,
+    0.467,
+    0.177,
+  ],
+  "min": [
+    -0.108,
+    -0,
+    -0.108,
+  ],
+  "triangles": 1200,
+}
+`;
+
+exports[`people > Father Cuthwin: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.15,
+    0.45,
+    0.092,
+  ],
+  "min": [
+    -0.142,
+    -0,
+    -0.092,
+  ],
+  "triangles": 1544,
+}
+`;
+
 exports[`people > Garrick Fenn: builds, poses and keeps their shape 1`] = `
 {
   "height": 0.45,
@@ -14,5 +48,22 @@ exports[`people > Garrick Fenn: builds, poses and keeps their shape 1`] = `
     -0.092,
   ],
   "triangles": 1336,
+}
+`;
+
+exports[`people > Odo Pell: builds, poses and keeps their shape 1`] = `
+{
+  "height": 0.45,
+  "max": [
+    0.125,
+    0.467,
+    0.108,
+  ],
+  "min": [
+    -0.125,
+    -0,
+    -0.108,
+  ],
+  "triangles": 1012,
 }
 `;
