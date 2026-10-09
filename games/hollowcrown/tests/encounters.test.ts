@@ -28,6 +28,7 @@ describe('encounters', () => {
   it('keeps the Red Hen camp with five of the band, on open ground', () => {
     const camp = KEEPERS.find((k) => k.note === 'the Red Hen camp')!;
     expect(camp.at).toHaveLength(5);
+    expect(camp.models!.every((m) => CREATURES.some((c) => c.id === m) && m.startsWith('redHen'))).toBe(true);
     for (const [x, z] of camp.at) {
       expect(map.walkable(x, z) && !obstacles.blocks(x, z, 0.2), `${x},${z}`).toBe(true);
       expect(Math.hypot(x - 620, z - 3560)).toBeLessThan(8);
