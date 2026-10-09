@@ -1,9 +1,11 @@
 // The HUD's screens that pause the game behind them (made by features/hud.ts), one up at a time, by their keys: the
-// map (M, drawn the first time it's opened), the journal (J) and the pause menu (Esc; Esc also closes the others).
+// map (M, drawn the first time it's opened), the journal (J) and the pause menu (Esc; Esc also closes the others:
+// Resume, Sound, Controls). Every pick in the menu clicks.
 // None opens while the game's `busy` (in a conversation, dead).
 
 import type { App } from '@voxel/engine/app';
-import { JournalScreen, MAP_TILES_PER_PIXEL, MapScreen, Menu, drawMapImage } from '@voxel/engine/ui';
+import { AudioResource, PlaySound } from '@voxel/engine/audio';
+import { JournalScreen, MAP_TILES_PER_PIXEL, MapScreen, Menu, drawMapImage, slider } from '@voxel/engine/ui';
 import type { WorldMap } from '@voxel/engine/world';
 import { CONTROLS } from './controls';
 import { MAP_GROUND, mapLabels, mapMarks } from './mapContent';
@@ -25,6 +27,18 @@ export function pausingScreens(app: App, root: HTMLElement, map: WorldMap, busy:
   };
   const journal = new JournalScreen(root);
   const menu = new Menu(root, 'Paused');
+  const { world } = app;
+  menu.onPick = () => world.emit(PlaySound, { name: 'click' });
+  // The sound page: the volume, and mute (N too).
+  const soundPage = (): void => {
+    if (!world.hasResource(AudioResource)) return menu.page('Sound', [['N', 'No sound yet']]);
+    const audio = world.resource(AudioResource);
+    const mute = { label: audio.muted ? 'Sound: off' : 'Sound: on', pick: () => {
+      audio.setMuted(!audio.muted);
+      soundPage();
+    } };
+    menu.pageOf('Sound', [slider('Volume', audio.volume, (v) => audio.setVolume(v))], [mute]);
+  };
   let up: Screen | null = null;
 
   const close = (): void => {
@@ -46,6 +60,7 @@ export function pausingScreens(app: App, root: HTMLElement, map: WorldMap, busy:
       if (up) close();
       else open(menu, () => menu.open([
         { label: 'Resume', pick: close },
+        { label: 'Sound', pick: soundPage },
         { label: 'Controls', pick: () => menu.page('Controls', CONTROLS) },
       ]));
     } else if (up === menu) return;
