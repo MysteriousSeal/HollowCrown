@@ -49,9 +49,16 @@ export function pointOf(map: WorldMap, spot: Spot): Point | null {
   return [Math.round((x0 + x1) / 2), Math.round((z0 + z1) / 2)];
 }
 
-// A spot as the badge says it: a place's or area's name, else 'the road'.
+// A spot as the badge says it: a place's or area's name; a tile, the named area it's in, else the nearest named place.
 export function nameOf(map: WorldMap, spot: Spot | undefined): string {
-  if (spot === undefined || typeof spot !== 'string') return 'the road';
+  if (spot === undefined) return 'the road';
+  if (typeof spot !== 'string') {
+    const [x, z] = spot;
+    const area = map.areasAt(x, z).find((a) => a.name);
+    if (area) return area.name!;
+    const near = map.places().filter((p) => p.name).sort((a, b) => Math.hypot(a.at[0] - x, a.at[1] - z) - Math.hypot(b.at[0] - x, b.at[1] - z))[0];
+    return near ? `the road by ${near.name}` : 'the road';
+  }
   return map.place(spot)?.name ?? map.data.areas.find((a) => a.id === spot)?.name ?? spot;
 }
 

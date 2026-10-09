@@ -4,7 +4,7 @@
 
 import type { Keyboard } from '@voxel/engine/input';
 
-export type Code = 'KeyW' | 'KeyA' | 'KeyS' | 'KeyD' | 'ShiftLeft' | 'KeyE' | 'Space' | `Digit${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
+export type Code = 'KeyW' | 'KeyA' | 'KeyS' | 'KeyD' | 'ShiftLeft' | 'KeyE' | 'Space' | 'Enter' | `Digit${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
 
 // What the engine's keyboard binds each held key to (DEFAULT_BINDINGS): to tell when it has let one go.
 const ACTION: Partial<Record<Code, 'up' | 'down' | 'left' | 'right' | 'sprint'>> = {
