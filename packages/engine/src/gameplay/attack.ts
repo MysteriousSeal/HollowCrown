@@ -33,15 +33,16 @@ export const Swing = defineEvent<{ by: Entity }>('Swing');
 // It means to swing this frame (taken by the attack system, whether it could or not).
 export const AttackIntent = defineComponent<true>('AttackIntent');
 
-// What an entity is acting out (a swing, a flinch): for its model to animate. `time`: seconds into it.
-export type ActionName = 'attack' | 'hurt';
+// What an entity is acting out (a swing, a flinch, or a game's own gesture by name, a scratch, a yawn): for its model
+// to animate. `time`: seconds into it.
+export type ActionName = 'attack' | 'hurt' | (string & {});
 export interface ActingData {
   action: ActionName;
   time: number;
   duration: number;
 }
 export const Acting = defineComponent<ActingData>('Acting');
-export const ACTION_TIME: Readonly<Record<ActionName, number>> = { attack: 0.35, hurt: 0.25 };
+export const ACTION_TIME = { attack: 0.35, hurt: 0.25 } as const;
 
 // Whether `at` (facing, reaching `reach` and `arc`) reaches `target` of body `radius`.
 export function inReach(at: { x: number; z: number; facing: number }, target: { x: number; z: number }, reach: number, arc: number, radius: number): boolean {
