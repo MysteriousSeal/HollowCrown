@@ -3,7 +3,7 @@
 
 import * as THREE from 'three';
 import { Schedule, World, type Entity, type System } from '../ecs';
-import { CAMERA_OFFSET, DEFAULT_ZOOM_LEVEL, PostProcessing, ZOOM_LEVELS, stepZoom, type Lights, addLights, computeMovementAxes, createCamera, resizeCamera, stylize, type Stylizer } from '../render';
+import { CAMERA_OFFSET, DEFAULT_ZOOM_LEVEL, updateWind, PostProcessing, ZOOM_LEVELS, stepZoom, type Lights, addLights, computeMovementAxes, createCamera, resizeCamera, stylize, type Stylizer } from '../render';
 import { ChunkStreamer, TerrainResource, tileOf, type ChunkLayer } from '../world';
 import { TimeOfDay, Transform, actingSystem, attackSystem, facingSystem, healthSystems, hostileSystem, hoursPerSecond, interactionSystem, movementSystem, timeOfDaySystem, wanderSystem } from '../gameplay';
 import { Keyboard, KeyboardResource, ScreenAxes, playerInputSystem } from '../input';
@@ -183,6 +183,7 @@ export class App {
     const workStart = performance.now();
     if (this.debug) this.renderer.info.reset();
     this.elapsed += this.schedule.frame(this.world, dt, { scale: this.scale, paused: this.pausedNow });
+    updateWind(this.elapsed);
     this.post?.render(this.elapsed);
     this.debug?.frame(performance.now() - workStart);
     requestAnimationFrame(this.frame);
