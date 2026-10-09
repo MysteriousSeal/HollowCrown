@@ -20,5 +20,6 @@ export function placesLayer(places: readonly PlaceData[], make: (place: PlaceDat
     materials,
     chunkKeys: () => byChunk.keys(),
     build: (key) => (byChunk.get(key) ?? []).flatMap((p) => make(p) ?? []),
+    buildSteps: (key) => (byChunk.get(key) ?? []).map((p) => () => { const made = make(p); return made ? [made] : []; }), // (a place a step)
   };
 }

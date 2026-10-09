@@ -1,8 +1,9 @@
 // Keeps the world's meshes loaded around the hero, chunk by chunk (see
 // chunkLayer.ts): every chunk within LOAD_RADIUS tiles is built, nearest
-// first, at most `budget` chunks a frame so walking never hitches; chunks
-// beyond UNLOAD_RADIUS are dropped (their instance buffers freed; shared
-// model geometry stays cached for when the hero comes back).
+// first, a step at a time (a layer's chunk, or one building of it) for at
+// most a few milliseconds a frame, so walking never hitches; chunks beyond
+// UNLOAD_RADIUS are dropped (their instance buffers freed; shared model
+// geometry stays cached for when the hero comes back).
 
 import * as THREE from 'three';
 import { CHUNK_SIZE } from './chunks';
@@ -12,19 +13,32 @@ import type { ChunkLayer } from './chunkLayer';
 // rest), so chunks load comfortably before they come into view.
 const LOAD_RADIUS = 28;
 const UNLOAD_RADIUS = 44;
+// Milliseconds of building a frame may take (a step started always finishes,
+// so one slow step can run over).
+export const FRAME_BUILD_BUDGET = 4;
+
+interface Chunk {
+  readonly group: THREE.Group;
+  readonly built: Map<ChunkLayer, THREE.Object3D[]>;
+}
+type Step = () => void;
 
 export class ChunkStreamer {
   private readonly layers: ChunkLayer[] = [];
-  private readonly loaded = new Map<string, { group: THREE.Group; built: Map<ChunkLayer, THREE.Object3D[]> }>();
+  private readonly loaded = new Map<string, Chunk>();
+  private building: { key: string; steps: Step[] } | null = null; // the chunk being built, its steps left
 
   private lastKey = '';
   private pending = true; // chunks near the camera still to build
 
-  constructor(private readonly scene: THREE.Scene) {}
+  constructor(
+    private readonly scene: THREE.Scene,
+    private readonly clock: () => number = () => performance.now(),
+  ) {}
 
   layer(layer: ChunkLayer): void {
     this.layers.push(layer);
-    for (const [key, chunk] of this.loaded) this.buildInto(chunk, layer, key); // (a layer added late: into what's built)
+    for (const [key, chunk] of this.loaded) for (const step of this.stepsOf(chunk, layer, key)) step(); // (a layer added late: into what's built)
   }
 
   // Every material any layer draws with, loaded or not.
@@ -32,9 +46,9 @@ export class ChunkStreamer {
     return [...new Set(this.layers.flatMap((l) => l.materials))];
   }
 
-  // Loads up to `budget` missing chunks near (x, z), nearest first, and
-  // drops far ones. Returns how many chunks it built.
-  update(x: number, z: number, budget = 1): number {
+  // Builds the missing chunks near (x, z), nearest first, for up to `budget`
+  // milliseconds, and drops far ones. Returns how many steps it ran.
+  update(x: number, z: number, budget = FRAME_BUILD_BUDGET): number {
     // Nothing to do while the camera stays in the same chunk and every chunk round it is built.
     const key = `${Math.floor(x / CHUNK_SIZE)},${Math.floor(z / CHUNK_SIZE)}`;
     if (key === this.lastKey && !this.pending) return 0;
@@ -42,34 +56,56 @@ export class ChunkStreamer {
     for (const [key, chunk] of this.loaded) {
       if (distanceToChunk(key, x, z) > UNLOAD_RADIUS) this.unload(key, chunk.group);
     }
-    const wanted = chunksWithin(x, z, LOAD_RADIUS).filter((key) => !this.loaded.has(key));
-    wanted.sort((a, b) => distanceToChunk(a, x, z) - distanceToChunk(b, x, z));
-    const toBuild = wanted.slice(0, budget);
-    for (const chunk of toBuild) this.load(chunk);
-    this.pending = wanted.length > toBuild.length;
-    return toBuild.length;
+    const start = this.clock();
+    let ran = 0;
+    let wanted: string[] | null = null;
+    while (ran === 0 || this.clock() - start < budget) {
+      if (!this.building) {
+        wanted ??= chunksWithin(x, z, LOAD_RADIUS)
+          .filter((key) => !this.loaded.has(key))
+          .sort((a, b) => distanceToChunk(b, x, z) - distanceToChunk(a, x, z)); // (nearest last, popped first)
+        const next = wanted.pop();
+        if (next === undefined) break;
+        this.building = { key: next, steps: this.load(next) };
+      }
+      const step = this.building.steps.shift();
+      if (step) {
+        step();
+        ran++;
+      }
+      if (this.building.steps.length === 0) this.building = null;
+    }
+    this.pending = this.building !== null || (wanted ?? chunksWithin(x, z, LOAD_RADIUS).filter((key) => !this.loaded.has(key))).length > 0;
+    return ran;
   }
 
   // Loads every chunk near (x, z) at once (startup).
   loadAround(x: number, z: number): void {
-    while (this.update(x, z, 64) > 0);
+    this.update(x, z, Infinity);
   }
 
-  private load(key: string): void {
-    const chunk = { group: new THREE.Group(), built: new Map<ChunkLayer, THREE.Object3D[]>() };
-    for (const layer of this.layers) this.buildInto(chunk, layer, key);
+  // A chunk added to the scene, empty, and the steps that fill it.
+  private load(key: string): Step[] {
+    const chunk: Chunk = { group: new THREE.Group(), built: new Map() };
     this.loaded.set(key, chunk);
     this.scene.add(chunk.group);
+    return this.layers.flatMap((layer) => this.stepsOf(chunk, layer, key));
   }
 
-  private buildInto(chunk: { group: THREE.Group; built: Map<ChunkLayer, THREE.Object3D[]> }, layer: ChunkLayer, key: string): void {
-    const objects = layer.build(key);
-    if (objects.length === 0) return;
-    chunk.group.add(...objects);
-    chunk.built.set(layer, objects);
+  private stepsOf(chunk: Chunk, layer: ChunkLayer, key: string): Step[] {
+    const add = (objects: THREE.Object3D[]) => {
+      if (objects.length === 0) return;
+      chunk.group.add(...objects);
+      const built = chunk.built.get(layer);
+      if (built) built.push(...objects);
+      else chunk.built.set(layer, objects);
+    };
+    const steps = layer.buildSteps?.(key) ?? [() => layer.build(key)];
+    return steps.map((step) => () => add(step()));
   }
 
   private unload(key: string, group: THREE.Group): void {
+    if (this.building?.key === key) this.building = null;
     this.scene.remove(group);
     group.traverse((o) => (o as THREE.InstancedMesh).isInstancedMesh && (o as THREE.InstancedMesh).dispose());
     this.loaded.delete(key);
