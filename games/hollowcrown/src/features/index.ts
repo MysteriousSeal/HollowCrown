@@ -3,10 +3,12 @@
 import type { Feature } from './context';
 import { buildings } from './buildings';
 import { land } from './land';
+import { villagers } from './villagers';
 
 export const FEATURES: Feature[] = [
   land,
   buildings,
+  villagers,
 ];
 
 export type { Feature, GameContext } from './context';
