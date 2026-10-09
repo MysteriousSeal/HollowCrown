@@ -1,6 +1,8 @@
 // Hostiles: creatures that fight the player. One idles (wandering, if it wanders) until the player comes within its
 // sight, then chases through its MoveIntent, turns on the player and swings (its Attack) once in reach; led further
-// than its leash from where it started, it gives up and goes back, paying the player no mind until it's home.
+// than its leash from where it started, it gives up and goes back. Going home it turns on the player again only if
+// they come within its sight near its home; stuck on the way (a trunk square in the path), it makes where it stands
+// its home.
 
 import { defineComponent, type System } from '../ecs';
 import { BODY_RADIUS, BodyRadius, MoveIntent, MoveSpeed, Player, Transform } from './components';
@@ -16,6 +18,8 @@ export interface HostileData {
   speed: number; // its chasing speed, tiles a second
   home: { x: number; z: number } | null; // where it gives up back to (none: where it stands at first)
   state: HostileState; // (kept by the hostile system)
+  closest: number; // going home: how near it has come (kept by the hostile system)
+  stuck: number; // going home: seconds since it last came nearer
 }
 export const Hostile = defineComponent<HostileData>('Hostile');
 
@@ -28,16 +32,17 @@ export interface HostileOptions {
 
 export function hostile({ sight = 6, leash = 14, speed = 3.2, home }: HostileOptions = {}): HostileData {
   if (!(sight > 0) || !(leash >= sight) || !(speed > 0)) throw new Error('hostile: sight and speed must be above 0, leash at least sight');
-  return { sight, leash, speed, home: home ? { ...home } : null, state: 'idle' };
+  return { sight, leash, speed, home: home ? { ...home } : null, state: 'idle', closest: Infinity, stuck: 0 };
 }
 
 const HOME = 0.5; // world units: this near home, it's back
+const STUCK_TIME = 1.5; // seconds going home without getting nearer before it settles where it is
 
 // Runs in the input stage, after wandering (a chase overrides a stroll), before the attacks.
 export const hostileSystem: System = {
   name: 'hostile',
   stage: 'input',
-  update(world) {
+  update(world, dt) {
     const player = world.first(Player, Transform);
     const prey = player !== undefined && (!world.has(player, Health) || isAlive(world, player)) ? world.read(player, Transform) : null;
     for (const entity of world.query(Hostile, Transform)) {
@@ -48,9 +53,18 @@ export const hostileSystem: System = {
       const fromHome = Math.hypot(at.x - h.home.x, at.z - h.home.z);
       const toPrey = prey ? Math.hypot(prey.x - at.x, prey.z - at.z) : Infinity;
 
+      const preyNearHome = prey !== null && Math.hypot(prey.x - h.home.x, prey.z - h.home.z) <= h.leash;
       if (h.state === 'idle' && prey && toPrey <= h.sight) h.state = 'chase';
-      if (h.state === 'chase' && (!prey || fromHome > h.leash || toPrey > h.leash)) h.state = 'return';
-      if (h.state === 'return' && fromHome <= HOME) {
+      if (h.state === 'return' && preyNearHome && toPrey <= h.sight && fromHome <= h.leash) h.state = 'chase';
+      if (h.state === 'chase' && (!prey || fromHome > h.leash || toPrey > h.leash)) {
+        [h.state, h.closest, h.stuck] = ['return', Infinity, 0];
+      }
+      if (h.state === 'return') {
+        if (fromHome < h.closest - 0.01) [h.closest, h.stuck] = [fromHome, 0];
+        else h.stuck += dt;
+        if (h.stuck > STUCK_TIME) h.home = { x: at.x, z: at.z }; // (it can't get back: here will do)
+      }
+      if (h.state === 'return' && (fromHome <= HOME || h.stuck > STUCK_TIME)) {
         h.state = 'idle';
         const intent = world.get(entity, MoveIntent);
         if (intent) [intent.x, intent.z] = [0, 0]; // (home: it stops, unless it wanders)
